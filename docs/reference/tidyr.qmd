@@ -2,7 +2,7 @@
 title: "tidyr"
 ---
 
-The tidyr verbs use tidyr's argument names. Arguments that start with a dot in
+The tidyr functions use tidyr's argument names. Arguments that start with a dot in
 tidyr start with an underscore here.
 
 ## Pivoting
@@ -26,7 +26,7 @@ warning. `names_vary: 'slowest'` groups each name's value columns together.
 `id_cols` values (sorted, factors by level). `unused_fn` summarises the
 columns that are in none of `id_cols`, `names_from`, and `values_from`.
 
-Both verbs build tidyr's pivot spec in phplyr and pass it to the table's
+Both functions build tidyr's pivot spec in phplyr and pass it to the table's
 `pivotLongerSpec()` or `pivotWiderSpec()`, so a backend can run the pivot
 natively. `build_longer_spec()` and `build_wider_spec()` return that spec as a
 table, and `pivot_longer_spec()` and `pivot_wider_spec()` run an edited one.

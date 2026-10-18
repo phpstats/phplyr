@@ -4,7 +4,7 @@ title: "Getting started"
 
 ## Imports
 
-phplyr's verbs and helpers are namespaced functions. Import the ones a file
+phplyr's table functions and helpers are namespaced functions. Import the ones a file
 uses with `use function`:
 
 ```php
@@ -13,7 +13,7 @@ use function Phplyr\{phplyr, filter, mutate, group_by, summarise, arrange, desc,
 ```
 
 A method chain only needs `phplyr()` and the helpers it uses, such as `n`,
-`mean`, and `desc`. The verbs are its methods.
+`mean`, and `desc`. The table functions are its methods.
 
 Three phplyr functions share names with PHP built-ins: `count`, `min`, and
 `max`. In a file that imports them, a bare `count($array)` calls phplyr's
@@ -30,19 +30,19 @@ $rows = DataFrame::fromRows([['id' => 1, 'x' => 2.5], ['id' => 2, 'x' => null]])
 $cols = DataFrame::fromColumns(['id' => [1, 2], 'x' => [2.5, null]]);
 ```
 
-`null` is NA. DataFrames are immutable, and every verb returns a new frame.
+`null` is NA. DataFrames are immutable, and every function returns a new frame.
 `echo $frame` prints the first rows in tibble's format.
 
-## Chaining verbs
+## Chaining functions
 
-A verb such as `filter(...)` returns a closure that takes a table. phplyr runs
-a sequence of verbs in three ways, and all three give the same result.
+A function such as `filter(...)` returns a closure that takes a table. phplyr runs
+a sequence of them in three ways, and all three give the same result.
 
 ::: {.panel-tabset group="syntax"}
 
 ## Method chain (PHP 8.3+)
 
-`phplyr($t)` starts a chain. Each method runs the phplyr verb of that name
+`phplyr($t)` starts a chain. Each method runs the phplyr function of that name
 with the same arguments, and `get()` returns the table:
 
 ```php
@@ -52,7 +52,7 @@ $out = phplyr($schools)
     ->get();
 ```
 
-`echo` prints a chain's table directly. A verb whose result isn't a table,
+`echo` prints a chain's table directly. A function whose result isn't a table,
 such as `pull()`, `n_groups()`, or `lm()`, returns that result and ends the
 chain. `->pipe($closure)` applies a closure of your own and continues.
 
@@ -113,7 +113,7 @@ a database table. See [Databases and expressions](reference/databases.qmd).
 
 ## Named arguments and options
 
-Verbs that create columns name them with PHP named arguments:
+Functions that create columns name them with PHP named arguments:
 `mutate(total: ...)`, `summarise(n: n())`. dplyr's dot-prefixed options are
 written with a leading underscore, because PHP named arguments cannot start with
 a dot: `_by`, `_keep`, `_before`, `_after`, `_groups`, `_keep_all`, and

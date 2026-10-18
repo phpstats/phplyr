@@ -2,7 +2,7 @@
 title: "Performance"
 ---
 
-phplyr is a thin layer. Each verb calls one or two methods of the table it is
+phplyr is a thin layer. Each function calls one or two methods of the table it is
 given, so the backend determines how fast a pipeline runs. This page reports
 timings for phibble's shared benchmark workloads on DataFrame and SQLite, and for
 three phplyr pipelines on DataFrame, PolarsTable, and SQLite, and gives guidance
@@ -70,7 +70,7 @@ DataFrame peaked at about 1.5 GB of memory for the 1M-row table and its results.
 - **SQLite columns need declared types.** PDO binds values as strings. In an
   untyped column, SQLite stores them as text and compares numbers as text.
 
-- **PolarsTable** (phibble's Polars backend, on the phpolars extension) runs the verbs in Polars, 10 to 100 times faster
+- **PolarsTable** (phibble's Polars backend, on the phpolars extension) runs the pipeline in Polars, 10 to 100 times faster
   than DataFrame, and pays mainly for bringing rows back into PHP. See below.
 
 ## PolarsTable
@@ -106,7 +106,7 @@ before collecting, PolarsTable (0.05 s) and dplyr (0.07 s) take about the
 same time. On B, which returns every row, dplyr is the fastest by a wide
 margin.
 
-The verbs themselves are fast in Polars. Most of PolarsTable's time goes to
+The operations themselves are fast in Polars. Most of PolarsTable's time goes to
 converting results back to PHP values: about 0.2 seconds per million rows of
 plain columns, plus about 0.5 seconds per million values of a datetime column,
 because each value becomes a PHP `DateTimeImmutable`. A pipeline that returns

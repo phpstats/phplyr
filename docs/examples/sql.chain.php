@@ -8,7 +8,7 @@ foreach (DataFrame::fromCsv('schools.csv')->toRows() as $row) {
     $insert->execute(array_values($row));
 }
 
-// The same verbs build a query. Nothing runs until collect().
+// The same functions build a query. Nothing runs until collect().
 $query = phplyr(tbl($pdo, 'schools'))
     ->filter(col('study_hours')->ge(5))
     ->group_by('school')

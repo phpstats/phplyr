@@ -1,10 +1,10 @@
 ---
-title: "Two-table verbs"
+title: "Joins, binding, and set operations"
 ---
 
 ## Joins
 
-The join verbs take the right-hand table as their first argument. The input
+The join functions take the right-hand table as their first argument. The input
 table is the left-hand table `x`.
 
 | Function | Rows kept |

@@ -33,9 +33,9 @@ $out = DataFrame::fromCsv('sales.csv')
     |> arrange('rank');
 ```
 
-The two give the same table. `phplyr($t)` starts a chain, each method runs the verb of that name with the same arguments, and `get()` returns the table. Verbs that return something other than a table, such as `pull()` or `lm()`, end the chain and return their result. `pipe($t, filter(...), group_by('brand'))` applies verbs in order and also works on every version.
+The two give the same table. `phplyr($t)` starts a chain, each method runs the function of that name with the same arguments, and `get()` returns the table. Functions that return something other than a table, such as `pull()` or `lm()`, end the chain and return their result. `pipe($t, filter(...), group_by('brand'))` applies functions in order and also works on every version.
 
-Each verb returns a closure that takes one `Phibble\Contracts\Table`, and verbs delegate to the table, so the same pipeline runs on phibble's in-memory DataFrame, on a database table, and on phpolars' PolarsTable. Results follow dplyr 1.2 and tidyr 1.3. The test suite compares phplyr's output with R's; the reference scripts are in `tests/r/`.
+Each function returns a closure that takes one `Phibble\Contracts\Table`, and delegates to the table, so the same pipeline runs on phibble's in-memory DataFrame, on a database table, and on phpolars' PolarsTable. Results follow dplyr 1.2 and tidyr 1.3. The test suite compares phplyr's output with R's; the reference scripts are in `tests/r/`.
 
 Documentation: <https://phpstats.github.io/phplyr/>. Start with [getting started](https://phpstats.github.io/phplyr/getting-started.html) or [coming from dplyr](https://phpstats.github.io/phplyr/coming-from-dplyr.html).
 
@@ -73,9 +73,9 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 - **NA is null.** Summaries return null when a value is missing, unless you pass `na_rm: true`.
 - **Shadowed built-ins:** `count`, `min`, `max`, `round`, `abs`, `log`, `str_replace`, `str_pad`, `str_split` and a few others shadow PHP's built-ins in files that import them. Write `\count()` for the built-in.
 
-## Verbs
+## Table functions
 
-| Verb | Example |
+| Function | Example |
 | --- | --- |
 | `filter` | `filter(fn ($r) => $r->x > 0, between('y', 1, 5), _by: 'g')` |
 | `select` | `select('id', starts_with('x'), except('tmp'))`, `select(['new' => 'old'], everything())` |
@@ -143,9 +143,9 @@ Names default to `{col}` for one function, or `{col}_{fn}` for a named list.
 
 ## tidyr
 
-The tidyr verbs are pipe-able too, with tidyr's argument names. The test suite compares them with tidyr output from `tests/r/tidyr.R`.
+The tidyr functions work the same way, with tidyr's argument names. The test suite compares them with tidyr output from `tests/r/tidyr.R`.
 
-| Verb | Example |
+| Function | Example |
 | --- | --- |
 | `pivot_longer` | `pivot_longer(starts_with('wk'), names_to: 'week', values_to: 'rank', names_prefix: 'wk', values_drop_na: true)` |
 | | `names_to` can list several names, split with `names_sep` or `names_pattern`. The name `'.value'` takes the value column's name from that part. |
@@ -164,7 +164,7 @@ The tidyr verbs are pipe-able too, with tidyr's argument names. The test suite c
 
 ## Expressions and databases
 
-`col('price')->mul(1.1)->gt(100)` and helpers such as `mean('x')` build inspectable `Phibble\Expr` trees when their arguments are column names, literals, or other helpers. Verbs pass them to the table. The in-memory DataFrame evaluates them, and `Phibble\tbl($pdo, 'sales')` compiles them to SQL (SQLite, PostgreSQL, MySQL). `show_query()` returns the SQL and `collect()` runs it. A PHP closure makes a database table load its rows and continue in memory. `mutate(_keep: 'used' | 'unused')` works with expression arguments.
+`col('price')->mul(1.1)->gt(100)` and helpers such as `mean('x')` build inspectable `Phibble\Expr` trees when their arguments are column names, literals, or other helpers. phplyr passes them to the table. The in-memory DataFrame evaluates them, and `Phibble\tbl($pdo, 'sales')` compiles them to SQL (SQLite, PostgreSQL, MySQL). `show_query()` returns the SQL and `collect()` runs it. A PHP closure makes a database table load its rows and continue in memory. `mutate(_keep: 'used' | 'unused')` works with expression arguments.
 
 ## Models
 
@@ -180,6 +180,6 @@ PHP=/path/to/php83 bin/test      # before PHP 8.5, leaves out tests/Pipe (|>)
 Rscript tests/r/reference.R     # regenerate the dplyr reference outputs
 ```
 
-phibble is installed from GitHub through a VCS repository in composer.json. The lock file is resolved for PHP 8.3 (`config.platform`), so it installs on every supported version. After adding or changing a verb, run `bin/chain-docblock` to update the method chain's `@method` list.
+phibble is installed from GitHub through a VCS repository in composer.json. The lock file is resolved for PHP 8.3 (`config.platform`), so it installs on every supported version. After adding or changing a table function, run `bin/chain-docblock` to update the method chain's `@method` list.
 
 The documentation site is in `docs/` (Quarto). `bin/render-docs` refreshes the example output and renders it; see `docs/development.qmd`.

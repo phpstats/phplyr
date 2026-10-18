@@ -4,7 +4,7 @@ title: "Development"
 
 ## Tests
 
-The tests use Pest and run under PHP 8.3, 8.4, and 8.5. They call verbs through
+The tests use Pest and run under PHP 8.3, 8.4, and 8.5. They call functions through
 `pipe()`, so they parse on every version. `tests/Pipe/` holds the tests written
 with `|>`; `bin/test` leaves them out before PHP 8.5.
 
@@ -16,16 +16,16 @@ PHP=/path/to/php83 bin/test
 ```
 
 The method chain's `@method` list in `src/Chain.php` is generated. After
-adding or changing a verb, run `bin/chain-docblock`; a test fails while the
+adding or changing a table function, run `bin/chain-docblock`; a test fails while the
 list is out of date.
 
 Most tests compare phplyr with R. The scripts in `tests/r/` run the same
 pipelines with dplyr and tidyr and write JSON fixtures to `tests/Fixtures/`:
 
 ```bash
-Rscript tests/r/reference.R   # single-table verbs, windows, across, tidyselect
+Rscript tests/r/reference.R   # single-table functions, windows, across, tidyselect
 Rscript tests/r/joins.R       # joins and rowwise
-Rscript tests/r/tidyr.R       # tidyr verbs
+Rscript tests/r/tidyr.R       # tidyr functions
 Rscript tests/r/rows.R        # set operations, rows_*(), dplyr 1.2 helpers
 Rscript tests/r/models.R      # lm() and glm() coefficients
 ```
@@ -75,12 +75,12 @@ runs each vignette at its default inputs.
 
 | Path | Contents |
 | --- | --- |
-| `src/functions/verbs.php` | Single-table verbs |
+| `src/functions/verbs.php` | Single-table functions |
 | `src/functions/chain.php`, `src/Chain.php` | `phplyr()` method chains and `pipe()` |
 | `src/functions/vectors.php` | Summary, window, and conditional helpers |
 | `src/functions/select.php` | tidyselect helpers and `across()` |
 | `src/functions/joins.php`, `rows.php` | Joins, set operations, and `rows_*()` |
 | `src/functions/groups.php` | Group utilities, binding, and model adapters |
-| `src/functions/tidyr.php` | tidyr verbs |
+| `src/functions/tidyr.php` | tidyr functions |
 | `src/Vec.php` | The per-group vector expression behind the helpers |
 | `src/Ops.php` | Group-vector primitives over the Table contract |

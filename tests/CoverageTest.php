@@ -86,7 +86,7 @@ describe('group helpers', function () {
         expect(array_map(fn ($g, $n) => ['g' => $g, 'n' => $n], $by->column('g'), $counts))->toBe(coverage('nest_by_n'));
     });
 
-    it('runs a verb under other groups with with_groups()', function () {
+    it('runs a function under other groups with with_groups()', function () {
         $out = pipe(panel(), head(3), with_groups('g', mutate(m: mean('score'))));
 
         expectRowsClose($out->toRows(), coverage('with_groups'));
@@ -100,7 +100,7 @@ describe('group helpers', function () {
     });
 });
 
-describe('superseded dplyr verbs', function () {
+describe('superseded dplyr functions', function () {
     it('keeps the top rows in table order with top_n() and top_frac()', function () {
         expectRowsClose((pipe(panel(), head(8), top_n(2, 'score')))->toRows(), coverage('top_n'));
         expectRowsClose((pipe(panel(), head(8), group_by('g'), top_n(-1, 'value'), ungroup()))->toRows(), coverage('top_n_neg'));

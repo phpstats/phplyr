@@ -9,10 +9,10 @@ later, or uses the pipe operator on PHP 8.5, and reads like its R equivalent.
 
 {{< include examples/_first-pipeline.md >}}
 
-Each verb is a function that returns a closure taking one table. In a method
+Each table function returns a closure taking one table. In a method
 chain, `phplyr($t)->filter(...)` runs `filter()` on the table, and `get()`
 returns the result. On PHP 8.5, the `|>` operator passes the table from one
-verb to the next. Verbs call the methods of
+function to the next. The functions call the methods of
 phibble's `Table` contract, so the same pipeline runs on the in-memory `DataFrame`
 and on other backends that implement the contract.
 
@@ -34,7 +34,7 @@ speeds up the descriptive helpers and provides `lm()` and `glm()`.
 ## Where to go next
 
 - [Getting started](getting-started.qmd) covers imports, loading data, and how
-  verbs, row closures, and vector helpers fit together.
+  table functions, row closures, and vector helpers fit together.
 - [Coming from dplyr](coming-from-dplyr.qmd) lists the syntax differences and
   what is not supported.
 - The reference pages document each group of functions with runnable examples.
@@ -44,8 +44,8 @@ speeds up the descriptive helpers and provides `lm()` and `glm()`.
 
 - **phibble** provides the typed data frame, CSV and database sources, and the
   `Table` contract.
-- **phplyr** provides the dplyr and tidyr verbs.
+- **phplyr** provides the dplyr and tidyr functions.
 - **phit** is a native extension for statistical models and descriptive
   statistics.
 - **phpolars** is a native extension that binds Polars. phibble's
-  `PolarsTable` uses it to run the same verbs in Polars.
+  `PolarsTable` uses it to run the same pipelines in Polars.

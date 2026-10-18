@@ -176,13 +176,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../reference/single-table.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Single-table verbs</span></a>
+ <span class="menu-text">Single-table functions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../reference/two-table.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Two-table verbs</span></a>
+ <span class="menu-text">Joins, binding, and set operations</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -292,12 +292,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The tidyr verbs use tidyr’s argument names. Arguments that start with a dot in tidyr start with an underscore here.</p>
+<p>The tidyr functions use tidyr’s argument names. Arguments that start with a dot in tidyr start with an underscore here.</p>
 <section id="pivoting" class="level2">
 <h2 class="anchored" data-anchor-id="pivoting">Pivoting</h2>
 <p><code>pivot_longer()</code> turns columns into rows of names and values. <code>names_prefix</code> strips a regular expression from the start of each name. <code>names_sep</code> or <code>names_pattern</code> split names into several <code>names_to</code> columns, and the special name <code>'.value'</code> takes the value column’s name from that part. <code>values_drop_na: true</code> drops rows whose values are all NA. <code>names_transform</code> and <code>values_transform</code> take a closure, or an array of closures by column. <code>cols_vary: 'slowest'</code> keeps each source column’s rows together.</p>
 <p><code>pivot_wider()</code> spreads names and values into columns. <code>id_cols</code> identify the rows (by default every other column). <code>values_fill</code> fills missing cells, <code>values_fn</code> combines duplicate cells, and <code>names_prefix</code>, <code>names_sep</code>, <code>names_glue</code>, and <code>names_sort</code> control the new names. Without <code>values_fn</code>, duplicate cells turn the value column into list-columns and raise tidyr’s warning. <code>names_vary: 'slowest'</code> groups each name’s value columns together. <code>names_expand</code> and <code>id_expand</code> add every combination of the <code>names_from</code> and <code>id_cols</code> values (sorted, factors by level). <code>unused_fn</code> summarises the columns that are in none of <code>id_cols</code>, <code>names_from</code>, and <code>values_from</code>.</p>
-<p>Both verbs build tidyr’s pivot spec in phplyr and pass it to the table’s <code>pivotLongerSpec()</code> or <code>pivotWiderSpec()</code>, so a backend can run the pivot natively. <code>build_longer_spec()</code> and <code>build_wider_spec()</code> return that spec as a table, and <code>pivot_longer_spec()</code> and <code>pivot_wider_spec()</code> run an edited one. The superseded <code>gather()</code> and <code>spread()</code> are also available.</p>
+<p>Both functions build tidyr’s pivot spec in phplyr and pass it to the table’s <code>pivotLongerSpec()</code> or <code>pivotWiderSpec()</code>, so a backend can run the pivot natively. <code>build_longer_spec()</code> and <code>build_wider_spec()</code> return that spec as a table, and <code>pivot_longer_spec()</code> and <code>pivot_wider_spec()</code> run an edited one. The superseded <code>gather()</code> and <code>spread()</code> are also available.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Method chain (PHP 8.3+)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Pipe (PHP 8.5)</a></li></ul>
 <div class="tab-content" data-group="syntax">

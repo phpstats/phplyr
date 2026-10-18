@@ -1,5 +1,5 @@
 ---
-title: "Single-table verbs"
+title: "Single-table functions"
 ---
 
 ## Rows

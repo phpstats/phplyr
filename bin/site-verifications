@@ -23,14 +23,14 @@ chdir($root);
 $r = 'R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2, lubridate 1.9.5, and stringr 1.6.0';
 $families = [
     'dplyr' => [
-        'title' => 'dplyr verbs and helpers',
-        'description' => 'Single-table verbs, window and summary helpers, expressions, grouping, joins, join_by() conditions, set operations, and rows_*(), compared with the same pipelines run in R by the scripts in tests/r/.',
+        'title' => 'dplyr functions and helpers',
+        'description' => 'Single-table functions, window and summary helpers, expressions, grouping, joins, join_by() conditions, set operations, and rows_*(), compared with the same pipelines run in R by the scripts in tests/r/.',
         'reference' => $r,
         'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
         'fixtures' => ['dplyr-reference.json', 'expr-reference.json', 'cur-group-reference.json', 'drop-reference.json', 'joins-reference.json', 'join-by-reference.json', 'rows-reference.json'],
     ],
     'tidyr' => [
-        'title' => 'tidyr verbs',
+        'title' => 'tidyr functions',
         'description' => 'Pivoting, completing, filling, separating, nesting, and unnesting, compared with tidyr in R.',
         'reference' => $r,
         'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
@@ -38,7 +38,7 @@ $families = [
     ],
     'additions' => [
         'title' => 'Later dplyr 1.1 and tidyr 1.3 functions',
-        'description' => 'across() edge cases, group helpers, superseded verbs, pivot options and specs, rectangling, and other functions added in phplyr 0.2, compared with R.',
+        'description' => 'across() edge cases, group helpers, superseded functions, pivot options and specs, rectangling, and other functions added in phplyr 0.2, compared with R.',
         'reference' => $r,
         'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
         'fixtures' => ['coverage-reference.json'],
@@ -51,7 +51,7 @@ $families = [
         'fixtures' => ['lubridate-stringr.json'],
     ],
     'models' => [
-        'title' => 'Model verbs',
+        'title' => 'Models',
         'description' => 'lm(), glm(), and lmer() through the phit extension, compared with the coefficients and residual standard deviation from R\'s lm(), glm(), and lme4\'s lmer().',
         'reference' => 'R 4.6.1 lm() and glm(), and lme4 2.0.6 lmer()',
         'tolerance' => 'lm() and glm() coefficients within 1e-6 relative; lmer() fixed effects within 1e-6 relative and sigma within 1e-5.',
@@ -96,7 +96,7 @@ foreach ($families as $slug => $family) {
         if ($isModel !== ($slug === 'models') || (! $isModel && array_intersect($rec['references'], $family['fixtures']) === [])) {
             continue;
         }
-        $name = preg_replace('/^it /', '', $rec['test']).($rec['data'] !== '' ? ' '.$rec['data'] : '');
+        $name = preg_replace(['/^`([^`]+)` → it /u', '/^it /'], ['$1: ', ''], $rec['test']).($rec['data'] !== '' ? ' '.$rec['data'] : '');
         $cases[] = [
             'name' => $name,
             'quantity' => $rec['kinds'] === [] ? 'values' : implode(', ', $rec['kinds']),

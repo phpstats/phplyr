@@ -126,7 +126,7 @@ return [
         PHP;
 
         $blocks = [
-            ['type' => 'text', 'content' => 'phplyr verbs call the methods of phibble\'s `Table` contract, so one pipeline runs on several backends. '
+            ['type' => 'text', 'content' => 'phplyr functions call the methods of phibble\'s `Table` contract, so one pipeline runs on several backends. '
                 .'`DataFrame` evaluates it in PHP. `SqlTable` compiles `col()` expressions and helpers such as `mean()` to SQL, and `collect()` runs the query. '
                 .'`PolarsTable` runs the same expressions in Polars through the php_polars extension. '
                 .'This pipeline joins sales to stores, sums revenue per region and product, and keeps each region\'s top products.'],

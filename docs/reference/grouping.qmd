@@ -28,7 +28,7 @@ within groups. `_by:` groups for a single call and returns an ungrouped table.
 | `group_trim()` | The table regrouped without unused factor levels |
 | `group_nest(_key:, _keep:)` | One row per group, with a list-column of tables |
 | `nest_by(...cols)` | `group_nest()` as a rowwise table |
-| `with_groups(groups, verb)` | The verb's result under other groups, with the original grouping restored |
+| `with_groups(groups, fn)` | The function's result under other groups, with the original grouping restored |
 | `group_split(_keep:)` | A list of tables, one per group |
 | `group_map(fn ($table, $key))` | A list of the function's results |
 | `group_modify(fn ($table, $key))` | A grouped table built from the returned tables |

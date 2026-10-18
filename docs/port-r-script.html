@@ -176,13 +176,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./reference/single-table.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Single-table verbs</span></a>
+ <span class="menu-text">Single-table functions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./reference/two-table.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Two-table verbs</span></a>
+ <span class="menu-text">Joins, binding, and set operations</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -482,7 +482,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="what-changed-in-translation">What changed in translation</h2>
 <ul>
 <li><strong>Loading.</strong> <code>read.csv()</code> becomes <code>DataFrame::fromCsv()</code>. phibble infers column types like readr.</li>
-<li><strong>Pipes.</strong> On PHP 8.5, R’s <code>|&gt;</code> stays <code>|&gt;</code>. Each verb returns a closure that the pipe applies. On PHP 8.3 and 8.4, the pipeline becomes a method chain: <code>phplyr($t)-&gt;verb(...)</code>, ending with <code>-&gt;get()</code>.</li>
+<li><strong>Pipes.</strong> On PHP 8.5, R’s <code>|&gt;</code> stays <code>|&gt;</code>. Each function returns a closure that the pipe applies. On PHP 8.3 and 8.4, the pipeline becomes a method chain: <code>phplyr($t)-&gt;filter(...)</code>, ending with <code>-&gt;get()</code>.</li>
 <li><strong>Column references.</strong> Bare names become strings, or <code>col('x')</code> inside expressions. <code>score - prior_score</code> becomes <code>col('score')-&gt;sub(col('prior_score'))</code>. A row closure, <code>fn ($r) =&gt; $r-&gt;score - $r-&gt;prior_score</code>, also works.</li>
 <li><strong>Conditions.</strong> <code>case_when(x &lt; 4 ~ "low", .default = "high")</code> becomes <code>case_when([col('x')-&gt;lt(4), 'low'], default: 'high')</code>.</li>
 <li><strong>Renaming in select.</strong> <code>select(prior = prior_score)</code> becomes <code>select(['prior' =&gt; 'prior_score'])</code>.</li>

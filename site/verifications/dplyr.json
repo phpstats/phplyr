@@ -1,11 +1,11 @@
 {
-    "title": "dplyr verbs and helpers",
-    "description": "Single-table verbs, window and summary helpers, expressions, grouping, joins, join_by() conditions, set operations, and rows_*(), compared with the same pipelines run in R by the scripts in tests/r/.",
+    "title": "dplyr functions and helpers",
+    "description": "Single-table functions, window and summary helpers, expressions, grouping, joins, join_by() conditions, set operations, and rows_*(), compared with the same pipelines run in R by the scripts in tests/r/.",
     "reference": "R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2, lubridate 1.9.5, and stringr 1.6.0",
     "tolerance": "Floating-point table values within 1e-9 relative; all other values equal.",
     "environment": {
         "php": "8.5.10",
-        "commit": "ed999d8",
+        "commit": "fa31c40",
         "date": "2026-10-18"
     },
     "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",

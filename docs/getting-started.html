@@ -176,13 +176,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./reference/single-table.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Single-table verbs</span></a>
+ <span class="menu-text">Single-table functions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./reference/two-table.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Two-table verbs</span></a>
+ <span class="menu-text">Joins, binding, and set operations</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -265,7 +265,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#imports" id="toc-imports" class="nav-link active" data-scroll-target="#imports">Imports</a></li>
   <li><a href="#loading-data" id="toc-loading-data" class="nav-link" data-scroll-target="#loading-data">Loading data</a></li>
-  <li><a href="#chaining-verbs" id="toc-chaining-verbs" class="nav-link" data-scroll-target="#chaining-verbs">Chaining verbs</a></li>
+  <li><a href="#chaining-functions" id="toc-chaining-functions" class="nav-link" data-scroll-target="#chaining-functions">Chaining functions</a></li>
   <li><a href="#row-closures-and-vector-helpers" id="toc-row-closures-and-vector-helpers" class="nav-link" data-scroll-target="#row-closures-and-vector-helpers">Row closures and vector helpers</a></li>
   <li><a href="#named-arguments-and-options" id="toc-named-arguments-and-options" class="nav-link" data-scroll-target="#named-arguments-and-options">Named arguments and options</a></li>
   <li><a href="#printing-and-inspecting" id="toc-printing-and-inspecting" class="nav-link" data-scroll-target="#printing-and-inspecting">Printing and inspecting</a></li>
@@ -296,10 +296,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="imports" class="level2">
 <h2 class="anchored" data-anchor-id="imports">Imports</h2>
-<p>phplyr’s verbs and helpers are namespaced functions. Import the ones a file uses with <code>use function</code>:</p>
+<p>phplyr’s table functions and helpers are namespaced functions. Import the ones a file uses with <code>use function</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> filter<span class="ot">,</span> mutate<span class="ot">,</span> group_by<span class="ot">,</span> summarise<span class="ot">,</span> arrange<span class="ot">,</span> desc<span class="ot">,</span> n<span class="ot">,</span> mean}<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>A method chain only needs <code>phplyr()</code> and the helpers it uses, such as <code>n</code>, <code>mean</code>, and <code>desc</code>. The verbs are its methods.</p>
+<p>A method chain only needs <code>phplyr()</code> and the helpers it uses, such as <code>n</code>, <code>mean</code>, and <code>desc</code>. The table functions are its methods.</p>
 <p>Three phplyr functions share names with PHP built-ins: <code>count</code>, <code>min</code>, and <code>max</code>. In a file that imports them, a bare <code>count($array)</code> calls phplyr’s <code>count()</code>. Write <code>\count()</code>, <code>\min()</code>, and <code>\max()</code> for the built-ins.</p>
 </section>
 <section id="loading-data" class="level2">
@@ -308,21 +308,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">$rows</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'x'</span> =&gt; <span class="fl">2.5</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'x'</span> =&gt; <span class="kw">null</span>]])<span class="ot">;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">$cols</span> <span class="op">=</span> DataFrame::fromColumns([<span class="st">'id'</span> =&gt; [<span class="dv">1</span><span class="ot">,</span> <span class="dv">2</span>]<span class="ot">,</span> <span class="st">'x'</span> =&gt; [<span class="fl">2.5</span><span class="ot">,</span> <span class="kw">null</span>]])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>null</code> is NA. DataFrames are immutable, and every verb returns a new frame. <code>echo $frame</code> prints the first rows in tibble’s format.</p>
+<p><code>null</code> is NA. DataFrames are immutable, and every function returns a new frame. <code>echo $frame</code> prints the first rows in tibble’s format.</p>
 </section>
-<section id="chaining-verbs" class="level2">
-<h2 class="anchored" data-anchor-id="chaining-verbs">Chaining verbs</h2>
-<p>A verb such as <code>filter(...)</code> returns a closure that takes a table. phplyr runs a sequence of verbs in three ways, and all three give the same result.</p>
+<section id="chaining-functions" class="level2">
+<h2 class="anchored" data-anchor-id="chaining-functions">Chaining functions</h2>
+<p>A function such as <code>filter(...)</code> returns a closure that takes a table. phplyr runs a sequence of them in three ways, and all three give the same result.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Method chain (PHP 8.3+)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Pipe (PHP 8.5)</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<p><code>phplyr($t)</code> starts a chain. Each method runs the phplyr verb of that name with the same arguments, and <code>get()</code> returns the table:</p>
+<p><code>phplyr($t)</code> starts a chain. Each method runs the phplyr function of that name with the same arguments, and <code>get()</code> returns the table:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">$out</span> <span class="op">=</span> phplyr(<span class="va">$schools</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">&gt;</span> <span class="dv">80</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(desc(<span class="st">'score'</span>))</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>echo</code> prints a chain’s table directly. A verb whose result isn’t a table, such as <code>pull()</code>, <code>n_groups()</code>, or <code>lm()</code>, returns that result and ends the chain. <code>-&gt;pipe($closure)</code> applies a closure of your own and continues.</p>
+<p><code>echo</code> prints a chain’s table directly. A function whose result isn’t a table, such as <code>pull()</code>, <code>n_groups()</code>, or <code>lm()</code>, returns that result and ends the chain. <code>-&gt;pipe($closure)</code> applies a closure of your own and continues.</p>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>The pipe operator calls each closure with the value on its left:</p>
@@ -404,7 +404,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="named-arguments-and-options" class="level2">
 <h2 class="anchored" data-anchor-id="named-arguments-and-options">Named arguments and options</h2>
-<p>Verbs that create columns name them with PHP named arguments: <code>mutate(total: ...)</code>, <code>summarise(n: n())</code>. dplyr’s dot-prefixed options are written with a leading underscore, because PHP named arguments cannot start with a dot: <code>_by</code>, <code>_keep</code>, <code>_before</code>, <code>_after</code>, <code>_groups</code>, <code>_keep_all</code>, and <code>_by_group</code>.</p>
+<p>Functions that create columns name them with PHP named arguments: <code>mutate(total: ...)</code>, <code>summarise(n: n())</code>. dplyr’s dot-prefixed options are written with a leading underscore, because PHP named arguments cannot start with a dot: <code>_by</code>, <code>_keep</code>, <code>_before</code>, <code>_after</code>, <code>_groups</code>, <code>_keep_all</code>, and <code>_by_group</code>.</p>
 <p>PHP does not allow positional arguments after named ones. Put <code>across()</code> and other positional arguments first: <code>summarise(across(...), n: n())</code>.</p>
 </section>
 <section id="printing-and-inspecting" class="level2">

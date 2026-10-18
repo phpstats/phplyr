@@ -6,7 +6,7 @@ title: "tidyselect and across()"
 
 Selectors pick columns by name, pattern, or type. They work in `select()`,
 `relocate()`, `rename_with()`, `arrange()`, `distinct()`, `group_by()`,
-`count()`, `across()`, `pick()`, and the tidyr verbs.
+`count()`, `across()`, `pick()`, and the tidyr functions.
 
 | Selector | Columns |
 | --- | --- |
