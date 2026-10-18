@@ -5,13 +5,13 @@
     "tolerance": "lm() and glm() coefficients within 1e-6 relative; lmer() fixed effects within 1e-6 relative and sigma within 1e-5.",
     "environment": {
         "php": "8.5.10",
-        "commit": "fa31c40",
+        "commit": "a741c88",
         "date": "2026-10-18"
     },
     "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
     "cases": [
         {
-            "name": "fits mixed models like lme4",
+            "name": "Fits mixed models like lme4",
             "quantity": "coefficients",
             "n_compared": 5,
             "max_abs_error": 1.9980699761390497e-8,
@@ -19,7 +19,7 @@
             "passed": true
         },
         {
-            "name": "fits models like R",
+            "name": "Fits models like R",
             "quantity": "coefficients",
             "n_compared": 22,
             "max_abs_error": 3.276490190273762e-12,

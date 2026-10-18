@@ -5,13 +5,13 @@
     "tolerance": "Floating-point table values within 1e-9 relative; all other values equal.",
     "environment": {
         "php": "8.5.10",
-        "commit": "fa31c40",
+        "commit": "a741c88",
         "date": "2026-10-18"
     },
     "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
     "cases": [
         {
-            "name": "across(), if_any(), and if_all(): names several functions with {.fn} and {.col}, and resolves helpers called on the values",
+            "name": "Names several functions with {.fn} and {.col}, and resolves helpers called on the values",
             "quantity": "table values",
             "n_compared": 7,
             "max_abs_error": 2.6645352591003757e-15,
@@ -19,7 +19,7 @@
             "passed": true
         },
         {
-            "name": "across(), if_any(), and if_all(): gives cur_column() inside across()",
+            "name": "Gives cur_column() inside across()",
             "quantity": "values",
             "n_compared": 30,
             "max_abs_error": 0,
@@ -27,7 +27,7 @@
             "passed": true
         },
         {
-            "name": "across(), if_any(), and if_all(): filters and mutates with if_any() and if_all(), with R NA logic",
+            "name": "Filters and mutates with if_any() and if_all(), with R NA logic",
             "quantity": "table values",
             "n_compared": 81,
             "max_abs_error": 0,
@@ -35,7 +35,7 @@
             "passed": true
         },
         {
-            "name": "across(), if_any(), and if_all(): treats an empty selection as FALSE for if_any() and TRUE for if_all()",
+            "name": "Treats an empty selection as FALSE for if_any() and TRUE for if_all()",
             "quantity": "table values",
             "n_compared": 40,
             "max_abs_error": 0,
@@ -43,7 +43,7 @@
             "passed": true
         },
         {
-            "name": "group helpers: lists group rows and group data",
+            "name": "Lists group rows and group data",
             "quantity": "values",
             "n_compared": 3,
             "max_abs_error": 0,
@@ -51,7 +51,7 @@
             "passed": true
         },
         {
-            "name": "group helpers: gives each row its group key with cur_group()",
+            "name": "Gives each row its group key with cur_group()",
             "quantity": "table values",
             "n_compared": 49,
             "max_abs_error": 0,
@@ -59,7 +59,7 @@
             "passed": true
         },
         {
-            "name": "group helpers: sums across columns in a rowwise table with c_across()",
+            "name": "Sums across columns in a rowwise table with c_across()",
             "quantity": "table values",
             "n_compared": 49,
             "max_abs_error": 0,
@@ -67,7 +67,7 @@
             "passed": true
         },
         {
-            "name": "group helpers: nests groups with group_nest() and nest_by()",
+            "name": "Nests groups with group_nest() and nest_by()",
             "quantity": "values",
             "n_compared": 12,
             "max_abs_error": 0,
@@ -75,7 +75,7 @@
             "passed": true
         },
         {
-            "name": "group helpers: runs a function under other groups with with_groups()",
+            "name": "Runs a function under other groups with with_groups()",
             "quantity": "table values",
             "n_compared": 26,
             "max_abs_error": 2.6645352591003757e-15,
@@ -83,7 +83,7 @@
             "passed": true
         },
         {
-            "name": "superseded dplyr functions: keeps the top rows in table order with top_n() and top_frac()",
+            "name": "Keeps the top rows in table order with top_n() and top_frac()",
             "quantity": "table values",
             "n_compared": 45,
             "max_abs_error": 0,
@@ -91,7 +91,7 @@
             "passed": true
         },
         {
-            "name": "superseded dplyr functions: recodes values by name",
+            "name": "Recodes values by name",
             "quantity": "values",
             "n_compared": 3,
             "max_abs_error": 0,
@@ -99,7 +99,7 @@
             "passed": true
         },
         {
-            "name": "superseded dplyr functions: evaluates a window function in another order with order_by()",
+            "name": "Evaluates a window function in another order with order_by()",
             "quantity": "table values",
             "n_compared": 82,
             "max_abs_error": 0,
@@ -107,7 +107,7 @@
             "passed": true
         },
         {
-            "name": "superseded dplyr functions: adds rows with add_row()",
+            "name": "Adds rows with add_row()",
             "quantity": "values",
             "n_compared": 24,
             "max_abs_error": 0,
@@ -115,7 +115,7 @@
             "passed": true
         },
         {
-            "name": "superseded dplyr functions: nests matching rows with nest_join()",
+            "name": "Nests matching rows with nest_join()",
             "quantity": "values",
             "n_compared": 19,
             "max_abs_error": 0,
@@ -123,7 +123,7 @@
             "passed": true
         },
         {
-            "name": "pivot options and specs: transforms names and values, and varies columns slowest",
+            "name": "Transforms names and values, and varies columns slowest",
             "quantity": "values",
             "n_compared": 78,
             "max_abs_error": 0,
@@ -131,7 +131,7 @@
             "passed": true
         },
         {
-            "name": "pivot options and specs: varies names slowest, summarises unused columns, and expands names and ids",
+            "name": "Varies names slowest, summarises unused columns, and expands names and ids",
             "quantity": "table values",
             "n_compared": 72,
             "max_abs_error": 0,
@@ -139,7 +139,7 @@
             "passed": true
         },
         {
-            "name": "pivot options and specs: builds specs and pivots with them",
+            "name": "Builds specs and pivots with them",
             "quantity": "table values",
             "n_compared": 61,
             "max_abs_error": 0,
@@ -147,7 +147,7 @@
             "passed": true
         },
         {
-            "name": "pivot options and specs: gathers and spreads",
+            "name": "Gathers and spreads",
             "quantity": "table values",
             "n_compared": 103,
             "max_abs_error": 0,
@@ -155,7 +155,7 @@
             "passed": true
         },
         {
-            "name": "rectangling: widens named and unnamed elements",
+            "name": "Widens named and unnamed elements",
             "quantity": "values",
             "n_compared": 34,
             "max_abs_error": 0,
@@ -163,7 +163,7 @@
             "passed": true
         },
         {
-            "name": "rectangling: lengthens elements with indices",
+            "name": "Lengthens elements with indices",
             "quantity": "values",
             "n_compared": 43,
             "max_abs_error": 0,
@@ -171,7 +171,7 @@
             "passed": true
         },
         {
-            "name": "rectangling: hoists components by name, position, and path",
+            "name": "Hoists components by name, position, and path",
             "quantity": "values",
             "n_compared": 14,
             "max_abs_error": 0,
@@ -179,7 +179,7 @@
             "passed": true
         },
         {
-            "name": "rectangling: chops and unchops",
+            "name": "Chops and unchops",
             "quantity": "values",
             "n_compared": 27,
             "max_abs_error": 0,
@@ -187,7 +187,7 @@
             "passed": true
         },
         {
-            "name": "rectangling: packs and unpacks",
+            "name": "Packs and unpacks",
             "quantity": "values",
             "n_compared": 16,
             "max_abs_error": 0,
@@ -195,7 +195,7 @@
             "passed": true
         },
         {
-            "name": "other tidyr functions: extracts regex groups",
+            "name": "Extracts regex groups",
             "quantity": "values",
             "n_compared": 19,
             "max_abs_error": 0,
@@ -203,7 +203,7 @@
             "passed": true
         },
         {
-            "name": "other tidyr functions: separates rows on a regex",
+            "name": "Separates rows on a regex",
             "quantity": "values",
             "n_compared": 13,
             "max_abs_error": 0,
@@ -211,7 +211,7 @@
             "passed": true
         },
         {
-            "name": "other tidyr functions: fills a sequence with full_seq()",
+            "name": "Fills a sequence with full_seq()",
             "quantity": "values",
             "n_compared": 3,
             "max_abs_error": 0,

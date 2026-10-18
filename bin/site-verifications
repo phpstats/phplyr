@@ -96,7 +96,7 @@ foreach ($families as $slug => $family) {
         if ($isModel !== ($slug === 'models') || (! $isModel && array_intersect($rec['references'], $family['fixtures']) === [])) {
             continue;
         }
-        $name = preg_replace(['/^`([^`]+)` → it /u', '/^it /'], ['$1: ', ''], $rec['test']).($rec['data'] !== '' ? ' '.$rec['data'] : '');
+        $name = ucfirst((string) preg_replace(['/^`[^`]+` → it /u', '/^it /'], '', $rec['test'])).($rec['data'] !== '' ? ' '.$rec['data'] : '');
         $cases[] = [
             'name' => $name,
             'quantity' => $rec['kinds'] === [] ? 'values' : implode(', ', $rec['kinds']),

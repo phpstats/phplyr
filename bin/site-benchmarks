@@ -18,9 +18,9 @@ $dplyrFile = $root.'/docs/benchmarks/dplyr-results.json';
 $dplyr = is_file($dplyrFile) ? json_decode(file_get_contents($dplyrFile), true) : null;
 
 $titles = [
-    'A' => 'A: filter, join, grouped summary, ranked window',
-    'B' => 'B: per-group windows over every row',
-    'C' => 'C: A with a PHP closure in filter()',
+    'A' => 'Filter, join, summarise, and rank',
+    'B' => 'Grouped windows over every row',
+    'C' => 'Filter with a PHP closure, join, summarise, and rank',
 ];
 $names = [
     'DataFrame' => 'phplyr on DataFrame',
@@ -35,7 +35,7 @@ foreach ([...$php['results'], ...($dplyr['results'] ?? [])] as $r) {
         continue;
     }
     $rows[] = [
-        'case' => $titles[$r['pipeline']].', '.number_format($r['rows_in']).' rows',
+        'case' => $titles[$r['pipeline']].' ('.number_format($r['rows_in']).' rows)',
         'implementation' => trim($names[$r['backend']]),
         'value' => $r['seconds'],
         'reps' => $r['seconds_all'],
@@ -52,7 +52,7 @@ $rows = array_map(function (array $r) {
 $m = $php['method'];
 $out = [
     'title' => 'phplyr backends and dplyr',
-    'description' => 'Three pipelines on a generated sales table of 100,000 and 1,000,000 rows, joined to a 100-row store table. phplyr runs each on phibble\'s in-memory DataFrame, on PolarsTable (Polars at '.$m['polars_threads'].' threads), and on SQLite through SqlTable. dplyr runs A and B on the same data; C has no dplyr version because its closure is PHP code. Every backend returned the same rows as DataFrame, and dplyr\'s row counts and column sums matched.',
+    'description' => 'Three pipelines on a generated sales table of 100,000 and 1,000,000 rows, joined to a 100-row store table. phplyr runs each on phibble\'s in-memory DataFrame, on PolarsTable (Polars at '.$m['polars_threads'].' threads), and on SQLite through SqlTable. dplyr runs the first two pipelines on the same data. The pipeline with a PHP closure has no dplyr version. Every backend returned the same rows as DataFrame, and dplyr\'s row counts and column sums matched.',
     'measure' => 'Best of '.$m['repeats'].' runs; '.$m['timing'],
     'unit' => 's',
     'environment' => [

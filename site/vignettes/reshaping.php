@@ -86,8 +86,8 @@ return [
                 .'`pivot_wider()` turns the bands into columns, `separate_wider_delim()` splits the school id, '
                 .'and `pivot_longer()` turns the band columns back into rows.'],
             ['type' => 'code', 'chain' => $chain, 'pipe' => $pipe],
-            ['type' => 'table', 'title' => 'Long: one row per school and band', 'data' => $long, 'digits' => 2],
-            ['type' => 'table', 'title' => "Wide: {$label} by band", 'data' => $wide, 'digits' => 2],
+            ['type' => 'table', 'title' => 'One row per school and band', 'data' => $long, 'digits' => 2],
+            ['type' => 'table', 'title' => "{$label}, one column per band", 'data' => $wide, 'digits' => 2],
             $missing > 0
                 ? ['type' => 'note', 'content' => "{$missing} school and band combinations have no students, so their cells are NA. `values_fill: 0` fills them."]
                 : ['type' => 'note', 'content' => 'Every school and band combination has a value.'],

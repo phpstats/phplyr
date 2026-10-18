@@ -1,6 +1,6 @@
 ---
 title: "phplyr"
-subtitle: "dplyr and tidyr for PHP 8.3+"
+subtitle: "A PHP port of the Tidyverse's dplyr and tidyr."
 ---
 
 phplyr is a port of R's dplyr and tidyr to PHP. It works on

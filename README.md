@@ -1,6 +1,6 @@
 # phplyr
 
-A port of dplyr for [phibble](https://github.com/phpstats/phibble) tables. It runs on PHP 8.3 and later with method chains, and on PHP 8.5 with the pipe operator.
+A PHP port of the Tidyverse's dplyr and tidyr, for [phibble](https://github.com/phpstats/phibble) tables. It runs on PHP 8.3 and later with method chains, and on PHP 8.5 with the pipe operator.
 
 **Method chain (PHP 8.3+)**
 

@@ -5,13 +5,13 @@
     "tolerance": "All values equal.",
     "environment": {
         "php": "8.5.10",
-        "commit": "fa31c40",
+        "commit": "a741c88",
         "date": "2026-10-18"
     },
     "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
     "cases": [
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"ymd\"  with data set \"dataset \"ymd\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"ymd\"  with data set \"dataset \"ymd\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -19,7 +19,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"ymd_hms\"  with data set \"dataset \"ymd_hms\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"ymd_hms\"  with data set \"dataset \"ymd_hms\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -27,7 +27,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"dmy\"  with data set \"dataset \"dmy\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"dmy\"  with data set \"dataset \"dmy\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -35,7 +35,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"mdy\"  with data set \"dataset \"mdy\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"mdy\"  with data set \"dataset \"mdy\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -43,7 +43,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"parse_dt\"  with data set \"dataset \"parse_dt\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"parse_dt\"  with data set \"dataset \"parse_dt\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -51,7 +51,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"year\"  with data set \"dataset \"year\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"year\"  with data set \"dataset \"year\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -59,7 +59,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"month\"  with data set \"dataset \"month\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"month\"  with data set \"dataset \"month\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -67,7 +67,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"day\"  with data set \"dataset \"day\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"day\"  with data set \"dataset \"day\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -75,7 +75,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"wday\"  with data set \"dataset \"wday\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"wday\"  with data set \"dataset \"wday\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -83,7 +83,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"wday_mon\"  with data set \"dataset \"wday_mon\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"wday_mon\"  with data set \"dataset \"wday_mon\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -91,7 +91,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"yday\"  with data set \"dataset \"yday\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"yday\"  with data set \"dataset \"yday\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -99,7 +99,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"quarter\"  with data set \"dataset \"quarter\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"quarter\"  with data set \"dataset \"quarter\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -107,7 +107,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"hour\"  with data set \"dataset \"hour\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"hour\"  with data set \"dataset \"hour\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -115,7 +115,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"minute\"  with data set \"dataset \"minute\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"minute\"  with data set \"dataset \"minute\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -123,7 +123,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"second\"  with data set \"dataset \"second\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"second\"  with data set \"dataset \"second\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -131,7 +131,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"year_t\"  with data set \"dataset \"year_t\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"year_t\"  with data set \"dataset \"year_t\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -139,7 +139,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"floor_hour\"  with data set \"dataset \"floor_hour\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"floor_hour\"  with data set \"dataset \"floor_hour\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -147,7 +147,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"floor_15min\"  with data set \"dataset \"floor_15min\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"floor_15min\"  with data set \"dataset \"floor_15min\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -155,7 +155,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"floor_week\"  with data set \"dataset \"floor_week\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"floor_week\"  with data set \"dataset \"floor_week\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -163,7 +163,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"floor_month_d\"  with data set \"dataset \"floor_month_d\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"floor_month_d\"  with data set \"dataset \"floor_month_d\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -171,7 +171,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"floor_quarter_d\"  with data set \"dataset \"floor_quarter_d\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"floor_quarter_d\"  with data set \"dataset \"floor_quarter_d\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -179,7 +179,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"floor_year_d\"  with data set \"dataset \"floor_year_d\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"floor_year_d\"  with data set \"dataset \"floor_year_d\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -187,7 +187,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"ceiling_month_d\"  with data set \"dataset \"ceiling_month_d\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"ceiling_month_d\"  with data set \"dataset \"ceiling_month_d\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -195,7 +195,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"ceiling_hour\"  with data set \"dataset \"ceiling_hour\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"ceiling_hour\"  with data set \"dataset \"ceiling_hour\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -203,7 +203,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"round_day\"  with data set \"dataset \"round_day\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"round_day\"  with data set \"dataset \"round_day\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -211,7 +211,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"round_month_d\"  with data set \"dataset \"round_month_d\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"round_month_d\"  with data set \"dataset \"round_month_d\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -219,7 +219,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"plus_days\"  with data set \"dataset \"plus_days\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"plus_days\"  with data set \"dataset \"plus_days\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -227,7 +227,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"plus_months\"  with data set \"dataset \"plus_months\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"plus_months\"  with data set \"dataset \"plus_months\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -235,7 +235,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"plus_years\"  with data set \"dataset \"plus_years\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"plus_years\"  with data set \"dataset \"plus_years\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -243,7 +243,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"minus_weeks\"  with data set \"dataset \"minus_weeks\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"minus_weeks\"  with data set \"dataset \"minus_weeks\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -251,7 +251,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"plus_hours\"  with data set \"dataset \"plus_hours\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"plus_hours\"  with data set \"dataset \"plus_hours\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -259,7 +259,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"plus_minutes\"  with data set \"dataset \"plus_minutes\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"plus_minutes\"  with data set \"dataset \"plus_minutes\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -267,7 +267,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"diff_days\"  with data set \"dataset \"diff_days\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"diff_days\"  with data set \"dataset \"diff_days\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -275,7 +275,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"difftime_hours\"  with data set \"dataset \"difftime_hours\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"difftime_hours\"  with data set \"dataset \"difftime_hours\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -283,7 +283,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"difftime_weeks\"  with data set \"dataset \"difftime_weeks\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"difftime_weeks\"  with data set \"dataset \"difftime_weeks\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -291,7 +291,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"with_tz\"  with data set \"dataset \"with_tz\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"with_tz\"  with data set \"dataset \"with_tz\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -299,7 +299,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"force_tz\"  with data set \"dataset \"force_tz\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"force_tz\"  with data set \"dataset \"force_tz\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -307,7 +307,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_detect\"  with data set \"dataset \"str_detect\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_detect\"  with data set \"dataset \"str_detect\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -315,7 +315,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_detect_fixed\"  with data set \"dataset \"str_detect_fixed\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_detect_fixed\"  with data set \"dataset \"str_detect_fixed\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -323,7 +323,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_detect_ic\"  with data set \"dataset \"str_detect_ic\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_detect_ic\"  with data set \"dataset \"str_detect_ic\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -331,7 +331,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_detect_negate\"  with data set \"dataset \"str_detect_negate\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_detect_negate\"  with data set \"dataset \"str_detect_negate\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -339,7 +339,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_starts\"  with data set \"dataset \"str_starts\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_starts\"  with data set \"dataset \"str_starts\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -347,7 +347,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_ends\"  with data set \"dataset \"str_ends\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_ends\"  with data set \"dataset \"str_ends\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -355,7 +355,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_count\"  with data set \"dataset \"str_count\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_count\"  with data set \"dataset \"str_count\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -363,7 +363,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_count_fixed\"  with data set \"dataset \"str_count_fixed\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_count_fixed\"  with data set \"dataset \"str_count_fixed\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -371,7 +371,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_count_class\"  with data set \"dataset \"str_count_class\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_count_class\"  with data set \"dataset \"str_count_class\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -379,7 +379,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_extract\"  with data set \"dataset \"str_extract\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_extract\"  with data set \"dataset \"str_extract\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -387,7 +387,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_extract_all\"  with data set \"dataset \"str_extract_all\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_extract_all\"  with data set \"dataset \"str_extract_all\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -395,7 +395,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_split\"  with data set \"dataset \"str_split\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_split\"  with data set \"dataset \"str_split\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -403,7 +403,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_split_i\"  with data set \"dataset \"str_split_i\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_split_i\"  with data set \"dataset \"str_split_i\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -411,7 +411,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_split_i_neg\"  with data set \"dataset \"str_split_i_neg\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_split_i_neg\"  with data set \"dataset \"str_split_i_neg\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -419,7 +419,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_replace\"  with data set \"dataset \"str_replace\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_replace\"  with data set \"dataset \"str_replace\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -427,7 +427,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_replace_all\"  with data set \"dataset \"str_replace_all\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_replace_all\"  with data set \"dataset \"str_replace_all\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -435,7 +435,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_replace_all_fixed\"  with data set \"dataset \"str_replace_all_fixed\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_replace_all_fixed\"  with data set \"dataset \"str_replace_all_fixed\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -443,7 +443,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_replace_na\"  with data set \"dataset \"str_replace_na\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_replace_na\"  with data set \"dataset \"str_replace_na\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -451,7 +451,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_pad\"  with data set \"dataset \"str_pad\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_pad\"  with data set \"dataset \"str_pad\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -459,7 +459,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_pad_right\"  with data set \"dataset \"str_pad_right\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_pad_right\"  with data set \"dataset \"str_pad_right\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -467,7 +467,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_pad_both\"  with data set \"dataset \"str_pad_both\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_pad_both\"  with data set \"dataset \"str_pad_both\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -475,7 +475,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_trunc\"  with data set \"dataset \"str_trunc\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_trunc\"  with data set \"dataset \"str_trunc\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -483,7 +483,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_trunc_left\"  with data set \"dataset \"str_trunc_left\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_trunc_left\"  with data set \"dataset \"str_trunc_left\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -491,7 +491,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_trunc_center\"  with data set \"dataset \"str_trunc_center\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_trunc_center\"  with data set \"dataset \"str_trunc_center\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -499,7 +499,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_to_title\"  with data set \"dataset \"str_to_title\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_to_title\"  with data set \"dataset \"str_to_title\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -507,7 +507,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_to_upper\"  with data set \"dataset \"str_to_upper\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_to_upper\"  with data set \"dataset \"str_to_upper\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -515,7 +515,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_squish\"  with data set \"dataset \"str_squish\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_squish\"  with data set \"dataset \"str_squish\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
@@ -523,7 +523,7 @@
             "passed": true
         },
         {
-            "name": "matches lubridate and stringr through phplyr with dataset \"str_length\"  with data set \"dataset \"str_length\"\"",
+            "name": "Matches lubridate and stringr through phplyr with dataset \"str_length\"  with data set \"dataset \"str_length\"\"",
             "quantity": "values",
             "n_compared": 2,
             "max_abs_error": 0,
