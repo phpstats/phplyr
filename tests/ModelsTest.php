@@ -19,11 +19,11 @@ function expectCoefficients(array $actual, array $expected): void
     }
 }
 
-it('explains when stats_lm is missing', function () {
+it('explains when fit_lm is missing', function () {
     $t = DataFrame::fromRows([['y' => 1.0, 'x' => 2.0]]);
-    expect(fn () => pipe($t, lm('y ~ x')))->toThrow(RuntimeException::class, 'stats_lm');
-    expect(fn () => pipe($t, glm('y ~ x', family: 'binomial')))->toThrow(RuntimeException::class, 'stats_glm');
-})->skip(fn () => function_exists('stats_lm'), 'stats_lm is available');
+    expect(fn () => pipe($t, lm('y ~ x')))->toThrow(RuntimeException::class, 'Phit\\fit_lm');
+    expect(fn () => pipe($t, glm('y ~ x', family: 'binomial')))->toThrow(RuntimeException::class, 'Phit\\fit_glm');
+})->skip(fn () => function_exists('Phit\\fit_lm'), 'fit_lm is available');
 
 it('fits models like R', function () {
     $schools = DataFrame::fromCsv(fixturePath('schools.csv'));
@@ -37,4 +37,4 @@ it('fits models like R', function () {
         (pipe($learning, glm('passed ~ study_hours + practice_score', family: 'binomial')))['coefficients'],
         modelsReference('glm'),
     );
-})->skip(fn () => ! function_exists('stats_lm'), 'needs php_stats with stats_lm');
+})->skip(fn () => ! function_exists('Phit\\fit_lm'), 'needs phit with fit_lm');

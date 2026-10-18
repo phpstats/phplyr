@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Phplyr;
 
 /**
- * Descriptive statistics over plain lists. Uses the php_stats extension when
+ * Descriptive statistics over plain lists. Uses the phit extension when
  * it is loaded and falls back to pure PHP otherwise. Results match R:
  * sample variance (n - 1) and type 7 quantiles.
  *
@@ -19,7 +19,7 @@ final class Stats
 
     public static function extensionLoaded(): bool
     {
-        return self::$useExtension && \extension_loaded('php_stats');
+        return self::$useExtension && \extension_loaded('phit');
     }
 
     /** @param list<mixed> $values */
@@ -39,7 +39,7 @@ final class Stats
         }
 
         return self::extensionLoaded()
-            ? \stats_mean($values)
+            ? \Phit\stat_mean($values)
             : array_sum($values) / \count($values);
     }
 
@@ -51,7 +51,7 @@ final class Stats
             return null;
         }
         if (self::extensionLoaded()) {
-            return \stats_var($values);
+            return \Phit\stat_var($values);
         }
 
         // Two-pass for accuracy.
@@ -70,7 +70,7 @@ final class Stats
         if (self::extensionLoaded()) {
             $clean = self::clean($values, $naRm);
 
-            return $clean === null || \count($clean) < 2 ? null : \stats_sd($clean);
+            return $clean === null || \count($clean) < 2 ? null : \Phit\stat_sd($clean);
         }
         $var = self::var($values, $naRm);
 
@@ -85,7 +85,7 @@ final class Stats
             return null;
         }
 
-        return self::extensionLoaded() ? \stats_median($values) : self::type7($values, 0.5);
+        return self::extensionLoaded() ? \Phit\stat_median($values) : self::type7($values, 0.5);
     }
 
     /** @param list<mixed> $values */
@@ -99,7 +99,7 @@ final class Stats
             return null;
         }
 
-        return self::extensionLoaded() ? \stats_quantile($values, $p) : self::type7($values, $p);
+        return self::extensionLoaded() ? \Phit\stat_quantile($values, $p) : self::type7($values, $p);
     }
 
     /** @param list<mixed> $values */

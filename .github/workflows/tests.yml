@@ -24,7 +24,7 @@ jobs:
 
       - run: composer install --no-interaction --no-progress
 
-      # Without php_stats, the descriptive helpers use pure PHP and the model
+      # Without phit, the descriptive helpers use pure PHP and the model
       # tests are skipped. bin/test leaves out tests/Pipe (|>) before PHP 8.5.
       - run: bin/test
 
@@ -46,7 +46,7 @@ jobs:
 
       - name: Install php_polars
         run: |
-          gh release download "$PHPOLARS_VERSION" -R erikwestlund/phpolars --pattern 'php_polars-*-x86_64-nts-bookworm.*'
+          gh release download "$PHPOLARS_VERSION" -R phpstats/phpolars --pattern 'php_polars-*-x86_64-nts-bookworm.*'
           sha256sum -c php_polars-*.sha256
           tar -xzf php_polars-*.tar.gz
           sudo cp php_polars-*/php_polars.so "$(php-config --extension-dir)/"
@@ -56,3 +56,36 @@ jobs:
       - run: composer install --no-interaction --no-progress
 
       - run: vendor/bin/pest tests/PolarsTest.php
+
+  phit:
+    # The model verbs and the native descriptive helpers, with the phit
+    # extension built from phpstats/phit's main branch.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: pdo_sqlite
+          coverage: none
+
+      - uses: actions/checkout@v4
+        with:
+          repository: phpstats/phit
+          path: phit
+
+      - name: Build phit
+        working-directory: phit
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang libclang-dev
+          rustup update stable && rustup default stable
+          PHP="$(command -v php)" PHP_CONFIG="$(command -v php-config)" cargo build -p phit --release --locked
+          sudo cp target/release/libphit.so "$(php-config --extension-dir)/phit.so"
+          echo "extension=phit.so" | sudo tee "$(php -r "echo PHP_CONFIG_FILE_SCAN_DIR;")/90-phit.ini"
+          php -r 'var_dump(function_exists("Phit\\fit_lm"));'
+
+      - run: composer install --no-interaction --no-progress
+
+      - run: bin/test

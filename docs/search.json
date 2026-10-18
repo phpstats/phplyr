@@ -15,7 +15,7 @@
     "href": "reference/vectors.html#summaries",
     "title": "Vector helpers",
     "section": "Summaries",
-    "text": "Summaries\n\n\n\nHelper\nValue\n\n\n\n\nn()\nRows in the group\n\n\nn_distinct('x', 'y')\nDistinct values or combinations\n\n\nsum, mean, median\nAs in R\n\n\nsd, variance\nSample statistics (n − 1)\n\n\nquantile('x', 0.9), iqr('x')\nType 7 quantiles, R’s default\n\n\nmin, max\nSmallest and largest values\n\n\nfirst, last, nth('x', 2)\nValues by position, with default:\n\n\nany, all\nLogical summaries with NA logic\n\n\n\nWith the php-stats extension loaded, mean, sd, variance, median, and quantile use it. Without it they run in PHP and give the same results.",
+    "text": "Summaries\n\n\n\nHelper\nValue\n\n\n\n\nn()\nRows in the group\n\n\nn_distinct('x', 'y')\nDistinct values or combinations\n\n\nsum, mean, median\nAs in R\n\n\nsd, variance\nSample statistics (n − 1)\n\n\nquantile('x', 0.9), iqr('x')\nType 7 quantiles, R’s default\n\n\nmin, max\nSmallest and largest values\n\n\nfirst, last, nth('x', 2)\nValues by position, with default:\n\n\nany, all\nLogical summaries with NA logic\n\n\n\nWith the phit extension loaded, mean, sd, variance, median, and quantile use it. Without it they run in PHP and give the same results.",
     "crumbs": [
       "Reference",
       "Vector helpers"
@@ -114,7 +114,7 @@
     "href": "reference/models.html",
     "title": "Models",
     "section": "",
-    "text": "lm(), glm(), lmer(), and glmer() pass the input table to the php-stats extension’s stats_lm(), stats_glm(), stats_lmer(), and stats_glmer(). The extension reads factor levels from the table, builds the model matrix, and returns coefficients, standard errors, and fit statistics in the same order as R.\n\nMethod chain (PHP 8.3+)Pipe (PHP 8.5)\n\n\nphplyr($table)-&gt;lm('y ~ x + group');\nphplyr($table)-&gt;glm('passed ~ hours', family: 'binomial');   // also 'poisson', link:\nphplyr($table)-&gt;lmer('score ~ hours + (1 | school)');        // REML; reml: false for ML\nphplyr($table)-&gt;glmer('passed ~ hours + (1 | school)', family: 'binomial');\n\n\n$table |&gt; lm('y ~ x + group');\n$table |&gt; glm('passed ~ hours', family: 'binomial');   // also 'poisson', link:\n$table |&gt; lmer('score ~ hours + (1 | school)');        // REML; reml: false for ML\n$table |&gt; glmer('passed ~ hours + (1 | school)', family: 'binomial');\n\n\n\nlmer() and glmer() take lme4’s random-effect bars. The result includes columns with R’s coefficient names. All four need php-stats with the formula functions. Without the extension they throw an exception that says so.\n\nMethod chain (PHP 8.3+)Pipe (PHP 8.5)\n\n\n$fit = phplyr(DataFrame::fromCsv('schools.csv'))\n    -&gt;filter(fn ($r) =&gt; $r-&gt;prior_score &gt; 50)\n    -&gt;lm('score ~ study_hours + prior_score');\n\nforeach (['(Intercept)', 'study_hours', 'prior_score'] as $i =&gt; $term) {\n    printf(\"%-12s %8.4f  (se %.4f)\\n\", $term, $fit['coefficients'][$i], $fit['std_errors'][$i]);\n}\nprintf(\"R² = %.4f, n = %d\\n\", $fit['r_squared'], $fit['n_observations']);\n\n$logit = phplyr(DataFrame::fromCsv('learning.csv'))-&gt;glm('passed ~ study_hours + practice_score', family: 'binomial');\necho 'logit coefficients: ', implode(', ', array_map(fn ($b) =&gt; round($b, 4), $logit['coefficients'])), \"\\n\";\n\n\n$fit = DataFrame::fromCsv('schools.csv')\n    |&gt; filter(fn ($r) =&gt; $r-&gt;prior_score &gt; 50)\n    |&gt; lm('score ~ study_hours + prior_score');\n\nforeach (['(Intercept)', 'study_hours', 'prior_score'] as $i =&gt; $term) {\n    printf(\"%-12s %8.4f  (se %.4f)\\n\", $term, $fit['coefficients'][$i], $fit['std_errors'][$i]);\n}\nprintf(\"R² = %.4f, n = %d\\n\", $fit['r_squared'], $fit['n_observations']);\n\n$logit = DataFrame::fromCsv('learning.csv') |&gt; glm('passed ~ study_hours + practice_score', family: 'binomial');\necho 'logit coefficients: ', implode(', ', array_map(fn ($b) =&gt; round($b, 4), $logit['coefficients'])), \"\\n\";\n\n\n\n(Intercept)   43.4427  (se 3.8669)\nstudy_hours    1.5135  (se 0.2256)\nprior_score    0.3074  (se 0.0736)\nR² = 0.4914, n = 193\nlogit coefficients: -3.171, 0.0637, 0.0342",
+    "text": "lm(), glm(), lmer(), and glmer() pass the input table to the phit extension’s Phit\\fit_lm(), Phit\\fit_glm(), Phit\\fit_lmer(), and Phit\\fit_glmer(). The extension reads factor levels from the table, builds the model matrix, and returns coefficients, standard errors, and fit statistics in the same order as R.\n\nMethod chain (PHP 8.3+)Pipe (PHP 8.5)\n\n\nphplyr($table)-&gt;lm('y ~ x + group');\nphplyr($table)-&gt;glm('passed ~ hours', family: 'binomial');   // also 'poisson', link:\nphplyr($table)-&gt;lmer('score ~ hours + (1 | school)');        // REML; reml: false for ML\nphplyr($table)-&gt;glmer('passed ~ hours + (1 | school)', family: 'binomial');\n\n\n$table |&gt; lm('y ~ x + group');\n$table |&gt; glm('passed ~ hours', family: 'binomial');   // also 'poisson', link:\n$table |&gt; lmer('score ~ hours + (1 | school)');        // REML; reml: false for ML\n$table |&gt; glmer('passed ~ hours + (1 | school)', family: 'binomial');\n\n\n\nlmer() and glmer() take lme4’s random-effect bars. The result includes columns with R’s coefficient names. All four need phit with the formula functions. Without the extension they throw an exception that says so.\n\nMethod chain (PHP 8.3+)Pipe (PHP 8.5)\n\n\n$fit = phplyr(DataFrame::fromCsv('schools.csv'))\n    -&gt;filter(fn ($r) =&gt; $r-&gt;prior_score &gt; 50)\n    -&gt;lm('score ~ study_hours + prior_score');\n\nforeach (['(Intercept)', 'study_hours', 'prior_score'] as $i =&gt; $term) {\n    printf(\"%-12s %8.4f  (se %.4f)\\n\", $term, $fit['coefficients'][$i], $fit['std_errors'][$i]);\n}\nprintf(\"R² = %.4f, n = %d\\n\", $fit['r_squared'], $fit['n_observations']);\n\n$logit = phplyr(DataFrame::fromCsv('learning.csv'))-&gt;glm('passed ~ study_hours + practice_score', family: 'binomial');\necho 'logit coefficients: ', implode(', ', array_map(fn ($b) =&gt; round($b, 4), $logit['coefficients'])), \"\\n\";\n\n\n$fit = DataFrame::fromCsv('schools.csv')\n    |&gt; filter(fn ($r) =&gt; $r-&gt;prior_score &gt; 50)\n    |&gt; lm('score ~ study_hours + prior_score');\n\nforeach (['(Intercept)', 'study_hours', 'prior_score'] as $i =&gt; $term) {\n    printf(\"%-12s %8.4f  (se %.4f)\\n\", $term, $fit['coefficients'][$i], $fit['std_errors'][$i]);\n}\nprintf(\"R² = %.4f, n = %d\\n\", $fit['r_squared'], $fit['n_observations']);\n\n$logit = DataFrame::fromCsv('learning.csv') |&gt; glm('passed ~ study_hours + practice_score', family: 'binomial');\necho 'logit coefficients: ', implode(', ', array_map(fn ($b) =&gt; round($b, 4), $logit['coefficients'])), \"\\n\";\n\n\n\n(Intercept)   43.4427  (se 3.8669)\nstudy_hours    1.5135  (se 0.2256)\nprior_score    0.3074  (se 0.0736)\nR² = 0.4914, n = 193\nlogit coefficients: -3.171, 0.0637, 0.0342",
     "crumbs": [
       "Reference",
       "Models"
@@ -288,7 +288,7 @@
     "href": "development.html",
     "title": "Development",
     "section": "",
-    "text": "The tests use Pest and run under PHP 8.3, 8.4, and 8.5. They call verbs through pipe(), so they parse on every version. tests/Pipe/ holds the tests written with |&gt;; bin/test leaves them out before PHP 8.5.\ncomposer install\nbin/test                 # loads .ext/libphp_stats.dylib when present\nNO_EXT=1 bin/test        # pure-PHP descriptive statistics\nPHP=/path/to/php83 bin/test\nThe method chain’s @method list in src/Chain.php is generated. After adding or changing a verb, run bin/chain-docblock; a test fails while the list is out of date.\nMost tests compare phplyr with R. The scripts in tests/r/ run the same pipelines with dplyr and tidyr and write JSON fixtures to tests/Fixtures/:\nRscript tests/r/reference.R   # single-table verbs, windows, across, tidyselect\nRscript tests/r/joins.R       # joins and rowwise\nRscript tests/r/tidyr.R       # tidyr verbs\nRscript tests/r/rows.R        # set operations, rows_*(), dplyr 1.2 helpers\nRscript tests/r/models.R      # lm() and glm() coefficients",
+    "text": "The tests use Pest and run under PHP 8.3, 8.4, and 8.5. They call verbs through pipe(), so they parse on every version. tests/Pipe/ holds the tests written with |&gt;; bin/test leaves them out before PHP 8.5.\ncomposer install\nbin/test                 # loads .ext/libphit.dylib when present\nNO_EXT=1 bin/test        # pure-PHP descriptive statistics\nPHP=/path/to/php83 bin/test\nThe method chain’s @method list in src/Chain.php is generated. After adding or changing a verb, run bin/chain-docblock; a test fails while the list is out of date.\nMost tests compare phplyr with R. The scripts in tests/r/ run the same pipelines with dplyr and tidyr and write JSON fixtures to tests/Fixtures/:\nRscript tests/r/reference.R   # single-table verbs, windows, across, tidyselect\nRscript tests/r/joins.R       # joins and rowwise\nRscript tests/r/tidyr.R       # tidyr verbs\nRscript tests/r/rows.R        # set operations, rows_*(), dplyr 1.2 helpers\nRscript tests/r/models.R      # lm() and glm() coefficients",
     "crumbs": [
       "Development"
     ]
@@ -298,7 +298,7 @@
     "href": "development.html#tests",
     "title": "Development",
     "section": "",
-    "text": "The tests use Pest and run under PHP 8.3, 8.4, and 8.5. They call verbs through pipe(), so they parse on every version. tests/Pipe/ holds the tests written with |&gt;; bin/test leaves them out before PHP 8.5.\ncomposer install\nbin/test                 # loads .ext/libphp_stats.dylib when present\nNO_EXT=1 bin/test        # pure-PHP descriptive statistics\nPHP=/path/to/php83 bin/test\nThe method chain’s @method list in src/Chain.php is generated. After adding or changing a verb, run bin/chain-docblock; a test fails while the list is out of date.\nMost tests compare phplyr with R. The scripts in tests/r/ run the same pipelines with dplyr and tidyr and write JSON fixtures to tests/Fixtures/:\nRscript tests/r/reference.R   # single-table verbs, windows, across, tidyselect\nRscript tests/r/joins.R       # joins and rowwise\nRscript tests/r/tidyr.R       # tidyr verbs\nRscript tests/r/rows.R        # set operations, rows_*(), dplyr 1.2 helpers\nRscript tests/r/models.R      # lm() and glm() coefficients",
+    "text": "The tests use Pest and run under PHP 8.3, 8.4, and 8.5. They call verbs through pipe(), so they parse on every version. tests/Pipe/ holds the tests written with |&gt;; bin/test leaves them out before PHP 8.5.\ncomposer install\nbin/test                 # loads .ext/libphit.dylib when present\nNO_EXT=1 bin/test        # pure-PHP descriptive statistics\nPHP=/path/to/php83 bin/test\nThe method chain’s @method list in src/Chain.php is generated. After adding or changing a verb, run bin/chain-docblock; a test fails while the list is out of date.\nMost tests compare phplyr with R. The scripts in tests/r/ run the same pipelines with dplyr and tidyr and write JSON fixtures to tests/Fixtures/:\nRscript tests/r/reference.R   # single-table verbs, windows, across, tidyselect\nRscript tests/r/joins.R       # joins and rowwise\nRscript tests/r/tidyr.R       # tidyr verbs\nRscript tests/r/rows.R        # set operations, rows_*(), dplyr 1.2 helpers\nRscript tests/r/models.R      # lm() and glm() coefficients",
     "crumbs": [
       "Development"
     ]
@@ -378,7 +378,7 @@
     "href": "gallery.html",
     "title": "Gallery",
     "section": "",
-    "text": "These analyses use the small datasets from php-stats’ documentation. Each example ran when the documentation was built, and the output shown is the output it produced. The CSV files are in docs/data.",
+    "text": "These analyses use the small datasets from phit’s documentation. Each example ran when the documentation was built, and the output shown is the output it produced. The CSV files are in docs/data.",
     "crumbs": [
       "Gallery"
     ]
@@ -448,7 +448,7 @@
     "href": "index.html#install",
     "title": "phplyr",
     "section": "Install",
-    "text": "Install\nphplyr needs PHP 8.3 or later. The pipe operator needs PHP 8.5.\ncomposer require erikwestlund/phplyr\nThe optional php-stats extension speeds up the descriptive helpers and provides lm() and glm().",
+    "text": "Install\nphplyr needs PHP 8.3 or later. The pipe operator needs PHP 8.5.\ncomposer require phpstats/phplyr\nThe optional phit extension speeds up the descriptive helpers and provides lm() and glm().",
     "crumbs": [
       "phplyr"
     ]
@@ -468,7 +468,7 @@
     "href": "index.html#the-family",
     "title": "phplyr",
     "section": "The family",
-    "text": "The family\n\nphibble provides the typed data frame, CSV and database sources, and the Table contract.\nphplyr provides the dplyr and tidyr verbs.\nphp-stats is a native extension for statistical models and descriptive statistics.\nphpolars is a native extension that binds Polars. phibble’s PolarsTable uses it to run the same verbs in Polars.",
+    "text": "The family\n\nphibble provides the typed data frame, CSV and database sources, and the Table contract.\nphplyr provides the dplyr and tidyr verbs.\nphit is a native extension for statistical models and descriptive statistics.\nphpolars is a native extension that binds Polars. phibble’s PolarsTable uses it to run the same verbs in Polars.",
     "crumbs": [
       "phplyr"
     ]
@@ -478,7 +478,7 @@
     "href": "port-r-script.html",
     "title": "Porting an R script",
     "section": "",
-    "text": "This page takes a typical R analysis of the schools data and translates it to PHP with phplyr and php-stats. The analysis reads a CSV file, cleans and reshapes it, summarises it, and fits a linear, a logistic, and a random-intercept model. Both scripts ran when the documentation was built. The output under each script is what it printed.",
+    "text": "This page takes a typical R analysis of the schools data and translates it to PHP with phplyr and phit. The analysis reads a CSV file, cleans and reshapes it, summarises it, and fits a linear, a logistic, and a random-intercept model. Both scripts ran when the documentation was built. The output under each script is what it printed.",
     "crumbs": [
       "Porting an R script"
     ]

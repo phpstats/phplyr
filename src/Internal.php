@@ -688,7 +688,7 @@ final class Internal
     {
         if (! \function_exists($function)) {
             throw new \RuntimeException(
-                "{$function}() is not available. Install or update the php_stats extension (erikwestlund/php-stats)."
+                "{$function}() is not available. Install or update the phit extension (phpstats/phit)."
             );
         }
 

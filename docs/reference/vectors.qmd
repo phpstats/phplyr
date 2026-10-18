@@ -25,7 +25,7 @@ row.
 | `first`, `last`, `nth('x', 2)` | Values by position, with `default:` |
 | `any`, `all` | Logical summaries with NA logic |
 
-With the php-stats extension loaded, `mean`, `sd`, `variance`, `median`, and
+With the phit extension loaded, `mean`, `sd`, `variance`, `median`, and
 `quantile` use it. Without it they run in PHP and give the same results.
 
 ## Window functions

@@ -283,7 +283,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code> pass the input table to the php-stats extension’s <code>stats_lm()</code>, <code>stats_glm()</code>, <code>stats_lmer()</code>, and <code>stats_glmer()</code>. The extension reads factor levels from the table, builds the model matrix, and returns coefficients, standard errors, and fit statistics in the same order as R.</p>
+<p><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code> pass the input table to the phit extension’s <code>Phit\fit_lm()</code>, <code>Phit\fit_glm()</code>, <code>Phit\fit_lmer()</code>, and <code>Phit\fit_glmer()</code>. The extension reads factor levels from the table, builds the model matrix, and returns coefficients, standard errors, and fit statistics in the same order as R.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Method chain (PHP 8.3+)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Pipe (PHP 8.5)</a></li></ul>
 <div class="tab-content" data-group="syntax">
@@ -301,7 +301,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p><code>lmer()</code> and <code>glmer()</code> take lme4’s random-effect bars. The result includes <code>columns</code> with R’s coefficient names. All four need php-stats with the formula functions. Without the extension they throw an exception that says so.</p>
+<p><code>lmer()</code> and <code>glmer()</code> take lme4’s random-effect bars. The result includes <code>columns</code> with R’s coefficient names. All four need phit with the formula functions. Without the extension they throw an exception that says so.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Method chain (PHP 8.3+)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Pipe (PHP 8.5)</a></li></ul>
 <div class="tab-content" data-group="syntax">
@@ -415,7 +415,7 @@ logit coefficients: -3.171, 0.0637, 0.0342</code></pre>
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/erikwestlund\.github\.io\/phplyr\/");
+        var filterRegex = new RegExp("https:\/\/phpstats\.github\.io\/phplyr\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

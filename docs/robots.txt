@@ -1,1 +1,1 @@
-Sitemap: https://erikwestlund.github.io/phplyr/sitemap.xml
+Sitemap: https://phpstats.github.io/phplyr/sitemap.xml

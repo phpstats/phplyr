@@ -295,7 +295,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="tests">Tests</h2>
 <p>The tests use Pest and run under PHP 8.3, 8.4, and 8.5. They call verbs through <code>pipe()</code>, so they parse on every version. <code>tests/Pipe/</code> holds the tests written with <code>|&gt;</code>; <code>bin/test</code> leaves them out before PHP 8.5.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> install</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">bin/test</span>                 <span class="co"># loads .ext/libphp_stats.dylib when present</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">bin/test</span>                 <span class="co"># loads .ext/libphit.dylib when present</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">NO_EXT</span><span class="op">=</span>1 <span class="ex">bin/test</span>        <span class="co"># pure-PHP descriptive statistics</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">PHP</span><span class="op">=</span>/path/to/php83 <span class="ex">bin/test</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The method chain’s <code>@method</code> list in <code>src/Chain.php</code> is generated. After adding or changing a verb, run <code>bin/chain-docblock</code>; a test fails while the list is out of date.</p>
@@ -444,7 +444,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/erikwestlund\.github\.io\/phplyr\/");
+        var filterRegex = new RegExp("https:\/\/phpstats\.github\.io\/phplyr\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

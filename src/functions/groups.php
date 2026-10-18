@@ -272,42 +272,42 @@ function bind_cols(Table ...$tables): Closure
 }
 
 // ---------------------------------------------------------------------------
-// Models: thin adapters over php_stats' formula API (stats_lm, stats_glm).
+// Models: thin adapters over phit's formula API (fit_lm, fit_glm).
 // The table itself is passed, so factor levels reach the model matrix.
 // ---------------------------------------------------------------------------
 
-/** Linear regression: $t |> lm('y ~ a + b'). Needs stats_lm from php_stats. */
+/** Linear regression: $t |> lm('y ~ a + b'). Needs fit_lm from phit. */
 function lm(string $formula, mixed ...$options): Closure
 {
-    return fn (Table $t) => Internal::callStats('stats_lm', $formula, $t, ...$options);
+    return fn (Table $t) => Internal::callStats('Phit\\fit_lm', $formula, $t, ...$options);
 }
 
 /**
  * Generalised linear model: $t |> glm('y ~ x', family: 'binomial').
- * Needs stats_glm from php_stats.
+ * Needs fit_glm from phit.
  */
 function glm(string $formula, string $family = 'gaussian', mixed ...$options): Closure
 {
-    return fn (Table $t) => Internal::callStats('stats_glm', $formula, $t, $family, ...$options);
+    return fn (Table $t) => Internal::callStats('Phit\\fit_glm', $formula, $t, $family, ...$options);
 }
 
 /**
  * Linear mixed model with lme4-style random effects:
  * $t |> lmer('score ~ study_hours + (1 | school)'). REML by default
- * (reml: false for maximum likelihood). Needs stats_lmer from php_stats.
+ * (reml: false for maximum likelihood). Needs fit_lmer from phit.
  */
 function lmer(string $formula, mixed ...$options): Closure
 {
-    return fn (Table $t) => Internal::callStats('stats_lmer', $formula, $t, ...$options);
+    return fn (Table $t) => Internal::callStats('Phit\\fit_lmer', $formula, $t, ...$options);
 }
 
 /**
  * Generalised linear mixed model: $t |> glmer('y ~ x + (1 | g)', family: 'binomial').
- * Needs stats_glmer from php_stats.
+ * Needs fit_glmer from phit.
  */
 function glmer(string $formula, string $family = 'binomial', mixed ...$options): Closure
 {
-    return fn (Table $t) => Internal::callStats('stats_glmer', $formula, $t, $family, ...$options);
+    return fn (Table $t) => Internal::callStats('Phit\\fit_glmer', $formula, $t, $family, ...$options);
 }
 
 /** The SQL a lazy table would run (database backends only). */

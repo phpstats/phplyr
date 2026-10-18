@@ -61,4 +61,4 @@ it('fits mixed models like lme4', function () {
     $fit = pipe(DataFrame::fromCsv(fixturePath('schools.csv')), lmer('score ~ study_hours + prior_score + (1 | school)'));
     expectCoefficients($fit['coefficients'], exprReference('lmer_fixef'));
     expect($fit['sigma'])->toEqualWithDelta(exprReference('lmer_sigma'), 1e-5);
-})->skip(fn () => ! function_exists('stats_lmer'), 'needs php_stats with stats_lmer');
+})->skip(fn () => ! function_exists('Phit\\fit_lmer'), 'needs phit with fit_lmer');

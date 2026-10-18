@@ -6,7 +6,7 @@ format:
 ---
 
 This page takes a typical R analysis of the schools data and translates it to
-PHP with phplyr and php-stats. The analysis reads a CSV file, cleans and
+PHP with phplyr and phit. The analysis reads a CSV file, cleans and
 reshapes it, summarises it, and fits a linear, a logistic, and a
 random-intercept model. Both scripts ran when the documentation was built.
 The output under each script is what it printed.

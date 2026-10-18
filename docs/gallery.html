@@ -293,7 +293,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>These analyses use the small datasets from php-stats’ documentation. Each example ran when the documentation was built, and the output shown is the output it produced. The CSV files are in <a href="https://github.com/erikwestlund/phplyr/tree/main/docs/data"><code>docs/data</code></a>.</p>
+<p>These analyses use the small datasets from phit’s documentation. Each example ran when the documentation was built, and the output shown is the output it produced. The CSV files are in <a href="https://github.com/phpstats/phplyr/tree/main/docs/data"><code>docs/data</code></a>.</p>
 <section id="school-value-added" class="level2">
 <h2 class="anchored" data-anchor-id="school-value-added">School value added</h2>
 <p>The schools data has 250 students in 12 schools, with study hours, a prior score, and a final score. A regression on all students gives each student an expected score. Averaging the residuals by school ranks schools by how far their students exceed that expectation.</p>
@@ -651,7 +651,7 @@ Odds ratio per extra study hour: 1.066</code></pre>
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/erikwestlund\.github\.io\/phplyr\/");
+        var filterRegex = new RegExp("https:\/\/phpstats\.github\.io\/phplyr\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

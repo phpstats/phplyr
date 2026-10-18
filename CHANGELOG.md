@@ -14,6 +14,8 @@ phplyr runs on PHP 8.3 and later. On 8.3 and 8.4, pipelines are method chains; o
 ### Changed
 
 - Composer allows PHP `^8.3` and requires symfony/polyfill-php84. CI tests PHP 8.3, 8.4, and 8.5.
+- The package is now `phpstats/phplyr`, and it requires `phpstats/phibble` ^0.3. The repositories moved to the phpstats GitHub organization, and the documentation is at <https://phpstats.github.io/phplyr/>. PHP namespaces are unchanged.
+- The php-stats extension is now phit (`ext-phit`). `lm()`, `glm()`, `lmer()`, and `glmer()` call `Phit\fit_lm()`, `Phit\fit_glm()`, `Phit\fit_lmer()`, and `Phit\fit_glmer()`. The descriptive helpers use `Phit\stat_mean()`, `stat_sd()`, `stat_var()`, `stat_median()`, and `stat_quantile()` when phit is loaded. CI builds phit from source and runs the suite with it.
 - The test suite calls verbs through `pipe()` so it runs on every version. Tests that use `|>` are in `tests/Pipe/`, which runs on PHP 8.5 only.
 - Every documentation example shows a method chain and the pipe version in tabs. `bin/docs-examples` checks that both print the same output.
 

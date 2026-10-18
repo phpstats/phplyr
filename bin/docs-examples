@@ -40,7 +40,7 @@ $preludeFor = function (string $code) use ($names): string {
 };
 
 $php = getenv('PHP') ?: PHP_BINARY;
-$ext = $root.'/.ext/libphp_stats.dylib';
+$ext = $root.'/.ext/libphit.dylib';
 $args = is_file($ext) && getenv('NO_EXT') === false ? ['-d', 'extension='.$ext] : [];
 
 $only = array_slice($argv, 1);

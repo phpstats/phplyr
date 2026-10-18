@@ -4,7 +4,7 @@ subtitle: "dplyr and tidyr for PHP 8.3+"
 ---
 
 phplyr is a port of R's dplyr and tidyr to PHP. It works on
-[phibble](https://github.com/erikwestlund/phibble) tables. A pipeline is a method chain on PHP 8.3 and
+[phibble](https://github.com/phpstats/phibble) tables. A pipeline is a method chain on PHP 8.3 and
 later, or uses the pipe operator on PHP 8.5, and reads like its R equivalent.
 
 {{< include examples/_first-pipeline.md >}}
@@ -25,10 +25,10 @@ pipelines in R and PHP and compares the output. The reference scripts are in
 phplyr needs PHP 8.3 or later. The pipe operator needs PHP 8.5.
 
 ```bash
-composer require erikwestlund/phplyr
+composer require phpstats/phplyr
 ```
 
-The optional [php-stats](https://github.com/erikwestlund/php-stats) extension
+The optional [phit](https://github.com/phpstats/phit) extension
 speeds up the descriptive helpers and provides `lm()` and `glm()`.
 
 ## Where to go next
@@ -45,7 +45,7 @@ speeds up the descriptive helpers and provides `lm()` and `glm()`.
 - **phibble** provides the typed data frame, CSV and database sources, and the
   `Table` contract.
 - **phplyr** provides the dplyr and tidyr verbs.
-- **php-stats** is a native extension for statistical models and descriptive
+- **phit** is a native extension for statistical models and descriptive
   statistics.
 - **phpolars** is a native extension that binds Polars. phibble's
   `PolarsTable` uses it to run the same verbs in Polars.

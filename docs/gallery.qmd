@@ -2,9 +2,9 @@
 title: "Gallery"
 ---
 
-These analyses use the small datasets from php-stats' documentation. Each
+These analyses use the small datasets from phit's documentation. Each
 example ran when the documentation was built, and the output shown is the
-output it produced. The CSV files are in [`docs/data`](https://github.com/erikwestlund/phplyr/tree/main/docs/data).
+output it produced. The CSV files are in [`docs/data`](https://github.com/phpstats/phplyr/tree/main/docs/data).
 
 ## School value added
 

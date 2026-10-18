@@ -1,6 +1,6 @@
 # phplyr
 
-A port of dplyr for [phibble](https://github.com/erikwestlund/phibble) tables. It runs on PHP 8.3 and later with method chains, and on PHP 8.5 with the pipe operator.
+A port of dplyr for [phibble](https://github.com/phpstats/phibble) tables. It runs on PHP 8.3 and later with method chains, and on PHP 8.5 with the pipe operator.
 
 **Method chain (PHP 8.3+)**
 
@@ -37,7 +37,7 @@ The two give the same table. `phplyr($t)` starts a chain, each method runs the v
 
 Each verb returns a closure that takes one `Phibble\Contracts\Table`, and verbs delegate to the table, so the same pipeline runs on phibble's in-memory DataFrame, on a database table, and on phpolars' PolarsTable. Results follow dplyr 1.2 and tidyr 1.3. The test suite compares phplyr's output with R's; the reference scripts are in `tests/r/`.
 
-Documentation: <https://erikwestlund.github.io/phplyr/>. Start with [getting started](https://erikwestlund.github.io/phplyr/getting-started.html) or [coming from dplyr](https://erikwestlund.github.io/phplyr/coming-from-dplyr.html).
+Documentation: <https://phpstats.github.io/phplyr/>. Start with [getting started](https://phpstats.github.io/phplyr/getting-started.html) or [coming from dplyr](https://phpstats.github.io/phplyr/coming-from-dplyr.html).
 
 ## Installation
 
@@ -45,21 +45,21 @@ phplyr needs PHP 8.3 or later; the pipe operator needs PHP 8.5. It isn't on Pack
 
 ```json
 "repositories": [
-    {"type": "vcs", "url": "https://github.com/erikwestlund/phibble"},
-    {"type": "vcs", "url": "https://github.com/erikwestlund/phplyr"}
+    {"type": "vcs", "url": "https://github.com/phpstats/phibble"},
+    {"type": "vcs", "url": "https://github.com/phpstats/phplyr"}
 ]
 ```
 
 Then:
 
 ```bash
-composer require erikwestlund/phplyr:^0.3
+composer require phpstats/phplyr:^0.3
 ```
 
 Two extensions are optional:
 
-- [php-stats](https://github.com/erikwestlund/php-stats) provides `lm()`, `glm()`, `lmer()`, and `glmer()`, and speeds up the descriptive helpers. Without it, the helpers run in PHP with the same results.
-- [phpolars](https://github.com/erikwestlund/phpolars) provides the php_polars extension behind phibble's PolarsTable (`Phibble\Polars\PolarsTable`), a Polars-backed table that runs phplyr pipelines natively.
+- [phit](https://github.com/phpstats/phit) provides `lm()`, `glm()`, `lmer()`, and `glmer()`, and speeds up the descriptive helpers. Without it, the helpers run in PHP with the same results.
+- [phpolars](https://github.com/phpstats/phpolars) provides the php_polars extension behind phibble's PolarsTable (`Phibble\Polars\PolarsTable`), a Polars-backed table that runs phplyr pipelines natively.
 
 See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 ## Conventions
@@ -115,7 +115,7 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 - **Conditionals and NA:** `if_else`, `case_when([cond, value], ..., default: ...)`, `replace_when`, `case_match`, `recode_values` / `replace_values` (cases or `from:` / `to:` lookup tables), `when_any` / `when_all`, `coalesce`, `na_if`, `between`, `near`.
 - **Building blocks:** `col('x')`, `vec(fn ($r) => ...)`, and `->map(fn ($value, $r) => ...)` on any helper.
 
-`sd` and `variance` use n - 1, and `quantile` uses R's type 7. The variance helper is called `variance()` because `var` is a reserved word in PHP. When the `php_stats` extension is loaded, the descriptive helpers use it; otherwise they fall back to pure PHP.
+`sd` and `variance` use n - 1, and `quantile` uses R's type 7. The variance helper is called `variance()` because `var` is a reserved word in PHP. When the `phit` extension is loaded, the descriptive helpers use it; otherwise they fall back to pure PHP.
 
 ## tidyselect and across()
 
@@ -168,13 +168,13 @@ The tidyr verbs are pipe-able too, with tidyr's argument names. The test suite c
 
 ## Models
 
-`lm('y ~ x + g')`, `glm('y ~ x', family: 'binomial')`, `lmer('y ~ x + (1 | g)')` and `glmer(...)` pass the table to php_stats' formula functions, so factor levels reach the model.
+`lm('y ~ x + g')`, `glm('y ~ x', family: 'binomial')`, `lmer('y ~ x + (1 | g)')` and `glmer(...)` pass the table to phit's formula functions, so factor levels reach the model.
 
 ## Development
 
 ```sh
 composer install
-bin/test                        # uses .ext/libphp_stats.dylib when present
+bin/test                        # uses .ext/libphit.dylib when present
 NO_EXT=1 bin/test               # pure-PHP fallback
 PHP=/path/to/php83 bin/test      # before PHP 8.5, leaves out tests/Pipe (|>)
 Rscript tests/r/reference.R     # regenerate the dplyr reference outputs

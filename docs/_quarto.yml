@@ -9,9 +9,9 @@ project:
     - benchmarks/*.json
 
 website:
-  site-url: "https://erikwestlund.github.io/phplyr/"
+  site-url: "https://phpstats.github.io/phplyr/"
   title: "phplyr"
-  repo-url: "https://github.com/erikwestlund/phplyr"
+  repo-url: "https://github.com/phpstats/phplyr"
   sidebar:
     style: docked
     search: true

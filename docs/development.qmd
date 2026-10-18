@@ -10,7 +10,7 @@ with `|>`; `bin/test` leaves them out before PHP 8.5.
 
 ```bash
 composer install
-bin/test                 # loads .ext/libphp_stats.dylib when present
+bin/test                 # loads .ext/libphit.dylib when present
 NO_EXT=1 bin/test        # pure-PHP descriptive statistics
 PHP=/path/to/php83 bin/test
 ```

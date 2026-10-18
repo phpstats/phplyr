@@ -9,10 +9,10 @@ function fixturePath(string $name): string
     return __DIR__.'/Fixtures/'.$name;
 }
 
-/** Run a test body once with php_stats (when loaded) and once in pure PHP. */
+/** Run a test body once with phit (when loaded) and once in pure PHP. */
 function bothBackends(Closure $body): void
 {
-    $backends = extension_loaded('php_stats') ? [true, false] : [false];
+    $backends = extension_loaded('phit') ? [true, false] : [false];
     try {
         foreach ($backends as $useExtension) {
             Stats::$useExtension = $useExtension;
