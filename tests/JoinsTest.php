@@ -20,8 +20,7 @@ function joinY(): DataFrame
 
 function joinReference(string $key): array
 {
-    static $json;
-    $json ??= json_decode(file_get_contents(fixturePath('joins-reference.json')), true);
+    $json = rReference('joins-reference.json');
 
     return $json[$key];
 }

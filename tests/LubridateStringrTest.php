@@ -16,8 +16,7 @@ use function Phplyr\{ceiling_date, col, day, days, difftime, dmy, fixed, floor_d
  */
 function lsExpected(string $case): array
 {
-    static $all = null;
-    $all ??= json_decode(file_get_contents(fixturePath('lubridate-stringr.json')), true);
+    $all = rReference('lubridate-stringr.json');
 
     return $all[$case];
 }

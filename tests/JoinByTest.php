@@ -8,8 +8,7 @@ use function Phplyr\{anti_join, between, closest, col, inner_join, join_by, left
 
 function joinByReference(string $key): array
 {
-    static $json;
-    $json ??= json_decode(file_get_contents(fixturePath('join-by-reference.json')), true);
+    $json = rReference('join-by-reference.json');
 
     return $json[$key];
 }

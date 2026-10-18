@@ -8,8 +8,7 @@ use function Phplyr\{case_match, group_by, group_cols, intersect, mutate, pipe, 
 
 function rowsReference(string $key): mixed
 {
-    static $json;
-    $json ??= json_decode(file_get_contents(fixturePath('rows-reference.json')), true);
+    $json = rReference('rows-reference.json');
 
     return $json[$key];
 }

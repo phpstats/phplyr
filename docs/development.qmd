@@ -48,6 +48,29 @@ PHP=/path/to/php85 bin/render-docs     # examples, quarto render, publish to doc
 
 GitHub Pages serves the rendered site from `main:/docs`.
 
+## Site content
+
+`site/` holds phplyr's content for phplyr.phpstats.org. The phpstats site
+reads it at a pinned commit.
+
+| Path | Contents | Made by |
+| --- | --- | --- |
+| `site/site.json` | Manifest: summary, install, example, docs pages, and file lists | `bin/site-manifest` |
+| `site/benchmarks/backends.json` | Backend and dplyr timings | `bin/site-benchmarks`, from `docs/benchmarks/` |
+| `site/verifications/*.json` | Every test that checks phplyr against R, with its assertion count and largest floating-point error | `bin/site-verifications` |
+| `site/vignettes/*.php` | Interactive examples the site runs on each request | By hand |
+| `site/data/` | Data files for the vignettes | By hand |
+
+`bin/site-verifications` runs the test suite with `PHPLYR_VERIFY_LOG` set.
+Each test that reads an R fixture through `rReference()` then logs its
+assertions and the differences recorded by `expectClose()`. The script writes
+nothing unless every test passes. Set `POLARS_PHP` to a PHP command that loads
+php_polars to add the PolarsTable parity file.
+
+To refresh the benchmarks, run `bench/backends.php --csv-dir=bench/data`,
+then `Rscript bench/backends.R`, then `bin/site-benchmarks`. `tests/SiteTest.php`
+runs each vignette at its default inputs.
+
 ## Layout
 
 | Path | Contents |

@@ -1,0 +1,646 @@
+{
+    "title": "dplyr verbs and helpers",
+    "description": "Single-table verbs, window and summary helpers, expressions, grouping, joins, join_by() conditions, set operations, and rows_*(), compared with the same pipelines run in R by the scripts in tests/r/.",
+    "reference": "R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2, lubridate 1.9.5, and stringr 1.6.0",
+    "tolerance": "Floating-point table values within 1e-9 relative; all other values equal.",
+    "environment": {
+        "php": "8.5.10",
+        "commit": "ed999d8",
+        "date": "2026-10-18"
+    },
+    "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
+    "cases": [
+        {
+            "name": "matches dplyr with dataset \"windows\"  with data set \"dataset \"windows\"\"",
+            "quantity": "table values",
+            "n_compared": 277,
+            "max_abs_error": 2.6645352591003757e-15,
+            "max_rel_error": 9.992007221626419e-16,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"ntile_all\"  with data set \"dataset \"ntile_all\"\"",
+            "quantity": "values",
+            "n_compared": 49,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"vectors\"  with data set \"dataset \"vectors\"\"",
+            "quantity": "table values",
+            "n_compared": 145,
+            "max_abs_error": 2.6645352591003757e-15,
+            "max_rel_error": 5.241708706426971e-16,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"filter_group_max\"  with data set \"dataset \"filter_group_max\"\"",
+            "quantity": "values",
+            "n_compared": 17,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"filter_between\"  with data set \"dataset \"filter_between\"\"",
+            "quantity": "values",
+            "n_compared": 11,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"filter_if_any\"  with data set \"dataset \"filter_if_any\"\"",
+            "quantity": "values",
+            "n_compared": 7,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"filter_if_all\"  with data set \"dataset \"filter_if_all\"\"",
+            "quantity": "values",
+            "n_compared": 9,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"filter_by\"  with data set \"dataset \"filter_by\"\"",
+            "quantity": "values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"across_mean\"  with data set \"dataset \"across_mean\"\"",
+            "quantity": "table values",
+            "n_compared": 13,
+            "max_abs_error": 2.6645352591003757e-15,
+            "max_rel_error": 5.419393747322794e-16,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"across_list\"  with data set \"dataset \"across_list\"\"",
+            "quantity": "table values",
+            "n_compared": 19,
+            "max_abs_error": 2.6645352591003757e-15,
+            "max_rel_error": 5.419393747322794e-16,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"across_names\"  with data set \"dataset \"across_names\"\"",
+            "quantity": "values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"across_mutate\"  with data set \"dataset \"across_mutate\"\"",
+            "quantity": "table values",
+            "n_compared": 49,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"across_mutate_window\"  with data set \"dataset \"across_mutate_window\"\"",
+            "quantity": "values",
+            "n_compared": 49,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"transmute\"  with data set \"dataset \"transmute\"\"",
+            "quantity": "values",
+            "n_compared": 49,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"keep_none\"  with data set \"dataset \"keep_none\"\"",
+            "quantity": "values",
+            "n_compared": 37,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"add_count\"  with data set \"dataset \"add_count\"\"",
+            "quantity": "values",
+            "n_compared": 37,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"tally\"  with data set \"dataset \"tally\"\"",
+            "quantity": "values",
+            "n_compared": 10,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"count_wt\"  with data set \"dataset \"count_wt\"\"",
+            "quantity": "values",
+            "n_compared": 10,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"add_tally\"  with data set \"dataset \"add_tally\"\"",
+            "quantity": "values",
+            "n_compared": 37,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"slice_min\"  with data set \"dataset \"slice_min\"\"",
+            "quantity": "values",
+            "n_compared": 11,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"slice_min_noties\"  with data set \"dataset \"slice_min_noties\"\"",
+            "quantity": "values",
+            "n_compared": 7,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"slice_max\"  with data set \"dataset \"slice_max\"\"",
+            "quantity": "values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"slice_max_prop\"  with data set \"dataset \"slice_max_prop\"\"",
+            "quantity": "values",
+            "n_compared": 7,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"slice_tail\"  with data set \"dataset \"slice_tail\"\"",
+            "quantity": "values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"slice_pos\"  with data set \"dataset \"slice_pos\"\"",
+            "quantity": "values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"slice_neg\"  with data set \"dataset \"slice_neg\"\"",
+            "quantity": "values",
+            "n_compared": 19,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"slice_head_by\"  with data set \"dataset \"slice_head_by\"\"",
+            "quantity": "values",
+            "n_compared": 7,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"distinct_keep_all\"  with data set \"dataset \"distinct_keep_all\"\"",
+            "quantity": "values",
+            "n_compared": 10,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"distinct_computed\"  with data set \"dataset \"distinct_computed\"\"",
+            "quantity": "values",
+            "n_compared": 5,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"reframe\"  with data set \"dataset \"reframe\"\"",
+            "quantity": "table values",
+            "n_compared": 25,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"summarise_by\"  with data set \"dataset \"summarise_by\"\"",
+            "quantity": "table values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"arrange_expr\"  with data set \"dataset \"arrange_expr\"\"",
+            "quantity": "values",
+            "n_compared": 25,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr with dataset \"arrange_by_group\"  with data set \"dataset \"arrange_by_group\"\"",
+            "quantity": "values",
+            "n_compared": 25,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr on output that depends on sorted group keys",
+            "quantity": "values",
+            "n_compared": 90,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "selects columns like tidyselect",
+            "quantity": "values",
+            "n_compared": 15,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "reports groups like dplyr",
+            "quantity": "values",
+            "n_compared": 4,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr for a grouped summary",
+            "quantity": "table values",
+            "n_compared": 242,
+            "max_abs_error": 5.684341886080802e-14,
+            "max_rel_error": 9.38769346702275e-16,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr count with sort",
+            "quantity": "values",
+            "n_compared": 8,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr for a grouped mutate",
+            "quantity": "table values",
+            "n_compared": 153,
+            "max_abs_error": 4.618527782440651e-14,
+            "max_rel_error": 4.58476002814641e-15,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr for mutate, rename, select and arrange",
+            "quantity": "table values",
+            "n_compared": 33,
+            "max_abs_error": 3.907985046680551e-14,
+            "max_rel_error": 1.5134445383287833e-15,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr distinct",
+            "quantity": "values",
+            "n_compared": 7,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr for mutate _keep used and unused",
+            "quantity": "table values",
+            "n_compared": 209,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches R for scalar expression helpers",
+            "quantity": "table values",
+            "n_compared": 97,
+            "max_abs_error": 4.884981308350689e-15,
+            "max_rel_error": 2.726359978694742e-15,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr for equality join_by()",
+            "quantity": "values",
+            "n_compared": 43,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr inequality, rolling and overlap joins with dataset \"ineq\"  with data set \"dataset \"ineq\"\"",
+            "quantity": "values",
+            "n_compared": 29,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr inequality, rolling and overlap joins with dataset \"ineq_left\"  with data set \"dataset \"ineq_left\"\"",
+            "quantity": "values",
+            "n_compared": 36,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr inequality, rolling and overlap joins with dataset \"between\"  with data set \"dataset \"between\"\"",
+            "quantity": "values",
+            "n_compared": 36,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr inequality, rolling and overlap joins with dataset \"closest\"  with data set \"dataset \"closest\"\"",
+            "quantity": "values",
+            "n_compared": 36,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr inequality, rolling and overlap joins with dataset \"closest_lt\"  with data set \"dataset \"closest_lt\"\"",
+            "quantity": "values",
+            "n_compared": 41,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr inequality, rolling and overlap joins with dataset \"within\"  with data set \"dataset \"within\"\"",
+            "quantity": "values",
+            "n_compared": 91,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr inequality, rolling and overlap joins with dataset \"overlaps\"  with data set \"dataset \"overlaps\"\"",
+            "quantity": "values",
+            "n_compared": 208,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr inequality, rolling and overlap joins with dataset \"semi\"  with data set \"dataset \"semi\"\"",
+            "quantity": "values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr inequality, rolling and overlap joins with dataset \"anti\"  with data set \"dataset \"anti\"\"",
+            "quantity": "values",
+            "n_compared": 9,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr inequality, rolling and overlap joins with dataset \"keep_true\"  with data set \"dataset \"keep_true\"\"",
+            "quantity": "values",
+            "n_compared": 41,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"left\"  with data set \"dataset \"left\"\"",
+            "quantity": "values",
+            "n_compared": 43,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"inner\"  with data set \"dataset \"inner\"\"",
+            "quantity": "values",
+            "n_compared": 37,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"right\"  with data set \"dataset \"right\"\"",
+            "quantity": "values",
+            "n_compared": 43,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"full\"  with data set \"dataset \"full\"\"",
+            "quantity": "values",
+            "n_compared": 49,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"keep\"  with data set \"dataset \"keep\"\"",
+            "quantity": "values",
+            "n_compared": 50,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"first\"  with data set \"dataset \"first\"\"",
+            "quantity": "values",
+            "n_compared": 31,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"last\"  with data set \"dataset \"last\"\"",
+            "quantity": "values",
+            "n_compared": 31,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"never\"  with data set \"dataset \"never\"\"",
+            "quantity": "values",
+            "n_compared": 43,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"semi\"  with data set \"dataset \"semi\"\"",
+            "quantity": "values",
+            "n_compared": 17,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"anti\"  with data set \"dataset \"anti\"\"",
+            "quantity": "values",
+            "n_compared": 5,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"anti_never\"  with data set \"dataset \"anti_never\"\"",
+            "quantity": "values",
+            "n_compared": 9,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"cross\"  with data set \"dataset \"cross\"\"",
+            "quantity": "values",
+            "n_compared": 76,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"suffix\"  with data set \"dataset \"suffix\"\"",
+            "quantity": "values",
+            "n_compared": 37,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"by_k\"  with data set \"dataset \"by_k\"\"",
+            "quantity": "values",
+            "n_compared": 25,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"natural\"  with data set \"dataset \"natural\"\"",
+            "quantity": "values",
+            "n_compared": 16,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"two_keys\"  with data set \"dataset \"two_keys\"\"",
+            "quantity": "values",
+            "n_compared": 26,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"key_clash\"  with data set \"dataset \"key_clash\"\"",
+            "quantity": "values",
+            "n_compared": 36,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"rowwise_sum\"  with data set \"dataset \"rowwise_sum\"\"",
+            "quantity": "table values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr joins with dataset \"rowwise_mutate\"  with data set \"dataset \"rowwise_mutate\"\"",
+            "quantity": "table values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr cur_group_id() and cur_group_rows()",
+            "quantity": "values",
+            "n_compared": 134,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "keeps empty factor-level groups with _drop: false",
+            "quantity": "table values",
+            "n_compared": 41,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr set operations",
+            "quantity": "table values",
+            "n_compared": 67,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr rows_*()",
+            "quantity": "table values",
+            "n_compared": 92,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches case_match and group_cols",
+            "quantity": "values",
+            "n_compared": 38,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "matches dplyr 1.2 additions",
+            "quantity": "values",
+            "n_compared": 189,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        }
+    ]
+}

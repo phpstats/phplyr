@@ -8,14 +8,14 @@ use function Phplyr\{filter, glm, lm, pipe};
 
 function modelsReference(string $key): array
 {
-    return json_decode(file_get_contents(fixturePath('models-reference.json')), true)[$key];
+    return rReference('models-reference.json')[$key];
 }
 
 function expectCoefficients(array $actual, array $expected): void
 {
     expect(\count($actual))->toBe(\count($expected));
     foreach ($expected as $i => $value) {
-        expect($actual[$i])->toEqualWithDelta($value, 1e-6 * \max(1.0, abs($value)));
+        expectClose($actual[$i], $value, 1e-6 * \max(1.0, abs($value)), 'coefficients');
     }
 }
 

@@ -95,7 +95,7 @@ it('rejects unknown options', function () {
 });
 
 it('matches dplyr cur_group_id() and cur_group_rows()', function () {
-    $ref = json_decode(file_get_contents(fixturePath('cur-group-reference.json')), true);
+    $ref = rReference('cur-group-reference.json');
     $mut = pipe(panel(), group_by('label'), mutate(gid: Phplyr\cur_group_id(), row: Phplyr\cur_group_rows()), ungroup(), Phplyr\select('id', 'gid', 'row'));
     expectRowsClose($mut->toRows(), $ref['mut']);
     $summ = pipe(panel(), group_by('g', 'label'), summarise(gid: Phplyr\cur_group_id(), n: n(), _groups: 'drop'));
@@ -106,7 +106,7 @@ it('matches dplyr cur_group_id() and cur_group_rows()', function () {
 });
 
 it('keeps empty factor-level groups with _drop: false', function () {
-    $ref = json_decode(file_get_contents(fixturePath('drop-reference.json')), true);
+    $ref = rReference('drop-reference.json');
     $d = DataFrame::fromColumns(['f' => ['a', 'a', 'c'], 's' => ['x', 'y', 'x'], 'v' => [1.0, 2.0, 3.0]])->asFactor('f', ['a', 'b', 'c']);
     expectRowsClose((pipe($d, group_by('f', _drop: false), summarise(n: n(), total: Phplyr\sum('v'))))->toRows(), $ref['drop']);
     expectRowsClose((pipe($d, group_by('f', _drop: false), Phplyr\count()))->ungroup()->toRows(), $ref['count']);

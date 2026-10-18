@@ -9,8 +9,7 @@ use function Phplyr\{across, add_row, arrange, build_longer_spec, build_wider_sp
 
 function coverage(string $key): mixed
 {
-    static $json;
-    $json ??= json_decode(file_get_contents(fixturePath('coverage-reference.json')), true);
+    $json = rReference('coverage-reference.json');
 
     return $json[$key];
 }

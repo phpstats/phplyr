@@ -85,16 +85,27 @@ from phpolars' benchmark script. The pipelines are:
 - **C:** pipeline A with a closure in `filter()`.
 
 Times are the best of three runs through `collect()`, on an Apple M5 Ultra with
-Homebrew PHP 8.5, phibble 9655e2a, and Polars 0.55.2 at two threads. In every case the
+Homebrew PHP 8.5, phibble 0.3.0, and Polars 0.55.2 at two threads. In every case the
 three backends returned the same rows. The full results, with all repeat
 timings and version details, are in
 [`benchmarks/backends-results.json`](benchmarks/backends-results.json).
 
-| Pipeline, 1M rows | DataFrame (s) | PolarsTable (s) | SQLite (s) |
-| --- | --: | --: | --: |
-| A: reduce to a ranked summary | 0.62 | 0.06 | 0.47 |
-| B: windows over every row | 1.32 | 0.43 | 3.52 |
-| C: A with a closure | 1.09 | 0.89 | 1.97 |
+`bench/backends.R` runs pipelines A and B with dplyr 1.2 on the same data,
+and checks that dplyr's row counts and column sums match phplyr's. Its
+results are in [`benchmarks/dplyr-results.json`](benchmarks/dplyr-results.json).
+Pipeline C has no dplyr version, because its closure is PHP code.
+
+| Pipeline, 1M rows | DataFrame (s) | PolarsTable (s) | SQLite (s) | dplyr (s) |
+| --- | --: | --: | --: | --: |
+| A: reduce to a ranked summary | 0.75 | 0.05 | 0.43 | 0.07 |
+| B: windows over every row | 1.25 | 0.42 | 3.33 | 0.02 |
+| C: A with a closure | 1.13 | 0.87 | 2.01 | |
+
+dplyr runs these pipelines in compiled code. On A, which reduces the data
+before collecting, PolarsTable (0.05 s) and dplyr (0.07 s) take about the
+same time. On B, which returns every row, dplyr is the fastest by a wide
+margin.
+
 The verbs themselves are fast in Polars. Most of PolarsTable's time goes to
 converting results back to PHP values: about 0.2 seconds per million rows of
 plain columns, plus about 0.5 seconds per million values of a datetime column,

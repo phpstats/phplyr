@@ -1,0 +1,222 @@
+{
+    "title": "Later dplyr 1.1 and tidyr 1.3 functions",
+    "description": "across() edge cases, group helpers, superseded verbs, pivot options and specs, rectangling, and other functions added in phplyr 0.2, compared with R.",
+    "reference": "R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2, lubridate 1.9.5, and stringr 1.6.0",
+    "tolerance": "Floating-point table values within 1e-9 relative; all other values equal.",
+    "environment": {
+        "php": "8.5.10",
+        "commit": "ed999d8",
+        "date": "2026-10-18"
+    },
+    "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
+    "cases": [
+        {
+            "name": "`across(), if_any(), and if_all()` → it names several functions with {.fn} and {.col}, and resolves helpers called on the values",
+            "quantity": "table values",
+            "n_compared": 7,
+            "max_abs_error": 2.6645352591003757e-15,
+            "max_rel_error": 5.419393747322794e-16,
+            "passed": true
+        },
+        {
+            "name": "`across(), if_any(), and if_all()` → it gives cur_column() inside across()",
+            "quantity": "values",
+            "n_compared": 30,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`across(), if_any(), and if_all()` → it filters and mutates with if_any() and if_all(), with R NA logic",
+            "quantity": "table values",
+            "n_compared": 81,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`across(), if_any(), and if_all()` → it treats an empty selection as FALSE for if_any() and TRUE for if_all()",
+            "quantity": "table values",
+            "n_compared": 40,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`group helpers` → it lists group rows and group data",
+            "quantity": "values",
+            "n_compared": 3,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`group helpers` → it gives each row its group key with cur_group()",
+            "quantity": "table values",
+            "n_compared": 49,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`group helpers` → it sums across columns in a rowwise table with c_across()",
+            "quantity": "table values",
+            "n_compared": 49,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`group helpers` → it nests groups with group_nest() and nest_by()",
+            "quantity": "values",
+            "n_compared": 12,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`group helpers` → it runs a verb under other groups with with_groups()",
+            "quantity": "table values",
+            "n_compared": 26,
+            "max_abs_error": 2.6645352591003757e-15,
+            "max_rel_error": 6.148927521000871e-16,
+            "passed": true
+        },
+        {
+            "name": "`superseded dplyr verbs` → it keeps the top rows in table order with top_n() and top_frac()",
+            "quantity": "table values",
+            "n_compared": 45,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`superseded dplyr verbs` → it recodes values by name",
+            "quantity": "values",
+            "n_compared": 3,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`superseded dplyr verbs` → it evaluates a window function in another order with order_by()",
+            "quantity": "table values",
+            "n_compared": 82,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`superseded dplyr verbs` → it adds rows with add_row()",
+            "quantity": "values",
+            "n_compared": 24,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`superseded dplyr verbs` → it nests matching rows with nest_join()",
+            "quantity": "values",
+            "n_compared": 19,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`pivot options and specs` → it transforms names and values, and varies columns slowest",
+            "quantity": "values",
+            "n_compared": 78,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`pivot options and specs` → it varies names slowest, summarises unused columns, and expands names and ids",
+            "quantity": "table values",
+            "n_compared": 72,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`pivot options and specs` → it builds specs and pivots with them",
+            "quantity": "table values",
+            "n_compared": 61,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`pivot options and specs` → it gathers and spreads",
+            "quantity": "table values",
+            "n_compared": 103,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`rectangling` → it widens named and unnamed elements",
+            "quantity": "values",
+            "n_compared": 34,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`rectangling` → it lengthens elements with indices",
+            "quantity": "values",
+            "n_compared": 43,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`rectangling` → it hoists components by name, position, and path",
+            "quantity": "values",
+            "n_compared": 14,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`rectangling` → it chops and unchops",
+            "quantity": "values",
+            "n_compared": 27,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`rectangling` → it packs and unpacks",
+            "quantity": "values",
+            "n_compared": 16,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`other tidyr functions` → it extracts regex groups",
+            "quantity": "values",
+            "n_compared": 19,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`other tidyr functions` → it separates rows on a regex",
+            "quantity": "values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "`other tidyr functions` → it fills a sequence with full_seq()",
+            "quantity": "values",
+            "n_compared": 3,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        }
+    ]
+}

@@ -1,0 +1,72 @@
+#!/usr/bin/env php
+<?php
+
+/*
+ * Write site/benchmarks/backends.json for the phpstats site from
+ * docs/benchmarks/backends-results.json (bench/backends.php) and
+ * docs/benchmarks/dplyr-results.json (bench/backends.R). Only results whose
+ * rows matched the DataFrame reference are included.
+ *
+ * Usage: bin/site-benchmarks
+ */
+
+declare(strict_types=1);
+
+$root = dirname(__DIR__);
+$php = json_decode(file_get_contents($root.'/docs/benchmarks/backends-results.json'), true);
+$dplyrFile = $root.'/docs/benchmarks/dplyr-results.json';
+$dplyr = is_file($dplyrFile) ? json_decode(file_get_contents($dplyrFile), true) : null;
+
+$titles = [
+    'A' => 'A: filter, join, grouped summary, ranked window',
+    'B' => 'B: per-group windows over every row',
+    'C' => 'C: A with a PHP closure in filter()',
+];
+$names = [
+    'DataFrame' => 'phplyr on DataFrame',
+    'PolarsTable' => 'phplyr on PolarsTable',
+    'SqlTable(SQLite)' => 'phplyr on SQLite',
+    'dplyr' => 'dplyr '.($dplyr['method']['dplyr'] ?? ''),
+];
+
+$rows = [];
+foreach ([...$php['results'], ...($dplyr['results'] ?? [])] as $r) {
+    if ($r['matches_frame'] !== true) {
+        continue;
+    }
+    $rows[] = [
+        'case' => $titles[$r['pipeline']].', '.number_format($r['rows_in']).' rows',
+        'implementation' => trim($names[$r['backend']]),
+        'value' => $r['seconds'],
+        'reps' => $r['seconds_all'],
+        '_order' => [$r['pipeline'], $r['rows_in'], array_search($r['backend'], array_keys($names), true)],
+    ];
+}
+usort($rows, fn ($a, $b) => $a['_order'] <=> $b['_order']);
+$rows = array_map(function (array $r) {
+    unset($r['_order']);
+
+    return $r;
+}, $rows);
+
+$m = $php['method'];
+$out = [
+    'title' => 'phplyr backends and dplyr',
+    'description' => 'Three pipelines on a generated sales table of 100,000 and 1,000,000 rows, joined to a 100-row store table. phplyr runs each on phibble\'s in-memory DataFrame, on PolarsTable (Polars at '.$m['polars_threads'].' threads), and on SQLite through SqlTable. dplyr runs A and B on the same data; C has no dplyr version because its closure is PHP code. Every backend returned the same rows as DataFrame, and dplyr\'s row counts and column sums matched.',
+    'measure' => 'Best of '.$m['repeats'].' runs; '.$m['timing'],
+    'unit' => 's',
+    'environment' => [
+        'cpu' => $m['machine']['cpu'],
+        'php' => $m['php'],
+        'date' => substr($php['generated_at'], 0, 10),
+        'commit' => $m['versions']['phplyr'],
+        'phibble' => $m['versions']['phibble'],
+        'polars' => $m['versions']['phpolars']['polars'] ?? null,
+        'r' => $dplyr['method']['r'] ?? null,
+    ],
+    'source' => 'bench/backends.php and bench/backends.R',
+    'rows' => $rows,
+];
+@mkdir($root.'/site/benchmarks', 0777, true);
+file_put_contents($root.'/site/benchmarks/backends.json', json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION)."\n");
+echo 'site/benchmarks/backends.json: '.\count($rows)." rows\n";

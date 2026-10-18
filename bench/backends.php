@@ -9,7 +9,12 @@
  * pipelines and result check.
  *
  *   php -d memory_limit=-1 [-d extension=.../libphp_polars.dylib] bench/backends.php \
- *       [--rows=100000,1000000] [--repeats=3] [--out=docs/benchmarks/backends-results.json]
+ *       [--rows=100000,1000000] [--repeats=3] [--out=docs/benchmarks/backends-results.json] [--csv-dir=bench/data]
+ *
+ * With --csv-dir, the generated tables are also written there as
+ * sales-<rows>.csv and stores.csv, for bench/backends.R to time with dplyr.
+ * Each result records its row count and the sums of its numeric columns,
+ * which bench/backends.R checks dplyr's results against.
  *
  * PolarsTable (phibble's Phibble\Polars\PolarsTable) runs when the php_polars
  * extension is loaded. PHPOLARS_DIR, a phpolars checkout, is optional and
@@ -29,7 +34,8 @@ use Phibble\Polars\PolarsTable;
 use function Phplyr\{arrange, col, cumsum, desc, filter, group_by, lag, left_join, mean, min_rank, mutate, n, sum, summarise};
 
 ini_set('memory_limit', '-1');
-$options = getopt('', ['rows:', 'repeats:', 'out:']);
+$options = getopt('', ['rows:', 'repeats:', 'out:', 'csv-dir:']);
+$csvDir = $options['csv-dir'] ?? null;
 $sizes = array_map('intval', explode(',', $options['rows'] ?? '100000,1000000'));
 $repeats = (int) ($options['repeats'] ?? 3);
 $root = dirname(__DIR__);
@@ -72,6 +78,32 @@ function canonical(array $rows): string
     return md5(implode("\n", $lines));
 }
 
+/** Write columns as a CSV file with NA for null. */
+function writeCsv(string $path, array $columns): void
+{
+    $fh = fopen($path, 'w');
+    fwrite($fh, implode(',', array_keys($columns))."\n");
+    $names = array_keys($columns);
+    for ($i = 0, $n = \count($columns[$names[0]]); $i < $n; $i++) {
+        fwrite($fh, implode(',', array_map(fn ($c) => $columns[$c][$i] ?? 'NA', $names))."\n");
+    }
+    fclose($fh);
+}
+
+/** Row count and the sum of each numeric column (nulls skipped), to check other implementations against. */
+function checksums(Table $t): array
+{
+    $sums = [];
+    foreach ($t->columns() as $c) {
+        $values = array_filter($t->column($c), fn ($v) => $v !== null);
+        if ($values !== [] && array_all($values, fn ($v) => \is_int($v) || \is_float($v))) {
+            $sums[$c] = array_sum($values);
+        }
+    }
+
+    return ['rows' => $t->nrow(), 'sums' => $sums];
+}
+
 /** The source of each pipeline, for the JSON. */
 function pipelineSource(string $id): string
 {
@@ -100,6 +132,11 @@ foreach ($sizes as $rows) {
     $stores = ['store' => range(1, 100), 'region' => array_map(fn ($s) => 'region-'.(($s - 1) % 5 + 1), range(1, 100))];
     $frameSales = DataFrame::fromColumns($sales);
     $frameStores = DataFrame::fromColumns($stores);
+    if ($csvDir !== null) {
+        @mkdir($csvDir, 0777, true);
+        writeCsv("{$csvDir}/sales-{$rows}.csv", $sales);
+        writeCsv("{$csvDir}/stores.csv", $stores);
+    }
 
     $pdo = new PDO('sqlite::memory:');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -152,6 +189,7 @@ foreach ($sizes as $rows) {
                 'seconds_all' => $times,
                 'fallbacks' => $backend === 'PolarsTable' ? intdiv(PolarsTable::$fallbacks - $before, $repeats) : null,
                 'matches_frame' => $error === null ? $hash === $reference : null,
+                'checksums' => $error === null && $backend === 'DataFrame' ? checksums($result) : null,
                 'error' => $error,
             ];
             $results[] = $entry;

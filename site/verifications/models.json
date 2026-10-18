@@ -1,0 +1,30 @@
+{
+    "title": "Model verbs",
+    "description": "lm(), glm(), and lmer() through the phit extension, compared with the coefficients and residual standard deviation from R's lm(), glm(), and lme4's lmer().",
+    "reference": "R 4.6.1 lm() and glm(), and lme4 2.0.6 lmer()",
+    "tolerance": "lm() and glm() coefficients within 1e-6 relative; lmer() fixed effects within 1e-6 relative and sigma within 1e-5.",
+    "environment": {
+        "php": "8.5.10",
+        "commit": "ed999d8",
+        "date": "2026-10-18"
+    },
+    "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
+    "cases": [
+        {
+            "name": "fits mixed models like lme4",
+            "quantity": "coefficients",
+            "n_compared": 5,
+            "max_abs_error": 1.9980699761390497e-8,
+            "max_rel_error": 3.951405576674164e-9,
+            "passed": true
+        },
+        {
+            "name": "fits models like R",
+            "quantity": "coefficients",
+            "n_compared": 22,
+            "max_abs_error": 3.276490190273762e-12,
+            "max_rel_error": 1.2320493022958951e-12,
+            "passed": true
+        }
+    ]
+}

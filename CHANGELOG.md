@@ -2,6 +2,17 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
+## Unreleased
+
+### Added
+
+- `site/` holds phplyr's content for phplyr.phpstats.org: a manifest, benchmark and verification files, and three interactive vignettes (porting an R analysis, one pipeline on three backends, and reshaping with tidyr). `bin/site-manifest`, `bin/site-benchmarks`, and `bin/site-verifications` generate the JSON files.
+- `bench/backends.R` times the benchmark pipelines with dplyr on the same data and checks its results against phplyr's. The performance page compares the two.
+
+### Changed
+
+- The benchmarks were rerun on phibble 0.3.0.
+
 ## 0.3.0 - 2026-10-18
 
 phplyr runs on PHP 8.3 and later. On 8.3 and 8.4, pipelines are method chains; on 8.5, the pipe operator works as before.

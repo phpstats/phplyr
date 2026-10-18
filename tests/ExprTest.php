@@ -9,8 +9,7 @@ use function Phplyr\{abs, col, filter, group_by, lag, lmer, log, mean, mutate, p
 
 function exprReference(string $key): mixed
 {
-    static $json;
-    $json ??= json_decode(file_get_contents(fixturePath('expr-reference.json')), true);
+    $json = rReference('expr-reference.json');
 
     return $json[$key];
 }
@@ -60,5 +59,5 @@ it('matches R for scalar expression helpers', function () {
 it('fits mixed models like lme4', function () {
     $fit = pipe(DataFrame::fromCsv(fixturePath('schools.csv')), lmer('score ~ study_hours + prior_score + (1 | school)'));
     expectCoefficients($fit['coefficients'], exprReference('lmer_fixef'));
-    expect($fit['sigma'])->toEqualWithDelta(exprReference('lmer_sigma'), 1e-5);
+    expectClose($fit['sigma'], exprReference('lmer_sigma'), 1e-5, 'coefficients');
 })->skip(fn () => ! function_exists('Phit\\fit_lmer'), 'needs phit with fit_lmer');

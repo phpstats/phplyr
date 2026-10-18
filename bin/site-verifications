@@ -1,0 +1,125 @@
+#!/usr/bin/env php
+<?php
+
+/*
+ * Write site/verifications/*.json for the phpstats site from a test run.
+ * Runs bin/test with PHPLYR_VERIFY_LOG set, so every test that checks phplyr
+ * against an R reference fixture records its assertions and floating-point
+ * differences (see tests/Pest.php), and groups the tests by fixture. Writes
+ * nothing unless every test passes.
+ *
+ * With POLARS_PHP set to a PHP binary that loads php_polars (for example
+ * "php -d extension=.../libphp_polars.dylib"), it also runs the PolarsTable
+ * parity suite and writes site/verifications/polars.json.
+ *
+ * Usage: bin/site-verifications   (PHP and NO_EXT env vars as in bin/test)
+ */
+
+declare(strict_types=1);
+
+$root = dirname(__DIR__);
+chdir($root);
+
+$r = 'R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2, lubridate 1.9.5, and stringr 1.6.0';
+$families = [
+    'dplyr' => [
+        'title' => 'dplyr verbs and helpers',
+        'description' => 'Single-table verbs, window and summary helpers, expressions, grouping, joins, join_by() conditions, set operations, and rows_*(), compared with the same pipelines run in R by the scripts in tests/r/.',
+        'reference' => $r,
+        'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
+        'fixtures' => ['dplyr-reference.json', 'expr-reference.json', 'cur-group-reference.json', 'drop-reference.json', 'joins-reference.json', 'join-by-reference.json', 'rows-reference.json'],
+    ],
+    'tidyr' => [
+        'title' => 'tidyr verbs',
+        'description' => 'Pivoting, completing, filling, separating, nesting, and unnesting, compared with tidyr in R.',
+        'reference' => $r,
+        'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
+        'fixtures' => ['tidyr-reference.json'],
+    ],
+    'additions' => [
+        'title' => 'Later dplyr 1.1 and tidyr 1.3 functions',
+        'description' => 'across() edge cases, group helpers, superseded verbs, pivot options and specs, rectangling, and other functions added in phplyr 0.2, compared with R.',
+        'reference' => $r,
+        'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
+        'fixtures' => ['coverage-reference.json'],
+    ],
+    'lubridate-stringr' => [
+        'title' => 'lubridate and stringr helpers',
+        'description' => 'Date parsing, date parts, rounding, periods, time zones, and string functions, compared with lubridate and stringr in R.',
+        'reference' => $r,
+        'tolerance' => 'All values equal.',
+        'fixtures' => ['lubridate-stringr.json'],
+    ],
+    'models' => [
+        'title' => 'Model verbs',
+        'description' => 'lm(), glm(), and lmer() through the phit extension, compared with the coefficients and residual standard deviation from R\'s lm(), glm(), and lme4\'s lmer().',
+        'reference' => 'R 4.6.1 lm() and glm(), and lme4 2.0.6 lmer()',
+        'tolerance' => 'lm() and glm() coefficients within 1e-6 relative; lmer() fixed effects within 1e-6 relative and sigma within 1e-5.',
+        'fixtures' => ['models-reference.json'],
+    ],
+    'polars' => [
+        'title' => 'PolarsTable parity',
+        'description' => 'About 120 pipelines run on phibble\'s in-memory DataFrame and on its Polars backend, PolarsTable, which must give the same columns, types, groups, and rows.',
+        'reference' => 'phplyr on DataFrame',
+        'tolerance' => 'Floating-point values within 1e-9 relative; all other values equal.',
+        'fixtures' => ['DataFrame'],
+    ],
+];
+
+$run = function (string $command, string $log): void {
+    @unlink($log);
+    passthru('PHPLYR_VERIFY_LOG='.escapeshellarg($log).' '.$command, $status);
+    if ($status !== 0) {
+        fwrite(STDERR, "Tests failed; no verification files written.\n");
+        exit(1);
+    }
+};
+$log = sys_get_temp_dir().'/phplyr-verify-'.getmypid().'.log';
+$run('bin/test --compact', $log);
+$records = file($log, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+if (getenv('POLARS_PHP')) {
+    $run(getenv('POLARS_PHP').' vendor/bin/pest --compact tests/PolarsTest.php', $log.'.polars');
+    $records = [...$records, ...file($log.'.polars', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)];
+    unlink($log.'.polars');
+}
+unlink($log);
+$records = array_map(fn ($l) => json_decode($l, true), $records);
+
+$php = trim((string) shell_exec(escapeshellarg(getenv('PHP') ?: 'php').' -r "echo PHP_VERSION;"'));
+$commit = trim((string) shell_exec('git rev-parse --short HEAD'));
+@mkdir($root.'/site/verifications', 0777, true);
+foreach ($families as $slug => $family) {
+    $cases = [];
+    foreach ($records as $rec) {
+        // Model fits (coefficients) go to the models file, whichever fixture they read.
+        $isModel = \in_array('coefficients', $rec['kinds'], true);
+        if ($isModel !== ($slug === 'models') || (! $isModel && array_intersect($rec['references'], $family['fixtures']) === [])) {
+            continue;
+        }
+        $name = preg_replace('/^it /', '', $rec['test']).($rec['data'] !== '' ? ' '.$rec['data'] : '');
+        $cases[] = [
+            'name' => $name,
+            'quantity' => $rec['kinds'] === [] ? 'values' : implode(', ', $rec['kinds']),
+            'n_compared' => $rec['assertions'],
+            'max_abs_error' => $rec['max_abs_error'],
+            'max_rel_error' => $rec['max_rel_error'],
+            'passed' => true,
+        ];
+    }
+    $path = "site/verifications/{$slug}.json";
+    if ($cases === []) {
+        echo "{$path}: no cases (skipped)\n";
+
+        continue;
+    }
+    file_put_contents($root.'/'.$path, json_encode([
+        'title' => $family['title'],
+        'description' => $family['description'],
+        'reference' => $family['reference'],
+        'tolerance' => $family['tolerance'],
+        'environment' => ['php' => $php, 'commit' => $commit, 'date' => gmdate('Y-m-d')],
+        'note' => 'n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.',
+        'cases' => $cases,
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)."\n");
+    echo "{$path}: ".\count($cases)." cases\n";
+}

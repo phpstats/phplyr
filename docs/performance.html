@@ -388,37 +388,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>B:</strong> grouped <code>lag(order_by:)</code>, <code>cumsum()</code>, and a share of the group total over all rows.</li>
 <li><strong>C:</strong> pipeline A with a closure in <code>filter()</code>.</li>
 </ul>
-<p>Times are the best of three runs through <code>collect()</code>, on an Apple M5 Ultra with Homebrew PHP 8.5, phibble 9655e2a, and Polars 0.55.2 at two threads. In every case the three backends returned the same rows. The full results, with all repeat timings and version details, are in <a href="benchmarks/backends-results.json"><code>benchmarks/backends-results.json</code></a>.</p>
+<p>Times are the best of three runs through <code>collect()</code>, on an Apple M5 Ultra with Homebrew PHP 8.5, phibble 0.3.0, and Polars 0.55.2 at two threads. In every case the three backends returned the same rows. The full results, with all repeat timings and version details, are in <a href="benchmarks/backends-results.json"><code>benchmarks/backends-results.json</code></a>.</p>
+<p><code>bench/backends.R</code> runs pipelines A and B with dplyr 1.2 on the same data, and checks that dplyr’s row counts and column sums match phplyr’s. Its results are in <a href="benchmarks/dplyr-results.json"><code>benchmarks/dplyr-results.json</code></a>. Pipeline C has no dplyr version, because its closure is PHP code.</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Pipeline, 1M rows</th>
 <th style="text-align: right;">DataFrame (s)</th>
 <th style="text-align: right;">PolarsTable (s)</th>
 <th style="text-align: right;">SQLite (s)</th>
+<th style="text-align: right;">dplyr (s)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>A: reduce to a ranked summary</td>
-<td style="text-align: right;">0.62</td>
-<td style="text-align: right;">0.06</td>
-<td style="text-align: right;">0.47</td>
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.43</td>
+<td style="text-align: right;">0.07</td>
 </tr>
 <tr class="even">
 <td>B: windows over every row</td>
-<td style="text-align: right;">1.32</td>
-<td style="text-align: right;">0.43</td>
-<td style="text-align: right;">3.52</td>
+<td style="text-align: right;">1.25</td>
+<td style="text-align: right;">0.42</td>
+<td style="text-align: right;">3.33</td>
+<td style="text-align: right;">0.02</td>
 </tr>
 <tr class="odd">
 <td>C: A with a closure</td>
-<td style="text-align: right;">1.09</td>
-<td style="text-align: right;">0.89</td>
-<td style="text-align: right;">1.97</td>
+<td style="text-align: right;">1.13</td>
+<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">2.01</td>
+<td style="text-align: right;"></td>
 </tr>
 </tbody>
 </table>
+<p>dplyr runs these pipelines in compiled code. On A, which reduces the data before collecting, PolarsTable (0.05 s) and dplyr (0.07 s) take about the same time. On B, which returns every row, dplyr is the fastest by a wide margin.</p>
 <p>The verbs themselves are fast in Polars. Most of PolarsTable’s time goes to converting results back to PHP values: about 0.2 seconds per million rows of plain columns, plus about 0.5 seconds per million values of a datetime column, because each value becomes a PHP <code>DateTimeImmutable</code>. A pipeline that returns every row of a table with a datetime column can therefore be slower on PolarsTable than on DataFrame. In phibble’s harness, <code>mutate()</code> and <code>left_join()</code> returning 1M rows took 1.3 seconds on PolarsTable against 0.3 seconds on DataFrame.</p>
 <p>A closure makes PolarsTable convert the data to a DataFrame and back, which costs about a second per million rows. Pipeline C runs its closure step that way.</p>
 <p>Use PolarsTable when a pipeline reduces the data before collecting (summaries, filters, <code>distinct()</code>, or a join followed by a summary), when it chains several steps, or when the data starts in Polars: <code>PolarsTable::fromPolars(Phpolars\read_csv($path))</code> skips phibble’s CSV parse. Keep the pipeline in expressions so every step stays in Polars.</p>

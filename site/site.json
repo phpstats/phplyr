@@ -1,0 +1,135 @@
+{
+    "package": "phplyr",
+    "title": "phplyr",
+    "tagline": "dplyr and tidyr for PHP.",
+    "summary": "phplyr ports R's dplyr and tidyr to PHP: filter, mutate, summarise, joins, pivots, and the rest, with dplyr's names, arguments, and results. Pipelines are method chains on PHP 8.3 and later, or use the pipe operator on PHP 8.5. They run on phibble's in-memory DataFrame, on databases through SQL, and on Polars. Every function is checked against the same pipelines run in R.",
+    "install": [
+        "composer require phpstats/phplyr"
+    ],
+    "requires": [
+        "PHP 8.3, 8.4, or 8.5",
+        "phpstats/phibble 0.3",
+        "Optional: the phit extension for lm(), glm(), lmer(), and glmer()",
+        "Optional: the php_polars extension for PolarsTable"
+    ],
+    "repository": "https://github.com/phpstats/phplyr",
+    "example": {
+        "chain": "$schools = DataFrame::fromCsv('schools.csv');\n\necho phplyr($schools)\n    ->filter(fn ($r) => $r->study_hours >= 5)\n    ->group_by('school')\n    ->summarise(students: n(), avg_score: mean('score'), sd_score: sd('score'))\n    ->arrange(desc('avg_score'))\n    ->head(5);",
+        "pipe": "$schools = DataFrame::fromCsv('schools.csv');\n\necho $schools\n    |> filter(fn ($r) => $r->study_hours >= 5)\n    |> group_by('school')\n    |> summarise(students: n(), avg_score: mean('score'), sd_score: sd('score'))\n    |> arrange(desc('avg_score'))\n    |> head(5);",
+        "output": "# A tibble: 5 × 4\n  school    students avg_score sd_score\n  <chr>        <int>     <dbl>    <dbl>\n1 school-07       14      86.9     6.32\n2 school-06       20      80.9     8.90\n3 school-02       12      79.7     8.22\n4 school-09       11      79.3     6.67\n5 school-11       13      77.6     7.31"
+    },
+    "docs": {
+        "root": "docs",
+        "format": "quarto",
+        "nav": [
+            {
+                "title": "Overview",
+                "path": "index.qmd"
+            },
+            {
+                "title": "Getting started",
+                "path": "getting-started.qmd"
+            },
+            {
+                "title": "Coming from dplyr",
+                "path": "coming-from-dplyr.qmd"
+            },
+            {
+                "title": "Single-table functions",
+                "path": "reference/single-table.qmd"
+            },
+            {
+                "title": "Joins, binding, and set operations",
+                "path": "reference/two-table.qmd"
+            },
+            {
+                "title": "Grouping",
+                "path": "reference/grouping.qmd"
+            },
+            {
+                "title": "Vector helpers",
+                "path": "reference/vectors.qmd"
+            },
+            {
+                "title": "Strings and dates",
+                "path": "reference/strings-dates.qmd"
+            },
+            {
+                "title": "Selecting columns",
+                "path": "reference/tidyselect.qmd"
+            },
+            {
+                "title": "Reshaping with tidyr",
+                "path": "reference/tidyr.qmd"
+            },
+            {
+                "title": "Models",
+                "path": "reference/models.qmd"
+            },
+            {
+                "title": "Databases",
+                "path": "reference/databases.qmd"
+            },
+            {
+                "title": "Gallery",
+                "path": "gallery.qmd"
+            },
+            {
+                "title": "Porting an R script",
+                "path": "port-r-script.qmd"
+            },
+            {
+                "title": "Performance",
+                "path": "performance.qmd"
+            },
+            {
+                "title": "Development",
+                "path": "development.qmd"
+            }
+        ]
+    },
+    "benchmarks": [
+        "site/benchmarks/backends.json"
+    ],
+    "verifications": [
+        "site/verifications/dplyr.json",
+        "site/verifications/tidyr.json",
+        "site/verifications/additions.json",
+        "site/verifications/lubridate-stringr.json",
+        "site/verifications/models.json",
+        "site/verifications/polars.json"
+    ],
+    "vignettes": [
+        {
+            "slug": "port-r-script",
+            "title": "Porting an R analysis",
+            "summary": "A dplyr and tidyr analysis of 250 students, translated line by line and run live, with the pass mark and study-time bands as inputs.",
+            "uses": [
+                "phibble",
+                "phplyr",
+                "phit"
+            ],
+            "script": "site/vignettes/port-r-script.php"
+        },
+        {
+            "slug": "backends",
+            "title": "One pipeline, three backends",
+            "summary": "Join, summarise, and rank sales on phibble's DataFrame, on SQLite, and on Polars, with timings and a check that every backend returns the same rows.",
+            "uses": [
+                "phibble",
+                "phplyr"
+            ],
+            "script": "site/vignettes/backends.php"
+        },
+        {
+            "slug": "reshaping",
+            "title": "Reshaping with tidyr",
+            "summary": "Summarise to one row per school and band, pivot the bands into columns, split the school id, and pivot back.",
+            "uses": [
+                "phibble",
+                "phplyr"
+            ],
+            "script": "site/vignettes/reshaping.php"
+        }
+    ]
+}

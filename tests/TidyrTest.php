@@ -13,8 +13,7 @@ function tidyFixture(string $name): DataFrame
 
 function tidyrReference(string $key): array
 {
-    static $json;
-    $json ??= json_decode(file_get_contents(fixturePath('tidyr-reference.json')), true);
+    $json = rReference('tidyr-reference.json');
 
     return $json[$key];
 }

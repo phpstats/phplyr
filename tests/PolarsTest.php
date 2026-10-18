@@ -26,6 +26,7 @@ if (! extension_loaded('php_polars') || ! class_exists(PolarsTable::class)) {
  */
 function expectSameOnPolars(Closure $pipeline, array $inputs, string $class = PolarsTable::class): void
 {
+    verifyAgainst('DataFrame');
     $frame = $pipeline(...$inputs);
     $polars = $pipeline(...array_map(PolarsTable::fromTable(...), $inputs));
     if (! $frame instanceof Table) {
