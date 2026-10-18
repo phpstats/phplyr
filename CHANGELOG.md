@@ -2,7 +2,7 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
-## Unreleased
+## 0.3.0 - 2026-10-18
 
 phplyr runs on PHP 8.3 and later. On 8.3 and 8.4, pipelines are method chains; on 8.5, the pipe operator works as before.
 
