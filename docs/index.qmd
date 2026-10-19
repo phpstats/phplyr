@@ -22,10 +22,14 @@ pipelines in R and PHP and compares the output. The reference scripts are in
 
 ## Install
 
-phplyr needs PHP 8.3 or later. The pipe operator needs PHP 8.5.
+phplyr needs PHP 8.3 or later. The pipe operator needs PHP 8.5. Neither phplyr
+nor phibble is on Packagist yet, so add both GitHub repositories and require
+phplyr from its main branch:
 
 ```bash
-composer require phpstats/phplyr
+composer config repositories.phibble vcs https://github.com/phpstats/phibble
+composer config repositories.phplyr vcs https://github.com/phpstats/phplyr
+composer require phpstats/phplyr:dev-main
 ```
 
 The optional [phit](https://github.com/phpstats/phit) extension

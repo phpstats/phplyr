@@ -4,7 +4,9 @@
     "tagline": "A PHP port of the Tidyverse's dplyr and tidyr.",
     "summary": "phplyr ports R's dplyr and tidyr to PHP: filter, mutate, summarise, joins, pivots, and the rest, with dplyr's names, arguments, and results. Pipelines are method chains on PHP 8.3 and later, or use the pipe operator on PHP 8.5. They run on phibble's in-memory DataFrame, on databases through SQL, and on Polars. Every function is checked against the same pipelines run in R.",
     "install": [
-        "composer require phpstats/phplyr"
+        "composer config repositories.phibble vcs https://github.com/phpstats/phibble",
+        "composer config repositories.phplyr vcs https://github.com/phpstats/phplyr",
+        "composer require phpstats/phplyr:dev-main"
     ],
     "requires": [
         "PHP 8.3, 8.4, or 8.5",

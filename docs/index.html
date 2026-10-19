@@ -330,8 +330,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Results follow dplyr 1.2 and tidyr 1.3. The test suite runs the same pipelines in R and PHP and compares the output. The reference scripts are in <code>tests/r/</code>.</p>
 <section id="install" class="level2">
 <h2 class="anchored" data-anchor-id="install">Install</h2>
-<p>phplyr needs PHP 8.3 or later. The pipe operator needs PHP 8.5.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require phpstats/phplyr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>phplyr needs PHP 8.3 or later. The pipe operator needs PHP 8.5. Neither phplyr nor phibble is on Packagist yet, so add both GitHub repositories and require phplyr from its main branch:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> config repositories.phibble vcs https://github.com/phpstats/phibble</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> config repositories.phplyr vcs https://github.com/phpstats/phplyr</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require phpstats/phplyr:dev-main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The optional <a href="https://github.com/phpstats/phit">phit</a> extension speeds up the descriptive helpers and provides <code>lm()</code> and <code>glm()</code>.</p>
 </section>
 <section id="where-to-go-next" class="level2">

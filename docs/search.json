@@ -458,7 +458,7 @@
     "href": "index.html#install",
     "title": "phplyr",
     "section": "Install",
-    "text": "Install\nphplyr needs PHP 8.3 or later. The pipe operator needs PHP 8.5.\ncomposer require phpstats/phplyr\nThe optional phit extension speeds up the descriptive helpers and provides lm() and glm().",
+    "text": "Install\nphplyr needs PHP 8.3 or later. The pipe operator needs PHP 8.5. Neither phplyr nor phibble is on Packagist yet, so add both GitHub repositories and require phplyr from its main branch:\ncomposer config repositories.phibble vcs https://github.com/phpstats/phibble\ncomposer config repositories.phplyr vcs https://github.com/phpstats/phplyr\ncomposer require phpstats/phplyr:dev-main\nThe optional phit extension speeds up the descriptive helpers and provides lm() and glm().",
     "crumbs": [
       "phplyr"
     ]

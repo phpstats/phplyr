@@ -41,19 +41,12 @@ Documentation: <https://phpstats.github.io/phplyr/>. Start with [getting started
 
 ## Installation
 
-phplyr needs PHP 8.3 or later; the pipe operator needs PHP 8.5. It isn't on Packagist yet, so add the GitHub repositories for phplyr and phibble to your `composer.json`:
-
-```json
-"repositories": [
-    {"type": "vcs", "url": "https://github.com/phpstats/phibble"},
-    {"type": "vcs", "url": "https://github.com/phpstats/phplyr"}
-]
-```
-
-Then:
+phplyr needs PHP 8.3 or later; the pipe operator needs PHP 8.5. Neither phplyr nor phibble is on Packagist yet, so add both GitHub repositories and require phplyr from its main branch:
 
 ```bash
-composer require phpstats/phplyr:^0.3
+composer config repositories.phibble vcs https://github.com/phpstats/phibble
+composer config repositories.phplyr vcs https://github.com/phpstats/phplyr
+composer require phpstats/phplyr:dev-main
 ```
 
 Two extensions are optional:
