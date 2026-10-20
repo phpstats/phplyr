@@ -10,12 +10,12 @@ $housing = phplyr(DataFrame::fromCsv('housing.csv'))
     ->get();
 
 echo phplyr($housing)
-    ->group_by('bedrooms')
+    ->groupBy('bedrooms')
     ->summarise(across(['area_m2', 'monthly_rent', 'per_m2'], ['mean' => mean(...), 'max' => max(...)]), flats: n())
     ->mutate(across(where('double'), fn ($v) => round($v, 1)));
 
 echo "\n", phplyr($housing)
-    ->mutate(vs_group: fn ($r, $g) => round($r->per_m2 - mean('per_m2')($g), 2), _by: 'bedrooms')
+    ->mutate(vs_group: fn ($r, $g) => round($r->per_m2 - mean('per_m2')($g), 2), by: 'bedrooms')
     ->arrange('bedrooms', desc('vs_group'));
 ```
 
@@ -33,7 +33,7 @@ echo $housing
     |> mutate(across(where('double'), fn ($v) => round($v, 1)));
 
 echo "\n", $housing
-    |> mutate(vs_group: fn ($r, $g) => round($r->per_m2 - mean('per_m2')($g), 2), _by: 'bedrooms')
+    |> mutate(vs_group: fn ($r, $g) => round($r->per_m2 - mean('per_m2')($g), 2), by: 'bedrooms')
     |> arrange('bedrooms', desc('vs_group'));
 ```
 

@@ -3,7 +3,7 @@
 ## Method chain (PHP 8.3+)
 
 ```php
-$schools = phplyr(DataFrame::fromCsv('schools.csv'))->group_by('school')->get();
+$schools = phplyr(DataFrame::fromCsv('schools.csv'))->groupBy('school')->get();
 
 // Phplyr helpers can be passed by name; each gets the column name.
 echo phplyr($schools)

@@ -309,14 +309,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">date</span><span class="ot">:</span> ymd(<span class="st">'when'</span>)<span class="ot">,</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        month_start<span class="ot">:</span> floor_date(ymd(<span class="st">'when'</span>)<span class="ot">,</span> <span class="st">'month'</span>)<span class="ot">,</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        next_month<span class="ot">:</span> ymd(<span class="st">'when'</span>)-&gt;add(months(<span class="dv">1</span>))<span class="ot">,</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        weekday<span class="ot">:</span> wday(ymd(<span class="st">'when'</span>)<span class="ot">,</span> week_start<span class="ot">:</span> <span class="dv">1</span>)<span class="ot">,</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        weekday<span class="ot">:</span> wday(ymd(<span class="st">'when'</span>)<span class="ot">,</span> weekStart<span class="ot">:</span> <span class="dv">1</span>)<span class="ot">,</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    -&gt;select(except(<span class="st">'note'</span>))<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">// Strings: patterns are regular expressions unless wrapped in fixed().</span></span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$notes</span>)</span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        invoice<span class="ot">:</span> str_extract(<span class="st">'note'</span><span class="ot">,</span> regex(<span class="st">'inv-\d+'</span><span class="ot">,</span> ignore_case<span class="ot">:</span> <span class="kw">true</span>))<span class="ot">,</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        invoice<span class="ot">:</span> str_extract(<span class="st">'note'</span><span class="ot">,</span> regex(<span class="st">'inv-\d+'</span><span class="ot">,</span> ignoreCase<span class="ot">:</span> <span class="kw">true</span>))<span class="ot">,</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        literal<span class="ot">:</span> str_detect(<span class="st">'note'</span><span class="ot">,</span> fixed(<span class="st">'INV'</span>))<span class="ot">,</span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        masked<span class="ot">:</span> str_replace_all(<span class="st">'note'</span><span class="ot">,</span> <span class="st">'\d'</span><span class="ot">,</span> <span class="st">'#'</span>)<span class="ot">,</span></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        title<span class="ot">:</span> str_to_title(<span class="st">'note'</span>)<span class="ot">,</span></span>
@@ -338,14 +338,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">date</span><span class="ot">:</span> ymd(<span class="st">'when'</span>)<span class="ot">,</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        month_start<span class="ot">:</span> floor_date(ymd(<span class="st">'when'</span>)<span class="ot">,</span> <span class="st">'month'</span>)<span class="ot">,</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        next_month<span class="ot">:</span> ymd(<span class="st">'when'</span>)-&gt;add(months(<span class="dv">1</span>))<span class="ot">,</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        weekday<span class="ot">:</span> wday(ymd(<span class="st">'when'</span>)<span class="ot">,</span> week_start<span class="ot">:</span> <span class="dv">1</span>)<span class="ot">,</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        weekday<span class="ot">:</span> wday(ymd(<span class="st">'when'</span>)<span class="ot">,</span> weekStart<span class="ot">:</span> <span class="dv">1</span>)<span class="ot">,</span></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">|&gt;</span> select(except(<span class="st">'note'</span>))<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">// Strings: patterns are regular expressions unless wrapped in fixed().</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$notes</span></span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">|&gt;</span> mutate(</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        invoice<span class="ot">:</span> str_extract(<span class="st">'note'</span><span class="ot">,</span> regex(<span class="st">'inv-\d+'</span><span class="ot">,</span> ignore_case<span class="ot">:</span> <span class="kw">true</span>))<span class="ot">,</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        invoice<span class="ot">:</span> str_extract(<span class="st">'note'</span><span class="ot">,</span> regex(<span class="st">'inv-\d+'</span><span class="ot">,</span> ignoreCase<span class="ot">:</span> <span class="kw">true</span>))<span class="ot">,</span></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        literal<span class="ot">:</span> str_detect(<span class="st">'note'</span><span class="ot">,</span> fixed(<span class="st">'INV'</span>))<span class="ot">,</span></span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        masked<span class="ot">:</span> str_replace_all(<span class="st">'note'</span><span class="ot">,</span> <span class="st">'\d'</span><span class="ot">,</span> <span class="st">'#'</span>)<span class="ot">,</span></span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        title<span class="ot">:</span> str_to_title(<span class="st">'note'</span>)<span class="ot">,</span></span>
@@ -368,7 +368,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 3 &lt;NA&gt;     FALSE   no invoice         No Invoice</code></pre>
 <section id="strings" class="level2">
 <h2 class="anchored" data-anchor-id="strings">Strings</h2>
-<p>As in stringr, a pattern is a regular expression. <code>fixed('a.b')</code> matches the text literally, and <code>regex('ab', ignore_case: true)</code> sets options.</p>
+<p>As in stringr, a pattern is a regular expression. <code>fixed('a.b')</code> matches the text literally, and <code>regex('ab', ignoreCase: true)</code> sets options.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -456,8 +456,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Parts</td>
 </tr>
 <tr class="even">
-<td><code>wday(x, week_start:)</code></td>
-<td>Day of the week; Sunday is 1 unless <code>week_start: 1</code></td>
+<td><code>wday(x, weekStart:)</code></td>
+<td>Day of the week; Sunday is 1 unless <code>weekStart: 1</code></td>
 </tr>
 <tr class="odd">
 <td><code>floor_date(x, unit)</code>, <code>ceiling_date</code>, <code>round_date</code></td>

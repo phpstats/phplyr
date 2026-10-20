@@ -16,7 +16,7 @@ $people = DataFrame::fromColumns([
 
 echo phplyr($people)->hoist('info', town: ['city', 'name']), "\n";
 
-echo phplyr($people)->unnest_wider('info')->select('id', 'langs')->unnest_longer('langs', indices_include: true), "\n";
+echo phplyr($people)->unnestWider('info')->select('id', 'langs')->unnestLonger('langs', indicesInclude: true), "\n";
 
 echo phplyr(DataFrame::fromColumns(['g' => ['a', 'a', 'b'], 'x' => [1, 2, 3]]))->chop('x');
 ```
@@ -37,7 +37,7 @@ $people = DataFrame::fromColumns([
 
 echo $people |> hoist('info', town: ['city', 'name']), "\n";
 
-echo $people |> unnest_wider('info') |> select('id', 'langs') |> unnest_longer('langs', indices_include: true), "\n";
+echo $people |> unnest_wider('info') |> select('id', 'langs') |> unnest_longer('langs', indicesInclude: true), "\n";
 
 echo DataFrame::fromColumns(['g' => ['a', 'a', 'b'], 'x' => [1, 2, 3]]) |> chop('x');
 ```

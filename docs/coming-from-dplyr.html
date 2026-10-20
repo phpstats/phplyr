@@ -287,7 +287,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td><code>summarise(m = mean(x, na.rm = TRUE))</code></td>
-<td><code>summarise(m: mean('x', na_rm: true))</code></td>
+<td><code>summarise(m: mean('x', naRm: true))</code></td>
 </tr>
 <tr class="odd">
 <td><code>select(-id)</code></td>
@@ -307,11 +307,11 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="odd">
 <td><code>mutate(..., .by = g)</code></td>
-<td><code>mutate(..., _by: 'g')</code></td>
+<td><code>mutate(..., by: 'g')</code></td>
 </tr>
 <tr class="even">
 <td><code>summarise(..., .groups = "drop")</code></td>
-<td><code>summarise(..., _groups: 'drop')</code></td>
+<td><code>summarise(..., groups: 'drop')</code></td>
 </tr>
 <tr class="odd">
 <td><code>across(c(a, b), mean)</code></td>
@@ -359,11 +359,11 @@ ul.task-list li input[type="checkbox"] {
 <section id="conventions" class="level2">
 <h2 class="anchored" data-anchor-id="conventions">Conventions</h2>
 <ul>
-<li><strong>Dot-arguments.</strong> dplyr’s <code>.by</code>, <code>.keep</code>, <code>.before</code>, <code>.after</code>, <code>.groups</code>, <code>.keep_all</code>, <code>.by_group</code>, <code>.direction</code>, <code>.id</code>, and <code>.remove</code> are written <code>_by</code>, <code>_keep</code>, and so on. A column whose name starts with an underscore cannot be created through a named argument.</li>
+<li><strong>Dot-arguments.</strong> dplyr’s <code>.by</code>, <code>.keep</code>, <code>.before</code>, <code>.after</code>, <code>.groups</code>, <code>.keep_all</code>, <code>.by_group</code>, <code>.direction</code>, <code>.id</code>, and <code>.remove</code> are written <code>by</code>, <code>keep</code>, <code>keepAll</code>, <code>byGroup</code>, and so on. A column an option name claims cannot be created through a named argument on that function.</li>
 <li><strong>Positions are 1-based</strong>, as in R: <code>pull(1)</code> is the first column, <code>pull(-1)</code> the last, and <code>slice(1, 3)</code> the first and third rows of each group.</li>
 <li><strong><code>var()</code> is <code>variance()</code></strong>, because <code>var</code> is a reserved word in PHP.</li>
 <li><strong><code>count</code>, <code>min</code>, and <code>max</code></strong> shadow PHP’s built-ins in files that import them.</li>
-<li><strong>Group order</strong> follows dplyr: groups are sorted by key, factors by level order, and NA last. <code>_by</code> also sorts groups (dplyr keeps first-appearance order for <code>.by</code>).</li>
+<li><strong>Group order</strong> follows dplyr: groups are sorted by key, factors by level order, and NA last. <code>by</code> also sorts groups (dplyr keeps first-appearance order for <code>.by</code>).</li>
 </ul>
 </section>
 <section id="across-functions" class="level2">

@@ -291,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Vector helpers are evaluated once per group on whole columns. Use them as <code>mutate()</code>, <code>filter()</code>, and <code>summarise()</code> arguments. They follow R’s NA rules: a summary returns NA when its input has an NA unless <code>na_rm: true</code>, ranks keep NA, and cumulative functions stay NA after the first NA.</p>
+<p>Vector helpers are evaluated once per group on whole columns. Use them as <code>mutate()</code>, <code>filter()</code>, and <code>summarise()</code> arguments. They follow R’s NA rules: a summary returns NA when its input has an NA unless <code>naRm: true</code>, ranks keep NA, and cumulative functions stay NA after the first NA.</p>
 <p>The first argument is the input column. A string there is a column name. It can also be <code>col('x')</code>, another helper, or a row closure. Later arguments are values. <code>-&gt;map(fn ($value, $r) =&gt; ...)</code> transforms a helper’s result row by row.</p>
 <section id="summaries" class="level2">
 <h2 class="anchored" data-anchor-id="summaries">Summaries</h2>
@@ -354,7 +354,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>lag('x', n:, default:, order_by:)</code>, <code>lead(...)</code></td>
+<td><code>lag('x', n:, default:, orderBy:)</code>, <code>lead(...)</code></td>
 <td>Shifted values</td>
 </tr>
 <tr class="even">
@@ -477,7 +477,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>dplyr’s deprecated form of <code>recode_values()</code></td>
 </tr>
 <tr class="odd">
-<td><code>recode('x', a: 'A', _default:, _missing:)</code></td>
+<td><code>recode('x', a: 'A', default:, missing:)</code></td>
 <td>dplyr’s superseded recoder, matching values by name</td>
 </tr>
 <tr class="even">

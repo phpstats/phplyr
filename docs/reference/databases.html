@@ -298,7 +298,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>mutate(dev<span class="ot">:</span> col(<span class="st">'score'</span>)-&gt;sub(mean(<span class="st">'score'</span>)))      <span class="co">// mean() recycles per group</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The operator methods are <code>add</code>, <code>sub</code>, <code>mul</code>, <code>div</code>, <code>mod</code>, <code>pow</code>, <code>neg</code>, <code>eq</code>, <code>ne</code>, <code>lt</code>, <code>le</code>, <code>gt</code>, <code>ge</code>, <code>and</code>, <code>or</code>, <code>not</code>, <code>isNa</code>, <code>isIn</code>, <code>between</code>, and <code>desc</code>. Scalar helpers include <code>round</code>, <code>abs</code>, <code>sqrt</code>, <code>exp</code>, <code>log</code>, <code>log10</code>, <code>floor</code>, <code>ceiling</code>, <code>is_na</code>, <code>as_int</code>, <code>as_float</code>, <code>as_string</code>, <code>as_bool</code>, <code>paste</code>, and <code>paste0</code>. Several of these names shadow PHP built-ins in files that import them. The <a href="../reference/strings-dates.html">string and date helpers</a> are expressions too.</p>
 <p>An expression is a <code>Phibble\Expr</code> tree. phplyr passes it to the table. The in-memory <code>DataFrame</code> evaluates it with dplyr’s semantics, and a database table compiles it to SQL. A helper given a PHP closure still works, but it is evaluated in PHP.</p>
-<p><code>mutate(_keep: 'used')</code> and <code>_keep: 'unused'</code> need expression arguments, because phplyr reads the columns an expression uses from the tree.</p>
+<p><code>mutate(keep: 'used')</code> and <code>keep: 'unused'</code> need expression arguments, because phplyr reads the columns an expression uses from the tree.</p>
 </section>
 <section id="database-tables" class="level2">
 <h2 class="anchored" data-anchor-id="database-tables">Database tables</h2>
@@ -318,13 +318,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">// The same functions build a query. Nothing runs until collect().</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="va">$query</span> <span class="op">=</span> phplyr(tbl(<span class="va">$pdo</span><span class="ot">,</span> <span class="st">'schools'</span>))</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(col(<span class="st">'study_hours'</span>)-&gt;ge(<span class="dv">5</span>))</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    -&gt;group_by(<span class="st">'school'</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    -&gt;summarise(students<span class="ot">:</span> n()<span class="ot">,</span> avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>))</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(col(<span class="st">'students'</span>)-&gt;ge(<span class="dv">12</span>))</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(desc(<span class="st">'avg_score'</span>))</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$query</span>)-&gt;show_query()<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$query</span>)-&gt;showQuery()<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$query</span>)-&gt;collect()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
@@ -363,7 +363,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 7 school-05       13      75.8
 8 school-04       20      71.1
 9 school-08       12      67.5</code></pre>
-<p>Grouped <code>mutate()</code> and <code>filter()</code> compile aggregates and window functions to <code>OVER (PARTITION BY ...)</code>. Window functions need an order, so call <code>arrange()</code> first or pass <code>order_by:</code>.</p>
+<p>Grouped <code>mutate()</code> and <code>filter()</code> compile aggregates and window functions to <code>OVER (PARTITION BY ...)</code>. Window functions need an order, so call <code>arrange()</code> first or pass <code>orderBy:</code>.</p>
 <p>A function given a PHP closure runs the query so far, loads the rows, and continues in memory, returning a <code>DataFrame</code>. Expressions with no faithful SQL translation do the same. They include <code>round()</code> (R rounds halves to even), <code>first()</code>, <code>last()</code>, <code>nth()</code>, <code>iqr()</code>, <code>cumprod()</code>, <code>consecutive_id()</code>, and <code>median()</code> or <code>quantile()</code> outside PostgreSQL.</p>
 
 

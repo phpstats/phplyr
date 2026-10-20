@@ -385,7 +385,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>bench/backends.php</code> times three phplyr pipelines on DataFrame, PolarsTable, and SQLite, and checks that all three backends return the same rows. It is adapted from phpolars’ benchmark script. The pipelines are:</p>
 <ul>
 <li><strong>A:</strong> filter, join a store lookup, two-key summarise, then a ranking window.</li>
-<li><strong>B:</strong> grouped <code>lag(order_by:)</code>, <code>cumsum()</code>, and a share of the group total over all rows.</li>
+<li><strong>B:</strong> grouped <code>lag(orderBy:)</code>, <code>cumsum()</code>, and a share of the group total over all rows.</li>
 <li><strong>C:</strong> pipeline A with a closure in <code>filter()</code>.</li>
 </ul>
 <p>Times are the best of three runs through <code>collect()</code>, on an Apple M5 Ultra with Homebrew PHP 8.5, phibble 0.3.0, and Polars 0.55.2 at two threads. In every case the three backends returned the same rows. The full results, with all repeat timings and version details, are in <a href="benchmarks/backends-results.json"><code>benchmarks/backends-results.json</code></a>.</p>

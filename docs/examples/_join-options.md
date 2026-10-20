@@ -7,10 +7,10 @@ $x = DataFrame::fromRows([['id' => 1, 'v' => 'a'], ['id' => 2, 'v' => 'b'], ['id
 $y = DataFrame::fromRows([['id' => 2, 'v' => 'B'], ['id' => 2, 'v' => 'B2'], ['id' => null, 'v' => 'C']]);
 
 // Clashing columns get suffixes; NA keys match each other, as in dplyr.
-echo phplyr($x)->left_join($y, by: 'id');
+echo phplyr($x)->leftJoin($y, by: 'id');
 
 // Keep only the first match, and never match NA keys.
-echo "\n", phplyr($x)->left_join($y, by: 'id', multiple: 'first', na_matches: 'never', suffix: ['_x', '_y']);
+echo "\n", phplyr($x)->leftJoin($y, by: 'id', multiple: 'first', naMatches: 'never', suffix: ['x', '_y']);
 ```
 
 ## Pipe (PHP 8.5)
@@ -23,7 +23,7 @@ $y = DataFrame::fromRows([['id' => 2, 'v' => 'B'], ['id' => 2, 'v' => 'B2'], ['i
 echo $x |> left_join($y, by: 'id');
 
 // Keep only the first match, and never match NA keys.
-echo "\n", $x |> left_join($y, by: 'id', multiple: 'first', na_matches: 'never', suffix: ['_x', '_y']);
+echo "\n", $x |> left_join($y, by: 'id', multiple: 'first', naMatches: 'never', suffix: ['x', '_y']);
 ```
 
 :::
@@ -37,7 +37,7 @@ echo "\n", $x |> left_join($y, by: 'id', multiple: 'first', na_matches: 'never',
 3     2 b     B2   
 4    NA c     C    
 # A tibble: 3 × 3
-     id v_x   v_y  
+     id vx    v_y  
   <int> <chr> <chr>
 1     1 a     <NA> 
 2     2 b     B    
