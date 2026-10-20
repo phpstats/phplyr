@@ -5,7 +5,7 @@ $scores = DataFrame::fromRows([
     ['student' => 'bob', 'wk1' => 7, 'wk2' => 8, 'wk3' => 9],
 ]);
 
-$long = phplyr($scores)->pivot_longer(starts_with('wk'), names_to: 'week', names_prefix: 'wk', values_to: 'points', values_drop_na: true)->get();
+$long = phplyr($scores)->pivot_longer(starts_with('wk'), namesTo: 'week', namesPrefix: 'wk', valuesTo: 'points', valuesDropNa: true)->get();
 echo $long;
 
-echo "\n", phplyr($long)->pivot_wider(names_from: 'week', values_from: 'points', names_prefix: 'week_', values_fill: 0, names_sort: true);
+echo "\n", phplyr($long)->pivot_wider(namesFrom: 'week', valuesFrom: 'points', namesPrefix: 'week_', valuesFill: 0, namesSort: true);

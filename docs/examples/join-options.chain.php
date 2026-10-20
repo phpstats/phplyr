@@ -7,4 +7,4 @@ $y = DataFrame::fromRows([['id' => 2, 'v' => 'B'], ['id' => 2, 'v' => 'B2'], ['i
 echo phplyr($x)->left_join($y, by: 'id');
 
 // Keep only the first match, and never match NA keys.
-echo "\n", phplyr($x)->left_join($y, by: 'id', multiple: 'first', na_matches: 'never', suffix: ['_x', '_y']);
+echo "\n", phplyr($x)->left_join($y, by: 'id', multiple: 'first', naMatches: 'never', suffix: ['x', '_y']);

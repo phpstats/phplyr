@@ -88,7 +88,7 @@ final class Across
 
             return $def instanceof Vec ? $def : new Vec($def);
         }
-        // A closure may return a helper's result, as in fn ($v) => mean($v, na_rm: true).
+        // A closure may return a helper's result, as in fn ($v) => mean($v, naRm: true).
         $resolve = fn (mixed $r, Table $g) => $r instanceof Vec ? $r($g) : $r;
         if ($verb === 'summarise' || self::takesArray($fn)) {
             return new Vec(fn (Table $g) => self::at($col, fn () => $resolve($fn($g->column($col)), $g)));

@@ -3,14 +3,14 @@ title: "Grouping"
 ---
 
 `group_by()` sets the grouping columns. Selectors work, named arguments group
-by a computed column, and `_add: true` adds to the existing groups.
-`_drop: false` keeps groups for unused factor levels, so `summarise()` and
+by a computed column, and `add: true` adds to the existing groups.
+`drop: false` keeps groups for unused factor levels, so `summarise()` and
 `count()` return them with `n() = 0`, as dplyr does.
 `ungroup()` removes grouping, or only the named columns.
 
 Groups are ordered like dplyr's: sorted by key, factors by level order, and NA
 last. `filter()`, `mutate()`, `summarise()`, and the slice functions work
-within groups. `_by:` groups for a single call and returns an ungrouped table.
+within groups. `by:` groups for a single call and returns an ungrouped table.
 
 {{< include ../examples/_grouping.md >}}
 
@@ -26,10 +26,10 @@ within groups. `_by:` groups for a single call and returns an ungrouped table.
 | `group_rows()` | Each group's 1-based row numbers |
 | `group_data()` | The group keys with a `.rows` list-column |
 | `group_trim()` | The table regrouped without unused factor levels |
-| `group_nest(_key:, _keep:)` | One row per group, with a list-column of tables |
+| `group_nest(key:, keep:)` | One row per group, with a list-column of tables |
 | `nest_by(...cols)` | `group_nest()` as a rowwise table |
 | `with_groups(groups, fn)` | The function's result under other groups, with the original grouping restored |
-| `group_split(_keep:)` | A list of tables, one per group |
+| `group_split(keep:)` | A list of tables, one per group |
 | `group_map(fn ($table, $key))` | A list of the function's results |
 | `group_modify(fn ($table, $key))` | A grouped table built from the returned tables |
 | `group_walk(fn ($table, $key))` | The table, after calling the function per group |

@@ -17,7 +17,7 @@ function exprReference(string $key): mixed
 it('builds Phibble expressions when every argument is inspectable', function () {
     expect(mean('x')->expr)->toBeInstanceOf(Call::class);
     expect(mean('x')->expr->toArray())->toBe(['type' => 'call', 'fn' => 'mean', 'args' => [['type' => 'col', 'name' => 'x']]]);
-    expect(lag('x', 2, order_by: Phplyr\desc('t'))->expr->toArray()['named']['order_by']['type'])->toBe('desc');
+    expect(lag('x', 2, orderBy: Phplyr\desc('t'))->expr->toArray()['named']['order_by']['type'])->toBe('desc');
     expect(col('price')->mul(1.1)->gt(100)->expr->columns())->toBe(['price']);
     expect(mean(fn ($r) => $r->x * 2)->expr)->toBeNull();
 });
@@ -29,15 +29,15 @@ it('evaluates closure arguments with the same semantics', function () {
     expect($b->toRows())->toBe($a->toRows());
 });
 
-it('matches dplyr for mutate _keep used and unused', function () {
+it('matches dplyr for mutate keep used and unused', function () {
     $p = panel();
-    expectRowsClose((pipe($p, mutate(z: col('score')->mul(2), w: col('value')->add(col('year')), _keep: 'used')))->toRows(), exprReference('keep_used'));
-    expectRowsClose((pipe($p, mutate(z: col('score')->mul(2), _keep: 'unused')))->toRows(), exprReference('keep_unused'));
+    expectRowsClose((pipe($p, mutate(z: col('score')->mul(2), w: col('value')->add(col('year')), keep: 'used')))->toRows(), exprReference('keep_used'));
+    expectRowsClose((pipe($p, mutate(z: col('score')->mul(2), keep: 'unused')))->toRows(), exprReference('keep_unused'));
     expectRowsClose(
-        (pipe($p, group_by('g'), mutate(dev: col('score')->sub(mean('score')), _keep: 'used'), ungroup()))->toRows(),
+        (pipe($p, group_by('g'), mutate(dev: col('score')->sub(mean('score')), keep: 'used'), ungroup()))->toRows(),
         exprReference('keep_used_grouped'),
     );
-    expect(fn () => pipe($p, mutate(z: fn ($r) => $r->score, _keep: 'used')))->toThrow(InvalidArgumentException::class, 'expression');
+    expect(fn () => pipe($p, mutate(z: fn ($r) => $r->score, keep: 'used')))->toThrow(InvalidArgumentException::class, 'expression');
 });
 
 it('matches R for scalar expression helpers', function () {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * tidyr verbs, pipe-able like the dplyr verbs. Arguments follow tidyr's
- * names; tidyr's dot-arguments use a leading underscore (_remove, _id).
+ * names; tidyr's dot-arguments drop the dot (remove, id).
  */
 
 namespace Phplyr;
@@ -15,66 +15,66 @@ use Phibble\DataFrame;
 
 /**
  * Lengthen: turn columns into name/value rows.
- * pivot_longer(starts_with('wk'), names_to: 'week', values_to: 'rank').
- * names_to may list several names (with names_sep or names_pattern); the
+ * pivot_longer(starts_with('wk'), namesTo: 'week', valuesTo: 'rank').
+ * namesTo may list several names (with namesSep or namesPattern); the
  * name '.value' takes the value column's name from that part.
- * names_transform and values_transform are a closure, or name => closure;
- * cols_vary: 'slowest' keeps each source column's rows together.
+ * namesTransform and valuesTransform are a closure, or name => closure;
+ * colsVary: 'slowest' keeps each source column's rows together.
  */
-function pivot_longer(mixed $cols, string|array $names_to = 'name', string $values_to = 'value', ?string $names_prefix = null, ?string $names_sep = null, ?string $names_pattern = null, bool $values_drop_na = false, Closure|array|null $names_transform = null, Closure|array|null $values_transform = null, string $cols_vary = 'fastest'): Closure
+function pivot_longer(mixed $cols, string|array $namesTo = 'name', string $valuesTo = 'value', ?string $namesPrefix = null, ?string $namesSep = null, ?string $namesPattern = null, bool $valuesDropNa = false, Closure|array|null $namesTransform = null, Closure|array|null $valuesTransform = null, string $colsVary = 'fastest'): Closure
 {
-    return fn (Table $t) => Tidyr::pivotLonger($t, $cols, $names_to, $values_to, $names_prefix, $names_sep, $names_pattern, $values_drop_na, $names_transform, $values_transform, $cols_vary);
+    return fn (Table $t) => Tidyr::pivotLonger($t, $cols, $namesTo, $valuesTo, $namesPrefix, $namesSep, $namesPattern, $valuesDropNa, $namesTransform, $valuesTransform, $colsVary);
 }
 
 /**
  * Widen: spread name/value pairs into columns.
- * pivot_wider(names_from: 'week', values_from: 'rank', values_fill: 0).
- * Duplicate cells need values_fn, a closure taking the list of values.
- * names_vary: 'slowest' groups each name's value columns together;
- * names_expand and id_expand add every combination of the names_from and
- * id_cols values (sorted, factors by level); unused_fn summarises the
- * columns that are in none of id_cols, names_from and values_from.
+ * pivot_wider(namesFrom: 'week', valuesFrom: 'rank', valuesFill: 0).
+ * Duplicate cells need valuesFn, a closure taking the list of values.
+ * namesVary: 'slowest' groups each name's value columns together;
+ * namesExpand and idExpand add every combination of the namesFrom and
+ * idCols values (sorted, factors by level); unusedFn summarises the
+ * columns that are in none of idCols, namesFrom and valuesFrom.
  */
-function pivot_wider(mixed $names_from = 'name', mixed $values_from = 'value', mixed $id_cols = null, string $names_prefix = '', string $names_sep = '_', ?string $names_glue = null, bool $names_sort = false, mixed $values_fill = null, Closure|array|null $values_fn = null, string $names_vary = 'fastest', bool $names_expand = false, bool $id_expand = false, Closure|array|null $unused_fn = null): Closure
+function pivot_wider(mixed $namesFrom = 'name', mixed $valuesFrom = 'value', mixed $idCols = null, string $namesPrefix = '', string $namesSep = '_', ?string $namesGlue = null, bool $namesSort = false, mixed $valuesFill = null, Closure|array|null $valuesFn = null, string $namesVary = 'fastest', bool $namesExpand = false, bool $idExpand = false, Closure|array|null $unusedFn = null): Closure
 {
-    return fn (Table $t) => Tidyr::pivotWider($t, $id_cols, $names_from, $values_from, $names_prefix, $names_sep, $names_glue, $names_sort, $values_fill, $values_fn, $names_vary, $names_expand, $id_expand, $unused_fn);
+    return fn (Table $t) => Tidyr::pivotWider($t, $idCols, $namesFrom, $valuesFrom, $namesPrefix, $namesSep, $namesGlue, $namesSort, $valuesFill, $valuesFn, $namesVary, $namesExpand, $idExpand, $unusedFn);
 }
 
 /**
  * The spec pivot_longer() would use, as a table with .name, .value and the
- * names_to columns; edit it and run it with pivot_longer_spec().
+ * namesTo columns; edit it and run it with pivot_longer_spec().
  */
-function build_longer_spec(mixed $cols, string|array $names_to = 'name', string $values_to = 'value', ?string $names_prefix = null, ?string $names_sep = null, ?string $names_pattern = null, Closure|array|null $names_transform = null): Closure
+function build_longer_spec(mixed $cols, string|array $namesTo = 'name', string $valuesTo = 'value', ?string $namesPrefix = null, ?string $namesSep = null, ?string $namesPattern = null, Closure|array|null $namesTransform = null): Closure
 {
-    return fn (Table $t) => DataFrame::fromRows(Tidyr::longerSpec($t, $cols, $names_to, $values_to, $names_prefix, $names_sep, $names_pattern, $names_transform));
+    return fn (Table $t) => DataFrame::fromRows(Tidyr::longerSpec($t, $cols, $namesTo, $valuesTo, $namesPrefix, $namesSep, $namesPattern, $namesTransform));
 }
 
 /** Lengthen with a spec from build_longer_spec() (a table or a list of rows). */
-function pivot_longer_spec(Table|array $spec, bool $values_drop_na = false, Closure|array|null $values_transform = null, string $cols_vary = 'fastest'): Closure
+function pivot_longer_spec(Table|array $spec, bool $valuesDropNa = false, Closure|array|null $valuesTransform = null, string $colsVary = 'fastest'): Closure
 {
-    return fn (Table $t) => Tidyr::runLongerSpec($t, $spec instanceof Table ? $spec->toRows() : array_values($spec), $values_drop_na, $values_transform, $cols_vary);
+    return fn (Table $t) => Tidyr::runLongerSpec($t, $spec instanceof Table ? $spec->toRows() : array_values($spec), $valuesDropNa, $valuesTransform, $colsVary);
 }
 
 /**
  * The spec pivot_wider() would use, as a table with .name, .value and the
- * names_from columns; edit it and run it with pivot_wider_spec().
+ * namesFrom columns; edit it and run it with pivot_wider_spec().
  */
-function build_wider_spec(mixed $names_from = 'name', mixed $values_from = 'value', string $names_prefix = '', string $names_sep = '_', ?string $names_glue = null, bool $names_sort = false, string $names_vary = 'fastest', bool $names_expand = false): Closure
+function build_wider_spec(mixed $namesFrom = 'name', mixed $valuesFrom = 'value', string $namesPrefix = '', string $namesSep = '_', ?string $namesGlue = null, bool $namesSort = false, string $namesVary = 'fastest', bool $namesExpand = false): Closure
 {
-    return fn (Table $t) => DataFrame::fromRows(Tidyr::widerSpec($t, Selector::select([$names_from], $t), Selector::select([$values_from], $t), $names_prefix, $names_sep, $names_glue, $names_sort, $names_vary, $names_expand));
+    return fn (Table $t) => DataFrame::fromRows(Tidyr::widerSpec($t, Selector::select([$namesFrom], $t), Selector::select([$valuesFrom], $t), $namesPrefix, $namesSep, $namesGlue, $namesSort, $namesVary, $namesExpand));
 }
 
 /**
- * Widen with a spec from build_wider_spec(). id_cols defaults to the
+ * Widen with a spec from build_wider_spec(). idCols defaults to the
  * columns the spec doesn't use.
  */
-function pivot_wider_spec(Table|array $spec, mixed $id_cols = null, mixed $values_fill = null): Closure
+function pivot_wider_spec(Table|array $spec, mixed $idCols = null, mixed $valuesFill = null): Closure
 {
-    return function (Table $t) use ($spec, $id_cols, $values_fill) {
+    return function (Table $t) use ($spec, $idCols, $valuesFill) {
         $rows = $spec instanceof Table ? $spec->toRows() : array_values($spec);
         $used = [...array_column($rows, '.value'), ...array_diff(array_keys($rows[0] ?? []), ['.name', '.value'])];
-        $ids = $id_cols === null ? array_values(array_diff($t->columns(), $used)) : Selector::select([$id_cols], $t);
-        $fill = \is_array($values_fill) ? $values_fill : ($values_fill === null ? [] : array_fill_keys(array_unique(array_column($rows, '.value')), $values_fill));
+        $ids = $idCols === null ? array_values(array_diff($t->columns(), $used)) : Selector::select([$idCols], $t);
+        $fill = \is_array($valuesFill) ? $valuesFill : ($valuesFill === null ? [] : array_fill_keys(array_unique(array_column($rows, '.value')), $valuesFill));
 
         return $t->pivotWiderSpec($rows, $ids, $fill);
     };
@@ -83,13 +83,13 @@ function pivot_wider_spec(Table|array $spec, mixed $id_cols = null, mixed $value
 /**
  * Gather columns into key-value pairs (superseded by pivot_longer()):
  * gather('week', 'rank', 'wk1', 'wk2'). Rows run column by column. Options:
- * na_rm, convert.
+ * naRm, convert.
  */
 function gather(string $key = 'key', string $value = 'value', mixed ...$cols): Closure
 {
-    $naRm = $cols['na_rm'] ?? false;
+    $naRm = $cols['naRm'] ?? false;
     $convert = $cols['convert'] ?? false;
-    unset($cols['na_rm'], $cols['convert']);
+    unset($cols['naRm'], $cols['convert']);
 
     return function (Table $t) use ($key, $value, $cols, $naRm, $convert) {
         $selected = $cols === [] ? array_values(array_diff($t->columns(), $t->groups())) : Selector::select(array_values($cols), $t);
@@ -176,11 +176,11 @@ function expand_grid(array ...$columns): DataFrame
 
 /**
  * Fill NA with the previous (or next) value, within groups:
- * fill('price', _direction: 'down'|'up'|'downup'|'updown').
+ * fill('price', direction: 'down'|'up'|'downup'|'updown').
  */
 function fill(mixed ...$cols): Closure
 {
-    [$cols, $o] = Internal::options($cols, ['_direction' => 'down'], 'fill');
+    [$cols, $o] = Internal::options($cols, ['direction' => 'down'], 'fill');
 
     return function (Table $t) use ($cols, $o) {
         $defs = [];
@@ -197,12 +197,12 @@ function fill(mixed ...$cols): Closure
                 };
                 $up = fn (array $v) => array_reverse($down(array_reverse($v)));
 
-                return match ($o['_direction']) {
+                return match ($o['direction']) {
                     'down' => $down($v),
                     'up' => $up($v),
                     'downup' => $up($down($v)),
                     'updown' => $down($up($v)),
-                    default => throw new \InvalidArgumentException("fill(): unknown _direction '{$o['_direction']}'."),
+                    default => throw new \InvalidArgumentException("fill(): unknown direction '{$o['direction']}'."),
                 };
             };
         }
@@ -243,12 +243,12 @@ function replace_na(array $replace): Closure
 }
 
 /**
- * Repeat each row by a weight column: uncount('n'). Options: _remove (drop
- * the weight column, default true), _id (add a 1-based copy number).
+ * Repeat each row by a weight column: uncount('n'). Options: remove (drop
+ * the weight column, default true), id (add a 1-based copy number).
  */
-function uncount(mixed $weights, bool $_remove = true, ?string $_id = null): Closure
+function uncount(mixed $weights, bool $remove = true, ?string $id = null): Closure
 {
-    return function (Table $t) use ($weights, $_remove, $_id) {
+    return function (Table $t) use ($weights, $remove, $id) {
         $w = Vec::values($weights, $t->ungroup(), true);
         $index = [];
         $ids = [];
@@ -262,24 +262,24 @@ function uncount(mixed $weights, bool $_remove = true, ?string $_id = null): Clo
             }
         }
         $out = Ops::take($t, $index);
-        if ($_remove && \is_string($weights)) {
+        if ($remove && \is_string($weights)) {
             $out = $out->select(array_values(array_diff($out->columns(), [$weights])));
         }
 
-        return $_id === null ? $out : $out->mutate([$_id => $ids]);
+        return $id === null ? $out : $out->mutate([$id => $ids]);
     };
 }
 
 /**
  * Paste columns together into one: unite('date', 'year', 'month', sep: '-').
- * Options: sep ('_'), remove (true), na_rm (false; NA otherwise prints "NA").
+ * Options: sep ('_'), remove (true), naRm (false; NA otherwise prints "NA").
  */
 function unite(string $col, mixed ...$cols): Closure
 {
     $sep = $cols['sep'] ?? '_';
     $remove = $cols['remove'] ?? true;
-    $naRm = $cols['na_rm'] ?? false;
-    unset($cols['sep'], $cols['remove'], $cols['na_rm']);
+    $naRm = $cols['naRm'] ?? false;
+    unset($cols['sep'], $cols['remove'], $cols['naRm']);
 
     return function (Table $t) use ($col, $cols, $sep, $remove, $naRm) {
         $names = $cols === [] ? $t->columns() : Selector::select(array_values($cols), $t);
@@ -353,19 +353,19 @@ function separate(string $col, array $into, string|int|array $sep = '[^[:alnum:]
 /**
  * Split columns on a fixed delimiter into new columns:
  * separate_wider_delim('name', ' ', names: ['first', 'last']).
- * Without names, give names_sep to name them col{sep}1, col{sep}2...
- * too_few: 'error'|'align_start'|'align_end'; too_many: 'error'|'drop'|'merge'.
+ * Without names, give namesSep to name them col{sep}1, col{sep}2...
+ * tooFew: 'error'|'align_start'|'align_end'; tooMany: 'error'|'drop'|'merge'.
  */
-function separate_wider_delim(mixed $cols, string $delim, ?array $names = null, ?string $names_sep = null, string $too_few = 'error', string $too_many = 'error', bool $cols_remove = true): Closure
+function separate_wider_delim(mixed $cols, string $delim, ?array $names = null, ?string $namesSep = null, string $tooFew = 'error', string $tooMany = 'error', bool $colsRemove = true): Closure
 {
-    return function (Table $t) use ($cols, $delim, $names, $names_sep, $too_few, $too_many, $cols_remove) {
+    return function (Table $t) use ($cols, $delim, $names, $namesSep, $tooFew, $tooMany, $colsRemove) {
         foreach (Selector::select([$cols], $t) as $col) {
             $split = array_map(fn ($v) => $v === null ? null : explode($delim, Tidyr::str($v)), $t->column($col));
             $k = $names === null ? \max(array_map(fn ($p) => $p === null ? 0 : \count($p), $split) ?: [0]) : \count($names);
-            if ($names === null && $names_sep === null) {
-                throw new \InvalidArgumentException('separate_wider_delim(): give names or names_sep.');
+            if ($names === null && $namesSep === null) {
+                throw new \InvalidArgumentException('separate_wider_delim(): give names or namesSep.');
             }
-            $targets = $names ?? array_map(fn ($i) => $col.$names_sep.($i + 1), range(0, $k - 1));
+            $targets = $names ?? array_map(fn ($i) => $col.$namesSep.($i + 1), range(0, $k - 1));
             $rows = [];
             foreach ($split as $i => $p) {
                 if ($p === null) {
@@ -374,18 +374,18 @@ function separate_wider_delim(mixed $cols, string $delim, ?array $names = null, 
                     continue;
                 }
                 if (\count($p) > $k) {
-                    $p = match ($too_many) {
+                    $p = match ($tooMany) {
                         'drop' => \array_slice($p, 0, $k),
                         'merge' => [...\array_slice($p, 0, $k - 1), implode($delim, \array_slice($p, $k - 1))],
-                        default => throw new \UnexpectedValueException("separate_wider_delim(): row ".($i + 1)." of '{$col}' has ".\count($p)." pieces; expected {$k}. Use too_many."),
+                        default => throw new \UnexpectedValueException("separate_wider_delim(): row ".($i + 1)." of '{$col}' has ".\count($p)." pieces; expected {$k}. Use tooMany."),
                     };
                 }
                 if (\count($p) < $k) {
                     $pad = array_fill(0, $k - \count($p), null);
-                    $p = match ($too_few) {
+                    $p = match ($tooFew) {
                         'align_start' => [...$p, ...$pad],
                         'align_end' => [...$pad, ...$p],
-                        default => throw new \UnexpectedValueException("separate_wider_delim(): row ".($i + 1)." of '{$col}' has ".\count($p)." pieces; expected {$k}. Use too_few."),
+                        default => throw new \UnexpectedValueException("separate_wider_delim(): row ".($i + 1)." of '{$col}' has ".\count($p)." pieces; expected {$k}. Use tooFew."),
                     };
                 }
                 $rows[] = $p;
@@ -396,7 +396,7 @@ function separate_wider_delim(mixed $cols, string $delim, ?array $names = null, 
                     $new[$name] = array_column($rows, $j);
                 }
             }
-            $t = Tidyr::insertAt($t, $col, $new, $cols_remove);
+            $t = Tidyr::insertAt($t, $col, $new, $colsRemove);
         }
 
         return $t;
@@ -407,16 +407,16 @@ function separate_wider_delim(mixed $cols, string $delim, ?array $names = null, 
  * Split columns by character widths: separate_wider_position('code',
  * ['state' => 2, 1, 'county' => 3]); unnamed widths are skipped.
  */
-function separate_wider_position(mixed $cols, array $widths, string $too_few = 'error', bool $cols_remove = true): Closure
+function separate_wider_position(mixed $cols, array $widths, string $tooFew = 'error', bool $colsRemove = true): Closure
 {
-    return function (Table $t) use ($cols, $widths, $too_few, $cols_remove) {
+    return function (Table $t) use ($cols, $widths, $tooFew, $colsRemove) {
         $total = array_sum($widths);
         foreach (Selector::select([$cols], $t) as $col) {
             $new = array_fill_keys(array_filter(array_keys($widths), 'is_string'), []);
             foreach ($t->column($col) as $i => $v) {
                 $v = $v === null ? null : Tidyr::str($v);
-                if ($v !== null && mb_strlen($v) < $total && $too_few === 'error') {
-                    throw new \UnexpectedValueException("separate_wider_position(): row ".($i + 1)." of '{$col}' is shorter than {$total} characters. Use too_few: 'align_start'.");
+                if ($v !== null && mb_strlen($v) < $total && $tooFew === 'error') {
+                    throw new \UnexpectedValueException("separate_wider_position(): row ".($i + 1)." of '{$col}' is shorter than {$total} characters. Use tooFew: 'align_start'.");
                 }
                 $pos = 0;
                 foreach ($widths as $name => $w) {
@@ -427,7 +427,7 @@ function separate_wider_position(mixed $cols, array $widths, string $too_few = '
                     $pos += $w;
                 }
             }
-            $t = Tidyr::insertAt($t, $col, $new, $cols_remove);
+            $t = Tidyr::insertAt($t, $col, $new, $colsRemove);
         }
 
         return $t;
@@ -437,41 +437,41 @@ function separate_wider_position(mixed $cols, array $widths, string $too_few = '
 /**
  * Split columns with regular expressions: separate_wider_regex('id',
  * ['letters' => '[a-z]+', '-', 'digits' => '\d+']). Unnamed patterns match
- * but are not kept. Rows that don't match error unless too_few: 'align_start'.
+ * but are not kept. Rows that don't match error unless tooFew: 'align_start'.
  */
-function separate_wider_regex(mixed $cols, array $patterns, string $too_few = 'error', bool $cols_remove = true): Closure
+function separate_wider_regex(mixed $cols, array $patterns, string $tooFew = 'error', bool $colsRemove = true): Closure
 {
     $piece = fn ($name, $p) => \is_string($name) ? '('.\str_replace('/', '\/', $p).')' : '(?:'.\str_replace('/', '\/', $p).')';
     $keys = array_keys($patterns);
-    // The full pattern, then shorter prefixes of it for too_few: 'align_start'.
+    // The full pattern, then shorter prefixes of it for tooFew: 'align_start'.
     $regexes = [];
     for ($k = \count($patterns); $k >= 1; $k--) {
         $regexes[] = '/^'.implode('', array_map($piece, \array_slice($keys, 0, $k), \array_slice($patterns, 0, $k))).'$/u';
     }
     $names = array_values(array_filter($keys, 'is_string'));
 
-    return function (Table $t) use ($cols, $regexes, $names, $too_few, $cols_remove) {
+    return function (Table $t) use ($cols, $regexes, $names, $tooFew, $colsRemove) {
         foreach (Selector::select([$cols], $t) as $col) {
             $new = array_fill_keys($names, []);
             foreach ($t->column($col) as $i => $v) {
                 $m = [];
                 if ($v !== null) {
                     $text = Tidyr::str($v);
-                    foreach ($too_few === 'align_start' ? $regexes : [$regexes[0]] as $regex) {
+                    foreach ($tooFew === 'align_start' ? $regexes : [$regexes[0]] as $regex) {
                         if (preg_match($regex, $text, $m) === 1) {
                             break;
                         }
                         $m = [];
                     }
-                    if ($m === [] && $too_few === 'error') {
-                        throw new \UnexpectedValueException('separate_wider_regex(): row '.($i + 1)." of '{$col}' doesn't match. Use too_few: 'align_start'.");
+                    if ($m === [] && $tooFew === 'error') {
+                        throw new \UnexpectedValueException('separate_wider_regex(): row '.($i + 1)." of '{$col}' doesn't match. Use tooFew: 'align_start'.");
                     }
                 }
                 foreach ($names as $j => $name) {
                     $new[$name][] = $m[$j + 1] ?? null;
                 }
             }
-            $t = Tidyr::insertAt($t, $col, $new, $cols_remove);
+            $t = Tidyr::insertAt($t, $col, $new, $colsRemove);
         }
 
         return $t;
@@ -513,9 +513,9 @@ function nest(mixed ...$spec): Closure
 }
 
 /** Unnest list-columns of tables back into rows. */
-function unnest(string|array $cols, bool $keep_empty = false): Closure
+function unnest(string|array $cols, bool $keepEmpty = false): Closure
 {
-    return fn (Table $t) => Internal::sameBackend($t->collect()->unnest($cols, $keep_empty), $t);
+    return fn (Table $t) => Internal::sameBackend($t->collect()->unnest($cols, $keepEmpty), $t);
 }
 
 /**

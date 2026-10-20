@@ -48,13 +48,13 @@ it('gives the same table with |>, a method chain, and pipe()', function () {
 
 it('passes named options the same way', function () {
     $operator = panel()
-        |> mutate(z: fn ($r) => $r->year * 2, _before: 'id')
-        |> slice_max('score', n: 2, _by: 'g')
+        |> mutate(z: fn ($r) => $r->year * 2, before: 'id')
+        |> slice_max('score', n: 2, by: 'g')
         |> count('g', sort: true);
 
     $chain = phplyr(panel())
-        ->mutate(z: fn ($r) => $r->year * 2, _before: 'id')
-        ->slice_max('score', n: 2, _by: 'g')
+        ->mutate(z: fn ($r) => $r->year * 2, before: 'id')
+        ->slice_max('score', n: 2, by: 'g')
         ->count('g', sort: true)
         ->get();
 
@@ -66,11 +66,11 @@ it('joins and pivots the same way', function () {
     $ids = panel() |> select('id', 'g') |> head(4);
 
     $operator = $wide
-        |> pivot_longer(starts_with('wk'), names_to: 'week', values_to: 'rank')
+        |> pivot_longer(starts_with('wk'), namesTo: 'week', valuesTo: 'rank')
         |> left_join($ids, by: 'id');
 
     $chain = phplyr($wide)
-        ->pivot_longer(starts_with('wk'), names_to: 'week', values_to: 'rank')
+        ->pivot_longer(starts_with('wk'), namesTo: 'week', valuesTo: 'rank')
         ->left_join($ids, by: 'id')
         ->get();
 

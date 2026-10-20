@@ -69,7 +69,7 @@ function group_data(): Closure
 
 /**
  * Drop unused factor levels from the grouping columns, and with them the
- * empty groups that _drop: false kept.
+ * empty groups that drop: false kept.
  */
 function group_trim(): Closure
 {
@@ -88,12 +88,12 @@ function group_trim(): Closure
 
 /**
  * One row per group: the key columns and a list-column of each group's
- * other columns as a table. Options: _key (the list-column, 'data'), _keep
+ * other columns as a table. Options: key (the list-column, 'data'), keep
  * (also keep the key columns in the nested tables).
  */
 function group_nest(mixed ...$options): Closure
 {
-    [$cols, $o] = Internal::options($options, ['_key' => 'data', '_keep' => false], 'group_nest');
+    [$cols, $o] = Internal::options($options, ['key' => 'data', 'keep' => false], 'group_nest');
 
     return function (Table $t) use ($cols, $o) {
         if ($cols !== []) {
@@ -101,60 +101,60 @@ function group_nest(mixed ...$options): Closure
         }
         $groups = $t->groups();
         $data = array_map(
-            fn ($g) => $o['_keep'] ? $g['table']->collect() : $g['table']->select(array_values(array_diff($g['table']->columns(), $groups)))->collect(),
+            fn ($g) => $o['keep'] ? $g['table']->collect() : $g['table']->select(array_values(array_diff($g['table']->columns(), $groups)))->collect(),
             Ops::groupRows($t),
         );
 
-        return group_keys()($t)->collect()->mutate([$o['_key'] => $data]);
+        return group_keys()($t)->collect()->mutate([$o['key'] => $data]);
     };
 }
 
 /**
  * Nest by the given columns into a rowwise table: one row per group, with a
- * list-column of tables. Options: _key ('data'), _keep (keep the grouping
+ * list-column of tables. Options: key ('data'), keep (keep the grouping
  * columns in the nested tables).
  */
 function nest_by(mixed ...$cols): Closure
 {
-    [$cols, $o] = Internal::options($cols, ['_key' => 'data', '_keep' => false], 'nest_by');
+    [$cols, $o] = Internal::options($cols, ['key' => 'data', 'keep' => false], 'nest_by');
 
     return function (Table $t) use ($cols, $o) {
         $groups = $cols === [] ? $t->groups() : Selector::select($cols, $t);
 
-        return group_nest(_key: $o['_key'], _keep: $o['_keep'])($t->groupBy($groups))->rowwise($groups);
+        return group_nest(key: $o['key'], keep: $o['keep'])($t->groupBy($groups))->rowwise($groups);
     };
 }
 
 /**
- * Run a verb on the table grouped by _groups, then restore the original
- * grouping (superseded in dplyr by _by): with_groups('g', mutate(m: mean('x'))).
- * A null _groups runs it ungrouped.
+ * Run a verb on the table grouped by groups, then restore the original
+ * grouping (superseded in dplyr by by): with_groups('g', mutate(m: mean('x'))).
+ * A null groups runs it ungrouped.
  */
-function with_groups(mixed $_groups, Closure $verb): Closure
+function with_groups(mixed $groups, Closure $verb): Closure
 {
-    return function (Table $t) use ($_groups, $verb) {
-        $grouped = $_groups === null ? $t->ungroup() : $t->groupBy(Selector::select([$_groups], $t));
+    return function (Table $t) use ($groups, $verb) {
+        $grouped = $groups === null ? $t->ungroup() : $t->groupBy(Selector::select([$groups], $t));
 
         return Ops::regroupLike($verb($grouped), $t);
     };
 }
 
 /**
- * Split into a list of ungrouped tables, one per group. With _keep: false
- * the grouping columns are dropped. Option _by groups first.
+ * Split into a list of ungrouped tables, one per group. With keep: false
+ * the grouping columns are dropped. Option by groups first.
  */
 function group_split(mixed ...$options): Closure
 {
-    [, $o] = Internal::options($options, ['_keep' => true, '_by' => null], 'group_split');
+    [, $o] = Internal::options($options, ['keep' => true, 'by' => null], 'group_split');
 
     return function (Table $t) use ($o) {
-        if ($o['_by'] !== null) {
-            $t = $t->groupBy(Selector::select([$o['_by']], $t));
+        if ($o['by'] !== null) {
+            $t = $t->groupBy(Selector::select([$o['by']], $t));
         }
         $groups = $t->groups();
 
         return array_map(
-            fn ($g) => $o['_keep'] ? $g['table'] : $g['table']->select(array_values(array_diff($g['table']->columns(), $groups))),
+            fn ($g) => $o['keep'] ? $g['table'] : $g['table']->select(array_values(array_diff($g['table']->columns(), $groups))),
             Ops::groupRows($t),
         );
     };
@@ -162,15 +162,15 @@ function group_split(mixed ...$options): Closure
 
 /**
  * Call fn (Table $group, array $key) for each group and return the list of
- * results. With _keep: true the group table keeps the grouping columns.
+ * results. With keep: true the group table keeps the grouping columns.
  */
-function group_map(Closure $fn, bool $_keep = false): Closure
+function group_map(Closure $fn, bool $keep = false): Closure
 {
-    return function (Table $t) use ($fn, $_keep) {
+    return function (Table $t) use ($fn, $keep) {
         $groups = $t->groups();
 
         return array_map(
-            fn ($g) => $fn($_keep ? $g['table'] : $g['table']->select(array_values(array_diff($g['table']->columns(), $groups))), $g['key']),
+            fn ($g) => $fn($keep ? $g['table'] : $g['table']->select(array_values(array_diff($g['table']->columns(), $groups))), $g['key']),
             Ops::groupRows($t),
         );
     };
@@ -211,18 +211,18 @@ function group_walk(Closure $fn): Closure
 
 /**
  * Stack tables under the piped one, matching columns by name; missing
- * columns are NA: $a |> bind_rows($b, $c). Option _id adds a column with
+ * columns are NA: $a |> bind_rows($b, $c). Option id adds a column with
  * each row's source (1 for the piped table, 2 for the next...).
  */
 function bind_rows(mixed ...$tables): Closure
 {
-    [$tables, $o] = Internal::options($tables, ['_id' => null], 'bind_rows');
+    [$tables, $o] = Internal::options($tables, ['id' => null], 'bind_rows');
 
     return function (Table $x) use ($tables, $o) {
         $all = [$x, ...array_values($tables)];
-        if ($o['_id'] !== null) {
+        if ($o['id'] !== null) {
             $all = array_map(
-                fn (Table $t, int $i) => $t->mutate([$o['_id'] => (string) ($i + 1)])->select([$o['_id'], ...$t->columns()]),
+                fn (Table $t, int $i) => $t->mutate([$o['id'] => (string) ($i + 1)])->select([$o['id'], ...$t->columns()]),
                 $all,
                 array_keys($all),
             );

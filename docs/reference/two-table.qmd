@@ -29,7 +29,7 @@ The options follow dplyr 1.1:
 
 - `suffix:` renames clashing non-key columns, `['.x', '.y']` by default.
 - `keep: true` keeps y's key columns.
-- `na_matches: 'never'` stops NA keys from matching. By default NA matches NA.
+- `naMatches: 'never'` stops NA keys from matching. By default NA matches NA.
 - `multiple:` is `'all'`, `'any'`, `'first'`, or `'last'`.
 - `unmatched: 'error'` throws when rows would be dropped.
 - `relationship:` checks `'one-to-one'`, `'one-to-many'`, `'many-to-one'`, or
@@ -65,7 +65,7 @@ run them in SQL, except right and full rolling joins, which load the rows.
 ## Binding
 
 `bind_rows()` stacks tables under the input one, matching columns by name and
-filling missing columns with NA. `_id:` adds a column with each row's source.
+filling missing columns with NA. `id:` adds a column with each row's source.
 `bind_cols()` puts tables side by side and renames duplicate names as
 `name...position`.
 

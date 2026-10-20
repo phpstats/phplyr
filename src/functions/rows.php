@@ -138,17 +138,17 @@ function rows_delete(Table $y, string|array|null $by = null, string $unmatched =
 
 /**
  * Add rows of values: add_row(x: 4, y: 'd'), or several with lists:
- * add_row(x: [4, 5]). Columns not given are NA. Options: _before, _after
+ * add_row(x: [4, 5]). Columns not given are NA. Options: before, after
  * (a 1-based row; the default adds at the end).
  */
 function add_row(mixed ...$values): Closure
 {
-    [$values, $o] = Internal::options($values, ['_before' => null, '_after' => null], 'add_row');
+    [$values, $o] = Internal::options($values, ['before' => null, 'after' => null], 'add_row');
     Internal::assertNamed($values, 'add_row');
 
     return function (Table $t) use ($values, $o) {
-        if ($o['_before'] !== null && $o['_after'] !== null) {
-            throw new \InvalidArgumentException('add_row(): give _before or _after, not both.');
+        if ($o['before'] !== null && $o['after'] !== null) {
+            throw new \InvalidArgumentException('add_row(): give before or after, not both.');
         }
         $unknown = array_diff(array_keys($values), $t->columns());
         if ($unknown !== []) {
@@ -159,8 +159,8 @@ function add_row(mixed ...$values): Closure
         $new = DataFrame::fromColumns($columns + array_fill_keys(array_diff($t->columns(), array_keys($values)), array_fill(0, $n, null)));
         $m = $t->nrow();
         $at = match (true) {
-            $o['_before'] !== null => $o['_before'] - 1,
-            $o['_after'] !== null => (int) $o['_after'],
+            $o['before'] !== null => $o['before'] - 1,
+            $o['after'] !== null => (int) $o['after'],
             default => $m,
         };
         $at = \max(0, \min($m, $at));

@@ -28,7 +28,7 @@ with the raw school means.
 
 The housing data has eight flats. The first table summarizes area, rent, and
 rent per square meter by number of bedrooms with `across()`. The second
-compares each flat with its bedroom group using `_by`.
+compares each flat with its bedroom group using `by`.
 
 {{< include examples/_gallery-housing.md >}}
 

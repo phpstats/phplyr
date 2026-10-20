@@ -15,30 +15,30 @@ use Phibble\Contracts\Table;
 use Phibble\Type;
 
 /** Columns whose names start with a prefix (case-insensitive by default). */
-function starts_with(string|array $prefix, bool $ignore_case = true): Selector
+function starts_with(string|array $prefix, bool $ignoreCase = true): Selector
 {
-    return Internal::nameMatcher((array) $prefix, $ignore_case, fn ($name, $p) => str_starts_with($name, $p));
+    return Internal::nameMatcher((array) $prefix, $ignoreCase, fn ($name, $p) => str_starts_with($name, $p));
 }
 
 /** Columns whose names end with a suffix (case-insensitive by default). */
-function ends_with(string|array $suffix, bool $ignore_case = true): Selector
+function ends_with(string|array $suffix, bool $ignoreCase = true): Selector
 {
-    return Internal::nameMatcher((array) $suffix, $ignore_case, fn ($name, $s) => str_ends_with($name, $s));
+    return Internal::nameMatcher((array) $suffix, $ignoreCase, fn ($name, $s) => str_ends_with($name, $s));
 }
 
 /** Columns whose names contain a string (case-insensitive by default). */
-function contains(string|array $needle, bool $ignore_case = true): Selector
+function contains(string|array $needle, bool $ignoreCase = true): Selector
 {
-    return Internal::nameMatcher((array) $needle, $ignore_case, fn ($name, $s) => str_contains($name, $s));
+    return Internal::nameMatcher((array) $needle, $ignoreCase, fn ($name, $s) => str_contains($name, $s));
 }
 
 /**
  * Columns whose names match a regular expression. Bare patterns are
  * wrapped in delimiters; case-insensitive by default.
  */
-function matches(string $pattern, bool $ignore_case = true): Selector
+function matches(string $pattern, bool $ignoreCase = true): Selector
 {
-    $regex = '/'.\str_replace('/', '\/', $pattern).'/'.($ignore_case ? 'i' : '');
+    $regex = '/'.\str_replace('/', '\/', $pattern).'/'.($ignoreCase ? 'i' : '');
 
     return new Selector(fn (Table $t) => array_values(array_filter(
         $t->columns(),

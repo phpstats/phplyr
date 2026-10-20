@@ -25,11 +25,11 @@ dataset('chain pipelines', fn () => [
     ]],
     'grouped summary' => [[
         ['group_by', ['g']],
-        ['summarise', ['n' => n(), 'm' => mean('score', na_rm: true)]],
+        ['summarise', ['n' => n(), 'm' => mean('score', naRm: true)]],
     ]],
     'named options' => [[
-        ['mutate', ['z' => fn ($r) => $r->score * 2, '_before' => 'id']],
-        ['slice_max', ['score', 'n' => 2, '_by' => 'g']],
+        ['mutate', ['z' => fn ($r) => $r->score * 2, 'before' => 'id']],
+        ['slice_max', ['score', 'n' => 2, 'by' => 'g']],
     ]],
     'join and count' => [[
         ['inner_join', [panel()->select(['id', 'g'])->rename(['g2' => 'g']), 'by' => 'id']],
@@ -37,7 +37,7 @@ dataset('chain pipelines', fn () => [
     ]],
     'pivot' => [[
         ['select', ['id', 'g', 'year', 'score']],
-        ['pivot_wider', ['names_from' => 'year', 'values_from' => 'score', 'id_cols' => 'g', 'values_fn' => fn (array $v) => array_sum($v)]],
+        ['pivot_wider', ['namesFrom' => 'year', 'valuesFrom' => 'score', 'idCols' => 'g', 'valuesFn' => fn (array $v) => array_sum($v)]],
     ]],
     'non-table result' => [[
         ['group_by', ['g']],

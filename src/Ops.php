@@ -158,7 +158,7 @@ final class Ops
 
     /**
      * $out regrouped the way $like is grouped: the same columns, rowwise
-     * status and _drop setting, keeping only grouping columns $out still has.
+     * status and drop setting, keeping only grouping columns $out still has.
      */
     public static function regroupLike(Table $out, Table $like): Table
     {

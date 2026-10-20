@@ -22,7 +22,7 @@ final class Tidyr
 
     /**
      * pivot_longer(): build tidyr's spec, run it on the table, then apply
-     * values_transform and cols_vary.
+     * valuesTransform and colsVary.
      *
      * @param string|list<?string> $namesTo
      */
@@ -34,14 +34,14 @@ final class Tidyr
     }
 
     /**
-     * Run a longer spec (rows with .name, .value and the names_to columns).
+     * Run a longer spec (rows with .name, .value and the namesTo columns).
      *
      * @param list<array<string, mixed>> $spec
      */
     public static function runLongerSpec(Table $t, array $spec, bool $valuesDropNa, Closure|array|null $valuesTransform = null, string $colsVary = 'fastest'): Table
     {
         if (! \in_array($colsVary, ['fastest', 'slowest'], true)) {
-            throw new \InvalidArgumentException("pivot_longer(): cols_vary must be 'fastest' or 'slowest'.");
+            throw new \InvalidArgumentException("pivot_longer(): colsVary must be 'fastest' or 'slowest'.");
         }
         $nameCols = array_values(array_diff(array_keys($spec[0] ?? []), ['.name', '.value']));
         $slowest = $colsVary === 'slowest' && $t->nrow() > 1;
@@ -50,7 +50,7 @@ final class Tidyr
         }
         $out = $t->pivotLongerSpec($spec, $valuesDropNa);
         if ($slowest) {
-            // Order by spec position (the names_to combination), then input row.
+            // Order by spec position (the namesTo combination), then input row.
             $position = [];
             foreach ($spec as $row) {
                 $position[self::partsKey(array_map(fn ($c) => $row[$c] ?? null, $nameCols))] ??= \count($position);
@@ -101,7 +101,7 @@ final class Tidyr
         $ids = array_values(array_diff($t->columns(), $cols));
         $namesTo = (array) $namesTo;
         if (\count($namesTo) > 1 && $namesSep === null && $namesPattern === null) {
-            throw new \InvalidArgumentException('pivot_longer(): several names_to need names_sep or names_pattern.');
+            throw new \InvalidArgumentException('pivot_longer(): several namesTo need namesSep or namesPattern.');
         }
 
         // Parse each source column name into name parts and a value column.
@@ -146,8 +146,8 @@ final class Tidyr
         return $spec;
     }
     /**
-     * pivot_wider(). The table runs tidyr's spec; values_fn, id_expand and
-     * unused_fn are applied here, in PHP, keeping tidyr's first-appearance
+     * pivot_wider(). The table runs tidyr's spec; valuesFn, idExpand and
+     * unusedFn are applied here, in PHP, keeping tidyr's first-appearance
      * row order.
      */
     public static function pivotWider(Table $t, mixed $idCols, mixed $namesFrom, mixed $valuesFrom, string $namesPrefix, string $namesSep, ?string $namesGlue, bool $namesSort, mixed $valuesFill, Closure|array|null $valuesFn, string $namesVary = 'fastest', bool $namesExpand = false, bool $idExpand = false, Closure|array|null $unusedFn = null): Table
@@ -179,7 +179,7 @@ final class Tidyr
 
     /**
      * The spec for pivot_wider() / build_wider_spec(): one row per output
-     * column, with .name, .value and the names_from values.
+     * column, with .name, .value and the namesFrom values.
      *
      * @param list<string> $namesFrom
      * @param list<string> $valuesFrom
@@ -188,7 +188,7 @@ final class Tidyr
     public static function widerSpec(Table $t, array $namesFrom, array $valuesFrom, string $namesPrefix, string $namesSep, ?string $namesGlue, bool $namesSort, string $namesVary, bool $namesExpand): array
     {
         if (! \in_array($namesVary, ['fastest', 'slowest'], true)) {
-            throw new \InvalidArgumentException("pivot_wider(): names_vary must be 'fastest' or 'slowest'.");
+            throw new \InvalidArgumentException("pivot_wider(): namesVary must be 'fastest' or 'slowest'.");
         }
         $keys = $namesExpand
             ? self::expansion($t, $namesFrom)
@@ -245,7 +245,7 @@ final class Tidyr
     }
 
     /**
-     * pivot_wider() with values_fn: cells are gathered and summarised in PHP.
+     * pivot_wider() with valuesFn: cells are gathered and summarised in PHP.
      *
      * @param list<array<string, mixed>> $spec
      * @param list<string> $idCols
@@ -274,7 +274,7 @@ final class Tidyr
         }
 
         $nRows = \count($first);
-        // Like tidyr, duplicate cells (without values_fn) turn that value column
+        // Like tidyr, duplicate cells (without valuesFn) turn that value column
         // into list-columns, with tidyr's warning.
         $listCols = [];
         foreach ($valuesFrom as $vc) {
@@ -305,7 +305,7 @@ final class Tidyr
         return Ops::take($t->select($idCols), $first)->mutate($out);
     }
 
-    /** id_expand: a row for every combination of the id columns, sorted. */
+    /** idExpand: a row for every combination of the id columns, sorted. */
     private static function expandIds(Table $t, Table $out, array $idCols, array $spec, array $fill): Table
     {
         $ids = DataFrame::fromColumns(array_map(fn ($c) => [], array_combine($idCols, $idCols)));
@@ -332,7 +332,7 @@ final class Tidyr
         return $joined->select(array_values(array_diff($joined->columns(), [self::PRESENT])));
     }
 
-    /** unused_fn: summarise the columns pivot_wider() would drop, per output row. */
+    /** unusedFn: summarise the columns pivot_wider() would drop, per output row. */
     private static function unused(Table $t, Table $out, array $idCols, array $unused, Closure|array $unusedFn): Table
     {
         $key = fn (Table $x, int $i, array $vectors) => implode("\x1f", array_map(fn ($v) => Internal::key($v[$i]), $vectors));
@@ -355,7 +355,7 @@ final class Tidyr
     }
 
     /**
-     * names_sort's order for names_from combinations (positional lists or
+     * namesSort's order for namesFrom combinations (positional lists or
      * keyed by column): values ascending, factors by level, NA last.
      */
     private static function nameOrder(Table $t, array $namesFrom): Closure

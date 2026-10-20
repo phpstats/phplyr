@@ -16,13 +16,13 @@ table below shows single calls.
 | `filter(x > 1)` | `filter(fn ($r) => $r->x > 1)` |
 | `mutate(z = x * 2)` | `mutate(z: fn ($r) => $r->x * 2)` or `mutate(z: col('x')->mul(2))` |
 | `mutate(z = lag(x))` | `mutate(z: lag('x'))` |
-| `summarise(m = mean(x, na.rm = TRUE))` | `summarise(m: mean('x', na_rm: true))` |
+| `summarise(m = mean(x, na.rm = TRUE))` | `summarise(m: mean('x', naRm: true))` |
 | `select(-id)` | `select(except('id'))` |
 | `select(new = old, everything())` | `select(['new' => 'old'], everything())` |
 | `rename(new = old)` | `rename(new: 'old')` |
 | `arrange(desc(x))` | `arrange(desc('x'))` |
-| `mutate(..., .by = g)` | `mutate(..., _by: 'g')` |
-| `summarise(..., .groups = "drop")` | `summarise(..., _groups: 'drop')` |
+| `mutate(..., .by = g)` | `mutate(..., by: 'g')` |
+| `summarise(..., .groups = "drop")` | `summarise(..., groups: 'drop')` |
 | `across(c(a, b), mean)` | `across(['a', 'b'], mean(...))` |
 | `across(c(a, b), \(x) x * 2)` | `across(['a', 'b'], fn ($x) => $x * 2)` |
 | `case_when(x < 0 ~ "neg", .default = "pos")` | `case_when([fn ($r) => $r->x < 0, 'neg'], default: 'pos')` |
@@ -38,15 +38,15 @@ table below shows single calls.
 
 - **Dot-arguments.** dplyr's `.by`, `.keep`, `.before`, `.after`, `.groups`,
   `.keep_all`, `.by_group`, `.direction`, `.id`, and `.remove` are written
-  `_by`, `_keep`, and so on. A column whose name starts with an underscore
-  cannot be created through a named argument.
+  `by`, `keep`, `keepAll`, `byGroup`, and so on. A column an option name
+  claims cannot be created through a named argument on that function.
 - **Positions are 1-based**, as in R: `pull(1)` is the first column, `pull(-1)`
   the last, and `slice(1, 3)` the first and third rows of each group.
 - **`var()` is `variance()`**, because `var` is a reserved word in PHP.
 - **`count`, `min`, and `max`** shadow PHP's built-ins in files that import
   them.
 - **Group order** follows dplyr: groups are sorted by key, factors by level
-  order, and NA last. `_by` also sorts groups (dplyr keeps first-appearance
+  order, and NA last. `by` also sorts groups (dplyr keeps first-appearance
   order for `.by`).
 
 ## `across()` functions

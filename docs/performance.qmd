@@ -80,7 +80,7 @@ SQLite, and checks that all three backends return the same rows. It is adapted
 from phpolars' benchmark script. The pipelines are:
 
 - **A:** filter, join a store lookup, two-key summarise, then a ranking window.
-- **B:** grouped `lag(order_by:)`, `cumsum()`, and a share of the group total
+- **B:** grouped `lag(orderBy:)`, `cumsum()`, and a share of the group total
   over all rows.
 - **C:** pipeline A with a closure in `filter()`.
 

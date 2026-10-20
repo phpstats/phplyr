@@ -34,14 +34,14 @@ return [
         $long = phplyr($clean)
             ->mutate(student: row_number())
             ->select('student', 'school', ['prior' => 'prior_score', 'final' => 'score'])
-            ->pivot_longer(['prior', 'final'], names_to: 'test', values_to: 'points')
+            ->pivot_longer(['prior', 'final'], namesTo: 'test', valuesTo: 'points')
             ->get();
 
         $tests = phplyr($long)->group_by('test')->summarise(mean: mean('points'), sd: sd('points'))->get();
 
         $bands = phplyr($clean)
             ->count('school', 'hours_band')
-            ->pivot_wider(names_from: 'hours_band', values_from: 'n', values_fill: 0)
+            ->pivot_wider(namesFrom: 'hours_band', valuesFrom: 'n', valuesFill: 0)
             ->get();
 
         $gains = phplyr($clean)

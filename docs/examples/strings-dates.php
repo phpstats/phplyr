@@ -14,14 +14,14 @@ echo $notes
         date: ymd('when'),
         month_start: floor_date(ymd('when'), 'month'),
         next_month: ymd('when')->add(months(1)),
-        weekday: wday(ymd('when'), week_start: 1),
+        weekday: wday(ymd('when'), weekStart: 1),
     )
     |> select(except('note')), "\n";
 
 // Strings: patterns are regular expressions unless wrapped in fixed().
 echo $notes
     |> mutate(
-        invoice: str_extract('note', regex('inv-\d+', ignore_case: true)),
+        invoice: str_extract('note', regex('inv-\d+', ignoreCase: true)),
         literal: str_detect('note', fixed('INV')),
         masked: str_replace_all('note', '\d', '#'),
         title: str_to_title('note'),

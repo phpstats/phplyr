@@ -2,29 +2,29 @@
 title: "tidyr"
 ---
 
-The tidyr functions use tidyr's argument names. Arguments that start with a dot in
-tidyr start with an underscore here.
+The tidyr functions use tidyr's argument names. Arguments that start with a dot
+in tidyr drop the dot here and read as camelCase.
 
 ## Pivoting
 
-`pivot_longer()` turns columns into rows of names and values. `names_prefix`
-strips a regular expression from the start of each name. `names_sep` or
-`names_pattern` split names into several `names_to` columns, and the special
+`pivot_longer()` turns columns into rows of names and values. `namesPrefix`
+strips a regular expression from the start of each name. `namesSep` or
+`namesPattern` split names into several `namesTo` columns, and the special
 name `'.value'` takes the value column's name from that part.
-`values_drop_na: true` drops rows whose values are all NA.
-`names_transform` and `values_transform` take a closure, or an array of
-closures by column. `cols_vary: 'slowest'` keeps each source column's rows
+`valuesDropNa: true` drops rows whose values are all NA.
+`namesTransform` and `valuesTransform` take a closure, or an array of
+closures by column. `colsVary: 'slowest'` keeps each source column's rows
 together.
 
-`pivot_wider()` spreads names and values into columns. `id_cols` identify the
-rows (by default every other column). `values_fill` fills missing cells,
-`values_fn` combines duplicate cells, and `names_prefix`, `names_sep`,
-`names_glue`, and `names_sort` control the new names. Without `values_fn`,
+`pivot_wider()` spreads names and values into columns. `idCols` identify the
+rows (by default every other column). `valuesFill` fills missing cells,
+`valuesFn` combines duplicate cells, and `namesPrefix`, `namesSep`,
+`namesGlue`, and `namesSort` control the new names. Without `valuesFn`,
 duplicate cells turn the value column into list-columns and raise tidyr's
-warning. `names_vary: 'slowest'` groups each name's value columns together.
-`names_expand` and `id_expand` add every combination of the `names_from` and
-`id_cols` values (sorted, factors by level). `unused_fn` summarises the
-columns that are in none of `id_cols`, `names_from`, and `values_from`.
+warning. `namesVary: 'slowest'` groups each name's value columns together.
+`namesExpand` and `idExpand` add every combination of the `namesFrom` and
+`idCols` values (sorted, factors by level). `unusedFn` summarises the
+columns that are in none of `idCols`, `namesFrom`, and `valuesFrom`.
 
 Both functions build tidyr's pivot spec in phplyr and pass it to the table's
 `pivotLongerSpec()` or `pivotWiderSpec()`, so a backend can run the pivot
@@ -46,7 +46,7 @@ build a new table from lists.
 {{< include ../examples/_complete.md >}}
 
 `fill()` carries values down or up over NA within groups
-(`_direction: 'down' | 'up' | 'downup' | 'updown'`). `drop_na()` drops rows
+(`direction: 'down' | 'up' | 'downup' | 'updown'`). `drop_na()` drops rows
 with NA in the given columns, and `replace_na()` replaces NA per column.
 
 {{< include ../examples/_fill.md >}}
@@ -62,13 +62,13 @@ with NA in the given columns, and `replace_na()` replaces NA per column.
 | `separate_longer_position(col, width)` | Split into rows of fixed width |
 | `separate(col, into, sep:)` | The superseded splitter, with `extra`, `fill`, and `convert` |
 | `unite(col, ...cols, sep:)` | Paste columns together |
-| `uncount('n', _id:)` | Repeat rows by a weight column |
+| `uncount('n', id:)` | Repeat rows by a weight column |
 | `separate_rows(...cols, sep:)` | The superseded row splitter, on a regular expression |
 | `extract(col, into, regex)` | The superseded regex splitter |
 | `nest(data: [...])`, `unnest('data')` | List-columns of tables |
 | `full_seq(x, period)` | Every value from the smallest to the largest in steps of `period` |
 
-`too_few` and `too_many` handle pieces that don't fit, as in tidyr.
+`tooFew` and `tooMany` handle pieces that don't fit, as in tidyr.
 
 {{< include ../examples/_separate.md >}}
 
@@ -79,11 +79,11 @@ array with string keys is a named list.
 
 | Function | Use |
 | --- | --- |
-| `unnest_wider(col, names_sep:)` | One column per name; unnamed elements need `names_sep` |
-| `unnest_longer(col, values_to:, indices_to:, indices_include:, keep_empty:)` | One row per element, with names or positions in `{col}_id` |
-| `hoist(col, name: path, _remove:)` | Pull components out by name, 1-based position, or a list path |
-| `chop(cols)`, `unchop(cols, keep_empty:)` | Collapse rows into list-columns and back |
-| `pack(name: cols, _names_sep:)`, `unpack(cols, names_sep:)` | Columns into a column of named arrays and back |
+| `unnest_wider(col, namesSep:)` | One column per name; unnamed elements need `namesSep` |
+| `unnest_longer(col, valuesTo:, indicesTo:, indicesInclude:, keepEmpty:)` | One row per element, with names or positions in `{col}_id` |
+| `hoist(col, name: path, remove:)` | Pull components out by name, 1-based position, or a list path |
+| `chop(cols)`, `unchop(cols, keepEmpty:)` | Collapse rows into list-columns and back |
+| `pack(name: cols, namesSep:)`, `unpack(cols, namesSep:)` | Columns into a column of named arrays and back |
 
 `chop`, `pack`, `unpack`, and `extract` share names with PHP built-ins, so
 import them with `use function Phplyr\{chop, pack, unpack, extract};`.

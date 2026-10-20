@@ -27,7 +27,7 @@ function p4(): DataFrame
 
 describe('across(), if_any(), and if_all()', function () {
     it('names several functions with {.fn} and {.col}, and resolves helpers called on the values', function () {
-        $out = pipe(p4(), group_by('g'), summarise(across(['value', 'score'], ['m' => fn ($v) => mean($v, na_rm: true), 's' => fn ($v) => sum($v)], names: '{.fn}_{.col}')));
+        $out = pipe(p4(), group_by('g'), summarise(across(['value', 'score'], ['m' => fn ($v) => mean($v, naRm: true), 's' => fn ($v) => sum($v)], names: '{.fn}_{.col}')));
 
         expectRowsClose($out->toRows(), coverage('across_fns'));
     });
@@ -69,7 +69,7 @@ describe('group helpers', function () {
     });
 
     it('sums across columns in a rowwise table with c_across()', function () {
-        $out = pipe(panel(), head(6), rowwise(), mutate(tot: sum(c_across(['value', 'score']), na_rm: true)), ungroup());
+        $out = pipe(panel(), head(6), rowwise(), mutate(tot: sum(c_across(['value', 'score']), naRm: true)), ungroup());
 
         expectRowsClose($out->toRows(), coverage('c_across'));
     });
@@ -109,9 +109,9 @@ describe('superseded dplyr functions', function () {
 
     it('recodes values by name', function () {
         $t = DataFrame::fromColumns(['x' => ['a', 'b', 'c', null], 'y' => ['x', 'y', 'z', 'x']]);
-        expect((mutate(r: recode('x', a: 'A', b: 'B', _default: 'other'))($t))->column('r'))->toBe(coverage('recode'));
-        expect(\array_slice((mutate(r: recode('y', x: 'X'))($t))->column('r'), 0, 3))->toBe(coverage('recode_keep'));
-        expect((mutate(r: recode('x', ['a' => 1], _missing: 0, _default: -1))($t))->column('r'))->toBe([1, -1, -1, 0]);
+        expect((mutate(r: recode('x', a: 'A', b: 'B', default: 'other'))($t))->column('r'))->toBe(coverage('recode'));
+        expect(\array_slice((mutate(r: recode('y', ['x' => 'X'])))($t)->column('r'), 0, 3))->toBe(coverage('recode_keep'));
+        expect((mutate(r: recode('x', ['a' => 1], missing: 0, default: -1))($t))->column('r'))->toBe([1, -1, -1, 0]);
     });
 
     it('evaluates a window function in another order with order_by()', function () {
@@ -121,7 +121,7 @@ describe('superseded dplyr functions', function () {
 
     it('adds rows with add_row()', function () {
         $t = DataFrame::fromColumns(['x' => [1, 2], 'y' => ['a', 'b']]);
-        expectRowsClose((add_row(x: 3, y: 'c', _before: 2)($t))->toRows(), coverage('add_row_before'));
+        expectRowsClose((add_row(x: 3, y: 'c', before: 2)($t))->toRows(), coverage('add_row_before'));
         expectRowsClose((add_row(x: [4, 5])($t))->toRows(), coverage('add_row_many'));
         expect(fn () => add_row(z: 1)($t))->toThrow(InvalidArgumentException::class);
     });
@@ -149,40 +149,40 @@ describe('pivot options and specs', function () {
     });
 
     it('transforms names and values, and varies columns slowest', function () {
-        $out = pipe($this->wide, pivot_longer(starts_with('wk'), names_to: 'week', names_prefix: 'wk', names_transform: intval(...), cols_vary: 'slowest'));
+        $out = pipe($this->wide, pivot_longer(starts_with('wk'), namesTo: 'week', namesPrefix: 'wk', namesTransform: intval(...), colsVary: 'slowest'));
         expectRowsClose($out->toRows(), coverage('longer_transform'));
         expect($out->types()['week'])->toBe(Type::Int);
 
-        $out = pipe($this->wide, pivot_longer(starts_with('wk'), names_to: 'week', values_transform: fn ($x) => $x === null ? null : $x * 2, values_drop_na: true));
+        $out = pipe($this->wide, pivot_longer(starts_with('wk'), namesTo: 'week', valuesTransform: fn ($x) => $x === null ? null : $x * 2, valuesDropNa: true));
         expectRowsClose($out->toRows(), coverage('longer_values_transform'));
     });
 
     it('varies names slowest, summarises unused columns, and expands names and ids', function () {
-        expectRowsClose((pipe($this->xy, pivot_wider(id_cols: 'id', names_from: 'key', values_from: ['val', 'w'], names_vary: 'slowest')))->toRows(), coverage('wider_vary'));
-        expectRowsClose((pipe($this->xy, pivot_wider(id_cols: 'id', names_from: 'key', values_from: 'val', unused_fn: ['w' => array_sum(...)])))->toRows(), coverage('wider_unused'));
+        expectRowsClose((pipe($this->xy, pivot_wider(idCols: 'id', namesFrom: 'key', valuesFrom: ['val', 'w'], namesVary: 'slowest')))->toRows(), coverage('wider_vary'));
+        expectRowsClose((pipe($this->xy, pivot_wider(idCols: 'id', namesFrom: 'key', valuesFrom: 'val', unusedFn: ['w' => array_sum(...)])))->toRows(), coverage('wider_unused'));
 
         $factorKey = $this->xy->asFactor('key', ['x', 'y', 'q']);
-        expectRowsClose((pipe($factorKey, pivot_wider(id_cols: 'id', names_from: 'key', values_from: 'val', names_expand: true)))->toRows(), coverage('wider_names_expand'));
+        expectRowsClose((pipe($factorKey, pivot_wider(idCols: 'id', namesFrom: 'key', valuesFrom: 'val', namesExpand: true)))->toRows(), coverage('wider_names_expand'));
 
         $factorId = $this->xy->mutate(['id' => array_map('strval', $this->xy->column('id'))])->asFactor('id', ['1', '2', '3', '4', '5']);
-        $out = pipe($factorId, pivot_wider(id_cols: 'id', names_from: 'key', values_from: 'val', id_expand: true, values_fill: 0));
+        $out = pipe($factorId, pivot_wider(idCols: 'id', namesFrom: 'key', valuesFrom: 'val', idExpand: true, valuesFill: 0));
         $out = $out->mutate(['id' => array_map('intval', $out->column('id'))]);
         expectRowsClose($out->toRows(), coverage('wider_id_expand'));
     });
 
     it('builds specs and pivots with them', function () {
-        expect((pipe($this->long, build_wider_spec(names_from: 'key', values_from: ['val', 'w'])))->toRows())->toBe(coverage('wider_spec'));
-        expect((pipe($this->wide, build_longer_spec(starts_with('wk'), names_to: 'week', names_prefix: 'wk')))->toRows())->toBe(coverage('longer_spec'));
+        expect((pipe($this->long, build_wider_spec(namesFrom: 'key', valuesFrom: ['val', 'w'])))->toRows())->toBe(coverage('wider_spec'));
+        expect((pipe($this->wide, build_longer_spec(starts_with('wk'), namesTo: 'week', namesPrefix: 'wk')))->toRows())->toBe(coverage('longer_spec'));
 
-        $spec = pipe($this->xy, build_wider_spec(names_from: 'key', values_from: 'val'));
-        expectRowsClose((pipe($this->xy, pivot_wider_spec($spec, id_cols: 'id')))->toRows(), coverage('pivot_wider_spec'));
-        $spec = pipe($this->wide, build_longer_spec(starts_with('wk'), names_to: 'week'));
+        $spec = pipe($this->xy, build_wider_spec(namesFrom: 'key', valuesFrom: 'val'));
+        expectRowsClose((pipe($this->xy, pivot_wider_spec($spec, idCols: 'id')))->toRows(), coverage('pivot_wider_spec'));
+        $spec = pipe($this->wide, build_longer_spec(starts_with('wk'), namesTo: 'week'));
         expectRowsClose((pipe($this->wide, pivot_longer_spec($spec)))->toRows(), coverage('pivot_longer_spec'));
     });
 
     it('gathers and spreads', function () {
         expectRowsClose((pipe($this->wide, gather('week', 'rank', 'wk1', 'wk2', 'wk3')))->toRows(), coverage('gather'));
-        expectRowsClose((pipe($this->wide, gather('week', 'rank', starts_with('wk'), na_rm: true)))->toRows(), coverage('gather_na'));
+        expectRowsClose((pipe($this->wide, gather('week', 'rank', starts_with('wk'), naRm: true)))->toRows(), coverage('gather_na'));
         $kv = pipe($this->xy, select('id', 'key', 'val'));
         expectRowsClose((pipe($kv, spread('key', 'val')))->toRows(), coverage('spread'));
         expectRowsClose((pipe($kv, spread('key', 'val', fill: 0)))->toRows(), coverage('spread_fill'));
@@ -195,18 +195,18 @@ describe('rectangling', function () {
         expectRowsClose((pipe($t, unnest_wider('x')))->toRows(), coverage('unnest_wider'));
 
         $u = DataFrame::fromColumns(['id' => [1, 2], 'y' => [[1, 2], [3]]]);
-        expectRowsClose((pipe($u, unnest_wider('y', names_sep: '_')))->toRows(), coverage('unnest_wider_sep'));
-        expect(fn () => unnest_wider('y')($u))->toThrow(InvalidArgumentException::class, 'names_sep');
+        expectRowsClose((pipe($u, unnest_wider('y', namesSep: '_')))->toRows(), coverage('unnest_wider_sep'));
+        expect(fn () => unnest_wider('y')($u))->toThrow(InvalidArgumentException::class, 'namesSep');
         $clash = DataFrame::fromColumns(['a' => [0], 'x' => [['a' => 1]]]);
         expect(fn () => unnest_wider('x')($clash))->toThrow(InvalidArgumentException::class, 'duplicate');
     });
 
     it('lengthens elements with indices', function () {
         $named = DataFrame::fromColumns(['id' => [1, 2], 'v' => [['a' => 1, 'b' => 2], ['c' => 3]]]);
-        expectRowsClose((pipe($named, unnest_longer('v', values_to: 'val', indices_to: 'key')))->toRows(), coverage('unnest_longer_named'));
+        expectRowsClose((pipe($named, unnest_longer('v', valuesTo: 'val', indicesTo: 'key')))->toRows(), coverage('unnest_longer_named'));
 
         $t = DataFrame::fromColumns(['id' => [1, 2, 3], 'v' => [[1, 2], 3, []]]);
-        expectRowsClose((pipe($t, unnest_longer('v', indices_include: true, keep_empty: true)))->toRows(), coverage('unnest_longer_keep'));
+        expectRowsClose((pipe($t, unnest_longer('v', indicesInclude: true, keepEmpty: true)))->toRows(), coverage('unnest_longer_keep'));
 
         $two = DataFrame::fromColumns(['id' => [1, 2], 'v' => [[1, 2], [3]], 'w' => [['a', 'b'], 'c']]);
         expectRowsClose((pipe($two, unnest_longer(['v', 'w'])))->toRows(), coverage('unnest_longer_two'));
@@ -218,12 +218,12 @@ describe('rectangling', function () {
         expectRowsClose($out->select(['id', 'first', 'bc', 'e'])->toRows(), coverage('hoist'));
         expect($out->columns())->toBe(['id', 'first', 'bc', 'e', 'x']);
         expect($out->column('x'))->toBe([['b' => ['d' => 6]], ['b' => []]]);
-        expect((pipe($h, hoist('x', bc: ['b', 'c'], _remove: false)))->column('x'))->toBe($h->column('x'));
+        expect((pipe($h, hoist('x', bc: ['b', 'c'], remove: false)))->column('x'))->toBe($h->column('x'));
     });
 
     it('chops and unchops', function () {
         $t = DataFrame::fromColumns(['g' => [1, 2, 3], 'x' => [[1, 2], null, []]]);
-        expectRowsClose((pipe($t, unchop('x', keep_empty: true)))->toRows(), coverage('unchop'));
+        expectRowsClose((pipe($t, unchop('x', keepEmpty: true)))->toRows(), coverage('unchop'));
 
         $chopped = pipe(DataFrame::fromColumns(['g' => [1, 1, 2], 'x' => [1, 2, 3], 'y' => [4, 5, 6]]), chop(['x', 'y']));
         expect($chopped->column('x'))->toBe([[1, 2], [3]]);
@@ -235,7 +235,7 @@ describe('rectangling', function () {
         $packed = pipe($t, pack(y: ['a', 'b']));
         expect($packed->columns())->toBe(['x', 'y']);
         expect($packed->column('y')[0])->toBe(['a' => 1, 'b' => 'p']);
-        expectRowsClose((pipe($packed, unpack('y', names_sep: '_')))->toRows(), coverage('unpack'));
+        expectRowsClose((pipe($packed, unpack('y', namesSep: '_')))->toRows(), coverage('unpack'));
         expect((pipe($packed, unpack('y')))->toRows())->toBe($t->toRows());
     });
 });

@@ -67,7 +67,7 @@ final class Lists
         $new = self::wider($t->column($col), $col, $sep, $verb, $positional);
         $taken = array_values(array_intersect(array_keys($new), array_diff($t->columns(), [$col])));
         if ($taken !== []) {
-            throw new \InvalidArgumentException("{$verb}(): the new columns would duplicate existing names: ".implode(', ', $taken).'. Use names_sep, or rename first.');
+            throw new \InvalidArgumentException("{$verb}(): the new columns would duplicate existing names: ".implode(', ', $taken).'. Use namesSep, or rename first.');
         }
 
         return $new;
@@ -88,7 +88,7 @@ final class Lists
             $row = [];
             foreach (self::elements($v) as $k => $x) {
                 if (\is_int($k) && $sep === null && ! $positional) {
-                    throw new \InvalidArgumentException("{$verb}(): row ".($i + 1)." of '{$col}' has elements without names. Give names_sep to name them by position.");
+                    throw new \InvalidArgumentException("{$verb}(): row ".($i + 1)." of '{$col}' has elements without names. Give namesSep to name them by position.");
                 }
                 $name = \is_int($k) ? (string) ($k + 1) : $k;
                 $name = $sep === null ? $name : $col.$sep.$name;

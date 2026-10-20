@@ -49,97 +49,97 @@ function n(): Vec
     return Internal::call('n', []);
 }
 
-/** Number of distinct values (or combinations); NA counts unless na_rm. */
+/** Number of distinct values (or combinations); NA counts unless naRm. */
 function n_distinct(mixed ...$columns): Vec
 {
-    $naRm = (bool) ($columns['na_rm'] ?? false);
-    unset($columns['na_rm']);
+    $naRm = (bool) ($columns['naRm'] ?? false);
+    unset($columns['naRm']);
     $columns = array_values($columns);
 
     return Internal::call('n_distinct', $columns, Internal::naRm($naRm), columns: array_keys($columns));
 }
 
-function sum(mixed $x, bool $na_rm = false): Vec
+function sum(mixed $x, bool $naRm = false): Vec
 {
-    return Internal::call('sum', [$x], Internal::naRm($na_rm));
+    return Internal::call('sum', [$x], Internal::naRm($naRm));
 }
 
-function mean(mixed $x, bool $na_rm = false): Vec
+function mean(mixed $x, bool $naRm = false): Vec
 {
-    return Internal::call('mean', [$x], Internal::naRm($na_rm));
+    return Internal::call('mean', [$x], Internal::naRm($naRm));
 }
 
-function median(mixed $x, bool $na_rm = false): Vec
+function median(mixed $x, bool $naRm = false): Vec
 {
-    return Internal::call('median', [$x], Internal::naRm($na_rm));
+    return Internal::call('median', [$x], Internal::naRm($naRm));
 }
 
 /** Sample standard deviation (n - 1). */
-function sd(mixed $x, bool $na_rm = false): Vec
+function sd(mixed $x, bool $naRm = false): Vec
 {
-    return Internal::call('sd', [$x], Internal::naRm($na_rm));
+    return Internal::call('sd', [$x], Internal::naRm($naRm));
 }
 
 /** Sample variance (n - 1). Named variance() because var is reserved in PHP. */
-function variance(mixed $x, bool $na_rm = false): Vec
+function variance(mixed $x, bool $naRm = false): Vec
 {
-    return Internal::call('var', [$x], Internal::naRm($na_rm));
+    return Internal::call('var', [$x], Internal::naRm($naRm));
 }
 
 /** Type 7 quantile, R's default. */
-function quantile(mixed $x, float $p, bool $na_rm = false): Vec
+function quantile(mixed $x, float $p, bool $naRm = false): Vec
 {
     if ($p < 0.0 || $p > 1.0) {
         throw new \InvalidArgumentException("Quantile probability must be in [0, 1], got {$p}.");
     }
 
-    return Internal::call('quantile', [$x, $p], Internal::naRm($na_rm));
+    return Internal::call('quantile', [$x, $p], Internal::naRm($naRm));
 }
 
 /** Interquartile range (type 7). */
-function iqr(mixed $x, bool $na_rm = false): Vec
+function iqr(mixed $x, bool $naRm = false): Vec
 {
-    return Internal::call('iqr', [$x], Internal::naRm($na_rm));
+    return Internal::call('iqr', [$x], Internal::naRm($naRm));
 }
 
-function min(mixed $x, bool $na_rm = false): Vec
+function min(mixed $x, bool $naRm = false): Vec
 {
-    return Internal::call('min', [$x], Internal::naRm($na_rm));
+    return Internal::call('min', [$x], Internal::naRm($naRm));
 }
 
-function max(mixed $x, bool $na_rm = false): Vec
+function max(mixed $x, bool $naRm = false): Vec
 {
-    return Internal::call('max', [$x], Internal::naRm($na_rm));
+    return Internal::call('max', [$x], Internal::naRm($naRm));
 }
 
 /** First value; $default when the group is empty. */
-function first(mixed $x, mixed $default = null, mixed $order_by = null, bool $na_rm = false): Vec
+function first(mixed $x, mixed $default = null, mixed $orderBy = null, bool $naRm = false): Vec
 {
-    return Internal::call('first', [$x], Internal::positionOptions($default, $order_by, $na_rm));
+    return Internal::call('first', [$x], Internal::positionOptions($default, $orderBy, $naRm));
 }
 
 /** Last value; $default when the group is empty. */
-function last(mixed $x, mixed $default = null, mixed $order_by = null, bool $na_rm = false): Vec
+function last(mixed $x, mixed $default = null, mixed $orderBy = null, bool $naRm = false): Vec
 {
-    return Internal::call('last', [$x], Internal::positionOptions($default, $order_by, $na_rm));
+    return Internal::call('last', [$x], Internal::positionOptions($default, $orderBy, $naRm));
 }
 
 /** The $n-th value, 1-based; negative counts from the end. */
-function nth(mixed $x, int $n, mixed $default = null, mixed $order_by = null, bool $na_rm = false): Vec
+function nth(mixed $x, int $n, mixed $default = null, mixed $orderBy = null, bool $naRm = false): Vec
 {
-    return Internal::call('nth', [$x, $n], Internal::positionOptions($default, $order_by, $na_rm));
+    return Internal::call('nth', [$x, $n], Internal::positionOptions($default, $orderBy, $naRm));
 }
 
 /** True when any value is true (R's any(); NA when undecided). */
-function any(mixed $x, bool $na_rm = false): Vec
+function any(mixed $x, bool $naRm = false): Vec
 {
-    return Internal::call('any', [$x], Internal::naRm($na_rm));
+    return Internal::call('any', [$x], Internal::naRm($naRm));
 }
 
 /** True when all values are true (R's all(); NA when undecided). */
-function all(mixed $x, bool $na_rm = false): Vec
+function all(mixed $x, bool $naRm = false): Vec
 {
-    return Internal::call('all', [$x], Internal::naRm($na_rm));
+    return Internal::call('all', [$x], Internal::naRm($naRm));
 }
 
 // ---------------------------------------------------------------------------
@@ -208,24 +208,24 @@ function near(mixed $x, mixed $y, ?float $tol = null): Vec
     return Internal::call('near', [$x, $y], $tol === null ? [] : ['tol' => $tol]);
 }
 
-/** Previous values: lag('x'), lag('x', 2, default: 0, order_by: 'year'). */
-function lag(mixed $x, int $n = 1, mixed $default = null, mixed $order_by = null): Vec
+/** Previous values: lag('x'), lag('x', 2, default: 0, orderBy: 'year'). */
+function lag(mixed $x, int $n = 1, mixed $default = null, mixed $orderBy = null): Vec
 {
     if ($n < 0) {
         throw new \InvalidArgumentException('lag() needs n >= 0; use lead().');
     }
 
-    return Internal::call('lag', [$x], Internal::shiftOptions($n, $default, $order_by));
+    return Internal::call('lag', [$x], Internal::shiftOptions($n, $default, $orderBy));
 }
 
-/** Next values: lead('x'), lead('x', 2, default: 0, order_by: 'year'). */
-function lead(mixed $x, int $n = 1, mixed $default = null, mixed $order_by = null): Vec
+/** Next values: lead('x'), lead('x', 2, default: 0, orderBy: 'year'). */
+function lead(mixed $x, int $n = 1, mixed $default = null, mixed $orderBy = null): Vec
 {
     if ($n < 0) {
         throw new \InvalidArgumentException('lead() needs n >= 0; use lag().');
     }
 
-    return Internal::call('lead', [$x], Internal::shiftOptions($n, $default, $order_by));
+    return Internal::call('lead', [$x], Internal::shiftOptions($n, $default, $orderBy));
 }
 
 /** Row numbers: 1..n, or ranks of $x with ties broken by position. */
@@ -316,12 +316,12 @@ function cumany(mixed $x): Vec
 
 /**
  * Elementwise any() across conditions (x | y | z): when_any(fn ($r) => ..., 'flag').
- * With na_rm, NA inputs are ignored.
+ * With naRm, NA inputs are ignored.
  */
 function when_any(mixed ...$conditions): Vec
 {
-    $naRm = (bool) ($conditions['na_rm'] ?? false);
-    unset($conditions['na_rm']);
+    $naRm = (bool) ($conditions['naRm'] ?? false);
+    unset($conditions['naRm']);
 
     return Internal::when(array_values($conditions), $naRm, any: true);
 }
@@ -329,8 +329,8 @@ function when_any(mixed ...$conditions): Vec
 /** Elementwise all() across conditions (x & y & z). */
 function when_all(mixed ...$conditions): Vec
 {
-    $naRm = (bool) ($conditions['na_rm'] ?? false);
-    unset($conditions['na_rm']);
+    $naRm = (bool) ($conditions['naRm'] ?? false);
+    unset($conditions['naRm']);
 
     return Internal::when(array_values($conditions), $naRm, any: false);
 }
@@ -362,15 +362,16 @@ function case_match(mixed $x, mixed ...$cases): Vec
 
 /**
  * Replace values by name (superseded in dplyr by recode_values()):
- * recode('grade', a: 'A', b: 'B', _default: 'other'), or with a map for keys
- * that aren't valid names: recode('code', [1 => 'one', 2 => 'two']).
+ * recode('grade', a: 'A', b: 'B', default: 'other'), or with a map for keys
+ * that aren't valid names, or that a parameter name claims: recode('code',
+ * [1 => 'one', 2 => 'two']), recode('axis', ['x' => 'X']).
  * The first argument is dplyr's .x. Values match by their string form. Unmatched values stay as they are
- * unless _default is given; NA becomes _missing.
+ * unless default is given; NA becomes missing.
  */
-function recode(mixed $_x, mixed ...$replacements): Vec
+function recode(mixed $x, mixed ...$replacements): Vec
 {
-    $hasDefault = \array_key_exists('_default', $replacements);
-    [$replacements, $o] = Internal::options($replacements, ['_default' => null, '_missing' => null], 'recode');
+    $hasDefault = \array_key_exists('default', $replacements);
+    [$replacements, $o] = Internal::options($replacements, ['default' => null, 'missing' => null], 'recode');
     $map = [];
     foreach ($replacements as $key => $value) {
         if (\is_int($key) && \is_array($value)) {
@@ -384,12 +385,12 @@ function recode(mixed $_x, mixed ...$replacements): Vec
 
     return new Vec(fn (Table $g) => array_map(
         fn ($v) => match (true) {
-            $v === null || (\is_float($v) && is_nan($v)) => $o['_missing'],
+            $v === null || (\is_float($v) && is_nan($v)) => $o['missing'],
             \array_key_exists(Tidyr::str($v), $map) => $map[Tidyr::str($v)],
-            $hasDefault => $o['_default'],
+            $hasDefault => $o['default'],
             default => $v,
         },
-        Vec::values($_x, $g, true),
+        Vec::values($x, $g, true),
     ));
 }
 
@@ -398,10 +399,10 @@ function recode(mixed $_x, mixed ...$replacements): Vec
  * results back: order_by('year', cumsum('score')). Wrap the order in desc()
  * to reverse it; NA sorts last.
  */
-function order_by(mixed $order_by, Vec $call): Vec
+function order_by(mixed $orderBy, Vec $call): Vec
 {
-    return new Vec(function (Table $g) use ($order_by, $call) {
-        [$by, $desc] = Internal::direction($order_by);
+    return new Vec(function (Table $g) use ($orderBy, $call) {
+        [$by, $desc] = Internal::direction($orderBy);
         $values = Vec::values($by, $g, true);
         $idx = Window::order($values, $desc);
         $idx = [...$idx, ...array_values(array_diff(array_keys($values), $idx))];

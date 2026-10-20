@@ -13,7 +13,7 @@ final class Join
     public static function verb(string $type, Table $y, string|array|JoinBy|null $by, array $suffix, ?bool $keep, string $naMatches, string $multiple, string $unmatched, ?string $relationship): Closure
     {
         if (! \in_array($naMatches, ['na', 'never'], true)) {
-            throw new \InvalidArgumentException("na_matches must be 'na' or 'never', got '{$naMatches}'.");
+            throw new \InvalidArgumentException("naMatches must be 'na' or 'never', got '{$naMatches}'.");
         }
         if (\count($suffix) !== 2) {
             throw new \InvalidArgumentException('suffix must have two strings.');

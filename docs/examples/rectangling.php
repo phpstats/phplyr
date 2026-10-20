@@ -13,6 +13,6 @@ $people = DataFrame::fromColumns([
 
 echo $people |> hoist('info', town: ['city', 'name']), "\n";
 
-echo $people |> unnest_wider('info') |> select('id', 'langs') |> unnest_longer('langs', indices_include: true), "\n";
+echo $people |> unnest_wider('info') |> select('id', 'langs') |> unnest_longer('langs', indicesInclude: true), "\n";
 
 echo DataFrame::fromColumns(['g' => ['a', 'a', 'b'], 'x' => [1, 2, 3]]) |> chop('x');

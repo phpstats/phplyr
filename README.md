@@ -61,38 +61,38 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 - **Row closures** receive `(Phibble\Row $r, Table $group)`, so `$r->price` or `$r['price']`. In a grouped table, `$group` is the row's group.
 - **Vector helpers** such as `lag('x')`, `cumsum('x')`, `min_rank('x')` and `mean('x')` are evaluated once per group. A summary such as `mean('x')` used in `mutate()` is recycled within each group, as in R.
 - **Helper arguments:** the first argument of a helper is its input column. A string there is a column name; it can also be `col('x')`, another helper, or a row closure. Later arguments are values, so a string there is a literal; wrap it in `col()` to use a column.
-- **Dot-arguments** are written with a leading underscore: `.by` becomes `_by`, `.keep` becomes `_keep`, and so on: `mutate(z: ..., _by: 'g')`.
+- **Dot-arguments** drop the dot: `.by` becomes `by`, `.keep` becomes `keep`, and so on: `mutate(z: ..., by: 'g')`. On a function that takes one, a named argument the option claims is read as the option, not as a column of that name.
 - **Positions** are 1-based, as in R: `pull(1)`, `pull(-1)`, `slice(1, 3)`.
-- **NA is null.** Summaries return null when a value is missing, unless you pass `na_rm: true`.
+- **NA is null.** Summaries return null when a value is missing, unless you pass `naRm: true`.
 - **Shadowed built-ins:** `count`, `min`, `max`, `round`, `abs`, `log`, `str_replace`, `str_pad`, `str_split` and a few others shadow PHP's built-ins in files that import them. Write `\count()` for the built-in.
 
 ## Table functions
 
 | Function | Example |
 | --- | --- |
-| `filter` | `filter(fn ($r) => $r->x > 0, between('y', 1, 5), _by: 'g')` |
+| `filter` | `filter(fn ($r) => $r->x > 0, between('y', 1, 5), by: 'g')` |
 | `select` | `select('id', starts_with('x'), except('tmp'))`, `select(['new' => 'old'], everything())` |
 | `mutate` | `mutate(z: fn ($r) => $r->x * 2, prev: lag('x'), avg: mean('x'), drop_me: null)` |
-| | Options: `_by`, `_keep: 'none'`, `_before`, `_after` |
+| | Options: `by`, `keep: 'none'`, `before`, `after` |
 | `transmute` | `transmute(z: fn ($r) => $r->x * 2)` |
 | `rename` / `rename_with` | `rename(new: 'old')`, `rename_with(strtoupper(...), starts_with('x'))` |
-| `relocate` | `relocate('score', _before: 'g')`, `relocate('g', _after: last_col())` |
-| `arrange` | `arrange('a', desc('b'), desc(fn ($r) => $r->x * $r->y), _by_group: true)` |
-| `group_by` / `ungroup` | `group_by('g', decade: fn ($r) => intdiv($r->year, 10) * 10, _add: true)` |
-| `summarise` / `summarize` | `summarise(n: n(), avg: mean('x'), across(...), _by: 'g', _groups: 'drop')` |
+| `relocate` | `relocate('score', before: 'g')`, `relocate('g', after: last_col())` |
+| `arrange` | `arrange('a', desc('b'), desc(fn ($r) => $r->x * $r->y), byGroup: true)` |
+| `group_by` / `ungroup` | `group_by('g', decade: fn ($r) => intdiv($r->year, 10) * 10, add: true)` |
+| `summarise` / `summarize` | `summarise(n: n(), avg: mean('x'), across(...), by: 'g', groups: 'drop')` |
 | `reframe` | `reframe(q: fn ($g) => [...several values...])` |
 | `count` / `tally` | `count('g', 'h', wt: 'w', sort: true, name: 'rows')`, `tally()` |
 | `add_count` / `add_tally` | `add_count('g', name: 'size')` |
-| `distinct` | `distinct('g')`, `distinct('g', _keep_all: true)` |
+| `distinct` | `distinct('g')`, `distinct('g', keepAll: true)` |
 | `slice` | `slice(1, 3)`, `slice(-1)`. These are positions within each group. |
 | `slice_head` / `slice_tail` | `slice_head(n: 3)`, `slice_tail(prop: 0.1)` |
-| `slice_min` / `slice_max` | `slice_max('score', n: 2, with_ties: false)` |
-| `slice_sample` | `slice_sample(n: 10, replace: true, weight_by: 'w')`. Seed with `mt_srand()`. |
+| `slice_min` / `slice_max` | `slice_max('score', n: 2, withTies: false)` |
+| `slice_sample` | `slice_sample(n: 10, replace: true, weightBy: 'w')`. Seed with `mt_srand()`. |
 | `head` | `head(6)`. Ignores groups. |
 | `pull` | `pull('x')`, `pull()` (the last column), `pull('x', name: 'id')` |
-| `bind_rows` / `bind_cols` | `bind_rows($b, _id: 'src')`, `bind_cols($b)` |
+| `bind_rows` / `bind_cols` | `bind_rows($b, id: 'src')`, `bind_cols($b)` |
 | `glimpse` | `glimpse()`. Prints a summary and passes the table on. |
-| Joins | `left_join($y, by: ['id' => 'key'], suffix: ['.x', '.y'], keep:, na_matches:, multiple:, unmatched:, relationship:)`. Also `inner_join`, `right_join`, `full_join`, `semi_join`, `anti_join` and `cross_join`. |
+| Joins | `left_join($y, by: ['id' => 'key'], suffix: ['.x', '.y'], keep:, naMatches:, multiple:, unmatched:, relationship:)`. Also `inner_join`, `right_join`, `full_join`, `semi_join`, `anti_join` and `cross_join`. |
 | `rowwise` | `rowwise('id')`. Each row becomes its own group. |
 
 | `filter_out` | `filter_out(fn ($r) => $r->status === 'test')`. Drops rows where every condition is true, keeping NA rows (dplyr 1.2). |
@@ -104,7 +104,7 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 ## Vector helpers
 
 - **Summaries:** `n`, `n_distinct`, `sum`, `mean`, `median`, `sd`, `variance`, `quantile(x, p)`, `iqr`, `min`, `max`, `first`, `last`, `nth(x, n)`, `any`, `all`.
-- **Windows:** `lag`, `lead` (with `default:` and `order_by:`), `row_number`, `min_rank`, `dense_rank`, `percent_rank`, `cume_dist`, `ntile`, `cumsum`, `cumprod`, `cummin`, `cummax`, `cummean`, `cumall`, `cumany`, `consecutive_id`.
+- **Windows:** `lag`, `lead` (with `default:` and `orderBy:`), `row_number`, `min_rank`, `dense_rank`, `percent_rank`, `cume_dist`, `ntile`, `cumsum`, `cumprod`, `cummin`, `cummax`, `cummean`, `cumall`, `cumany`, `consecutive_id`.
 - **Conditionals and NA:** `if_else`, `case_when([cond, value], ..., default: ...)`, `replace_when`, `case_match`, `recode_values` / `replace_values` (cases or `from:` / `to:` lookup tables), `when_any` / `when_all`, `coalesce`, `na_if`, `between`, `near`.
 - **Building blocks:** `col('x')`, `vec(fn ($r) => ...)`, and `->map(fn ($value, $r) => ...)` on any helper.
 
@@ -140,16 +140,16 @@ The tidyr functions work the same way, with tidyr's argument names. The test sui
 
 | Function | Example |
 | --- | --- |
-| `pivot_longer` | `pivot_longer(starts_with('wk'), names_to: 'week', values_to: 'rank', names_prefix: 'wk', values_drop_na: true)` |
-| | `names_to` can list several names, split with `names_sep` or `names_pattern`. The name `'.value'` takes the value column's name from that part. |
-| `pivot_wider` | `pivot_wider(names_from: 'key', values_from: ['val', 'w'], values_fill: 0, values_fn: fn ($v) => array_sum($v))` |
-| | Also takes `id_cols`, `names_prefix`, `names_sep`, `names_glue: '{key}_{.value}'` and `names_sort`. |
+| `pivot_longer` | `pivot_longer(starts_with('wk'), namesTo: 'week', valuesTo: 'rank', namesPrefix: 'wk', valuesDropNa: true)` |
+| | `namesTo` can list several names, split with `namesSep` or `namesPattern`. The name `'.value'` takes the value column's name from that part. |
+| `pivot_wider` | `pivot_wider(namesFrom: 'key', valuesFrom: ['val', 'w'], valuesFill: 0, valuesFn: fn ($v) => array_sum($v))` |
+| | Also takes `idCols`, `namesPrefix`, `namesSep`, `namesGlue: '{key}_{.value}'` and `namesSort`. |
 | `complete` / `expand` | `complete('id', 'key', fill: ['n' => 0])`, `expand(nesting('g', 'label'), year: [2001, 2002])` |
 | `crossing` / `expand_grid` | `crossing(x: [2, 1], y: ['a', 'b'])`. These return a new DataFrame. |
-| `fill` | `fill('price', _direction: 'downup')`. Works within groups. |
+| `fill` | `fill('price', direction: 'downup')`. Works within groups. |
 | `drop_na` / `replace_na` | `drop_na('wk1')`, `replace_na(['wk1' => 0])` |
-| `uncount` | `uncount('n', _id: 'copy')` |
-| `unite` | `unite('date', 'year', 'month', sep: '-', remove: false, na_rm: true)` |
+| `uncount` | `uncount('n', id: 'copy')` |
+| `unite` | `unite('date', 'year', 'month', sep: '-', remove: false, naRm: true)` |
 | `separate` | `separate('s', ['a', 'b'], sep: '-', extra: 'merge', fill: 'left', convert: true)` |
 | `separate_wider_*` | `separate_wider_delim('s', '-', names: [...])`, `separate_wider_position('code', ['state' => 2, 1, 'n' => 2])`, `separate_wider_regex('code', ['l' => '[A-Z]+', 'd' => '\d+'])` |
 | `separate_longer_*` | `separate_longer_delim('tags', ',')`, `separate_longer_position('code', 2)` |
@@ -157,7 +157,7 @@ The tidyr functions work the same way, with tidyr's argument names. The test sui
 
 ## Expressions and databases
 
-`col('price')->mul(1.1)->gt(100)` and helpers such as `mean('x')` build inspectable `Phibble\Expr` trees when their arguments are column names, literals, or other helpers. phplyr passes them to the table. The in-memory DataFrame evaluates them, and `Phibble\tbl($pdo, 'sales')` compiles them to SQL (SQLite, PostgreSQL, MySQL). `show_query()` returns the SQL and `collect()` runs it. A PHP closure makes a database table load its rows and continue in memory. `mutate(_keep: 'used' | 'unused')` works with expression arguments.
+`col('price')->mul(1.1)->gt(100)` and helpers such as `mean('x')` build inspectable `Phibble\Expr` trees when their arguments are column names, literals, or other helpers. phplyr passes them to the table. The in-memory DataFrame evaluates them, and `Phibble\tbl($pdo, 'sales')` compiles them to SQL (SQLite, PostgreSQL, MySQL). `show_query()` returns the SQL and `collect()` runs it. A PHP closure makes a database table load its rows and continue in memory. `mutate(keep: 'used' | 'unused')` works with expression arguments.
 
 ## Models
 

@@ -56,7 +56,7 @@ $pipelines = [
         |> arrange('region', 'rank')],
     'B' => ['per-group windows over every row', fn (Table $s, Table $st) => $s
         |> group_by('store')
-        |> mutate(prev: lag('units', order_by: 'day'), running: cumsum('units'), share: col('units')->div(sum('units', na_rm: true)))],
+        |> mutate(prev: lag('units', orderBy: 'day'), running: cumsum('units'), share: col('units')->div(sum('units', naRm: true)))],
     'C' => ['as A, with a PHP closure in filter()', fn (Table $s, Table $st) => $s
         |> filter(fn ($r) => $r->units > 0)
         |> left_join($st, by: 'store')

@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * stringr helpers, re-exported from Phibble\Expr's registry. As in stringr,
  * a pattern is a regular expression (PCRE); wrap it in fixed() to match
- * literally, or regex() for options such as ignore_case.
+ * literally, or regex() for options such as ignoreCase.
  *
  * str_replace, str_pad and str_split shadow PHP built-ins in files that
  * import them.
@@ -18,10 +18,10 @@ use Phibble\Expr\Lit;
 /** A literal pattern: str_detect('name', fixed('a.b')). */
 function fixed(string $pattern): Vec { return Internal::call('fixed', [$pattern], columns: []); }
 
-/** A regular expression with options: regex('^ab', ignore_case: true). */
-function regex(string $pattern, bool $ignore_case = false): Vec
+/** A regular expression with options: regex('^ab', ignoreCase: true). */
+function regex(string $pattern, bool $ignoreCase = false): Vec
 {
-    return Internal::call('regex', [$pattern], $ignore_case ? ['ignore_case' => true] : [], columns: []);
+    return Internal::call('regex', [$pattern], $ignoreCase ? ['ignore_case' => true] : [], columns: []);
 }
 
 /** Does the pattern occur? */

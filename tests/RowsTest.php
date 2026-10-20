@@ -71,7 +71,7 @@ it('matches dplyr 1.2 additions', function () {
             mutate(
                 any: Phplyr\when_any(fn ($r) => $r->value === null ? null : $r->value > 5, fn ($r) => $r->score > 5),
                 all: Phplyr\when_all(fn ($r) => $r->value === null ? null : $r->value > 5, fn ($r) => $r->score > 5),
-                all_rm: Phplyr\when_all(fn ($r) => $r->value === null ? null : $r->value > 5, fn ($r) => $r->score > 5, na_rm: true),
+                all_rm: Phplyr\when_all(fn ($r) => $r->value === null ? null : $r->value > 5, fn ($r) => $r->score > 5, naRm: true),
             ),
             select('id', 'any', 'all', 'all_rm'),
         ),

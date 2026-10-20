@@ -75,7 +75,7 @@ $pipelines = [
         ->arrange(['region', 'rank']),
     'B grouped windows (phplyr)' => fn () => $sales
         |> group_by('store')
-        |> mutate(prev: lag('units', order_by: 'day'), running: cumsum('units'), share: col('units')->div(sum('units', na_rm: true))),
+        |> mutate(prev: lag('units', orderBy: 'day'), running: cumsum('units'), share: col('units')->div(sum('units', naRm: true))),
     'B grouped windows (phibble)' => fn () => $sales
         ->groupBy(['store'])
         ->mutate([

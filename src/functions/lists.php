@@ -17,27 +17,27 @@ use Phibble\Contracts\Table;
 /**
  * Turn each element of list-columns into rows: unnest_longer('tags').
  * Elements with names add an index column of the names ({col}_id); with
- * indices_include: true, unnamed elements add 1-based positions. Empty and
- * NA elements drop their row unless keep_empty: true. values_to and
- * indices_to may use {col}. Several columns must have elements of the same
+ * indicesInclude: true, unnamed elements add 1-based positions. Empty and
+ * NA elements drop their row unless keepEmpty: true. valuesTo and
+ * indicesTo may use {col}. Several columns must have elements of the same
  * length in each row, or length one.
  */
-function unnest_longer(mixed $col, ?string $values_to = null, ?string $indices_to = null, ?bool $indices_include = null, bool $keep_empty = false): Closure
+function unnest_longer(mixed $col, ?string $valuesTo = null, ?string $indicesTo = null, ?bool $indicesInclude = null, bool $keepEmpty = false): Closure
 {
-    return function (Table $t) use ($col, $values_to, $indices_to, $indices_include, $keep_empty) {
+    return function (Table $t) use ($col, $valuesTo, $indicesTo, $indicesInclude, $keepEmpty) {
         $names = Selector::select([$col], $t);
         $include = [];
         foreach ($names as $c) {
-            $include[$c] = $indices_include ?? array_any($t->column($c), fn ($v) => \is_array($v) && ! array_is_list($v));
+            $include[$c] = $indicesInclude ?? array_any($t->column($c), fn ($v) => \is_array($v) && ! array_is_list($v));
         }
-        [$index, $pieces] = Lists::longer($t, $names, $keep_empty, 'unnest_longer');
+        [$index, $pieces] = Lists::longer($t, $names, $keepEmpty, 'unnest_longer');
         $out = Ops::take($t, $index);
         foreach ($names as $c) {
-            $valuesTo = strtr($values_to ?? '{col}', ['{col}' => $c]);
+            $values = strtr($valuesTo ?? '{col}', ['{col}' => $c]);
             $new = [];
             if ($include[$c]) {
                 $named = array_any($t->column($c), fn ($v) => \is_array($v) && ! array_is_list($v));
-                $new[strtr($indices_to ?? '{col}_id', ['{col}' => $c])] = array_map(
+                $new[strtr($indicesTo ?? '{col}_id', ['{col}' => $c])] = array_map(
                     fn ($k) => match (true) {
                         $k === null => null,
                         $named => \is_string($k) ? $k : '',
@@ -46,8 +46,8 @@ function unnest_longer(mixed $col, ?string $values_to = null, ?string $indices_t
                     $pieces[$c]['keys'],
                 );
             }
-            $new[$valuesTo] = $pieces[$c]['values'];
-            $out = Tidyr::insertAt($out, $c, $new, remove: $valuesTo !== $c);
+            $new[$values] = $pieces[$c]['values'];
+            $out = Tidyr::insertAt($out, $c, $new, remove: $values !== $c);
         }
 
         return $out;
@@ -57,15 +57,15 @@ function unnest_longer(mixed $col, ?string $values_to = null, ?string $indices_t
 /**
  * Turn each element of list-columns into columns: unnest_wider('meta').
  * Named elements give a column per name, in order of first appearance;
- * unnamed elements need names_sep, which names them {col}{sep}1,
- * {col}{sep}2... (names_sep also prefixes named ones). Missing names and NA
+ * unnamed elements need namesSep, which names them {col}{sep}1,
+ * {col}{sep}2... (namesSep also prefixes named ones). Missing names and NA
  * elements become NA.
  */
-function unnest_wider(mixed $col, ?string $names_sep = null): Closure
+function unnest_wider(mixed $col, ?string $namesSep = null): Closure
 {
-    return function (Table $t) use ($col, $names_sep) {
+    return function (Table $t) use ($col, $namesSep) {
         foreach (Selector::select([$col], $t) as $c) {
-            $t = Tidyr::insertAt($t, $c, Lists::widerColumns($t, $c, $names_sep, 'unnest_wider'), remove: true);
+            $t = Tidyr::insertAt($t, $c, Lists::widerColumns($t, $c, $namesSep, 'unnest_wider'), remove: true);
         }
 
         return $t;
@@ -76,13 +76,13 @@ function unnest_wider(mixed $col, ?string $names_sep = null): Closure
  * Pull components out of a list-column into new columns, before it:
  * hoist('meta', name: 'name', first: 1, city: ['address', 'city']).
  * A path is a name, a 1-based position, or a list of them for nested
- * elements. With _remove (the default), hoisted components are removed
+ * elements. With remove (the default), hoisted components are removed
  * from the list-column, and the column is dropped once every element is
  * empty.
  */
 function hoist(string $col, mixed ...$paths): Closure
 {
-    [$paths, $o] = Internal::options($paths, ['_remove' => true], 'hoist');
+    [$paths, $o] = Internal::options($paths, ['remove' => true], 'hoist');
     Internal::assertNamed($paths, 'hoist');
 
     return function (Table $t) use ($col, $paths, $o) {
@@ -91,12 +91,12 @@ function hoist(string $col, mixed ...$paths): Closure
         foreach ($paths as $name => $path) {
             $path = (array) $path;
             $new[$name] = array_map(fn ($e) => Lists::pluck($e, $path), $elements);
-            if ($o['_remove']) {
+            if ($o['remove']) {
                 $elements = array_map(fn ($e) => Lists::without($e, $path), $elements);
             }
         }
         $out = Tidyr::insertAt($t, $col, $new, remove: false, newFirst: true)->mutate([$col => $elements]);
-        if ($o['_remove'] && array_all($elements, fn ($e) => $e === null || $e === [])) {
+        if ($o['remove'] && array_all($elements, fn ($e) => $e === null || $e === [])) {
             $out = $out->select(array_values(array_diff($out->columns(), [$col])));
         }
 
@@ -137,13 +137,13 @@ function chop(mixed $cols): Closure
 
 /**
  * Expand list-columns into rows, the reverse of chop(). Empty and NA
- * elements drop their row unless keep_empty: true.
+ * elements drop their row unless keepEmpty: true.
  */
-function unchop(mixed $cols, bool $keep_empty = false): Closure
+function unchop(mixed $cols, bool $keepEmpty = false): Closure
 {
-    return function (Table $t) use ($cols, $keep_empty) {
+    return function (Table $t) use ($cols, $keepEmpty) {
         $names = Selector::select([$cols], $t);
-        [$index, $pieces] = Lists::longer($t, $names, $keep_empty, 'unchop');
+        [$index, $pieces] = Lists::longer($t, $names, $keepEmpty, 'unchop');
 
         return Ops::take($t, $index)->mutate(array_map(fn ($p) => $p['values'], $pieces));
     };
@@ -152,11 +152,11 @@ function unchop(mixed $cols, bool $keep_empty = false): Closure
 /**
  * Pack columns into a column of named arrays (tidyr's data frame columns):
  * pack(dims: ['width', 'height']). Packed columns go at the end. With
- * _names_sep, the inner names drop their outer name and the separator.
+ * namesSep, the inner names drop their outer name and the separator.
  */
 function pack(mixed ...$spec): Closure
 {
-    [$spec, $o] = Internal::options($spec, ['_names_sep' => null], 'pack');
+    [$spec, $o] = Internal::options($spec, ['namesSep' => null], 'pack');
     Internal::assertNamed($spec, 'pack');
 
     return function (Table $t) use ($spec, $o) {
@@ -164,7 +164,7 @@ function pack(mixed ...$spec): Closure
         $used = [];
         foreach ($spec as $name => $cols) {
             $names = Selector::select([$cols], $t);
-            $inner = array_map(fn ($c) => $o['_names_sep'] !== null && str_starts_with($c, $name.$o['_names_sep']) ? substr($c, \strlen($name.$o['_names_sep'])) : $c, $names);
+            $inner = array_map(fn ($c) => $o['namesSep'] !== null && str_starts_with($c, $name.$o['namesSep']) ? substr($c, \strlen($name.$o['namesSep'])) : $c, $names);
             $vectors = array_map(fn ($c) => $t->column($c), $names);
             $new[$name] = array_map(fn ($i) => array_combine($inner, array_column($vectors, $i)), $t->nrow() === 0 ? [] : range(0, $t->nrow() - 1));
             $used = [...$used, ...$names];
@@ -176,11 +176,11 @@ function pack(mixed ...$spec): Closure
 }
 
 /** Spread columns of named arrays into columns, the reverse of pack(). */
-function unpack(mixed $cols, ?string $names_sep = null): Closure
+function unpack(mixed $cols, ?string $namesSep = null): Closure
 {
-    return function (Table $t) use ($cols, $names_sep) {
+    return function (Table $t) use ($cols, $namesSep) {
         foreach (Selector::select([$cols], $t) as $c) {
-            $t = Tidyr::insertAt($t, $c, Lists::widerColumns($t, $c, $names_sep, 'unpack', positional: true), remove: true);
+            $t = Tidyr::insertAt($t, $c, Lists::widerColumns($t, $c, $namesSep, 'unpack', positional: true), remove: true);
         }
 
         return $t;

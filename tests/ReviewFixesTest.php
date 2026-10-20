@@ -23,15 +23,15 @@ function dropFactor(): DataFrame
     return DataFrame::fromColumns(['g' => ['b', 'c', 'c'], 'v' => [3, 1, 2]])->asFactor('g', ['a', 'b', 'c']);
 }
 
-it('keeps rowwise and _drop: false through arrange() and ungroup()', function () {
+it('keeps rowwise and drop: false through arrange() and ungroup()', function () {
     $df = DataFrame::fromColumns(['id' => ['p', 'q', 'q'], 'a' => [1, 2, 3]]);
     expect(pipe($df, rowwise(), arrange(desc('a')), mutate(s: sum('a')), Phplyr\pull('s')))->toBe([3, 2, 1]);
     $out = pipe($df, rowwise('id'), arrange(desc('a')), summarise(s: sum('a')));
     expect($out->toRows())->toBe([['id' => 'q', 's' => 3], ['id' => 'q', 's' => 2], ['id' => 'p', 's' => 1]]);
 
-    $kept = pipe(dropFactor(), group_by('g', _drop: false), arrange('v'), summarise(n: n()));
+    $kept = pipe(dropFactor(), group_by('g', drop: false), arrange('v'), summarise(n: n()));
     expect(pipe($kept, Phplyr\pull('n')))->toBe([0, 1, 2]);
-    $partial = pipe(dropFactor(), mutate(h: 1), group_by('g', 'h', _drop: false), ungroup('h'), summarise(n: n()));
+    $partial = pipe(dropFactor(), mutate(h: 1), group_by('g', 'h', drop: false), ungroup('h'), summarise(n: n()));
     expect($partial->column('g'))->toBe(['a', 'b', 'c']);
 });
 
@@ -50,12 +50,12 @@ it('recycles zero-length reframe() results to zero rows', function () {
     expect($out->columns())->toBe(['a', 'b'])->and($out->nrow())->toBe(0);
 });
 
-it('orders factors by level in slice_min(), slice_max() and pivot_wider(names_sort:)', function () {
+it('orders factors by level in slice_min(), slice_max() and pivot_wider(namesSort:)', function () {
     $f = DataFrame::fromColumns(['k' => ['lo', 'hi', 'mid']])->asFactor('k', ['lo', 'mid', 'hi']);
     expect(pipe($f, slice_min('k', n: 1), Phplyr\pull('k')))->toBe(['lo']);
     expect(pipe($f, slice_max('k', n: 1), Phplyr\pull('k')))->toBe(['hi']);
     $w = DataFrame::fromColumns(['g' => ['c', 'b'], 'k' => ['x', 'y'], 'v' => [1, 2]])->asFactor('k', ['y', 'x']);
-    expect((pipe($w, pivot_wider(names_from: 'k', values_from: 'v', names_sort: true)))->columns())->toBe(['g', 'y', 'x']);
+    expect((pipe($w, pivot_wider(namesFrom: 'k', valuesFrom: 'v', namesSort: true)))->columns())->toBe(['g', 'y', 'x']);
 });
 
 it('accepts desc() in slice_min() and slice_max()', function () {
@@ -67,7 +67,7 @@ it('accepts desc() in slice_min() and slice_max()', function () {
 it('numbers rowwise and empty groups by visit order in cur_group_id()', function () {
     $df = DataFrame::fromColumns(['a' => [1, 2, 3]]);
     expect(pipe($df, rowwise(), summarise(id: cur_group_id()), Phplyr\pull('id')))->toBe([1, 2, 3]);
-    $out = pipe(dropFactor(), group_by('g', _drop: false), summarise(id: cur_group_id(), n: n()));
+    $out = pipe(dropFactor(), group_by('g', drop: false), summarise(id: cur_group_id(), n: n()));
     expect($out->toRows())->toBe([['g' => 'a', 'id' => 1, 'n' => 0], ['g' => 'b', 'id' => 2, 'n' => 1], ['g' => 'c', 'id' => 3, 'n' => 2]]);
 });
 
@@ -91,18 +91,18 @@ it('treats NaN as missing in drop_na(), replace_na() and fill()', function () {
     expect(pipe($t, fill('x'), Phplyr\pull('x')))->toBe([1.0, 1.0, 1.0, 4.0]);
 });
 
-it('keeps partial matches in separate_wider_regex(too_few: align_start)', function () {
+it('keeps partial matches in separate_wider_regex(tooFew: align_start)', function () {
     $out = pipe(
         DataFrame::fromColumns(['s' => ['ab12', 'zz', '12']]),
-        separate_wider_regex('s', ['l' => '[a-z]+', 'd' => '[0-9]+'], too_few: 'align_start'),
+        separate_wider_regex('s', ['l' => '[a-z]+', 'd' => '[0-9]+'], tooFew: 'align_start'),
     );
     expect($out->toRows())->toBe([['l' => 'ab', 'd' => '12'], ['l' => 'zz', 'd' => null], ['l' => null, 'd' => null]]);
 });
 
-it('drops extra names_sep pieces in pivot_longer()', function () {
+it('drops extra namesSep pieces in pivot_longer()', function () {
     $out = pipe(
         DataFrame::fromColumns(['id' => [1], 'a_b_c' => [1], 'a_d_e' => [2]]),
-        pivot_longer(['a_b_c', 'a_d_e'], names_to: ['p', 'q'], names_sep: '_'),
+        pivot_longer(['a_b_c', 'a_d_e'], namesTo: ['p', 'q'], namesSep: '_'),
     );
     expect(pipe($out, Phplyr\pull('q')))->toBe(['b', 'd']);
 });
@@ -121,8 +121,8 @@ it('writes doubles as R does in unite()', function () {
 it('samples with replacement beyond the group size and never draws zero weights', function () {
     $t = DataFrame::fromColumns(['x' => [1, 2, 3], 'w' => [0, 0, 1]]);
     expect((pipe($t, slice_sample(prop: 2.0, replace: true)))->nrow())->toBe(6);
-    expect(pipe($t, slice_sample(n: 1, weight_by: 'w'), Phplyr\pull('x')))->toBe([3]);
-    expect(fn () => pipe($t, slice_sample(n: 3, weight_by: 'w')))->toThrow(InvalidArgumentException::class, 'positive weight');
+    expect(pipe($t, slice_sample(n: 1, weightBy: 'w'), Phplyr\pull('x')))->toBe([3]);
+    expect(fn () => pipe($t, slice_sample(n: 3, weightBy: 'w')))->toThrow(InvalidArgumentException::class, 'positive weight');
 });
 
 it('drops grouping when bind_cols() renames a grouping column', function () {

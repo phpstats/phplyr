@@ -95,7 +95,7 @@ it('summarises with several groups, dropping the last level', function () {
     $out = pipe(
         sales(),
         group_by('brand', 'store'),
-        summarise(qty: sum('qty', na_rm: true), revenue: fn ($g) => array_sum($g->column('price'))),
+        summarise(qty: sum('qty', naRm: true), revenue: fn ($g) => array_sum($g->column('price'))),
     );
 
     expect($out->groups())->toBe(['brand']);
@@ -108,8 +108,8 @@ it('summarises with several groups, dropping the last level', function () {
     expect((pipe(sales(), summarize(n: n())))->toRows())->toBe([['n' => 5]]);
 });
 
-it('propagates NA in summaries unless na_rm is set', function () {
-    $out = pipe(sales(), summarise(q: sum('qty'), q_rm: sum('qty', na_rm: true), m: mean('qty')));
+it('propagates NA in summaries unless naRm is set', function () {
+    $out = pipe(sales(), summarise(q: sum('qty'), q_rm: sum('qty', naRm: true), m: mean('qty')));
     expect($out->toRows())->toBe([['q' => null, 'q_rm' => 11, 'm' => null]]);
 });
 

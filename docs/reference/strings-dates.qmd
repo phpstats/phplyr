@@ -12,7 +12,7 @@ database tables. Their results are checked against stringr 1.6.0 and lubridate
 ## Strings
 
 As in stringr, a pattern is a regular expression. `fixed('a.b')` matches the
-text literally, and `regex('ab', ignore_case: true)` sets options.
+text literally, and `regex('ab', ignoreCase: true)` sets options.
 
 | Function | Value |
 | --- | --- |
@@ -38,7 +38,7 @@ import them.
 | `ymd`, `dmy`, `mdy`, `ymd_hms`, `dmy_hms`, `mdy_hms` (`tz:`) | Parse text; failures give NA |
 | `parse_date_time(x, ['Ymd HMS', 'dmY HMS'])` | Parse with lubridate orders |
 | `year`, `month`, `day`, `yday`, `quarter`, `hour`, `minute`, `second` | Parts |
-| `wday(x, week_start:)` | Day of the week; Sunday is 1 unless `week_start: 1` |
+| `wday(x, weekStart:)` | Day of the week; Sunday is 1 unless `weekStart: 1` |
 | `floor_date(x, unit)`, `ceiling_date`, `round_date` | Round to `'hour'`, `'15 minutes'`, `'week'`, `'month'`, and so on |
 | `seconds(n)` … `years(n)` | Periods: `col('d')->add(months(1))` |
 | `difftime(x, y, units:)` | The difference as a number |

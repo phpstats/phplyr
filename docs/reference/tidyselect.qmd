@@ -11,7 +11,7 @@ Selectors pick columns by name, pattern, or type. They work in `select()`,
 | Selector | Columns |
 | --- | --- |
 | `'x'`, `['x', 'y']` | By name |
-| `starts_with('x')`, `ends_with()`, `contains()` | By name fragment; case-insensitive unless `ignore_case: false` |
+| `starts_with('x')`, `ends_with()`, `contains()` | By name fragment; case-insensitive unless `ignoreCase: false` |
 | `matches('^x\\d+$')` | By regular expression |
 | `num_range('x', 1, 3)` | `x1`, `x2`, `x3` |
 | `everything()`, `last_col()` | All columns, the last column |
@@ -41,7 +41,7 @@ What each function receives:
 - In `mutate()`, other closures receive one value at a time, or the whole
   column if the first parameter is typed `array`.
 - A closure may return a helper's result, as in
-  `fn ($v) => mean($v, na_rm: true)`, which is then evaluated on the group.
+  `fn ($v) => mean($v, naRm: true)`, which is then evaluated on the group.
 
 Inside any of these functions, `cur_column()` returns the name of the column
 being processed.

@@ -27,7 +27,7 @@ in-memory `DataFrame` evaluates it with dplyr's semantics, and a database table
 compiles it to SQL. A helper given a PHP closure still works, but it is
 evaluated in PHP.
 
-`mutate(_keep: 'used')` and `_keep: 'unused'` need expression arguments,
+`mutate(keep: 'used')` and `keep: 'unused'` need expression arguments,
 because phplyr reads the columns an expression uses from the tree.
 
 ## Database tables
@@ -41,7 +41,7 @@ SQLite, PostgreSQL, and MySQL are supported.
 
 Grouped `mutate()` and `filter()` compile aggregates and window functions to
 `OVER (PARTITION BY ...)`. Window functions need an order, so call `arrange()`
-first or pass `order_by:`.
+first or pass `orderBy:`.
 
 A function given a PHP closure runs the query so far, loads the rows, and continues
 in memory, returning a `DataFrame`. Expressions with no faithful SQL translation do

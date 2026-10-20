@@ -22,39 +22,39 @@ use Closure;
 use Phibble\Contracts\Table;
 
 /** Rows of x with a match in y, with y's columns. */
-function inner_join(Table $y, string|array|JoinBy|null $by = null, array $suffix = ['.x', '.y'], ?bool $keep = null, string $na_matches = 'na', string $multiple = 'all', string $unmatched = 'drop', ?string $relationship = null): Closure
+function inner_join(Table $y, string|array|JoinBy|null $by = null, array $suffix = ['.x', '.y'], ?bool $keep = null, string $naMatches = 'na', string $multiple = 'all', string $unmatched = 'drop', ?string $relationship = null): Closure
 {
-    return Join::verb('inner', $y, $by, $suffix, $keep, $na_matches, $multiple, $unmatched, $relationship);
+    return Join::verb('inner', $y, $by, $suffix, $keep, $naMatches, $multiple, $unmatched, $relationship);
 }
 
 /** All rows of x, with y's columns where they match (NA otherwise). */
-function left_join(Table $y, string|array|JoinBy|null $by = null, array $suffix = ['.x', '.y'], ?bool $keep = null, string $na_matches = 'na', string $multiple = 'all', string $unmatched = 'drop', ?string $relationship = null): Closure
+function left_join(Table $y, string|array|JoinBy|null $by = null, array $suffix = ['.x', '.y'], ?bool $keep = null, string $naMatches = 'na', string $multiple = 'all', string $unmatched = 'drop', ?string $relationship = null): Closure
 {
-    return Join::verb('left', $y, $by, $suffix, $keep, $na_matches, $multiple, $unmatched, $relationship);
+    return Join::verb('left', $y, $by, $suffix, $keep, $naMatches, $multiple, $unmatched, $relationship);
 }
 
 /** All rows of y, with x's columns where they match. */
-function right_join(Table $y, string|array|JoinBy|null $by = null, array $suffix = ['.x', '.y'], ?bool $keep = null, string $na_matches = 'na', string $multiple = 'all', string $unmatched = 'drop', ?string $relationship = null): Closure
+function right_join(Table $y, string|array|JoinBy|null $by = null, array $suffix = ['.x', '.y'], ?bool $keep = null, string $naMatches = 'na', string $multiple = 'all', string $unmatched = 'drop', ?string $relationship = null): Closure
 {
-    return Join::verb('right', $y, $by, $suffix, $keep, $na_matches, $multiple, $unmatched, $relationship);
+    return Join::verb('right', $y, $by, $suffix, $keep, $naMatches, $multiple, $unmatched, $relationship);
 }
 
 /** All rows of both tables. */
-function full_join(Table $y, string|array|JoinBy|null $by = null, array $suffix = ['.x', '.y'], ?bool $keep = null, string $na_matches = 'na', string $multiple = 'all', ?string $relationship = null): Closure
+function full_join(Table $y, string|array|JoinBy|null $by = null, array $suffix = ['.x', '.y'], ?bool $keep = null, string $naMatches = 'na', string $multiple = 'all', ?string $relationship = null): Closure
 {
-    return Join::verb('full', $y, $by, $suffix, $keep, $na_matches, $multiple, 'drop', $relationship);
+    return Join::verb('full', $y, $by, $suffix, $keep, $naMatches, $multiple, 'drop', $relationship);
 }
 
 /** Rows of x that have a match in y (x's columns only). */
-function semi_join(Table $y, string|array|JoinBy|null $by = null, string $na_matches = 'na'): Closure
+function semi_join(Table $y, string|array|JoinBy|null $by = null, string $naMatches = 'na'): Closure
 {
-    return Join::verb('semi', $y, $by, ['.x', '.y'], null, $na_matches, 'all', 'drop', null);
+    return Join::verb('semi', $y, $by, ['.x', '.y'], null, $naMatches, 'all', 'drop', null);
 }
 
 /** Rows of x that have no match in y. */
-function anti_join(Table $y, string|array|JoinBy|null $by = null, string $na_matches = 'na'): Closure
+function anti_join(Table $y, string|array|JoinBy|null $by = null, string $naMatches = 'na'): Closure
 {
-    return Join::verb('anti', $y, $by, ['.x', '.y'], null, $na_matches, 'all', 'drop', null);
+    return Join::verb('anti', $y, $by, ['.x', '.y'], null, $naMatches, 'all', 'drop', null);
 }
 
 /** Every combination of rows of x and y. */
@@ -67,16 +67,16 @@ function cross_join(Table $y, array $suffix = ['.x', '.y']): Closure
  * All rows of x, with a list-column (name) holding each row's matching rows
  * of y as a table. y's equality keys are left out unless keep: true.
  */
-function nest_join(Table $y, string|array|JoinBy|null $by = null, ?bool $keep = null, string $name = 'data', string $na_matches = 'na'): Closure
+function nest_join(Table $y, string|array|JoinBy|null $by = null, ?bool $keep = null, string $name = 'data', string $naMatches = 'na'): Closure
 {
-    return function (Table $x) use ($y, $by, $keep, $name, $na_matches) {
+    return function (Table $x) use ($y, $by, $keep, $name, $naMatches) {
         $pairs = Join::pairs($x, $y, $by);
         $xRow = '.phplyr_x_row';
         $yRow = '.phplyr_y_row';
         $xKeys = array_values(array_unique(array_map(fn ($p) => $p[0], $pairs)));
         $left = $x->ungroup()->select($xKeys)->mutate([$xRow => $x->nrow() === 0 ? [] : range(0, $x->nrow() - 1)]);
         $right = $y->ungroup()->mutate([$yRow => $y->nrow() === 0 ? [] : range(0, $y->nrow() - 1)]);
-        $matched = Join::verb('inner', $right, new JoinBy($pairs), ['.x', '.y'], true, $na_matches, 'all', 'drop', 'many-to-many')($left);
+        $matched = Join::verb('inner', $right, new JoinBy($pairs), ['.x', '.y'], true, $naMatches, 'all', 'drop', 'many-to-many')($left);
         $members = array_fill(0, $x->nrow(), []);
         foreach ($matched->column($xRow) as $i => $r) {
             $members[$r][] = $matched->column($yRow)[$i];
@@ -122,14 +122,14 @@ function closest(mixed $condition): Closest
     return new Closest($condition);
 }
 
-/** x's interval [x_lower, x_upper] lies within y's [y_lower, y_upper]. */
-function within(string $x_lower, string $x_upper, string $y_lower, string $y_upper): array
+/** x's interval [xLower, xUpper] lies within y's [yLower, yUpper]. */
+function within(string $xLower, string $xUpper, string $yLower, string $yUpper): array
 {
-    return [[$x_lower, '>=', $y_lower], [$x_upper, '<=', $y_upper]];
+    return [[$xLower, '>=', $yLower], [$xUpper, '<=', $yUpper]];
 }
 
-/** x's interval [x_lower, x_upper] overlaps y's [y_lower, y_upper]. */
-function overlaps(string $x_lower, string $x_upper, string $y_lower, string $y_upper): array
+/** x's interval [xLower, xUpper] overlaps y's [yLower, yUpper]. */
+function overlaps(string $xLower, string $xUpper, string $yLower, string $yUpper): array
 {
-    return [[$x_lower, '<=', $y_upper], [$x_upper, '>=', $y_lower]];
+    return [[$xLower, '<=', $yUpper], [$xUpper, '>=', $yLower]];
 }

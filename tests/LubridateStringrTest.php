@@ -68,7 +68,7 @@ dataset('lubridate and stringr', function () {
         'month' => ['month', lsFrame(...), month($d)],
         'day' => ['day', lsFrame(...), day($d)],
         'wday' => ['wday', lsFrame(...), wday($d)],
-        'wday_mon' => ['wday_mon', lsFrame(...), wday($d, week_start: 1)],
+        'wday_mon' => ['wday_mon', lsFrame(...), wday($d, weekStart: 1)],
         'yday' => ['yday', lsFrame(...), yday($d)],
         'quarter' => ['quarter', lsFrame(...), quarter($d)],
         'hour' => ['hour', lsFrame(...), hour($t)],
@@ -99,7 +99,7 @@ dataset('lubridate and stringr', function () {
 
         'str_detect' => ['str_detect', lsFrame(...), str_detect($s, 'a.p')],
         'str_detect_fixed' => ['str_detect_fixed', lsFrame(...), str_detect($s, fixed('.'))],
-        'str_detect_ic' => ['str_detect_ic', lsFrame(...), str_detect($s, regex('apple', ignore_case: true))],
+        'str_detect_ic' => ['str_detect_ic', lsFrame(...), str_detect($s, regex('apple', ignoreCase: true))],
         'str_detect_negate' => ['str_detect_negate', lsFrame(...), str_detect($s, '^a', negate: true)],
         'str_starts' => ['str_starts', lsFrame(...), str_starts($s, 'a|A')],
         'str_ends' => ['str_ends', lsFrame(...), str_ends($s, 't|E')],

@@ -38,8 +38,8 @@ function year(mixed $x): Vec { return Internal::call('year', [$x]); }
 function month(mixed $x): Vec { return Internal::call('month', [$x]); }
 function day(mixed $x): Vec { return Internal::call('day', [$x]); }
 
-/** Day of the week, 1-7; Sunday is 1 unless week_start says otherwise (1 = Monday). */
-function wday(mixed $x, ?int $week_start = null): Vec { return Internal::call('wday', [$x], $week_start === null ? [] : ['week_start' => $week_start]); }
+/** Day of the week, 1-7; Sunday is 1 unless weekStart says otherwise (1 = Monday). */
+function wday(mixed $x, ?int $weekStart = null): Vec { return Internal::call('wday', [$x], $weekStart === null ? [] : ['week_start' => $weekStart]); }
 function yday(mixed $x): Vec { return Internal::call('yday', [$x]); }
 function quarter(mixed $x): Vec { return Internal::call('quarter', [$x]); }
 function hour(mixed $x): Vec { return Internal::call('hour', [$x]); }
@@ -47,9 +47,9 @@ function minute(mixed $x): Vec { return Internal::call('minute', [$x]); }
 function second(mixed $x): Vec { return Internal::call('second', [$x]); }
 
 // Rounding: unit is 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter' or 'year', optionally with a multiple ('15 minutes').
-function floor_date(mixed $x, string $unit, ?int $week_start = null): Vec { return Internal::call('floor_date', [$x, $unit], $week_start === null ? [] : ['week_start' => $week_start]); }
-function ceiling_date(mixed $x, string $unit, ?int $week_start = null): Vec { return Internal::call('ceiling_date', [$x, $unit], $week_start === null ? [] : ['week_start' => $week_start]); }
-function round_date(mixed $x, string $unit, ?int $week_start = null): Vec { return Internal::call('round_date', [$x, $unit], $week_start === null ? [] : ['week_start' => $week_start]); }
+function floor_date(mixed $x, string $unit, ?int $weekStart = null): Vec { return Internal::call('floor_date', [$x, $unit], $weekStart === null ? [] : ['week_start' => $weekStart]); }
+function ceiling_date(mixed $x, string $unit, ?int $weekStart = null): Vec { return Internal::call('ceiling_date', [$x, $unit], $weekStart === null ? [] : ['week_start' => $weekStart]); }
+function round_date(mixed $x, string $unit, ?int $weekStart = null): Vec { return Internal::call('round_date', [$x, $unit], $weekStart === null ? [] : ['week_start' => $weekStart]); }
 
 // Periods, for date arithmetic.
 function seconds(mixed $n = 1): Vec { return Internal::call('seconds', [$n], columns: []); }

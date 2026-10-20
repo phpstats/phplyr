@@ -115,8 +115,11 @@ final class Internal
     }
 
     /**
-     * Split dplyr's dot-arguments, written here with a leading underscore
-     * (_by, _keep...), from the rest.
+     * Split a variadic verb's options, which dplyr writes with a dot
+     * prefix and phplyr writes as plain named arguments (by:, keep:...),
+     * from the rest of its arguments. An option is recognised by name, so
+     * on these verbs a named argument that an option claims is always that
+     * option and never a column of that name.
      *
      * @param array<int|string, mixed> $args
      * @param array<string, mixed> $defaults Allowed options and their defaults.
@@ -126,11 +129,7 @@ final class Internal
     {
         $options = $defaults;
         foreach ($args as $key => $value) {
-            if (\is_string($key) && str_starts_with($key, '_')) {
-                if (! \array_key_exists($key, $defaults)) {
-                    $allowed = implode(', ', array_keys($defaults)) ?: 'none';
-                    throw new \InvalidArgumentException("{$verb}(): unknown option '{$key}'. Allowed: {$allowed}.");
-                }
+            if (\is_string($key) && \array_key_exists($key, $defaults)) {
                 $options[$key] = $value;
                 unset($args[$key]);
             }
@@ -152,7 +151,7 @@ final class Internal
             return $fn($t);
         }
         if ($t->groups() !== []) {
-            throw new \LogicException("Can't use _by on a grouped table; ungroup() first.");
+            throw new \LogicException("Can't use by: on a grouped table; ungroup() first.");
         }
 
         return $fn($t->groupBy(Selector::select([$by], $t)))->ungroup();
@@ -238,7 +237,7 @@ final class Internal
     public static function relocated(array $columns, array $moved, mixed $before, mixed $after, Table $t): array
     {
         if ($before !== null && $after !== null) {
-            throw new \InvalidArgumentException('Give _before or _after, not both.');
+            throw new \InvalidArgumentException('Give before: or after:, not both.');
         }
         $rest = array_values(array_diff($columns, $moved));
         if ($before === null && $after === null) {
@@ -287,7 +286,7 @@ final class Internal
                 continue;
             }
             $name = '.phplyr_sort_'.\count($temp);
-            $work = Mutate::run($work, [$name => $x], ['_keep' => 'all', '_before' => null, '_after' => null]);
+            $work = Mutate::run($work, [$name => $x], ['keep' => 'all', 'before' => null, 'after' => null]);
             $temp[] = $name;
             $sort[] = [$name, $desc ? 'desc' : 'asc'];
         }
@@ -487,7 +486,7 @@ final class Internal
     /** The count for a group: rows, or the sum of $wt (NA dropped). */
     public static function tallyOf(mixed $wt): Vec
     {
-        return $wt === null ? n() : sum($wt, na_rm: true);
+        return $wt === null ? n() : sum($wt, naRm: true);
     }
 
     public static function glimpse(Table $t, int $width): string
@@ -572,7 +571,7 @@ final class Internal
         return $like::fromTable($result);
     }
 
-    /** Group by $names, keeping $like's _drop: false setting. */
+    /** Group by $names, keeping $like's drop: false setting. */
     public static function regroup(Table $t, array $names, Table $like): Table
     {
         if ($names === []) {
@@ -600,7 +599,7 @@ final class Internal
 
         return array_map(fn ($v) => $v === null ? null : ($levels[$v] ?? null), $values);
     }
-    /** na_rm as a named option, only when set. */
+    /** phibble's na_rm expression option, only when set. */
     public static function naRm(bool $naRm): array
     {
         return $naRm ? ['na_rm' => true] : [];

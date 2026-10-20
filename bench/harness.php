@@ -71,7 +71,7 @@ $workloads = [
     'group_summarise' => [
         'phplyr' => fn (Table $ev) => $ev
             |> group_by('key')
-            |> summarise(n: n(), mean_x: mean('x', na_rm: true), sum_x: sum('x', na_rm: true)),
+            |> summarise(n: n(), mean_x: mean('x', naRm: true), sum_x: sum('x', naRm: true)),
         'direct' => fn (Table $ev) => $ev
             ->groupBy(['key'])
             ->summarise(['n' => Phibble\Expr\n(), 'mean_x' => Phibble\Expr\mean(Phibble\Expr\col('x'), na_rm: true), 'sum_x' => Phibble\Expr\sum(Phibble\Expr\col('x'), na_rm: true)]),

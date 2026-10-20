@@ -14,9 +14,9 @@ declare(strict_types=1);
  *
  * Verbs delegate to Phibble\Contracts\Table, so any backend works unchanged.
  *
- * dplyr's dot-arguments (.by, .keep, .groups...) are written with a leading
- * underscore: mutate(z: ..., _by: 'g'). Column names starting with an
- * underscore therefore can't be created through named arguments.
+ * dplyr's dot-arguments (.by, .keep, .groups...) drop the dot:
+ * mutate(z: ..., by: 'g'). A named argument one of these options claims is
+ * read as the option, not as a column of that name.
  *
  * count, min and max shadow PHP built-ins inside this namespace, so
  * built-ins are called with a leading backslash.
@@ -32,14 +32,14 @@ use Phibble\DataFrame;
  * Keep rows where every condition is true; NA counts as false.
  * Conditions are row closures fn ($r, $group), vector helpers such as
  * between('x', 1, 5) or if_any(...), or a logical column name.
- * Option: _by.
+ * Option: by.
  */
 function filter(mixed ...$conditions): Closure
 {
-    [$conditions, $o] = Internal::options($conditions, ['_by' => null], 'filter');
+    [$conditions, $o] = Internal::options($conditions, ['by' => null], 'filter');
     $conditions = array_values($conditions);
 
-    return fn (Table $t) => Internal::withBy($t, $o['_by'], function (Table $t) use ($conditions) {
+    return fn (Table $t) => Internal::withBy($t, $o['by'], function (Table $t) use ($conditions) {
         $expr = Internal::allExpr($conditions);
         if ($expr !== null) {
             return $t->filter($expr);
@@ -72,11 +72,11 @@ function filter(mixed ...$conditions): Closure
 /**
  * Drop rows where every condition is true (dplyr 1.2). NA counts as false,
  * so rows with NA conditions are kept: filter() and filter_out() together
- * see every row exactly once. Option: _by.
+ * see every row exactly once. Option: by.
  */
 function filter_out(mixed ...$conditions): Closure
 {
-    [$conditions, $o] = Internal::options($conditions, ['_by' => null], 'filter_out');
+    [$conditions, $o] = Internal::options($conditions, ['by' => null], 'filter_out');
     $conditions = array_values($conditions);
 
     $expr = Internal::allExpr($conditions);
@@ -84,10 +84,10 @@ function filter_out(mixed ...$conditions): Closure
         // Keep rows where the conditions are false or NA.
         $keep = new \Phibble\Expr\Call('if_else', [$expr, new \Phibble\Expr\Lit(false), new \Phibble\Expr\Lit(true)], ['missing' => new \Phibble\Expr\Lit(true)]);
 
-        return fn (Table $t) => Internal::withBy($t, $o['_by'], fn (Table $t) => $t->filter($keep));
+        return fn (Table $t) => Internal::withBy($t, $o['by'], fn (Table $t) => $t->filter($keep));
     }
 
-    return fn (Table $t) => Internal::withBy($t, $o['_by'], fn (Table $t) => Ops::filterGroups($t, function (Table $g) use ($conditions) {
+    return fn (Table $t) => Internal::withBy($t, $o['by'], fn (Table $t) => Ops::filterGroups($t, function (Table $g) use ($conditions) {
         $drop = array_fill(0, $g->nrow(), true);
         foreach ($conditions as $c) {
             foreach (Vec::values($c, $g, true) as $i => $v) {
@@ -121,14 +121,14 @@ function select(mixed ...$columns): Closure
  * mean...; summaries recycle within groups), a list with one value per row,
  * a scalar, or null to drop the column. across(...) may be passed first.
  *
- * Options: _by, _keep ('all', 'none'), _before, _after.
+ * Options: by, keep ('all', 'none'), before, after.
  */
 function mutate(mixed ...$columns): Closure
 {
-    [$columns, $o] = Internal::options($columns, ['_by' => null, '_keep' => 'all', '_before' => null, '_after' => null], 'mutate');
+    [$columns, $o] = Internal::options($columns, ['by' => null, 'keep' => 'all', 'before' => null, 'after' => null], 'mutate');
     Internal::assertNamed($columns, 'mutate');
 
-    return fn (Table $t) => Internal::withBy($t, $o['_by'], fn (Table $t) => Mutate::run($t, $columns, $o));
+    return fn (Table $t) => Internal::withBy($t, $o['by'], fn (Table $t) => Mutate::run($t, $columns, $o));
 }
 
 /**
@@ -137,7 +137,7 @@ function mutate(mixed ...$columns): Closure
  */
 function transmute(mixed ...$columns): Closure
 {
-    [$columns, $o] = Internal::options($columns, ['_by' => null], 'transmute');
+    [$columns, $o] = Internal::options($columns, ['by' => null], 'transmute');
     $named = [];
     foreach ($columns as $key => $def) {
         \is_int($key) && \is_string($def) ? $named[$def] = col($def) : $named[$key] = $def;
@@ -145,9 +145,9 @@ function transmute(mixed ...$columns): Closure
     $columns = $named;
     Internal::assertNamed($columns, 'transmute');
 
-    return fn (Table $t) => Internal::withBy($t, $o['_by'], function (Table $t) use ($columns) {
+    return fn (Table $t) => Internal::withBy($t, $o['by'], function (Table $t) use ($columns) {
         $made = [];
-        $out = Mutate::run($t, $columns, ['_keep' => 'all', '_before' => null, '_after' => null], $made);
+        $out = Mutate::run($t, $columns, ['keep' => 'all', 'before' => null, 'after' => null], $made);
 
         return $out->select(array_values(array_unique([...$t->groups(), ...$made])));
     });
@@ -178,16 +178,16 @@ function rename_with(Closure $fn, mixed $cols = null): Closure
 }
 
 /**
- * Move columns: to the front by default, or _before / _after a column.
+ * Move columns: to the front by default, or before / after a column.
  * Named arguments rename while moving.
  */
 function relocate(mixed ...$columns): Closure
 {
-    [$columns, $o] = Internal::options($columns, ['_before' => null, '_after' => null], 'relocate');
+    [$columns, $o] = Internal::options($columns, ['before' => null, 'after' => null], 'relocate');
 
     return function (Table $t) use ($columns, $o) {
         $map = Selector::resolve($columns, $t);
-        $order = Internal::relocated($t->columns(), array_values($map), $o['_before'], $o['_after'], $t);
+        $order = Internal::relocated($t->columns(), array_values($map), $o['before'], $o['after'], $t);
         $out = $t->select($order);
         $renames = array_filter($map, fn ($source, $name) => $source !== $name, ARRAY_FILTER_USE_BOTH);
 
@@ -197,13 +197,13 @@ function relocate(mixed ...$columns): Closure
 
 /**
  * Sort rows by columns or expressions; desc() reverses. Stable; NA last.
- * Ignores grouping unless _by_group: true.
+ * Ignores grouping unless byGroup: true.
  */
 function arrange(mixed ...$keys): Closure
 {
-    [$keys, $o] = Internal::options($keys, ['_by_group' => false], 'arrange');
+    [$keys, $o] = Internal::options($keys, ['byGroup' => false], 'arrange');
 
-    return fn (Table $t) => Internal::arrange($t, array_values($keys), (bool) $o['_by_group']);
+    return fn (Table $t) => Internal::arrange($t, array_values($keys), (bool) $o['byGroup']);
 }
 
 /** Descending sort key for arrange(), and for rank helpers: min_rank(desc('x')). */
@@ -215,28 +215,28 @@ function desc(mixed $x): Desc
 /**
  * Group by columns (names or selectors). Named arguments group by a computed
  * column: group_by(decade: fn ($r) => intdiv($r->year, 10) * 10).
- * Options: _add (add to the existing groups), _drop (false keeps empty
+ * Options: add (add to the existing groups), drop (false keeps empty
  * factor-level groups; needs backend support).
  */
 function group_by(mixed ...$columns): Closure
 {
-    [$columns, $o] = Internal::options($columns, ['_add' => false, '_drop' => true], 'group_by');
+    [$columns, $o] = Internal::options($columns, ['add' => false, 'drop' => true], 'group_by');
 
     return function (Table $t) use ($columns, $o) {
         $computed = array_filter($columns, fn ($k) => \is_string($k), ARRAY_FILTER_USE_KEY);
         $selected = array_filter($columns, fn ($k) => \is_int($k), ARRAY_FILTER_USE_KEY);
         if ($computed !== []) {
-            $t = Mutate::run($t, $computed, ['_keep' => 'all', '_before' => null, '_after' => null]);
+            $t = Mutate::run($t, $computed, ['keep' => 'all', 'before' => null, 'after' => null]);
         }
         $names = [...Selector::select($selected, $t), ...array_keys($computed)];
-        if ($o['_add']) {
+        if ($o['add']) {
             $names = [...$t->groups(), ...$names];
         }
 
         $names = array_values(array_unique($names));
-        if ($o['_drop'] === false) {
+        if ($o['drop'] === false) {
             if (\count((new \ReflectionMethod($t, 'groupBy'))->getParameters()) < 2) {
-                throw new \LogicException('group_by(_drop: false) needs a table that keeps empty groups (phibble groupBy($names, drop: false)).');
+                throw new \LogicException('group_by(drop: false) needs a table that keeps empty groups (phibble groupBy($names, drop: false)).');
             }
 
             return $t->groupBy($names, false);
@@ -279,17 +279,17 @@ function rowwise(string ...$idColumns): Closure
 /**
  * One row per group. Each named argument is a summary: a helper such as n()
  * or mean('x'), or any fn (Table $group) => value. across(...) may be
- * passed first. Options: _by, _groups ('drop_last', 'drop', 'keep').
+ * passed first. Options: by, groups ('drop_last', 'drop', 'keep').
  */
 function summarise(mixed ...$aggregates): Closure
 {
-    [$aggregates, $o] = Internal::options($aggregates, ['_by' => null, '_groups' => null], 'summarise');
+    [$aggregates, $o] = Internal::options($aggregates, ['by' => null, 'groups' => null], 'summarise');
     Internal::assertNamed($aggregates, 'summarise');
 
-    return fn (Table $t) => Internal::withBy($t, $o['_by'], function (Table $t) use ($aggregates, $o) {
+    return fn (Table $t) => Internal::withBy($t, $o['by'], function (Table $t) use ($aggregates, $o) {
         $aggregates = Internal::summaries($t, $aggregates, 'summarise');
 
-        return $o['_groups'] === null ? $t->summarise($aggregates) : $t->summarise($aggregates, $o['_groups']);
+        return $o['groups'] === null ? $t->summarise($aggregates) : $t->summarise($aggregates, $o['groups']);
     });
 }
 
@@ -302,14 +302,14 @@ function summarize(mixed ...$aggregates): Closure
 /**
  * Like summarise(), but each summary may return any number of values
  * (a list); they are recycled to a common length per group. The result is
- * ungrouped. Option: _by.
+ * ungrouped. Option: by.
  */
 function reframe(mixed ...$aggregates): Closure
 {
-    [$aggregates, $o] = Internal::options($aggregates, ['_by' => null], 'reframe');
+    [$aggregates, $o] = Internal::options($aggregates, ['by' => null], 'reframe');
     Internal::assertNamed($aggregates, 'reframe');
 
-    return fn (Table $t) => Internal::sameBackend(Internal::withBy($t, $o['_by'], fn (Table $t) => Internal::reframe($t, $aggregates)), $t);
+    return fn (Table $t) => Internal::sameBackend(Internal::withBy($t, $o['by'], fn (Table $t) => Internal::reframe($t, $aggregates)), $t);
 }
 
 /**
@@ -353,7 +353,7 @@ function add_count(mixed ...$args): Closure
         $groups = $t->groups();
         $by = array_values(array_unique([...$groups, ...Selector::select($columns, $t)]));
         $name = Internal::countName($t, $name);
-        $out = Mutate::run(Internal::regroup($t, $by, $t), [$name => Internal::tallyOf($wt)], ['_keep' => 'all', '_before' => null, '_after' => null]);
+        $out = Mutate::run(Internal::regroup($t, $by, $t), [$name => Internal::tallyOf($wt)], ['keep' => 'all', 'before' => null, 'after' => null]);
         $out = Internal::regroup($out, $groups, $t);
 
         return $sort ? $out->arrange([[$name, 'desc']]) : $out;
@@ -365,7 +365,7 @@ function add_tally(mixed $wt = null, bool $sort = false, ?string $name = null): 
 {
     return function (Table $t) use ($wt, $sort, $name) {
         $name = Internal::countName($t, $name);
-        $out = Mutate::run($t, [$name => Internal::tallyOf($wt)], ['_keep' => 'all', '_before' => null, '_after' => null]);
+        $out = Mutate::run($t, [$name => Internal::tallyOf($wt)], ['keep' => 'all', 'before' => null, 'after' => null]);
 
         return $sort ? $out->arrange([[$name, 'desc']]) : $out;
     };
@@ -373,21 +373,21 @@ function add_tally(mixed $wt = null, bool $sort = false, ?string $name = null): 
 
 /**
  * Unique rows over the given columns (all columns when none are given).
- * Named arguments add computed columns first. Option: _keep_all (keep every
+ * Named arguments add computed columns first. Option: keepAll (keep every
  * column, from the first row of each combination).
  */
 function distinct(mixed ...$columns): Closure
 {
-    [$columns, $o] = Internal::options($columns, ['_keep_all' => false], 'distinct');
+    [$columns, $o] = Internal::options($columns, ['keepAll' => false], 'distinct');
 
     return function (Table $t) use ($columns, $o) {
         $computed = array_filter($columns, fn ($k) => \is_string($k), ARRAY_FILTER_USE_KEY);
         $selected = array_filter($columns, fn ($k) => \is_int($k), ARRAY_FILTER_USE_KEY);
         if ($computed !== []) {
-            $t = Mutate::run($t, $computed, ['_keep' => 'all', '_before' => null, '_after' => null]);
+            $t = Mutate::run($t, $computed, ['keep' => 'all', 'before' => null, 'after' => null]);
         }
         $names = [...Selector::select($selected, $t), ...array_keys($computed)];
-        if (! $o['_keep_all'] || $names === []) {
+        if (! $o['keepAll'] || $names === []) {
             return $t->distinct(array_values(array_unique($names)));
         }
         $key = array_values(array_unique([...$t->groups(), ...$names]));
@@ -415,47 +415,47 @@ function head(int $n = 6): Closure
 /**
  * Rows by 1-based position within each group, like dplyr's slice():
  * slice(1, 2), slice(range(1, 5)), or negative positions to drop rows.
- * Option: _by.
+ * Option: by.
  */
 function slice(int|array ...$positions): Closure
 {
-    [$positions, $o] = Internal::options($positions, ['_by' => null], 'slice');
+    [$positions, $o] = Internal::options($positions, ['by' => null], 'slice');
     $positions = array_merge(...array_map(fn ($p) => (array) $p, array_values($positions)));
 
-    return fn (Table $t) => Internal::withBy($t, $o['_by'], fn (Table $t) => Slice::positions($t, $positions));
+    return fn (Table $t) => Internal::withBy($t, $o['by'], fn (Table $t) => Slice::positions($t, $positions));
 }
 
 /** First rows of each group: slice_head(n: 3) or slice_head(prop: 0.1). */
-function slice_head(?int $n = null, ?float $prop = null, mixed $_by = null): Closure
+function slice_head(?int $n = null, ?float $prop = null, mixed $by = null): Closure
 {
-    return fn (Table $t) => Internal::withBy($t, $_by, fn (Table $t) => Slice::run($t, fn ($m, $k) => $k === 0 ? [] : range(0, $k - 1), $n, $prop));
+    return fn (Table $t) => Internal::withBy($t, $by, fn (Table $t) => Slice::run($t, fn ($m, $k) => $k === 0 ? [] : range(0, $k - 1), $n, $prop));
 }
 
 /** Last rows of each group. */
-function slice_tail(?int $n = null, ?float $prop = null, mixed $_by = null): Closure
+function slice_tail(?int $n = null, ?float $prop = null, mixed $by = null): Closure
 {
-    return fn (Table $t) => Internal::withBy($t, $_by, fn (Table $t) => Slice::run($t, fn ($m, $k) => $k === 0 ? [] : range($m - $k, $m - 1), $n, $prop));
+    return fn (Table $t) => Internal::withBy($t, $by, fn (Table $t) => Slice::run($t, fn ($m, $k) => $k === 0 ? [] : range($m - $k, $m - 1), $n, $prop));
 }
 
-/** Rows with the smallest values of $order_by in each group, ordered by it. */
-function slice_min(mixed $order_by, ?int $n = null, ?float $prop = null, bool $with_ties = true, bool $na_rm = false, mixed $_by = null): Closure
+/** Rows with the smallest values of $orderBy in each group, ordered by it. */
+function slice_min(mixed $orderBy, ?int $n = null, ?float $prop = null, bool $withTies = true, bool $naRm = false, mixed $by = null): Closure
 {
-    return fn (Table $t) => Internal::withBy($t, $_by, fn (Table $t) => Slice::extreme($t, $order_by, false, $n, $prop, $with_ties, $na_rm));
+    return fn (Table $t) => Internal::withBy($t, $by, fn (Table $t) => Slice::extreme($t, $orderBy, false, $n, $prop, $withTies, $naRm));
 }
 
-/** Rows with the largest values of $order_by in each group, ordered by it. */
-function slice_max(mixed $order_by, ?int $n = null, ?float $prop = null, bool $with_ties = true, bool $na_rm = false, mixed $_by = null): Closure
+/** Rows with the largest values of $orderBy in each group, ordered by it. */
+function slice_max(mixed $orderBy, ?int $n = null, ?float $prop = null, bool $withTies = true, bool $naRm = false, mixed $by = null): Closure
 {
-    return fn (Table $t) => Internal::withBy($t, $_by, fn (Table $t) => Slice::extreme($t, $order_by, true, $n, $prop, $with_ties, $na_rm));
+    return fn (Table $t) => Internal::withBy($t, $by, fn (Table $t) => Slice::extreme($t, $orderBy, true, $n, $prop, $withTies, $naRm));
 }
 
 /**
  * Random rows from each group. Uses mt_rand(), so mt_srand() makes it
- * reproducible. $weight_by is a column of non-negative weights.
+ * reproducible. $weightBy is a column of non-negative weights.
  */
-function slice_sample(?int $n = null, ?float $prop = null, bool $replace = false, mixed $weight_by = null, mixed $_by = null): Closure
+function slice_sample(?int $n = null, ?float $prop = null, bool $replace = false, mixed $weightBy = null, mixed $by = null): Closure
 {
-    return fn (Table $t) => Internal::withBy($t, $_by, fn (Table $t) => Slice::sample($t, $n, $prop, $replace, $weight_by));
+    return fn (Table $t) => Internal::withBy($t, $by, fn (Table $t) => Slice::sample($t, $n, $prop, $replace, $weightBy));
 }
 
 /**
@@ -477,13 +477,13 @@ function top_frac(float $n, mixed $wt = null): Closure
 /** n random rows from each group (superseded by slice_sample()). */
 function sample_n(int $size, bool $replace = false, mixed $weight = null): Closure
 {
-    return slice_sample(n: $size, replace: $replace, weight_by: $weight);
+    return slice_sample(n: $size, replace: $replace, weightBy: $weight);
 }
 
 /** A proportion of random rows from each group (superseded by slice_sample(prop:)). */
 function sample_frac(float $size = 1.0, bool $replace = false, mixed $weight = null): Closure
 {
-    return slice_sample(prop: $size, replace: $replace, weight_by: $weight);
+    return slice_sample(prop: $size, replace: $replace, weightBy: $weight);
 }
 
 /**
