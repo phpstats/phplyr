@@ -5,7 +5,7 @@
  * and through the equivalent phibble method calls, to separate phplyr's own
  * overhead from the backend's.
  *
- * Usage: php bench/pipeline.php [rows=100000] [backend=frame|sqlite]
+ * Usage: php bench/pipeline.php [rows=100000] [backend=dataframe|sqlite]
  */
 
 declare(strict_types=1);
@@ -19,7 +19,7 @@ use function Phibble\Expr\{col as ecol, desc as edesc, mean as emean, min_rank a
 use function Phplyr\{arrange, col, cumsum, desc, filter, group_by, lag, left_join, mean, min_rank, mutate, n, sum, summarise};
 
 $rows = (int) ($argv[1] ?? 100_000);
-$backend = $argv[2] ?? 'frame';
+$backend = $argv[2] ?? 'dataframe';
 
 mt_srand(42);
 $columns = ['id' => [], 'store' => [], 'product' => [], 'day' => [], 'units' => [], 'price' => []];

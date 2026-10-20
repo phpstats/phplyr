@@ -5,7 +5,7 @@
  * numbers line up with phibble's bin/bench. Each workload also runs as the
  * equivalent direct Table method calls ("direct") to show phplyr's own cost.
  *
- * Usage: php bench/harness.php [--backend=frame|sqlite|polars] [--runs=3] [workload ...]
+ * Usage: php bench/harness.php [--backend=dataframe|sqlite|polars] [--runs=3] [workload ...]
  * Data: php bench/generate.php [rows]
  *
  * Prints one JSON line per workload and form: backend, form, workload, rows,
@@ -25,7 +25,7 @@ use function Phplyr\{arrange, col, cumsum, desc, filter, group_by, lag, left_joi
 ini_set('memory_limit', '-1');
 
 $options = getopt('', ['backend:', 'runs:'], $rest);
-$backendName = $options['backend'] ?? 'frame';
+$backendName = $options['backend'] ?? 'dataframe';
 $runs = (int) ($options['runs'] ?? 3);
 $only = array_slice($argv, $rest);
 $data = __DIR__.'/data';
@@ -35,7 +35,7 @@ if (! is_file("{$data}/events.csv")) {
 }
 
 $load = match ($backendName) {
-    'frame' => fn (string $path) => DataFrame::fromCsv($path),
+    'dataframe' => fn (string $path) => DataFrame::fromCsv($path),
     'sqlite' => (function () {
         $pdo = new PDO('sqlite::memory:');
 

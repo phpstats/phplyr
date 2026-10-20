@@ -21,7 +21,7 @@ time identical data:
 
 ```bash
 php bench/generate.php 1000000
-php bench/harness.php --backend=frame --runs=3
+php bench/harness.php --backend=dataframe --runs=3
 php bench/harness.php --backend=sqlite --runs=3
 ```
 
@@ -61,8 +61,8 @@ DataFrame peaked at about 1.5 GB of memory for the 1M-row table and its results.
   With expressions, `filter()` and `summarise()` run in the database, and only
   the result reaches PHP, so memory stays small. This is the right choice when
   the data lives in a database or doesn't fit in memory. For data already in
-  memory, a frame is faster: these timings exclude loading, and reading the 1M-row
-  CSV into a frame takes about 1.4 seconds. Pipelines that return every row
+  memory, a data frame is faster: these timings exclude loading, and reading the
+  1M-row CSV into a data frame takes about 1.4 seconds. Pipelines that return every row
   (`mutate()`, `arrange()`, unfiltered joins) spend most of their database time
   transferring rows to PHP.
 - **Closures on a database table** load all rows first and then run in memory.
