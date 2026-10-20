@@ -40,12 +40,12 @@ $stores = DataFrame::fromColumns([
 
 if ($backend === 'sqlite') {
     $pdo = new PDO('sqlite::memory:');
-    foreach (['sales' => $sales, 'stores' => $stores] as $name => $frame) {
-        $cols = $frame->columns();
+    foreach (['sales' => $sales, 'stores' => $stores] as $name => $df) {
+        $cols = $df->columns();
         $pdo->exec("CREATE TABLE {$name} (".implode(', ', $cols).')');
         $insert = $pdo->prepare("INSERT INTO {$name} VALUES (".implode(', ', array_fill(0, \count($cols), '?')).')');
         $pdo->beginTransaction();
-        foreach ($frame->toRows() as $row) {
+        foreach ($df->toRows() as $row) {
             $insert->execute(array_values($row));
         }
         $pdo->commit();

@@ -128,11 +128,11 @@ dataset('lubridate and stringr', function () {
     ];
 });
 
-it('matches lubridate and stringr through phplyr', function (string $case, Closure $frame, Vec $expr) {
+it('matches lubridate and stringr through phplyr', function (string $case, Closure $makeDf, Vec $expr) {
     expect($expr->expr)->not->toBeNull();
     set_error_handler(fn () => true, E_USER_WARNING);
     try {
-        $out = pipe($frame(), mutate(out: $expr), pull('out'));
+        $out = pipe($makeDf(), mutate(out: $expr), pull('out'));
     } finally {
         restore_error_handler();
     }

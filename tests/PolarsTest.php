@@ -27,15 +27,15 @@ if (! extension_loaded('php_polars') || ! class_exists(PolarsTable::class)) {
 function expectSameOnPolars(Closure $pipeline, array $inputs, string $class = PolarsTable::class): void
 {
     verifyAgainst('DataFrame');
-    $frame = $pipeline(...$inputs);
+    $df = $pipeline(...$inputs);
     $polars = $pipeline(...array_map(PolarsTable::fromTable(...), $inputs));
-    if (! $frame instanceof Table) {
-        expect($polars)->toEqual($frame);
+    if (! $df instanceof Table) {
+        expect($polars)->toEqual($df);
 
         return;
     }
     expect($polars)->toBeInstanceOf($class);
-    $a = $frame->collect();
+    $a = $df->collect();
     $b = $polars->collect();
     expect($b->columns())->toBe($a->columns());
     expect($b->groups())->toBe($a->groups());

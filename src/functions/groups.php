@@ -75,14 +75,14 @@ function group_trim(): Closure
 {
     return function (Table $t) {
         $groups = $t->groups();
-        $frame = $t->collect();
+        $df = $t->collect();
         foreach ($groups as $g) {
-            if ($frame->types()[$g] === \Phibble\Type::Factor) {
-                $frame = $frame->fctDrop($g);
+            if ($df->types()[$g] === \Phibble\Type::Factor) {
+                $df = $df->fctDrop($g);
             }
         }
 
-        return Internal::sameBackend(Internal::regroup($frame, $groups, $t), $t);
+        return Internal::sameBackend(Internal::regroup($df, $groups, $t), $t);
     };
 }
 
@@ -242,7 +242,7 @@ function bind_cols(Table ...$tables): Closure
         $all = [$x, ...$tables];
         $names = array_merge(...array_map(fn (Table $t) => $t->columns(), $all));
         $counts = array_count_values($names);
-        $frames = [];
+        $dataFrames = [];
         $pos = 0;
         foreach ($all as $t) {
             if ($t->nrow() !== $x->nrow()) {
@@ -255,13 +255,13 @@ function bind_cols(Table ...$tables): Closure
                     $map[$c.'...'.$pos] = $c;
                 }
             }
-            $frames[] = $map === [] ? $t->collect() : $t->collect()->rename($map);
+            $dataFrames[] = $map === [] ? $t->collect() : $t->collect()->rename($map);
         }
         if (method_exists(DataFrame::class, 'bindCols')) {
-            return Internal::sameBackend(Ops::regroupLike(DataFrame::bindCols($frames), $x), $x);
+            return Internal::sameBackend(Ops::regroupLike(DataFrame::bindCols($dataFrames), $x), $x);
         }
-        $out = array_shift($frames);
-        foreach ($frames as $f) {
+        $out = array_shift($dataFrames);
+        foreach ($dataFrames as $f) {
             foreach ($f->columns() as $c) {
                 $out = $out->withColumn($c, $f->storage($c));
             }

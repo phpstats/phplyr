@@ -40,9 +40,9 @@ $load = match ($backendName) {
         $pdo = new PDO('sqlite::memory:');
 
         return function (string $path) use ($pdo) {
-            $frame = DataFrame::fromCsv($path);
+            $df = DataFrame::fromCsv($path);
             $table = basename($path, '.csv');
-            $columns = $frame->columns();
+            $columns = $df->columns();
             // Typed columns: PDO binds strings, so untyped columns would store TEXT
             // and SQLite would compare numbers as text.
             $sqlType = fn (Phibble\Type $t) => match ($t) {
@@ -50,11 +50,11 @@ $load = match ($backendName) {
                 Phibble\Type::Float => 'REAL',
                 default => 'TEXT',
             };
-            $types = $frame->types();
+            $types = $df->types();
             $pdo->exec("CREATE TABLE \"{$table}\" (".implode(', ', array_map(fn ($c) => "\"{$c}\" ".$sqlType($types[$c]), $columns)).')');
             $insert = $pdo->prepare("INSERT INTO \"{$table}\" VALUES (".implode(', ', array_fill(0, \count($columns), '?')).')');
             $pdo->beginTransaction();
-            foreach ($frame->toRows() as $row) {
+            foreach ($df->toRows() as $row) {
                 $insert->execute(array_map(fn ($v) => $v instanceof DateTimeInterface ? $v->format('Y-m-d H:i:s') : $v, array_values($row)));
             }
             $pdo->commit();

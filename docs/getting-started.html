@@ -304,11 +304,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="loading-data" class="level2">
 <h2 class="anchored" data-anchor-id="loading-data">Loading data</h2>
-<p>phibble reads CSV files, PDO queries, and query builders, and builds frames from PHP arrays:</p>
+<p>phibble reads CSV files, PDO queries, and query builders, and builds data frames from PHP arrays:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">$rows</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'x'</span> =&gt; <span class="fl">2.5</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'x'</span> =&gt; <span class="kw">null</span>]])<span class="ot">;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">$cols</span> <span class="op">=</span> DataFrame::fromColumns([<span class="st">'id'</span> =&gt; [<span class="dv">1</span><span class="ot">,</span> <span class="dv">2</span>]<span class="ot">,</span> <span class="st">'x'</span> =&gt; [<span class="fl">2.5</span><span class="ot">,</span> <span class="kw">null</span>]])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>null</code> is NA. DataFrames are immutable, and every function returns a new frame. <code>echo $frame</code> prints the first rows in tibble’s format.</p>
+<p><code>null</code> is NA. DataFrames are immutable, and every function returns a new data frame. <code>echo $df</code> prints the first rows in tibble’s format.</p>
 </section>
 <section id="chaining-functions" class="level2">
 <h2 class="anchored" data-anchor-id="chaining-functions">Chaining functions</h2>
@@ -409,7 +409,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="printing-and-inspecting" class="level2">
 <h2 class="anchored" data-anchor-id="printing-and-inspecting">Printing and inspecting</h2>
-<p><code>echo</code> prints a frame. <code>glimpse()</code> prints one line per column and passes the table through, so it can sit inside a pipeline. <code>pull('x')</code> returns a column as a PHP list, and <code>$frame-&gt;toRows()</code> returns all rows as arrays.</p>
+<p><code>echo</code> prints a data frame. <code>glimpse()</code> prints one line per column and passes the table through, so it can sit inside a pipeline. <code>pull('x')</code> returns a column as a PHP list, and <code>$df-&gt;toRows()</code> returns all rows as arrays.</p>
 
 
 </section>

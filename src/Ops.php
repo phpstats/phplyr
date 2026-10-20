@@ -71,18 +71,18 @@ final class Ops
         if (method_exists($t, 'take') && (new \ReflectionMethod($t, 'take'))->isPublic()) {
             return $t->take($indices);
         }
-        $frame = $t->collect();
+        $df = $t->collect();
         $hasNull = \in_array(null, $indices, true);
         if ($hasNull) {
             // Append one all-NA row and point null indices at it.
-            $na = DataFrame::fromColumns(array_fill_keys($frame->columns(), [null]));
-            $n = $frame->nrow();
-            $frame = DataFrame::concat([$frame, $na])->groupBy($frame->groups());
+            $na = DataFrame::fromColumns(array_fill_keys($df->columns(), [null]));
+            $n = $df->nrow();
+            $df = DataFrame::concat([$df, $na])->groupBy($df->groups());
             $indices = array_map(fn ($i) => $i ?? $n, $indices);
         }
 
         // DataFrame::take() is private in contract v0; call it in scope.
-        return (fn (array $idx) => $this->take($idx, $this->groups))->call($frame, $indices);
+        return (fn (array $idx) => $this->take($idx, $this->groups))->call($df, $indices);
     }
 
     /**

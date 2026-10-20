@@ -521,10 +521,10 @@ final class Tidyr
     /** Sorted unique values, NA last; a factor's levels in level order. */
     private static function levelsOrValues(Table $t, string $col): array
     {
-        $frame = $t->collect();
-        if ($frame->types()[$col] === Type::Factor) {
-            $levels = $frame->levels($col);
-            $hasNa = \in_array(null, $frame->column($col), true);
+        $df = $t->collect();
+        if ($df->types()[$col] === Type::Factor) {
+            $levels = $df->levels($col);
+            $hasNa = \in_array(null, $df->column($col), true);
 
             return $hasNa ? [...$levels, null] : $levels;
         }

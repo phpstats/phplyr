@@ -21,7 +21,7 @@ Three phplyr functions share names with PHP built-ins: `count`, `min`, and
 
 ## Loading data
 
-phibble reads CSV files, PDO queries, and query builders, and builds frames from
+phibble reads CSV files, PDO queries, and query builders, and builds data frames from
 PHP arrays:
 
 ```php
@@ -30,8 +30,8 @@ $rows = DataFrame::fromRows([['id' => 1, 'x' => 2.5], ['id' => 2, 'x' => null]])
 $cols = DataFrame::fromColumns(['id' => [1, 2], 'x' => [2.5, null]]);
 ```
 
-`null` is NA. DataFrames are immutable, and every function returns a new frame.
-`echo $frame` prints the first rows in tibble's format.
+`null` is NA. DataFrames are immutable, and every function returns a new data frame.
+`echo $df` prints the first rows in tibble's format.
 
 ## Chaining functions
 
@@ -128,6 +128,6 @@ other positional arguments first: `summarise(across(...), n: n())`.
 
 ## Printing and inspecting
 
-`echo` prints a frame. `glimpse()` prints one line per column and passes the
+`echo` prints a data frame. `glimpse()` prints one line per column and passes the
 table through, so it can sit inside a pipeline. `pull('x')` returns a column as
-a PHP list, and `$frame->toRows()` returns all rows as arrays.
+a PHP list, and `$df->toRows()` returns all rows as arrays.

@@ -238,7 +238,7 @@
     "href": "getting-started.html#loading-data",
     "title": "Getting started",
     "section": "Loading data",
-    "text": "Loading data\nphibble reads CSV files, PDO queries, and query builders, and builds frames from PHP arrays:\n$schools = DataFrame::fromCsv('schools.csv');\n$rows = DataFrame::fromRows([['id' =&gt; 1, 'x' =&gt; 2.5], ['id' =&gt; 2, 'x' =&gt; null]]);\n$cols = DataFrame::fromColumns(['id' =&gt; [1, 2], 'x' =&gt; [2.5, null]]);\nnull is NA. DataFrames are immutable, and every function returns a new frame. echo $frame prints the first rows in tibble’s format.",
+    "text": "Loading data\nphibble reads CSV files, PDO queries, and query builders, and builds data frames from PHP arrays:\n$schools = DataFrame::fromCsv('schools.csv');\n$rows = DataFrame::fromRows([['id' =&gt; 1, 'x' =&gt; 2.5], ['id' =&gt; 2, 'x' =&gt; null]]);\n$cols = DataFrame::fromColumns(['id' =&gt; [1, 2], 'x' =&gt; [2.5, null]]);\nnull is NA. DataFrames are immutable, and every function returns a new data frame. echo $df prints the first rows in tibble’s format.",
     "crumbs": [
       "Getting started"
     ]
@@ -278,7 +278,7 @@
     "href": "getting-started.html#printing-and-inspecting",
     "title": "Getting started",
     "section": "Printing and inspecting",
-    "text": "Printing and inspecting\necho prints a frame. glimpse() prints one line per column and passes the table through, so it can sit inside a pipeline. pull('x') returns a column as a PHP list, and $frame-&gt;toRows() returns all rows as arrays.",
+    "text": "Printing and inspecting\necho prints a data frame. glimpse() prints one line per column and passes the table through, so it can sit inside a pipeline. pull('x') returns a column as a PHP list, and $df-&gt;toRows() returns all rows as arrays.",
     "crumbs": [
       "Getting started"
     ]
