@@ -16,19 +16,19 @@ $clean = phplyr($schools)
 $long = phplyr($clean)
     ->mutate(student: row_number())
     ->select('student', 'school', ['prior' => 'prior_score', 'final' => 'score'])
-    ->pivot_longer(['prior', 'final'], namesTo: 'test', valuesTo: 'points')
+    ->pivotLonger(['prior', 'final'], namesTo: 'test', valuesTo: 'points')
     ->get();
 
-echo phplyr($long)->group_by('test')->summarise(mean: mean('points'), sd: sd('points')), "\n";
+echo phplyr($long)->groupBy('test')->summarise(mean: mean('points'), sd: sd('points')), "\n";
 
 // Summarise: students per school and band, then the schools with the largest gains.
 echo phplyr($clean)
     ->count('school', 'hours_band')
-    ->pivot_wider(namesFrom: 'hours_band', valuesFrom: 'n', valuesFill: 0)
+    ->pivotWider(namesFrom: 'hours_band', valuesFrom: 'n', valuesFill: 0)
     ->head(3), "\n";
 
 echo phplyr($clean)
-    ->group_by('school')
+    ->groupBy('school')
     ->summarise(n: n(), mean_gain: mean('gain'))
     ->arrange(desc('mean_gain'))
     ->head(3), "\n";

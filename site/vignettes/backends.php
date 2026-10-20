@@ -75,10 +75,10 @@ return [
 
         $pipeline = fn ($sales, $stores) => phplyr($sales)
             ->filter(col('units')->gt(0))
-            ->left_join($stores, by: 'store')
-            ->group_by('region', 'product')
+            ->leftJoin($stores, by: 'store')
+            ->groupBy('region', 'product')
             ->summarise(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))
-            ->group_by('region')
+            ->groupBy('region')
             ->mutate(rank: min_rank(desc('revenue')))
             ->filter(col('rank')->le($top))
             ->arrange('region', 'rank')
@@ -102,10 +102,10 @@ return [
         $chain = <<<'PHP'
         $top = phplyr($sales)
             ->filter(col('units')->gt(0))
-            ->left_join($stores, by: 'store')
-            ->group_by('region', 'product')
+            ->leftJoin($stores, by: 'store')
+            ->groupBy('region', 'product')
             ->summarise(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))
-            ->group_by('region')
+            ->groupBy('region')
             ->mutate(rank: min_rank(desc('revenue')))
             ->filter(col('rank')->le(3))
             ->arrange('region', 'rank')
@@ -162,14 +162,14 @@ return [
             $blocks[] = ['type' => 'text', 'content' => 'On SQLite, `show_query()` returns the SQL that phplyr generated.'];
             $blocks[] = ['type' => 'output', 'content' => phplyr($s)
                 ->filter(col('units')->gt(0))
-                ->left_join($st, by: 'store')
-                ->group_by('region', 'product')
+                ->leftJoin($st, by: 'store')
+                ->groupBy('region', 'product')
                 ->summarise(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))
-                ->group_by('region')
+                ->groupBy('region')
                 ->mutate(rank: min_rank(desc('revenue')))
                 ->filter(col('rank')->le($top))
                 ->arrange('region', 'rank')
-                ->show_query()];
+                ->showQuery()];
         }
         $blocks[] = ['type' => 'note', 'content' => 'The timing covers the pipeline only, on the site\'s server. Building the tables is not timed. The performance page has benchmarks at a million rows, with dplyr for comparison.'];
 

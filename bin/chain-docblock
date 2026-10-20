@@ -4,7 +4,8 @@
 /*
  * Write the @method lines in src/Chain.php's docblock, one per phplyr verb
  * (a function in the Phplyr namespace that returns a Closure), so IDEs
- * autocomplete phplyr($t)->... chains. Run it after adding or changing a
+ * autocomplete phplyr($t)->... chains. A chained verb is camelCase, so
+ * group_by() is listed as groupBy(). Run it after adding or changing a
  * verb. With --check, exit 1 if the docblock is out of date instead.
  *
  * Usage: bin/chain-docblock [--check]
@@ -68,7 +69,12 @@ foreach (get_defined_functions()['user'] as $name) {
         return $p->isDefaultValueAvailable() ? $s.' = '.$value($p->getDefaultValue()) : $s;
     }, $f->getParameters());
     $short = $f->getShortName();
-    $lines[$short] = ' * @method '.($returns[$short] ?? 'Chain').' '.$short.'('.implode(', ', $params).')';
+    $method = lcfirst(str_replace('_', '', ucwords($short, '_')));
+    if (strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $method)) !== $short) {
+        fwrite(STDERR, "{$short}() has no camelCase chain spelling that maps back to it\n");
+        exit(1);
+    }
+    $lines[$method] = ' * @method '.($returns[$short] ?? 'Chain').' '.$method.'('.implode(', ', $params).')';
 }
 ksort($lines);
 

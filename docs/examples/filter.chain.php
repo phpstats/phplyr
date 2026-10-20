@@ -8,4 +8,4 @@ echo phplyr($schools)
     ->head(4);
 
 // filter_out() drops the rows where every condition is true.
-echo "\n", phplyr($schools)->filter_out(fn ($r) => $r->prior_score < 70)->count();
+echo "\n", phplyr($schools)->filterOut(fn ($r) => $r->prior_score < 70)->count();

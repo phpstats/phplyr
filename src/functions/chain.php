@@ -16,8 +16,9 @@ use Phibble\Contracts\Table;
 
 /**
  * Start a method chain on a table: phplyr($t)->filter(...)->head(5).
- * Each method runs the phplyr verb of that name. get() returns the table,
- * and verbs that return something else, such as pull(), return it plainly.
+ * Each method runs the phplyr verb of that name, spelled camelCase, so
+ * ->groupBy() runs group_by(). get() returns the table, and verbs that
+ * return something else, such as pull(), return it plainly.
  */
 function phplyr(Table|Chain $table): Chain
 {

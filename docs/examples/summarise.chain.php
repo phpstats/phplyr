@@ -7,5 +7,5 @@ echo phplyr(DataFrame::fromCsv('schools.csv'))
         median_hours: median('study_hours'),
         q90_score: quantile('score', 0.9),
         iqr_score: iqr('score'),
-        top_school: fn ($g) => (phplyr($g)->slice_max('score', n: 1)->pull('school'))[0],
+        top_school: fn ($g) => (phplyr($g)->sliceMax('score', n: 1)->pull('school'))[0],
     );

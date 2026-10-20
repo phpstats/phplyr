@@ -6,4 +6,4 @@ echo phplyr(DataFrame::fromRows([
     ['quarter' => 'Q3', 'year' => null, 'sales' => 14],
 ]))
     ->fill('year')
-    ->replace_na(['sales' => 0]);
+    ->replaceNa(['sales' => 0]);

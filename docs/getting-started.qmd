@@ -43,7 +43,9 @@ a sequence of them in three ways, and all three give the same result.
 ## Method chain (PHP 8.3+)
 
 `phplyr($t)` starts a chain. Each method runs the phplyr function of that name
-with the same arguments, and `get()` returns the table:
+with the same arguments, and `get()` returns the table. A chained method is
+camelCase, matching the methods on a phibble DataFrame, so `group_by()` is
+`->groupBy()`:
 
 ```php
 $out = phplyr($schools)
@@ -54,7 +56,8 @@ $out = phplyr($schools)
 
 `echo` prints a chain's table directly. A function whose result isn't a table,
 such as `pull()`, `n_groups()`, or `lm()`, returns that result and ends the
-chain. `->pipe($closure)` applies a closure of your own and continues.
+chain, as `->pull()` and `->nGroups()`. `->pipe($closure)` applies a closure
+of your own and continues.
 
 ## Pipe (PHP 8.5)
 

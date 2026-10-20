@@ -7,7 +7,7 @@ $housing = phplyr(DataFrame::fromCsv('housing.csv'))
     ->get();
 
 echo phplyr($housing)
-    ->group_by('bedrooms')
+    ->groupBy('bedrooms')
     ->summarise(across(['area_m2', 'monthly_rent', 'per_m2'], ['mean' => mean(...), 'max' => max(...)]), flats: n())
     ->mutate(across(where('double'), fn ($v) => round($v, 1)));
 

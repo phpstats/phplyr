@@ -5,7 +5,7 @@ $learning = DataFrame::fromCsv('learning.csv');
 
 echo phplyr($learning)
     ->mutate(hours_quartile: ntile('study_hours', 4))
-    ->group_by('hours_quartile')
+    ->groupBy('hours_quartile')
     ->summarise(
         students: n(),
         min_hours: min('study_hours'),

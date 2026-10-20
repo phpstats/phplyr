@@ -28,36 +28,36 @@ return [
                 band: case_when([col('study_hours')->lt(4), 'low'], [col('study_hours')->lt(8), 'mid'], default: 'high'),
                 gain: col('score')->sub(col('prior_score')),
             )
-            ->group_by('school', 'band')
+            ->groupBy('school', 'band')
             ->summarise(students: n(), mean_score: mean('score', naRm: true), mean_gain: mean('gain', naRm: true))
             ->get();
 
         // Wide: one row per school, one column per band.
         $wide = phplyr($long)
-            ->pivot_wider(idCols: 'school', namesFrom: 'band', valuesFrom: $measure, namesPrefix: $prefix, valuesFill: $fill ? 0 : null)
-            ->separate_wider_delim('school', '-', names: ['kind', 'number'], colsRemove: false)
+            ->pivotWider(idCols: 'school', namesFrom: 'band', valuesFrom: $measure, namesPrefix: $prefix, valuesFill: $fill ? 0 : null)
+            ->separateWiderDelim('school', '-', names: ['kind', 'number'], colsRemove: false)
             ->get();
 
         // Back to long: pivot_longer() undoes pivot_wider().
         $back = phplyr($wide)
             ->select('school', $prefix.'low', $prefix.'mid', $prefix.'high')
-            ->pivot_longer([$prefix.'low', $prefix.'mid', $prefix.'high'], namesTo: 'band', namesPrefix: $prefix === '' ? null : $prefix, valuesTo: $measure)
+            ->pivotLonger([$prefix.'low', $prefix.'mid', $prefix.'high'], namesTo: 'band', namesPrefix: $prefix === '' ? null : $prefix, valuesTo: $measure)
             ->get();
 
         $chain = <<<'PHP'
         $long = phplyr($schools)
             ->mutate(band: case_when([col('study_hours')->lt(4), 'low'], [col('study_hours')->lt(8), 'mid'], default: 'high'))
-            ->group_by('school', 'band')
+            ->groupBy('school', 'band')
             ->summarise(students: n(), mean_score: mean('score', naRm: true))
             ->get();
 
         $wide = phplyr($long)
-            ->pivot_wider(idCols: 'school', namesFrom: 'band', valuesFrom: 'mean_score', namesPrefix: 'band_')
-            ->separate_wider_delim('school', '-', names: ['kind', 'number'], colsRemove: false)
+            ->pivotWider(idCols: 'school', namesFrom: 'band', valuesFrom: 'mean_score', namesPrefix: 'band_')
+            ->separateWiderDelim('school', '-', names: ['kind', 'number'], colsRemove: false)
             ->get();
 
         $back = phplyr($wide)
-            ->pivot_longer(starts_with('band_'), namesTo: 'band', namesPrefix: 'band_', valuesTo: 'mean_score')
+            ->pivotLonger(starts_with('band_'), namesTo: 'band', namesPrefix: 'band_', valuesTo: 'mean_score')
             ->get();
         PHP;
         $pipe = <<<'PHP'

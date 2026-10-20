@@ -3,5 +3,5 @@
 $a = DataFrame::fromRows([['id' => 1, 'v' => 'a']]);
 $b = DataFrame::fromRows([['id' => 2, 'w' => true]]);
 
-echo phplyr($a)->bind_rows($b, id: 'source');
-echo "\n", phplyr($a)->bind_cols(DataFrame::fromRows([['id' => 10]]));
+echo phplyr($a)->bindRows($b, id: 'source');
+echo "\n", phplyr($a)->bindCols(DataFrame::fromRows([['id' => 10]]));

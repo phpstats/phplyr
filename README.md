@@ -11,7 +11,7 @@ use function Phplyr\{phplyr, desc, n, mean, min_rank};
 $out = phplyr(DataFrame::fromCsv('sales.csv'))
     ->filter(fn ($r) => $r->price > 0)
     ->mutate(log_price: fn ($r) => log($r->price))
-    ->group_by('brand')
+    ->groupBy('brand')
     ->summarise(n: n(), avg: mean('price'))
     ->mutate(rank: min_rank(desc('avg')))
     ->arrange('rank')
@@ -117,7 +117,7 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 - **Where they work:** `select`, `relocate`, `rename_with`, `arrange`, `distinct`, `group_by`, `count` and `across`.
 
 ```php
-phplyr($t)->group_by('g')->summarise(across(starts_with('x'), ['avg' => mean(...), 'sd' => sd(...)]));
+phplyr($t)->groupBy('g')->summarise(across(starts_with('x'), ['avg' => mean(...), 'sd' => sd(...)]));
 phplyr($t)->mutate(across(where('numeric'), fn ($v) => $v * 2));  // applied to each value
 phplyr($t)->mutate(across(['a', 'b'], lag(...)));                 // phplyr helpers by name
 phplyr($t)->filter(if_any(['a', 'b'], fn ($v) => $v > 8));

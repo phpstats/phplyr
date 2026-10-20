@@ -12,7 +12,7 @@ use Phibble\Contracts\Table;
 use Phibble\DataFrame;
 use Phplyr\Chain;
 
-use function Phplyr\{arrange, desc, filter, group_by, inner_join, mean, mutate, n, phplyr, pipe, pull, summarise};
+use function Phplyr\{arrange, desc, filter, group_by, inner_join, mean, mutate, n, phplyr, pipe, pull, slice_max, summarise};
 
 /**
  * Pipelines as [verb, args] steps, so each runs three ways: as closures
@@ -57,6 +57,12 @@ function stepClosure(array $step): Closure
     return ('Phplyr\\'.$name)(...$args);
 }
 
+/** The chain spelling of a verb: group_by() is ->groupBy(). */
+function chainMethod(string $verb): string
+{
+    return lcfirst(str_replace('_', '', ucwords($verb, '_')));
+}
+
 function expectSameResult(mixed $actual, mixed $expected): void
 {
     if ($expected instanceof Table) {
@@ -80,7 +86,7 @@ it('gives the same result as applying the verbs in turn for', function (array $s
 
     $chain = phplyr(panel());
     foreach ($steps as [$name, $args]) {
-        $chain = $chain->{$name}(...$args);
+        $chain = $chain->{chainMethod($name)}(...$args);
     }
     expectSameResult($chain instanceof Chain ? $chain->get() : $chain, $expected);
 })->with('chain pipelines');
@@ -88,7 +94,7 @@ it('gives the same result as applying the verbs in turn for', function (array $s
 it('runs a written-out chain', function () {
     $out = phplyr(panel())
         ->filter(fn ($r) => $r->score !== null)
-        ->group_by('g')
+        ->groupBy('g')
         ->summarise(n: n(), m: mean('score'))
         ->arrange(desc('m'))
         ->get();
@@ -104,10 +110,10 @@ it('runs a written-out chain', function () {
 });
 
 it('continues the chain while results are tables and returns other results plainly', function () {
-    expect(phplyr(panel())->group_by('g'))->toBeInstanceOf(Chain::class);
-    expect(phplyr(panel())->group_by('g')->get())->toBeInstanceOf(DataFrame::class);
+    expect(phplyr(panel())->groupBy('g'))->toBeInstanceOf(Chain::class);
+    expect(phplyr(panel())->groupBy('g')->get())->toBeInstanceOf(DataFrame::class);
     expect(phplyr(panel())->pull('id'))->toBe(panel()->column('id'));
-    expect(phplyr(panel())->group_by('g')->n_groups())->toBe(3);
+    expect(phplyr(panel())->groupBy('g')->nGroups())->toBe(3);
     expect(phplyr(panel())->setequal(panel()))->toBeTrue();
 });
 
@@ -129,12 +135,51 @@ it('prints the table, and accepts a chain', function () {
 
 it('runs joins with a table argument', function () {
     $y = panel()->select(['id', 'g']);
-    expectSameResult(phplyr(panel())->inner_join($y, by: ['id', 'g'])->get(), pipe(panel(), inner_join($y, by: ['id', 'g'])));
+    expectSameResult(phplyr(panel())->innerJoin($y, by: ['id', 'g'])->get(), pipe(panel(), inner_join($y, by: ['id', 'g'])));
 });
 
 it('rejects names that are not verbs', function (string $name) {
     expect(fn () => phplyr(panel())->{$name}('score'))->toThrow(BadMethodCallException::class, "{$name}() is not a phplyr verb");
-})->with(['mean', 'starts_with', 'nonexistent', 'phplyr', 'pipe_x']);
+})->with(['mean', 'startsWith', 'nonexistent', 'phplyr', 'pipeX']);
+
+it('takes a verb in camelCase and runs the snake_case function', function () {
+    expectSameResult(phplyr(panel())->groupBy('g')->summarise(n: n())->get(), pipe(panel(), group_by('g'), summarise(n: n())));
+    expectSameResult(phplyr(panel())->sliceMax('score', n: 2, by: 'g')->get(), pipe(panel(), slice_max('score', n: 2, by: 'g')));
+    expect(phplyr(panel())->groupBy('g')->nGroups())->toBe(3);
+    expect(phplyr(panel())->groupBy('g')->groupVars())->toBe(['g']);
+});
+
+it('still has the function under its own snake_case name', function () {
+    expect(\function_exists('Phplyr\\group_by'))->toBeTrue();
+    expect(\function_exists('Phplyr\\groupBy'))->toBeFalse();
+    expectSameResult(pipe(panel(), group_by('g'), summarise(n: n())), phplyr(panel())->groupBy('g')->summarise(n: n())->get());
+});
+
+it('rejects the function spelling on a chain and names the camelCase one', function (string $snake, string $camel) {
+    expect(fn () => phplyr(panel())->{$snake}('g'))
+        ->toThrow(BadMethodCallException::class, "{$snake}() is not a phplyr verb; a chained verb is camelCase, so write {$camel}()");
+})->with([
+    ['group_by', 'groupBy'],
+    ['slice_max', 'sliceMax'],
+    ['pivot_longer', 'pivotLonger'],
+    ['n_groups', 'nGroups'],
+    ['top_n', 'topN'],
+    ['separate_wider_delim', 'separateWiderDelim'],
+]);
+
+it('spells every verb for a chain so that it maps back to the function', function () {
+    $verbs = array_filter(
+        get_defined_functions()['user'],
+        fn (string $f) => str_starts_with($f, 'phplyr\\')
+            && (string) (new \ReflectionFunction($f))->getReturnType() === 'Closure',
+    );
+    expect($verbs)->not->toBeEmpty();
+    foreach ($verbs as $f) {
+        $verb = (new \ReflectionFunction($f))->getShortName();
+        $camel = chainMethod($verb);
+        expect(strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $camel)))->toBe($verb, $verb);
+    }
+});
 
 it('lists every verb in its @method docblock', function () {
     $php = escapeshellarg(PHP_BINARY);

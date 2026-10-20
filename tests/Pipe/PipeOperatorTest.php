@@ -29,7 +29,7 @@ it('gives the same table with |>, a method chain, and pipe()', function () {
 
     $chain = phplyr(panel())
         ->filter(fn ($r) => $r->score !== null)
-        ->group_by('g')
+        ->groupBy('g')
         ->summarise(n: n(), m: mean('score'))
         ->arrange(desc('m'))
         ->get();
@@ -54,7 +54,7 @@ it('passes named options the same way', function () {
 
     $chain = phplyr(panel())
         ->mutate(z: fn ($r) => $r->year * 2, before: 'id')
-        ->slice_max('score', n: 2, by: 'g')
+        ->sliceMax('score', n: 2, by: 'g')
         ->count('g', sort: true)
         ->get();
 
@@ -70,8 +70,8 @@ it('joins and pivots the same way', function () {
         |> left_join($ids, by: 'id');
 
     $chain = phplyr($wide)
-        ->pivot_longer(starts_with('wk'), namesTo: 'week', valuesTo: 'rank')
-        ->left_join($ids, by: 'id')
+        ->pivotLonger(starts_with('wk'), namesTo: 'week', valuesTo: 'rank')
+        ->leftJoin($ids, by: 'id')
         ->get();
 
     expectSameTables($chain, $operator);
@@ -80,7 +80,7 @@ it('joins and pivots the same way', function () {
 it('returns non-table results the same way', function () {
     $operator = panel() |> group_by('g') |> summarise(n: n()) |> pull('n');
 
-    expect(phplyr(panel())->group_by('g')->summarise(n: n())->pull('n'))->toBe($operator);
+    expect(phplyr(panel())->groupBy('g')->summarise(n: n())->pull('n'))->toBe($operator);
     expect(pipe(panel(), group_by('g'), summarise(n: n()), pull('n')))->toBe($operator);
 });
 
