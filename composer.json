@@ -56,5 +56,8 @@
             "type": "vcs",
             "url": "https://github.com/phpstats/phibble"
         }
-    ]
+    ],
+    "scripts": {
+        "lint": "phpcs"
+    }
 }
