@@ -3,8 +3,9 @@ title: "tidyr"
 ---
 
 The tidyr functions use tidyr's argument names. Arguments that start with a dot
-in tidyr drop the dot here and read as camelCase, except `_id` and `_remove`,
-which keep the dot as an underscore because a column could have the same name.
+in tidyr keep the dot here as a leading underscore, camelCase after it:
+`.names_sep` on `pack()` is `_namesSep:`. See
+[Underscored arguments](../coming-from-dplyr.qmd#underscored-arguments).
 
 ## Pivoting
 
@@ -47,7 +48,7 @@ build a new table from lists.
 {{< include ../examples/_complete.md >}}
 
 `fill()` carries values down or up over NA within groups
-(`direction: 'down' | 'up' | 'downup' | 'updown'`). `drop_na()` drops rows
+(`_direction: 'down' | 'up' | 'downup' | 'updown'`). `drop_na()` drops rows
 with NA in the given columns, and `replace_na()` replaces NA per column.
 
 {{< include ../examples/_fill.md >}}
@@ -84,7 +85,7 @@ array with string keys is a named list.
 | `unnest_longer(col, valuesTo:, indicesTo:, indicesInclude:, keepEmpty:)` | One row per element, with names or positions in `{col}_id` |
 | `hoist(col, name: path, _remove:)` | Pull components out by name, 1-based position, or a list path |
 | `chop(cols)`, `unchop(cols, keepEmpty:)` | Collapse rows into list-columns and back |
-| `pack(name: cols, namesSep:)`, `unpack(cols, namesSep:)` | Columns into a column of named arrays and back |
+| `pack(name: cols, _namesSep:)`, `unpack(cols, namesSep:)` | Columns into a column of named arrays and back |
 
 `chop`, `pack`, `unpack`, and `extract` share names with PHP built-ins, so
 import them with `use function Phplyr\{chop, pack, unpack, extract};`.

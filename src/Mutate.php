@@ -12,7 +12,7 @@ final class Mutate
 {
     /**
      * @param array<int|string, mixed> $columns
-     * @param array{_keep: string, before: mixed, after: mixed} $o
+     * @param array{_keep: string, _before: mixed, _after: mixed} $o
      * @param list<string> $made Receives the names created or modified, in call order.
      */
     public static function run(Table $t, array $columns, array $o, ?array &$made = []): Table
@@ -58,9 +58,9 @@ final class Mutate
             default => throw new \InvalidArgumentException("mutate(): unknown _keep '{$o['_keep']}'."),
         };
 
-        if ($o['before'] !== null || $o['after'] !== null) {
+        if ($o['_before'] !== null || $o['_after'] !== null) {
             $new = array_values(array_diff($made, $before));
-            $t = $t->select(Internal::relocated($t->columns(), $new, $o['before'], $o['after'], $t));
+            $t = $t->select(Internal::relocated($t->columns(), $new, $o['_before'], $o['_after'], $t));
         }
 
         return $t;

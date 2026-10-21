@@ -362,16 +362,15 @@ function case_match(mixed $x, mixed ...$cases): Vec
 
 /**
  * Replace values by name (superseded in dplyr by recode_values()):
- * recode('grade', a: 'A', b: 'B', default: 'other'), or with a map for keys
- * that aren't valid names, or that an option claims: recode('code',
- * [1 => 'one', 2 => 'two']), recode('level', ['default' => 'D']).
+ * recode('grade', a: 'A', b: 'B', _default: 'other'), or with a map for keys
+ * that aren't valid names: recode('code', [1 => 'one', 2 => 'two']).
  * The first argument is dplyr's .x. Values match by their string form. Unmatched values stay as they are
- * unless default is given; NA becomes missing.
+ * unless _default is given; NA becomes _missing.
  */
 function recode(mixed $_x, mixed ...$replacements): Vec
 {
-    $hasDefault = \array_key_exists('default', $replacements);
-    [$replacements, $o] = Internal::options($replacements, ['default' => null, 'missing' => null], 'recode');
+    $hasDefault = \array_key_exists('_default', $replacements);
+    [$replacements, $o] = Internal::options($replacements, ['_default' => null, '_missing' => null], 'recode');
     $map = [];
     foreach ($replacements as $key => $value) {
         if (\is_int($key) && \is_array($value)) {
@@ -385,9 +384,9 @@ function recode(mixed $_x, mixed ...$replacements): Vec
 
     return new Vec(fn (Table $g) => array_map(
         fn ($v) => match (true) {
-            $v === null || (\is_float($v) && is_nan($v)) => $o['missing'],
+            $v === null || (\is_float($v) && is_nan($v)) => $o['_missing'],
             \array_key_exists(Tidyr::str($v), $map) => $map[Tidyr::str($v)],
-            $hasDefault => $o['default'],
+            $hasDefault => $o['_default'],
             default => $v,
         },
         Vec::values($_x, $g, true),

@@ -96,20 +96,36 @@ it('reads an underscored named argument as an option and the rest as columns', f
     expect(fn () => pipe(small(), ungroup()))->not->toThrow(Exception::class);
 });
 
-it('still reaches a column whose name an option would claim', function () {
+it('still reaches a column named after any of the sixteen options', function () {
     // The prefix is what frees these names: mutate(_by: 'g') groups,
-    // mutate(by: 1) makes a column called by.
-    $out = pipe(small(), mutate(by: 1, keep: 2, groups: 3, id: 4, remove: 5));
-    expect($out->columns())->toBe(['g', 'x', 'by', 'keep', 'groups', 'id', 'remove']);
-    expect($out->column('by'))->toBe([1, 1, 1]);
+    // mutate(by: 1) makes a column called by. Every option name is a
+    // plausible column name, so every one of the sixteen is prefixed.
+    $names = ['by', 'keep', 'groups', 'id', 'remove', 'before', 'after', 'add',
+        'drop', 'key', 'direction', 'default', 'missing', 'namesSep',
+        'byGroup', 'keepAll'];
+    $out = pipe(small(), mutate(...array_combine($names, range(1, \count($names)))));
+    expect($out->columns())->toBe(['g', 'x', ...$names]);
+    expect($out->column('before'))->toBe([6, 6, 6]);
+    expect($out->column('key'))->toBe([10, 10, 10]);
 
+    // ...while the prefixed spelling still reaches the option.
     $grouped = pipe(small(), mutate(m: Phplyr\max('x'), _by: 'g'));
     expect($grouped->column('m'))->toBe([3, 2, 3]);
     expect($grouped->groups())->toBe([]);
+    expect(pipe(small(), mutate(one: 1, _before: 'g'))->columns())->toBe(['one', 'g', 'x']);
+    expect(pipe(small(), group_by('g'), Phplyr\group_nest(_key: 'rows'))->columns())->toBe(['g', 'rows']);
 
     // recode()'s first argument is dplyr's .x, so x: is a replacement.
     expect((mutate(r: Phplyr\recode('g', x: 'X', a: 'A'))(small()))->column('r'))->toBe(['A', 'b', 'A']);
     expect((mutate(r: Phplyr\recode('g', ['a' => 'A']))(small()))->column('r'))->toBe(['A', 'b', 'A']);
+});
+
+it('takes an option only in its prefixed spelling', function () {
+    // An unprefixed named argument is data, never an option, so these make
+    // columns instead of changing what the verb does.
+    expect(pipe(small(), mutate(one: 1, before: 'g'))->columns())->toBe(['g', 'x', 'one', 'before']);
+    expect(pipe(small(), Phplyr\distinct('g', keepAll: true))->columns())->toBe(['g', 'keepAll']);
+    expect(pipe(small(), group_by('g', drop: false))->groups())->toBe(['g', 'drop']);
 });
 
 it('matches dplyr cur_group_id() and cur_group_rows()', function () {
@@ -123,11 +139,11 @@ it('matches dplyr cur_group_id() and cur_group_rows()', function () {
     expect(fn () => pipe(panel(), group_by('g'), summarise(r: Phplyr\cur_group_rows())))->toThrow(LengthException::class, 'reframe');
 });
 
-it('keeps empty factor-level groups with drop: false', function () {
+it('keeps empty factor-level groups with _drop: false', function () {
     $ref = rReference('drop-reference.json');
     $d = DataFrame::fromColumns(['f' => ['a', 'a', 'c'], 's' => ['x', 'y', 'x'], 'v' => [1.0, 2.0, 3.0]])->asFactor('f', ['a', 'b', 'c']);
-    expectRowsClose((pipe($d, group_by('f', drop: false), summarise(n: n(), total: Phplyr\sum('v'))))->toRows(), $ref['drop']);
-    expectRowsClose((pipe($d, group_by('f', drop: false), Phplyr\count()))->ungroup()->toRows(), $ref['count']);
-    expectRowsClose((pipe($d, group_by('f', 's', drop: false), summarise(n: n(), _groups: 'drop')))->toRows(), $ref['two']);
-    expect((pipe($d, group_by('f', drop: false)))->dropsEmptyGroups())->toBeFalse();
+    expectRowsClose((pipe($d, group_by('f', _drop: false), summarise(n: n(), total: Phplyr\sum('v'))))->toRows(), $ref['drop']);
+    expectRowsClose((pipe($d, group_by('f', _drop: false), Phplyr\count()))->ungroup()->toRows(), $ref['count']);
+    expectRowsClose((pipe($d, group_by('f', 's', _drop: false), summarise(n: n(), _groups: 'drop')))->toRows(), $ref['two']);
+    expect((pipe($d, group_by('f', _drop: false)))->dropsEmptyGroups())->toBeFalse();
 })->skip(fn () => ! method_exists(DataFrame::class, 'dropsEmptyGroups'), 'phibble lacks groupBy drop: false');

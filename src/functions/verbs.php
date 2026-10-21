@@ -14,11 +14,10 @@ declare(strict_types=1);
  *
  * Verbs delegate to Phibble\Contracts\Table, so any backend works unchanged.
  *
- * Most of dplyr's dot-arguments drop the dot and read as camelCase
- * (byGroup:, keepAll:). The five whose name a column could also have keep
- * the dot as an underscore (_by, _keep, _groups, _id, _remove), so
- * mutate(z: ..., _by: 'g') sets the option and mutate(by: 1) still makes a
- * column called by. docs/coming-from-dplyr.qmd records the exception.
+ * dplyr's dot-arguments (.by, .keep, .groups...) are written with a leading
+ * underscore: mutate(z: ..., _by: 'g'). The prefix keeps an option apart
+ * from a column, so mutate(by: 1) still makes a column called by.
+ * docs/coming-from-dplyr.qmd records the exception.
  *
  * count, min and max shadow PHP built-ins inside this namespace, so
  * built-ins are called with a leading backslash.
@@ -123,11 +122,11 @@ function select(mixed ...$columns): Closure
  * mean...; summaries recycle within groups), a list with one value per row,
  * a scalar, or null to drop the column. across(...) may be passed first.
  *
- * Options: _by, _keep ('all', 'none'), before, after.
+ * Options: _by, _keep ('all', 'none'), _before, _after.
  */
 function mutate(mixed ...$columns): Closure
 {
-    [$columns, $o] = Internal::options($columns, ['_by' => null, '_keep' => 'all', 'before' => null, 'after' => null], 'mutate');
+    [$columns, $o] = Internal::options($columns, ['_by' => null, '_keep' => 'all', '_before' => null, '_after' => null], 'mutate');
     Internal::assertNamed($columns, 'mutate');
 
     return fn (Table $t) => Internal::withBy($t, $o['_by'], fn (Table $t) => Mutate::run($t, $columns, $o));
@@ -149,7 +148,7 @@ function transmute(mixed ...$columns): Closure
 
     return fn (Table $t) => Internal::withBy($t, $o['_by'], function (Table $t) use ($columns) {
         $made = [];
-        $out = Mutate::run($t, $columns, ['_keep' => 'all', 'before' => null, 'after' => null], $made);
+        $out = Mutate::run($t, $columns, ['_keep' => 'all', '_before' => null, '_after' => null], $made);
 
         return $out->select(array_values(array_unique([...$t->groups(), ...$made])));
     });
@@ -180,16 +179,16 @@ function rename_with(Closure $fn, mixed $cols = null): Closure
 }
 
 /**
- * Move columns: to the front by default, or before / after a column.
+ * Move columns: to the front by default, or _before / _after a column.
  * Named arguments rename while moving.
  */
 function relocate(mixed ...$columns): Closure
 {
-    [$columns, $o] = Internal::options($columns, ['before' => null, 'after' => null], 'relocate');
+    [$columns, $o] = Internal::options($columns, ['_before' => null, '_after' => null], 'relocate');
 
     return function (Table $t) use ($columns, $o) {
         $map = Selector::resolve($columns, $t);
-        $order = Internal::relocated($t->columns(), array_values($map), $o['before'], $o['after'], $t);
+        $order = Internal::relocated($t->columns(), array_values($map), $o['_before'], $o['_after'], $t);
         $out = $t->select($order);
         $renames = array_filter($map, fn ($source, $name) => $source !== $name, ARRAY_FILTER_USE_BOTH);
 
@@ -199,13 +198,13 @@ function relocate(mixed ...$columns): Closure
 
 /**
  * Sort rows by columns or expressions; desc() reverses. Stable; NA last.
- * Ignores grouping unless byGroup: true.
+ * Ignores grouping unless _byGroup: true.
  */
 function arrange(mixed ...$keys): Closure
 {
-    [$keys, $o] = Internal::options($keys, ['byGroup' => false], 'arrange');
+    [$keys, $o] = Internal::options($keys, ['_byGroup' => false], 'arrange');
 
-    return fn (Table $t) => Internal::arrange($t, array_values($keys), (bool) $o['byGroup']);
+    return fn (Table $t) => Internal::arrange($t, array_values($keys), (bool) $o['_byGroup']);
 }
 
 /** Descending sort key for arrange(), and for rank helpers: min_rank(desc('x')). */
@@ -217,28 +216,28 @@ function desc(mixed $x): Desc
 /**
  * Group by columns (names or selectors). Named arguments group by a computed
  * column: group_by(decade: fn ($r) => intdiv($r->year, 10) * 10).
- * Options: add (add to the existing groups), drop (false keeps empty
+ * Options: _add (add to the existing groups), _drop (false keeps empty
  * factor-level groups; needs backend support).
  */
 function group_by(mixed ...$columns): Closure
 {
-    [$columns, $o] = Internal::options($columns, ['add' => false, 'drop' => true], 'group_by');
+    [$columns, $o] = Internal::options($columns, ['_add' => false, '_drop' => true], 'group_by');
 
     return function (Table $t) use ($columns, $o) {
         $computed = array_filter($columns, fn ($k) => \is_string($k), ARRAY_FILTER_USE_KEY);
         $selected = array_filter($columns, fn ($k) => \is_int($k), ARRAY_FILTER_USE_KEY);
         if ($computed !== []) {
-            $t = Mutate::run($t, $computed, ['_keep' => 'all', 'before' => null, 'after' => null]);
+            $t = Mutate::run($t, $computed, ['_keep' => 'all', '_before' => null, '_after' => null]);
         }
         $names = [...Selector::select($selected, $t), ...array_keys($computed)];
-        if ($o['add']) {
+        if ($o['_add']) {
             $names = [...$t->groups(), ...$names];
         }
 
         $names = array_values(array_unique($names));
-        if ($o['drop'] === false) {
+        if ($o['_drop'] === false) {
             if (\count((new \ReflectionMethod($t, 'groupBy'))->getParameters()) < 2) {
-                throw new \LogicException('group_by(drop: false) needs a table that keeps empty groups (phibble groupBy($names, drop: false)).');
+                throw new \LogicException('group_by(_drop: false) needs a table that keeps empty groups (phibble groupBy($names, drop: false)).');
             }
 
             return $t->groupBy($names, false);
@@ -355,7 +354,7 @@ function add_count(mixed ...$args): Closure
         $groups = $t->groups();
         $by = array_values(array_unique([...$groups, ...Selector::select($columns, $t)]));
         $name = Internal::countName($t, $name);
-        $out = Mutate::run(Internal::regroup($t, $by, $t), [$name => Internal::tallyOf($wt)], ['_keep' => 'all', 'before' => null, 'after' => null]);
+        $out = Mutate::run(Internal::regroup($t, $by, $t), [$name => Internal::tallyOf($wt)], ['_keep' => 'all', '_before' => null, '_after' => null]);
         $out = Internal::regroup($out, $groups, $t);
 
         return $sort ? $out->arrange([[$name, 'desc']]) : $out;
@@ -367,7 +366,7 @@ function add_tally(mixed $wt = null, bool $sort = false, ?string $name = null): 
 {
     return function (Table $t) use ($wt, $sort, $name) {
         $name = Internal::countName($t, $name);
-        $out = Mutate::run($t, [$name => Internal::tallyOf($wt)], ['_keep' => 'all', 'before' => null, 'after' => null]);
+        $out = Mutate::run($t, [$name => Internal::tallyOf($wt)], ['_keep' => 'all', '_before' => null, '_after' => null]);
 
         return $sort ? $out->arrange([[$name, 'desc']]) : $out;
     };
@@ -375,21 +374,21 @@ function add_tally(mixed $wt = null, bool $sort = false, ?string $name = null): 
 
 /**
  * Unique rows over the given columns (all columns when none are given).
- * Named arguments add computed columns first. Option: keepAll (keep every
+ * Named arguments add computed columns first. Option: _keepAll (keep every
  * column, from the first row of each combination).
  */
 function distinct(mixed ...$columns): Closure
 {
-    [$columns, $o] = Internal::options($columns, ['keepAll' => false], 'distinct');
+    [$columns, $o] = Internal::options($columns, ['_keepAll' => false], 'distinct');
 
     return function (Table $t) use ($columns, $o) {
         $computed = array_filter($columns, fn ($k) => \is_string($k), ARRAY_FILTER_USE_KEY);
         $selected = array_filter($columns, fn ($k) => \is_int($k), ARRAY_FILTER_USE_KEY);
         if ($computed !== []) {
-            $t = Mutate::run($t, $computed, ['_keep' => 'all', 'before' => null, 'after' => null]);
+            $t = Mutate::run($t, $computed, ['_keep' => 'all', '_before' => null, '_after' => null]);
         }
         $names = [...Selector::select($selected, $t), ...array_keys($computed)];
-        if (! $o['keepAll'] || $names === []) {
+        if (! $o['_keepAll'] || $names === []) {
             return $t->distinct(array_values(array_unique($names)));
         }
         $key = array_values(array_unique([...$t->groups(), ...$names]));

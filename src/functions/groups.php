@@ -88,12 +88,12 @@ function group_trim(): Closure
 
 /**
  * One row per group: the key columns and a list-column of each group's
- * other columns as a table. Options: key (the list-column, 'data'), _keep
+ * other columns as a table. Options: _key (the list-column, 'data'), _keep
  * (also keep the key columns in the nested tables).
  */
 function group_nest(mixed ...$options): Closure
 {
-    [$cols, $o] = Internal::options($options, ['key' => 'data', '_keep' => false], 'group_nest');
+    [$cols, $o] = Internal::options($options, ['_key' => 'data', '_keep' => false], 'group_nest');
 
     return function (Table $t) use ($cols, $o) {
         if ($cols !== []) {
@@ -105,7 +105,7 @@ function group_nest(mixed ...$options): Closure
             Ops::groupRows($t),
         );
 
-        return group_keys()($t)->collect()->mutate([$o['key'] => $data]);
+        return group_keys()($t)->collect()->mutate([$o['_key'] => $data]);
     };
 }
 
@@ -116,12 +116,12 @@ function group_nest(mixed ...$options): Closure
  */
 function nest_by(mixed ...$cols): Closure
 {
-    [$cols, $o] = Internal::options($cols, ['key' => 'data', '_keep' => false], 'nest_by');
+    [$cols, $o] = Internal::options($cols, ['_key' => 'data', '_keep' => false], 'nest_by');
 
     return function (Table $t) use ($cols, $o) {
         $groups = $cols === [] ? $t->groups() : Selector::select($cols, $t);
 
-        return group_nest(key: $o['key'], _keep: $o['_keep'])($t->groupBy($groups))->rowwise($groups);
+        return group_nest(_key: $o['_key'], _keep: $o['_keep'])($t->groupBy($groups))->rowwise($groups);
     };
 }
 

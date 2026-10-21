@@ -61,7 +61,7 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 - **Row closures** receive `(Phibble\Row $r, Table $group)`, so `$r->price` or `$r['price']`. In a grouped table, `$group` is the row's group.
 - **Vector helpers** such as `lag('x')`, `cumsum('x')`, `min_rank('x')` and `mean('x')` are evaluated once per group. A summary such as `mean('x')` used in `mutate()` is recycled within each group, as in R.
 - **Helper arguments:** the first argument of a helper is its input column. A string there is a column name; it can also be `col('x')`, another helper, or a row closure. Later arguments are values, so a string there is a literal; wrap it in `col()` to use a column.
-- **Dot-arguments** mostly drop the dot and read as camelCase: `.before` becomes `before`, `.keep_all` becomes `keepAll`. Six keep the dot as an underscore, because a column could have the same name: `_by`, `_keep`, `_groups`, `_id`, `_remove`, and `recode()`'s first argument. So `mutate(z: ..., _by: 'g')` groups the call, and `mutate(by: 1)` still makes a column called `by`. On a function that takes one of the camelCase options, a named argument the option claims is read as the option, not as a column of that name; `docs/coming-from-dplyr.qmd` lists the six and why they keep the prefix.
+- **Dot-arguments** keep the dot as a leading underscore, camelCase after it: `.by` is `_by:`, `.keep_all` is `_keepAll:`. The prefix is what keeps an option apart from a column, since a named argument to a variadic verb lands in the same array as the columns the call creates: `mutate(z: ..., _by: 'g')` groups the call, and `mutate(by: 1)` makes a column called `by`. An unprefixed named argument is always data. `docs/coming-from-dplyr.qmd` lists all sixteen.
 - **Positions** are 1-based, as in R: `pull(1)`, `pull(-1)`, `slice(1, 3)`.
 - **NA is null.** Summaries return null when a value is missing, unless you pass `naRm: true`.
 - **Shadowed built-ins:** `count`, `min`, `max`, `round`, `abs`, `log`, `str_replace`, `str_pad`, `str_split` and a few others shadow PHP's built-ins in files that import them. Write `\count()` for the built-in.
@@ -73,17 +73,17 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 | `filter` | `filter(fn ($r) => $r->x > 0, between('y', 1, 5), _by: 'g')` |
 | `select` | `select('id', starts_with('x'), except('tmp'))`, `select(['new' => 'old'], everything())` |
 | `mutate` | `mutate(z: fn ($r) => $r->x * 2, prev: lag('x'), avg: mean('x'), drop_me: null)` |
-| | Options: `_by`, `_keep: 'none'`, `before`, `after` |
+| | Options: `_by`, `_keep: 'none'`, `_before`, `_after` |
 | `transmute` | `transmute(z: fn ($r) => $r->x * 2)` |
 | `rename` / `rename_with` | `rename(new: 'old')`, `rename_with(strtoupper(...), starts_with('x'))` |
-| `relocate` | `relocate('score', before: 'g')`, `relocate('g', after: last_col())` |
-| `arrange` | `arrange('a', desc('b'), desc(fn ($r) => $r->x * $r->y), byGroup: true)` |
-| `group_by` / `ungroup` | `group_by('g', decade: fn ($r) => intdiv($r->year, 10) * 10, add: true)` |
+| `relocate` | `relocate('score', _before: 'g')`, `relocate('g', _after: last_col())` |
+| `arrange` | `arrange('a', desc('b'), desc(fn ($r) => $r->x * $r->y), _byGroup: true)` |
+| `group_by` / `ungroup` | `group_by('g', decade: fn ($r) => intdiv($r->year, 10) * 10, _add: true)` |
 | `summarise` / `summarize` | `summarise(n: n(), avg: mean('x'), across(...), _by: 'g', _groups: 'drop')` |
 | `reframe` | `reframe(q: fn ($g) => [...several values...])` |
 | `count` / `tally` | `count('g', 'h', wt: 'w', sort: true, name: 'rows')`, `tally()` |
 | `add_count` / `add_tally` | `add_count('g', name: 'size')` |
-| `distinct` | `distinct('g')`, `distinct('g', keepAll: true)` |
+| `distinct` | `distinct('g')`, `distinct('g', _keepAll: true)` |
 | `slice` | `slice(1, 3)`, `slice(-1)`. These are positions within each group. |
 | `slice_head` / `slice_tail` | `slice_head(n: 3)`, `slice_tail(prop: 0.1)` |
 | `slice_min` / `slice_max` | `slice_max('score', n: 2, withTies: false)` |
@@ -146,7 +146,7 @@ The tidyr functions work the same way, with tidyr's argument names. The test sui
 | | Also takes `idCols`, `namesPrefix`, `namesSep`, `namesGlue: '{key}_{.value}'` and `namesSort`. |
 | `complete` / `expand` | `complete('id', 'key', fill: ['n' => 0])`, `expand(nesting('g', 'label'), year: [2001, 2002])` |
 | `crossing` / `expand_grid` | `crossing(x: [2, 1], y: ['a', 'b'])`. These return a new DataFrame. |
-| `fill` | `fill('price', direction: 'downup')`. Works within groups. |
+| `fill` | `fill('price', _direction: 'downup')`. Works within groups. |
 | `drop_na` / `replace_na` | `drop_na('wk1')`, `replace_na(['wk1' => 0])` |
 | `uncount` | `uncount('n', _id: 'copy')` |
 | `unite` | `unite('date', 'year', 'month', sep: '-', remove: false, naRm: true)` |

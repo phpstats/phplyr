@@ -178,11 +178,11 @@ function expand_grid(array ...$columns): DataFrame
 
 /**
  * Fill NA with the previous (or next) value, within groups:
- * fill('price', direction: 'down'|'up'|'downup'|'updown').
+ * fill('price', _direction: 'down'|'up'|'downup'|'updown').
  */
 function fill(mixed ...$cols): Closure
 {
-    [$cols, $o] = Internal::options($cols, ['direction' => 'down'], 'fill');
+    [$cols, $o] = Internal::options($cols, ['_direction' => 'down'], 'fill');
 
     return function (Table $t) use ($cols, $o) {
         $defs = [];
@@ -199,12 +199,12 @@ function fill(mixed ...$cols): Closure
                 };
                 $up = fn (array $v) => array_reverse($down(array_reverse($v)));
 
-                return match ($o['direction']) {
+                return match ($o['_direction']) {
                     'down' => $down($v),
                     'up' => $up($v),
                     'downup' => $up($down($v)),
                     'updown' => $down($up($v)),
-                    default => throw new \InvalidArgumentException("fill(): unknown direction '{$o['direction']}'."),
+                    default => throw new \InvalidArgumentException("fill(): unknown _direction '{$o['_direction']}'."),
                 };
             };
         }

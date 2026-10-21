@@ -23,15 +23,15 @@ function dropFactor(): DataFrame
     return DataFrame::fromColumns(['g' => ['b', 'c', 'c'], 'v' => [3, 1, 2]])->asFactor('g', ['a', 'b', 'c']);
 }
 
-it('keeps rowwise and drop: false through arrange() and ungroup()', function () {
+it('keeps rowwise and _drop: false through arrange() and ungroup()', function () {
     $df = DataFrame::fromColumns(['id' => ['p', 'q', 'q'], 'a' => [1, 2, 3]]);
     expect(pipe($df, rowwise(), arrange(desc('a')), mutate(s: sum('a')), Phplyr\pull('s')))->toBe([3, 2, 1]);
     $out = pipe($df, rowwise('id'), arrange(desc('a')), summarise(s: sum('a')));
     expect($out->toRows())->toBe([['id' => 'q', 's' => 3], ['id' => 'q', 's' => 2], ['id' => 'p', 's' => 1]]);
 
-    $kept = pipe(dropFactor(), group_by('g', drop: false), arrange('v'), summarise(n: n()));
+    $kept = pipe(dropFactor(), group_by('g', _drop: false), arrange('v'), summarise(n: n()));
     expect(pipe($kept, Phplyr\pull('n')))->toBe([0, 1, 2]);
-    $partial = pipe(dropFactor(), mutate(h: 1), group_by('g', 'h', drop: false), ungroup('h'), summarise(n: n()));
+    $partial = pipe(dropFactor(), mutate(h: 1), group_by('g', 'h', _drop: false), ungroup('h'), summarise(n: n()));
     expect($partial->column('g'))->toBe(['a', 'b', 'c']);
 });
 
@@ -67,7 +67,7 @@ it('accepts desc() in slice_min() and slice_max()', function () {
 it('numbers rowwise and empty groups by visit order in cur_group_id()', function () {
     $df = DataFrame::fromColumns(['a' => [1, 2, 3]]);
     expect(pipe($df, rowwise(), summarise(id: cur_group_id()), Phplyr\pull('id')))->toBe([1, 2, 3]);
-    $out = pipe(dropFactor(), group_by('g', drop: false), summarise(id: cur_group_id(), n: n()));
+    $out = pipe(dropFactor(), group_by('g', _drop: false), summarise(id: cur_group_id(), n: n()));
     expect($out->toRows())->toBe([['g' => 'a', 'id' => 1, 'n' => 0], ['g' => 'b', 'id' => 2, 'n' => 1], ['g' => 'c', 'id' => 3, 'n' => 2]]);
 });
 

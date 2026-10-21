@@ -152,11 +152,11 @@ function unchop(mixed $cols, bool $keepEmpty = false): Closure
 /**
  * Pack columns into a column of named arrays (tidyr's data frame columns):
  * pack(dims: ['width', 'height']). Packed columns go at the end. With
- * namesSep, the inner names drop their outer name and the separator.
+ * _namesSep, the inner names drop their outer name and the separator.
  */
 function pack(mixed ...$spec): Closure
 {
-    [$spec, $o] = Internal::options($spec, ['namesSep' => null], 'pack');
+    [$spec, $o] = Internal::options($spec, ['_namesSep' => null], 'pack');
     Internal::assertNamed($spec, 'pack');
 
     return function (Table $t) use ($spec, $o) {
@@ -164,7 +164,7 @@ function pack(mixed ...$spec): Closure
         $used = [];
         foreach ($spec as $name => $cols) {
             $names = Selector::select([$cols], $t);
-            $inner = array_map(fn ($c) => $o['namesSep'] !== null && str_starts_with($c, $name.$o['namesSep']) ? substr($c, \strlen($name.$o['namesSep'])) : $c, $names);
+            $inner = array_map(fn ($c) => $o['_namesSep'] !== null && str_starts_with($c, $name.$o['_namesSep']) ? substr($c, \strlen($name.$o['_namesSep'])) : $c, $names);
             $vectors = array_map(fn ($c) => $t->column($c), $names);
             $new[$name] = array_map(fn ($i) => array_combine($inner, array_column($vectors, $i)), $t->nrow() === 0 ? [] : range(0, $t->nrow() - 1));
             $used = [...$used, ...$names];

@@ -19,12 +19,12 @@ helpers are evaluated per group:
 
 `arrange()` sorts rows. It is stable and puts NA last. Keys are column names,
 `desc()`, or expressions, which are evaluated over the whole table. It ignores
-grouping unless you pass `byGroup: true`.
+grouping unless you pass `_byGroup: true`.
 
 {{< include ../examples/_arrange.md >}}
 
 `distinct()` keeps unique rows over the given columns, or over all columns.
-Named arguments add computed columns first, and `keepAll: true` keeps every
+Named arguments add computed columns first, and `_keepAll: true` keeps every
 column from the first row of each combination.
 
 The slice family picks rows within each group:
@@ -38,7 +38,7 @@ The slice family picks rows within each group:
 | `head(n)` | The first rows of the whole table, ignoring groups. |
 | `top_n(n, wt)`, `top_frac(prop, wt)` | Superseded by `slice_max()`. Rows ranked within `n`, in table order. |
 | `sample_n(size)`, `sample_frac(size)` | Superseded by `slice_sample()`. |
-| `add_row(x: 1, before:, after:)` | New rows of values; columns not given are NA. |
+| `add_row(x: 1, _before:, _after:)` | New rows of values; columns not given are NA. |
 
 Each takes `prop:` in place of `n:`, and `_by:`.
 
@@ -49,7 +49,7 @@ Each takes `prop:` in place of `n:`, and `_by:`.
 `select()` keeps columns by name or with [tidyselect helpers](tidyselect.qmd).
 An associative array renames while selecting. `rename()` renames with
 `new: 'old'` arguments, `rename_with()` applies a function to selected names,
-and `relocate()` moves columns to the front or `before` / `after` another
+and `relocate()` moves columns to the front or `_before` / `_after` another
 column.
 
 {{< include ../examples/_select.md >}}
@@ -61,7 +61,7 @@ Later arguments see the columns made by earlier ones.
 {{< include ../examples/_mutate.md >}}
 
 `mutate()` takes dplyr's options: `_by` groups for one call, `_keep: 'none'`
-keeps only the grouping and new columns, and `before` or `after` place the
+keeps only the grouping and new columns, and `_before` or `_after` place the
 new columns. `transmute()` is `mutate()` that keeps only the new columns.
 
 {{< include ../examples/_mutate-options.md >}}

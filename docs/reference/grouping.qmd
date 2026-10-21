@@ -3,8 +3,8 @@ title: "Grouping"
 ---
 
 `group_by()` sets the grouping columns. Selectors work, named arguments group
-by a computed column, and `add: true` adds to the existing groups.
-`drop: false` keeps groups for unused factor levels, so `summarise()` and
+by a computed column, and `_add: true` adds to the existing groups.
+`_drop: false` keeps groups for unused factor levels, so `summarise()` and
 `count()` return them with `n() = 0`, as dplyr does.
 `ungroup()` removes grouping, or only the named columns.
 
@@ -26,7 +26,7 @@ within groups. `_by:` groups for a single call and returns an ungrouped table.
 | `group_rows()` | Each group's 1-based row numbers |
 | `group_data()` | The group keys with a `.rows` list-column |
 | `group_trim()` | The table regrouped without unused factor levels |
-| `group_nest(key:, _keep:)` | One row per group, with a list-column of tables |
+| `group_nest(_key:, _keep:)` | One row per group, with a list-column of tables |
 | `nest_by(...cols)` | `group_nest()` as a rowwise table |
 | `with_groups(_groups, fn)` | The function's result under other groups, with the original grouping restored |
 | `group_split(_keep:)` | A list of tables, one per group |

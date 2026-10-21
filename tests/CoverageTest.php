@@ -109,9 +109,9 @@ describe('superseded dplyr functions', function () {
 
     it('recodes values by name', function () {
         $t = DataFrame::fromColumns(['x' => ['a', 'b', 'c', null], 'y' => ['x', 'y', 'z', 'x']]);
-        expect((mutate(r: recode('x', a: 'A', b: 'B', default: 'other'))($t))->column('r'))->toBe(coverage('recode'));
+        expect((mutate(r: recode('x', a: 'A', b: 'B', _default: 'other'))($t))->column('r'))->toBe(coverage('recode'));
         expect(\array_slice((mutate(r: recode('y', x: 'X')))($t)->column('r'), 0, 3))->toBe(coverage('recode_keep'));
-        expect((mutate(r: recode('x', ['a' => 1], missing: 0, default: -1))($t))->column('r'))->toBe([1, -1, -1, 0]);
+        expect((mutate(r: recode('x', ['a' => 1], _missing: 0, _default: -1))($t))->column('r'))->toBe([1, -1, -1, 0]);
     });
 
     it('evaluates a window function in another order with order_by()', function () {
@@ -121,7 +121,7 @@ describe('superseded dplyr functions', function () {
 
     it('adds rows with add_row()', function () {
         $t = DataFrame::fromColumns(['x' => [1, 2], 'y' => ['a', 'b']]);
-        expectRowsClose((add_row(x: 3, y: 'c', before: 2)($t))->toRows(), coverage('add_row_before'));
+        expectRowsClose((add_row(x: 3, y: 'c', _before: 2)($t))->toRows(), coverage('add_row_before'));
         expectRowsClose((add_row(x: [4, 5])($t))->toRows(), coverage('add_row_many'));
         expect(fn () => add_row(z: 1)($t))->toThrow(InvalidArgumentException::class);
     });

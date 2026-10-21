@@ -54,7 +54,7 @@ With the phit extension loaded, `mean`, `sd`, `variance`, `median`, and
 | `recode_values('x', [from, to], ..., default:)` | Map values; also `from:` / `to:` lookup lists |
 | `replace_values('x', [from, to], ...)` | `recode_values()` that keeps unmatched values |
 | `case_match('x', [from, to], ..., default:)` | dplyr's deprecated form of `recode_values()` |
-| `recode('x', a: 'A', default:, missing:)` | dplyr's superseded recoder, matching values by name |
+| `recode('x', a: 'A', _default:, _missing:)` | dplyr's superseded recoder, matching values by name |
 | `when_any(...)`, `when_all(...)` | Elementwise OR and AND across conditions |
 | `coalesce('x', 0)` | The first non-NA value |
 | `na_if('x', value)` | NA where `x` equals the value |

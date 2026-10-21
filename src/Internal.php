@@ -115,13 +115,12 @@ final class Internal
     }
 
     /**
-     * Split a variadic verb's options, which dplyr writes with a dot
-     * prefix, from the rest of its arguments. An option whose name a
-     * column could also have keeps that prefix as an underscore (_by,
-     * _keep, _groups, _id, _remove), so a named argument still reaches a
-     * column of that name; the rest read as plain named arguments
-     * (before:, after:...) and on those verbs a named argument an option
-     * claims is always the option.
+     * Split dplyr's dot-arguments, written here with a leading underscore
+     * (_by, _keep...), from the rest. The prefix is what keeps an option
+     * apart from a column of the same name: a named argument to one of
+     * these variadic verbs lands in the same string-keyed array as the
+     * columns the call creates. docs/coming-from-dplyr.qmd records the
+     * exception to the family's camelCase rule.
      *
      * @param array<int|string, mixed> $args
      * @param array<string, mixed> $defaults Allowed options and their defaults.
@@ -131,14 +130,11 @@ final class Internal
     {
         $options = $defaults;
         foreach ($args as $key => $value) {
-            if (! \is_string($key)) {
-                continue;
-            }
-            if (str_starts_with($key, '_') && ! \array_key_exists($key, $defaults)) {
-                $allowed = implode(', ', array_keys($defaults)) ?: 'none';
-                throw new \InvalidArgumentException("{$verb}(): unknown option '{$key}'. Allowed: {$allowed}.");
-            }
-            if (\array_key_exists($key, $defaults)) {
+            if (\is_string($key) && str_starts_with($key, '_')) {
+                if (! \array_key_exists($key, $defaults)) {
+                    $allowed = implode(', ', array_keys($defaults)) ?: 'none';
+                    throw new \InvalidArgumentException("{$verb}(): unknown option '{$key}'. Allowed: {$allowed}.");
+                }
                 $options[$key] = $value;
                 unset($args[$key]);
             }
@@ -295,7 +291,7 @@ final class Internal
                 continue;
             }
             $name = '.phplyr_sort_'.\count($temp);
-            $work = Mutate::run($work, [$name => $x], ['_keep' => 'all', 'before' => null, 'after' => null]);
+            $work = Mutate::run($work, [$name => $x], ['_keep' => 'all', '_before' => null, '_after' => null]);
             $temp[] = $name;
             $sort[] = [$name, $desc ? 'desc' : 'asc'];
         }

@@ -117,11 +117,13 @@ a database table. See [Databases and expressions](reference/databases.qmd).
 ## Named arguments and options
 
 Functions that create columns name them with PHP named arguments:
-`mutate(total: ...)`, `summarise(n: n())`. dplyr's dot-prefixed options drop
-the dot, because PHP named arguments cannot start with one: `by`, `keep`,
-`before`, `after`, `groups`, `keepAll`, and `byGroup`. On those functions a
-named argument one of these options claims is read as the option, so a column
-of that name is made another way.
+`mutate(total: ...)`, `summarise(n: n())`. dplyr's dot-prefixed options keep
+the dot as a leading underscore, because PHP named arguments cannot start with
+a dot: `_by`, `_keep`, `_before`, `_after`, `_groups`, `_keepAll`, and
+`_byGroup`. The prefix is what tells an option from a column, so
+`mutate(_before: 'id')` places the new columns while `mutate(before: 1)` makes
+a column called `before`. See
+[Underscored arguments](coming-from-dplyr.qmd#underscored-arguments).
 
 PHP does not allow positional arguments after named ones. Put `across()` and
 other positional arguments first: `summarise(across(...), n: n())`.

@@ -97,7 +97,7 @@ dataset('window', [
     'slice_pos' => fn () => pipe(panel(), group_by('g'), slice(1, 3), ungroup(), select('id')),
     'slice_neg' => fn () => pipe(panel(), group_by('g'), slice(-1), ungroup(), select('id')),
     'slice_head_by' => fn () => pipe(panel(), slice_head(n: 1, _by: 'g'), select('id')),
-    'distinct_keep_all' => fn () => pipe(panel(), distinct('label', keepAll: true), select('id', 'label')),
+    'distinct_keep_all' => fn () => pipe(panel(), distinct('label', _keepAll: true), select('id', 'label')),
     'distinct_computed' => fn () => pipe(panel(), distinct(hi: fn ($r) => $r->score > 5), arrange('hi')),
     'reframe' => fn () => pipe(
         panel(),
@@ -106,7 +106,7 @@ dataset('window', [
     ),
     'summarise_by' => fn () => pipe(panel(), summarise(m: mean('score'), n: n(), _by: 'g')),
     'arrange_expr' => fn () => pipe(panel(), arrange(desc(fn ($r) => $r->score * 2), 'id'), select('id')),
-    'arrange_by_group' => fn () => pipe(panel(), group_by('g'), arrange(desc('score'), byGroup: true), ungroup(), select('id')),
+    'arrange_by_group' => fn () => pipe(panel(), group_by('g'), arrange(desc('score'), _byGroup: true), ungroup(), select('id')),
 ]);
 
 it('matches dplyr', function (Closure $pipeline) {
@@ -131,11 +131,11 @@ it('selects columns like tidyselect', function () {
     expect((pipe($p, select(matches('^(id|g)$'))))->columns())->toBe(referenceNames('select_matches'));
     expect((pipe($p, select(any_of(['score', 'nope', 'id']))))->columns())->toBe(referenceNames('select_any_of'));
     expect((pipe($p, rename_with(strtoupper(...), starts_with('s'))))->columns())->toBe(referenceNames('rename_with'));
-    expect((pipe($p, relocate('score', before: 'g')))->columns())->toBe(referenceNames('relocate_before'));
-    expect((pipe($p, relocate('g', 'id', after: last_col())))->columns())->toBe(referenceNames('relocate_after'));
+    expect((pipe($p, relocate('score', _before: 'g')))->columns())->toBe(referenceNames('relocate_before'));
+    expect((pipe($p, relocate('g', 'id', _after: last_col())))->columns())->toBe(referenceNames('relocate_after'));
     expect((pipe($p, relocate('label')))->columns())->toBe(referenceNames('relocate_front'));
-    expect((pipe($p, mutate(z: fn ($r) => $r->score * 2, before: 'g')))->columns())->toBe(referenceNames('mutate_before'));
-    expect((pipe($p, mutate(z: fn ($r) => $r->score * 2, w: 1, after: 'id')))->columns())->toBe(referenceNames('mutate_after'));
+    expect((pipe($p, mutate(z: fn ($r) => $r->score * 2, _before: 'g')))->columns())->toBe(referenceNames('mutate_before'));
+    expect((pipe($p, mutate(z: fn ($r) => $r->score * 2, w: 1, _after: 'id')))->columns())->toBe(referenceNames('mutate_after'));
     expect((pipe($p, mutate(label: null, year: null)))->columns())->toBe(referenceNames('mutate_drop'));
 });
 

@@ -48,12 +48,12 @@ it('gives the same table with |>, a method chain, and pipe()', function () {
 
 it('passes named options the same way', function () {
     $operator = panel()
-        |> mutate(z: fn ($r) => $r->year * 2, before: 'id')
+        |> mutate(z: fn ($r) => $r->year * 2, _before: 'id')
         |> slice_max('score', n: 2, _by: 'g')
         |> count('g', sort: true);
 
     $chain = phplyr(panel())
-        ->mutate(z: fn ($r) => $r->year * 2, before: 'id')
+        ->mutate(z: fn ($r) => $r->year * 2, _before: 'id')
         ->sliceMax('score', n: 2, _by: 'g')
         ->count('g', sort: true)
         ->get();
