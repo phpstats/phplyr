@@ -7,7 +7,7 @@ echo DataFrame::fromCsv('clinic.csv')
         volume: if_else(fn ($r) => $r->visitors >= 250, 'busy', 'quiet'),
     )
     |> group_by('staffing', 'volume')
-    |> summarise(mean_calls: mean('calls'), groups: 'drop')
+    |> summarise(mean_calls: mean('calls'), _groups: 'drop')
     |> mutate(mean_calls: fn ($r) => round($r->mean_calls, 2))
     |> pivot_wider(namesFrom: 'volume', valuesFrom: 'mean_calls', namesSort: true)
     |> arrange(fn ($r) => array_search($r->staffing, ['low', 'mid', 'high']));

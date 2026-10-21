@@ -48,7 +48,7 @@ dataset('tidyr', function () {
         'drop_na_all' => fn () => pipe($wide(), drop_na()),
         'drop_na_col' => fn () => pipe($wide(), drop_na('wk1')),
         'replace_na' => fn () => pipe($wide(), replace_na(['wk1' => 0, 'wk2' => -1])),
-        'uncount' => fn () => pipe($strings(), select('id', 'n'), uncount('n', id: 'copy')),
+        'uncount' => fn () => pipe($strings(), select('id', 'n'), uncount('n', _id: 'copy')),
         'unite' => fn () => pipe(panel(), head(3), unite('gl', 'g', 'label', sep: ':')),
         'unite_keep' => fn () => pipe(panel(), head(3), unite('gv', 'g', 'value', remove: false)),
         'separate' => fn () => pipe($strings(), select('id', 's'), separate('s', ['a', 'b'], sep: '-', extra: 'drop', fill: 'right')),

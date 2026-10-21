@@ -12,7 +12,7 @@ final class Mutate
 {
     /**
      * @param array<int|string, mixed> $columns
-     * @param array{keep: string, before: mixed, after: mixed} $o
+     * @param array{_keep: string, before: mixed, after: mixed} $o
      * @param list<string> $made Receives the names created or modified, in call order.
      */
     public static function run(Table $t, array $columns, array $o, ?array &$made = []): Table
@@ -23,7 +23,7 @@ final class Mutate
         foreach ($columns as $key => $def) {
             if ($def instanceof Across) {
                 foreach ($def->expand($t, 'mutate') as $name => $vec) {
-                    $used = [...$used, ...self::used($vec, $name, $o['keep'])];
+                    $used = [...$used, ...self::used($vec, $name, $o['_keep'])];
                     $t = self::one($t, $name, $vec);
                     $made[] = $name;
                 }
@@ -33,7 +33,7 @@ final class Mutate
             if (\is_int($key)) {
                 throw new \InvalidArgumentException('mutate() needs named arguments, for example mutate(total: ...), or across(...).');
             }
-            $used = [...$used, ...self::used($def, $key, $o['keep'])];
+            $used = [...$used, ...self::used($def, $key, $o['_keep'])];
             $t = self::one($t, $key, $def);
             if ($def !== null) {
                 $made[] = $key;
@@ -43,7 +43,7 @@ final class Mutate
         }
         $made = array_values(array_unique($made));
 
-        $t = match ($o['keep']) {
+        $t = match ($o['_keep']) {
             'all' => $t,
             'none' => $t->select(array_values(array_filter(
                 $t->columns(),
@@ -53,9 +53,9 @@ final class Mutate
                 $t->columns(),
                 fn ($c) => \in_array($c, $t->groups(), true) || \in_array($c, $made, true)
                     || ! \in_array($c, $before, true)
-                    || (\in_array($c, $used, true) === ($o['keep'] === 'used')),
+                    || (\in_array($c, $used, true) === ($o['_keep'] === 'used')),
             ))),
-            default => throw new \InvalidArgumentException("mutate(): unknown keep: '{$o['keep']}'."),
+            default => throw new \InvalidArgumentException("mutate(): unknown _keep '{$o['_keep']}'."),
         };
 
         if ($o['before'] !== null || $o['after'] !== null) {
@@ -99,7 +99,7 @@ final class Mutate
     }
 
     /**
-     * Columns an argument reads, for keep: 'used' / 'unused'. Only
+     * Columns an argument reads, for _keep 'used' / 'unused'. Only
      * expressions can be inspected; closures can't.
      *
      * @return list<string>
@@ -117,6 +117,6 @@ final class Mutate
             return [];
         }
 
-        throw new \InvalidArgumentException("mutate(): keep: '{$keep}' requires expression arguments; '{$name}' is a PHP closure. Use helpers such as col('x')->mul(2).");
+        throw new \InvalidArgumentException("mutate(): _keep '{$keep}' requires expression arguments; '{$name}' is a PHP closure. Use helpers such as col('x')->mul(2).");
     }
 }

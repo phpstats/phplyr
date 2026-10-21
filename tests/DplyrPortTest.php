@@ -52,7 +52,7 @@ dataset('window', [
     'filter_between' => fn () => pipe(panel(), filter(between('score', 2, 4), fn ($r) => $r->value !== null), select('id')),
     'filter_if_any' => fn () => pipe(panel(), filter(if_any(['value', 'score'], fn ($v) => $v === null ? null : $v > 8)), select('id')),
     'filter_if_all' => fn () => pipe(panel(), filter(if_all(['value', 'score'], fn ($v) => $v === null ? null : $v > 3)), select('id')),
-    'filter_by' => fn () => pipe(panel(), filter(fn ($r, $g) => $r->score > mean('score')($g), by: 'g'), select('id')),
+    'filter_by' => fn () => pipe(panel(), filter(fn ($r, $g) => $r->score > mean('score')($g), _by: 'g'), select('id')),
     'across_mean' => fn () => pipe(
         panel(),
         group_by('g'),
@@ -84,7 +84,7 @@ dataset('window', [
         select('id', 'score', 'year'),
     ),
     'transmute' => fn () => pipe(panel(), group_by('g'), transmute(double: fn ($r) => $r->score * 2, id: col('id')), ungroup()),
-    'keep_none' => fn () => pipe(panel(), mutate(z: fn ($r) => $r->score * 2, score: fn ($r) => $r->score + 1, keep: 'none')),
+    'keep_none' => fn () => pipe(panel(), mutate(z: fn ($r) => $r->score * 2, score: fn ($r) => $r->score + 1, _keep: 'none')),
     'add_count' => fn () => pipe(panel(), add_count('g', name: 'size'), select('id', 'size')),
     'tally' => fn () => pipe(panel(), group_by('g'), tally()),
     'count_wt' => fn () => pipe(panel(), count('g', wt: 'score')),
@@ -96,7 +96,7 @@ dataset('window', [
     'slice_tail' => fn () => pipe(panel(), group_by('g'), slice_tail(n: 2), ungroup(), select('id')),
     'slice_pos' => fn () => pipe(panel(), group_by('g'), slice(1, 3), ungroup(), select('id')),
     'slice_neg' => fn () => pipe(panel(), group_by('g'), slice(-1), ungroup(), select('id')),
-    'slice_head_by' => fn () => pipe(panel(), slice_head(n: 1, by: 'g'), select('id')),
+    'slice_head_by' => fn () => pipe(panel(), slice_head(n: 1, _by: 'g'), select('id')),
     'distinct_keep_all' => fn () => pipe(panel(), distinct('label', keepAll: true), select('id', 'label')),
     'distinct_computed' => fn () => pipe(panel(), distinct(hi: fn ($r) => $r->score > 5), arrange('hi')),
     'reframe' => fn () => pipe(
@@ -104,7 +104,7 @@ dataset('window', [
         group_by('g'),
         reframe(p: [0.25, 0.75], q: fn ($g) => [quantile('score', 0.25)($g), quantile('score', 0.75)($g)]),
     ),
-    'summarise_by' => fn () => pipe(panel(), summarise(m: mean('score'), n: n(), by: 'g')),
+    'summarise_by' => fn () => pipe(panel(), summarise(m: mean('score'), n: n(), _by: 'g')),
     'arrange_expr' => fn () => pipe(panel(), arrange(desc(fn ($r) => $r->score * 2), 'id'), select('id')),
     'arrange_by_group' => fn () => pipe(panel(), group_by('g'), arrange(desc('score'), byGroup: true), ungroup(), select('id')),
 ]);
@@ -115,7 +115,7 @@ it('matches dplyr', function (Closure $pipeline) {
 })->with('window');
 
 it('matches dplyr on output that depends on sorted group keys', function () {
-    expectRowsClose((pipe(panel(), group_by('g', early: fn ($r) => $r->year < 2003), summarise(n: n(), groups: 'drop')))->toRows(), reference('group_computed'));
+    expectRowsClose((pipe(panel(), group_by('g', early: fn ($r) => $r->year < 2003), summarise(n: n(), _groups: 'drop')))->toRows(), reference('group_computed'));
     expectRowsClose((pipe(panel(), group_by('g', 'label'), group_keys()))->toRows(), reference('group_keys'));
     expectRowsClose((pipe(panel(), count('g', 'label')))->toRows(), reference('count_multi'));
 })->skip(fn () => ! phibbleSortsGroups(), 'phibble orders groups by first appearance (contract v0)');

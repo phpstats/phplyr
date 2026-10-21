@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 /*
  * tidyr verbs, pipe-able like the dplyr verbs. Arguments follow tidyr's
- * names; tidyr's dot-arguments drop the dot (remove, id).
+ * names; tidyr's dot-arguments drop the dot and read as camelCase, except
+ * _remove and _id, which keep it as an underscore (see
+ * docs/coming-from-dplyr.qmd).
  */
 
 namespace Phplyr;
@@ -243,12 +245,12 @@ function replace_na(array $replace): Closure
 }
 
 /**
- * Repeat each row by a weight column: uncount('n'). Options: remove (drop
- * the weight column, default true), id (add a 1-based copy number).
+ * Repeat each row by a weight column: uncount('n'). Options: _remove (drop
+ * the weight column, default true), _id (add a 1-based copy number).
  */
-function uncount(mixed $weights, bool $remove = true, ?string $id = null): Closure
+function uncount(mixed $weights, bool $_remove = true, ?string $_id = null): Closure
 {
-    return function (Table $t) use ($weights, $remove, $id) {
+    return function (Table $t) use ($weights, $_remove, $_id) {
         $w = Vec::values($weights, $t->ungroup(), true);
         $index = [];
         $ids = [];
@@ -262,11 +264,11 @@ function uncount(mixed $weights, bool $remove = true, ?string $id = null): Closu
             }
         }
         $out = Ops::take($t, $index);
-        if ($remove && \is_string($weights)) {
+        if ($_remove && \is_string($weights)) {
             $out = $out->select(array_values(array_diff($out->columns(), [$weights])));
         }
 
-        return $id === null ? $out : $out->mutate([$id => $ids]);
+        return $_id === null ? $out : $out->mutate([$_id => $ids]);
     };
 }
 

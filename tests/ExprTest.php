@@ -31,13 +31,13 @@ it('evaluates closure arguments with the same semantics', function () {
 
 it('matches dplyr for mutate keep used and unused', function () {
     $p = panel();
-    expectRowsClose((pipe($p, mutate(z: col('score')->mul(2), w: col('value')->add(col('year')), keep: 'used')))->toRows(), exprReference('keep_used'));
-    expectRowsClose((pipe($p, mutate(z: col('score')->mul(2), keep: 'unused')))->toRows(), exprReference('keep_unused'));
+    expectRowsClose((pipe($p, mutate(z: col('score')->mul(2), w: col('value')->add(col('year')), _keep: 'used')))->toRows(), exprReference('keep_used'));
+    expectRowsClose((pipe($p, mutate(z: col('score')->mul(2), _keep: 'unused')))->toRows(), exprReference('keep_unused'));
     expectRowsClose(
-        (pipe($p, group_by('g'), mutate(dev: col('score')->sub(mean('score')), keep: 'used'), ungroup()))->toRows(),
+        (pipe($p, group_by('g'), mutate(dev: col('score')->sub(mean('score')), _keep: 'used'), ungroup()))->toRows(),
         exprReference('keep_used_grouped'),
     );
-    expect(fn () => pipe($p, mutate(z: fn ($r) => $r->score, keep: 'used')))->toThrow(InvalidArgumentException::class, 'expression');
+    expect(fn () => pipe($p, mutate(z: fn ($r) => $r->score, _keep: 'used')))->toThrow(InvalidArgumentException::class, 'expression');
 });
 
 it('matches R for scalar expression helpers', function () {

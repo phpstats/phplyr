@@ -40,7 +40,7 @@ The slice family picks rows within each group:
 | `sample_n(size)`, `sample_frac(size)` | Superseded by `slice_sample()`. |
 | `add_row(x: 1, before:, after:)` | New rows of values; columns not given are NA. |
 
-Each takes `prop:` in place of `n:`, and `by:`.
+Each takes `prop:` in place of `n:`, and `_by:`.
 
 {{< include ../examples/_slice.md >}}
 
@@ -60,7 +60,7 @@ Later arguments see the columns made by earlier ones.
 
 {{< include ../examples/_mutate.md >}}
 
-`mutate()` takes dplyr's options: `by` groups for one call, `keep: 'none'`
+`mutate()` takes dplyr's options: `_by` groups for one call, `_keep: 'none'`
 keeps only the grouping and new columns, and `before` or `after` place the
 new columns. `transmute()` is `mutate()` that keeps only the new columns.
 
@@ -77,7 +77,7 @@ new columns. `transmute()` is `mutate()` that keeps only the new columns.
 `summarise()` returns one row per group. Each named argument is a summary
 helper or a closure that receives the group's table and returns one value.
 With several grouping columns, the result drops the last one, as in dplyr.
-`groups` accepts `'drop_last'`, `'drop'`, `'keep'`, and `'rowwise'`.
+`_groups` accepts `'drop_last'`, `'drop'`, `'keep'`, and `'rowwise'`.
 
 {{< include ../examples/_summarise.md >}}
 

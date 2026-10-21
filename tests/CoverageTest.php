@@ -110,7 +110,7 @@ describe('superseded dplyr functions', function () {
     it('recodes values by name', function () {
         $t = DataFrame::fromColumns(['x' => ['a', 'b', 'c', null], 'y' => ['x', 'y', 'z', 'x']]);
         expect((mutate(r: recode('x', a: 'A', b: 'B', default: 'other'))($t))->column('r'))->toBe(coverage('recode'));
-        expect(\array_slice((mutate(r: recode('y', ['x' => 'X'])))($t)->column('r'), 0, 3))->toBe(coverage('recode_keep'));
+        expect(\array_slice((mutate(r: recode('y', x: 'X')))($t)->column('r'), 0, 3))->toBe(coverage('recode_keep'));
         expect((mutate(r: recode('x', ['a' => 1], missing: 0, default: -1))($t))->column('r'))->toBe([1, -1, -1, 0]);
     });
 
@@ -218,7 +218,7 @@ describe('rectangling', function () {
         expectRowsClose($out->select(['id', 'first', 'bc', 'e'])->toRows(), coverage('hoist'));
         expect($out->columns())->toBe(['id', 'first', 'bc', 'e', 'x']);
         expect($out->column('x'))->toBe([['b' => ['d' => 6]], ['b' => []]]);
-        expect((pipe($h, hoist('x', bc: ['b', 'c'], remove: false)))->column('x'))->toBe($h->column('x'));
+        expect((pipe($h, hoist('x', bc: ['b', 'c'], _remove: false)))->column('x'))->toBe($h->column('x'));
     });
 
     it('chops and unchops', function () {

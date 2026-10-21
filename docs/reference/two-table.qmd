@@ -65,7 +65,7 @@ run them in SQL, except right and full rolling joins, which load the rows.
 ## Binding
 
 `bind_rows()` stacks tables under the input one, matching columns by name and
-filling missing columns with NA. `id:` adds a column with each row's source.
+filling missing columns with NA. `_id:` adds a column with each row's source.
 `bind_cols()` puts tables side by side and renames duplicate names as
 `name...position`.
 

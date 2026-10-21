@@ -76,13 +76,13 @@ function unnest_wider(mixed $col, ?string $namesSep = null): Closure
  * Pull components out of a list-column into new columns, before it:
  * hoist('meta', name: 'name', first: 1, city: ['address', 'city']).
  * A path is a name, a 1-based position, or a list of them for nested
- * elements. With remove (the default), hoisted components are removed
+ * elements. With _remove (the default), hoisted components are removed
  * from the list-column, and the column is dropped once every element is
  * empty.
  */
 function hoist(string $col, mixed ...$paths): Closure
 {
-    [$paths, $o] = Internal::options($paths, ['remove' => true], 'hoist');
+    [$paths, $o] = Internal::options($paths, ['_remove' => true], 'hoist');
     Internal::assertNamed($paths, 'hoist');
 
     return function (Table $t) use ($col, $paths, $o) {
@@ -91,12 +91,12 @@ function hoist(string $col, mixed ...$paths): Closure
         foreach ($paths as $name => $path) {
             $path = (array) $path;
             $new[$name] = array_map(fn ($e) => Lists::pluck($e, $path), $elements);
-            if ($o['remove']) {
+            if ($o['_remove']) {
                 $elements = array_map(fn ($e) => Lists::without($e, $path), $elements);
             }
         }
         $out = Tidyr::insertAt($t, $col, $new, remove: false, newFirst: true)->mutate([$col => $elements]);
-        if ($o['remove'] && array_all($elements, fn ($e) => $e === null || $e === [])) {
+        if ($o['_remove'] && array_all($elements, fn ($e) => $e === null || $e === [])) {
             $out = $out->select(array_values(array_diff($out->columns(), [$col])));
         }
 

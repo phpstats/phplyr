@@ -3,7 +3,8 @@ title: "tidyr"
 ---
 
 The tidyr functions use tidyr's argument names. Arguments that start with a dot
-in tidyr drop the dot here and read as camelCase.
+in tidyr drop the dot here and read as camelCase, except `_id` and `_remove`,
+which keep the dot as an underscore because a column could have the same name.
 
 ## Pivoting
 
@@ -62,7 +63,7 @@ with NA in the given columns, and `replace_na()` replaces NA per column.
 | `separate_longer_position(col, width)` | Split into rows of fixed width |
 | `separate(col, into, sep:)` | The superseded splitter, with `extra`, `fill`, and `convert` |
 | `unite(col, ...cols, sep:)` | Paste columns together |
-| `uncount('n', id:)` | Repeat rows by a weight column |
+| `uncount('n', _id:)` | Repeat rows by a weight column |
 | `separate_rows(...cols, sep:)` | The superseded row splitter, on a regular expression |
 | `extract(col, into, regex)` | The superseded regex splitter |
 | `nest(data: [...])`, `unnest('data')` | List-columns of tables |
@@ -81,7 +82,7 @@ array with string keys is a named list.
 | --- | --- |
 | `unnest_wider(col, namesSep:)` | One column per name; unnamed elements need `namesSep` |
 | `unnest_longer(col, valuesTo:, indicesTo:, indicesInclude:, keepEmpty:)` | One row per element, with names or positions in `{col}_id` |
-| `hoist(col, name: path, remove:)` | Pull components out by name, 1-based position, or a list path |
+| `hoist(col, name: path, _remove:)` | Pull components out by name, 1-based position, or a list path |
 | `chop(cols)`, `unchop(cols, keepEmpty:)` | Collapse rows into list-columns and back |
 | `pack(name: cols, namesSep:)`, `unpack(cols, namesSep:)` | Columns into a column of named arrays and back |
 

@@ -21,8 +21,8 @@ table below shows single calls.
 | `select(new = old, everything())` | `select(['new' => 'old'], everything())` |
 | `rename(new = old)` | `rename(new: 'old')` |
 | `arrange(desc(x))` | `arrange(desc('x'))` |
-| `mutate(..., .by = g)` | `mutate(..., by: 'g')` |
-| `summarise(..., .groups = "drop")` | `summarise(..., groups: 'drop')` |
+| `mutate(..., .by = g)` | `mutate(..., _by: 'g')` |
+| `summarise(..., .groups = "drop")` | `summarise(..., _groups: 'drop')` |
 | `across(c(a, b), mean)` | `across(['a', 'b'], mean(...))` |
 | `across(c(a, b), \(x) x * 2)` | `across(['a', 'b'], fn ($x) => $x * 2)` |
 | `case_when(x < 0 ~ "neg", .default = "pos")` | `case_when([fn ($r) => $r->x < 0, 'neg'], default: 'pos')` |
@@ -36,18 +36,51 @@ table below shows single calls.
 
 ## Conventions
 
-- **Dot-arguments.** dplyr's `.by`, `.keep`, `.before`, `.after`, `.groups`,
-  `.keep_all`, `.by_group`, `.direction`, `.id`, and `.remove` are written
-  `by`, `keep`, `keepAll`, `byGroup`, and so on. A column an option name
-  claims cannot be created through a named argument on that function.
+- **Dot-arguments.** Most of dplyr's and tidyr's dot-arguments drop the dot
+  and read as camelCase: `.before`, `.after`, `.keep_all`, `.by_group`, and
+  `.direction` are `before:`, `after:`, `keepAll:`, `byGroup:`, and
+  `direction:`. Six keep the dot as an underscore; see
+  [Underscored arguments](#underscored-arguments).
 - **Positions are 1-based**, as in R: `pull(1)` is the first column, `pull(-1)`
   the last, and `slice(1, 3)` the first and third rows of each group.
 - **`var()` is `variance()`**, because `var` is a reserved word in PHP.
 - **`count`, `min`, and `max`** shadow PHP's built-ins in files that import
   them.
 - **Group order** follows dplyr: groups are sorted by key, factors by level
-  order, and NA last. `by` also sorts groups (dplyr keeps first-appearance
+  order, and NA last. `_by` also sorts groups (dplyr keeps first-appearance
   order for `.by`).
+
+## Underscored arguments
+
+phplyr's parameters are camelCase, like the rest of the phpstats family.
+Six arguments are an exception and keep dplyr's and tidyr's dot as a leading
+underscore:
+
+| phplyr | dplyr / tidyr | On |
+| --- | --- | --- |
+| `_by` | `.by` | `filter()`, `filter_out()`, `mutate()`, `transmute()`, `summarise()`, `reframe()`, `slice()`, the `slice_*()` family, `group_split()` |
+| `_keep` | `.keep` | `mutate()`, `group_nest()`, `nest_by()`, `group_split()`, `group_map()` |
+| `_groups` | `.groups` | `summarise()`, `with_groups()` |
+| `_id` | `.id` | `bind_rows()`, `uncount()` |
+| `_remove` | `.remove` | `hoist()`, `uncount()` |
+| `$_x` | `.x` | `recode()` |
+
+These are the names a column is also likely to have, and most of the verbs
+that take them are variadic. A named argument to a variadic function lands in
+the same string-keyed array as the columns the call creates, so without the
+prefix the option would always win and the column would be unreachable. dplyr
+and tidyr use the dot for the same reason. With the prefix, both work:
+
+```php
+$t |> mutate(m: mean('x'), _by: 'g');   // grouped by g for this call
+$t |> mutate(by: 1);                    // a column called by
+```
+
+The camelCase options are on verbs where the name is unlikely to clash, and
+there the option does win: `mutate(before: 'id')` places the new columns, so a
+column called `before` has to come from the array form,
+`mutate(['before' => 1])`. The same holds for `after`, `add`, `drop`, `key`,
+`direction`, `namesSep`, `byGroup`, `keepAll`, `default`, and `missing`.
 
 ## `across()` functions
 

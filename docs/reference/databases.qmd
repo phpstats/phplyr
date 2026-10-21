@@ -27,7 +27,7 @@ in-memory `DataFrame` evaluates it with dplyr's semantics, and a database table
 compiles it to SQL. A helper given a PHP closure still works, but it is
 evaluated in PHP.
 
-`mutate(keep: 'used')` and `keep: 'unused'` need expression arguments,
+`mutate(_keep: 'used')` and `_keep: 'unused'` need expression arguments,
 because phplyr reads the columns an expression uses from the tree.
 
 ## Database tables

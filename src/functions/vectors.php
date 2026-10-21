@@ -363,12 +363,12 @@ function case_match(mixed $x, mixed ...$cases): Vec
 /**
  * Replace values by name (superseded in dplyr by recode_values()):
  * recode('grade', a: 'A', b: 'B', default: 'other'), or with a map for keys
- * that aren't valid names, or that a parameter name claims: recode('code',
- * [1 => 'one', 2 => 'two']), recode('axis', ['x' => 'X']).
+ * that aren't valid names, or that an option claims: recode('code',
+ * [1 => 'one', 2 => 'two']), recode('level', ['default' => 'D']).
  * The first argument is dplyr's .x. Values match by their string form. Unmatched values stay as they are
  * unless default is given; NA becomes missing.
  */
-function recode(mixed $x, mixed ...$replacements): Vec
+function recode(mixed $_x, mixed ...$replacements): Vec
 {
     $hasDefault = \array_key_exists('default', $replacements);
     [$replacements, $o] = Internal::options($replacements, ['default' => null, 'missing' => null], 'recode');
@@ -390,7 +390,7 @@ function recode(mixed $x, mixed ...$replacements): Vec
             $hasDefault => $o['default'],
             default => $v,
         },
-        Vec::values($x, $g, true),
+        Vec::values($_x, $g, true),
     ));
 }
 

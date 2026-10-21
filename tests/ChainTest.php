@@ -29,7 +29,7 @@ dataset('chain pipelines', fn () => [
     ]],
     'named options' => [[
         ['mutate', ['z' => fn ($r) => $r->score * 2, 'before' => 'id']],
-        ['slice_max', ['score', 'n' => 2, 'by' => 'g']],
+        ['slice_max', ['score', 'n' => 2, '_by' => 'g']],
     ]],
     'join and count' => [[
         ['inner_join', [panel()->select(['id', 'g'])->rename(['g2' => 'g']), 'by' => 'id']],
@@ -144,7 +144,7 @@ it('rejects names that are not verbs', function (string $name) {
 
 it('takes a verb in camelCase and runs the snake_case function', function () {
     expectSameResult(phplyr(panel())->groupBy('g')->summarise(n: n())->get(), pipe(panel(), group_by('g'), summarise(n: n())));
-    expectSameResult(phplyr(panel())->sliceMax('score', n: 2, by: 'g')->get(), pipe(panel(), slice_max('score', n: 2, by: 'g')));
+    expectSameResult(phplyr(panel())->sliceMax('score', n: 2, _by: 'g')->get(), pipe(panel(), slice_max('score', n: 2, _by: 'g')));
     expect(phplyr(panel())->groupBy('g')->nGroups())->toBe(3);
     expect(phplyr(panel())->groupBy('g')->groupVars())->toBe(['g']);
 });

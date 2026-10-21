@@ -116,10 +116,12 @@ final class Internal
 
     /**
      * Split a variadic verb's options, which dplyr writes with a dot
-     * prefix and phplyr writes as plain named arguments (by:, keep:...),
-     * from the rest of its arguments. An option is recognised by name, so
-     * on these verbs a named argument that an option claims is always that
-     * option and never a column of that name.
+     * prefix, from the rest of its arguments. An option whose name a
+     * column could also have keeps that prefix as an underscore (_by,
+     * _keep, _groups, _id, _remove), so a named argument still reaches a
+     * column of that name; the rest read as plain named arguments
+     * (before:, after:...) and on those verbs a named argument an option
+     * claims is always the option.
      *
      * @param array<int|string, mixed> $args
      * @param array<string, mixed> $defaults Allowed options and their defaults.
@@ -129,7 +131,14 @@ final class Internal
     {
         $options = $defaults;
         foreach ($args as $key => $value) {
-            if (\is_string($key) && \array_key_exists($key, $defaults)) {
+            if (! \is_string($key)) {
+                continue;
+            }
+            if (str_starts_with($key, '_') && ! \array_key_exists($key, $defaults)) {
+                $allowed = implode(', ', array_keys($defaults)) ?: 'none';
+                throw new \InvalidArgumentException("{$verb}(): unknown option '{$key}'. Allowed: {$allowed}.");
+            }
+            if (\array_key_exists($key, $defaults)) {
                 $options[$key] = $value;
                 unset($args[$key]);
             }
@@ -151,7 +160,7 @@ final class Internal
             return $fn($t);
         }
         if ($t->groups() !== []) {
-            throw new \LogicException("Can't use by: on a grouped table; ungroup() first.");
+            throw new \LogicException("Can't use _by on a grouped table; ungroup() first.");
         }
 
         return $fn($t->groupBy(Selector::select([$by], $t)))->ungroup();
@@ -286,7 +295,7 @@ final class Internal
                 continue;
             }
             $name = '.phplyr_sort_'.\count($temp);
-            $work = Mutate::run($work, [$name => $x], ['keep' => 'all', 'before' => null, 'after' => null]);
+            $work = Mutate::run($work, [$name => $x], ['_keep' => 'all', 'before' => null, 'after' => null]);
             $temp[] = $name;
             $sort[] = [$name, $desc ? 'desc' : 'asc'];
         }

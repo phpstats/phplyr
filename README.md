@@ -61,7 +61,7 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 - **Row closures** receive `(Phibble\Row $r, Table $group)`, so `$r->price` or `$r['price']`. In a grouped table, `$group` is the row's group.
 - **Vector helpers** such as `lag('x')`, `cumsum('x')`, `min_rank('x')` and `mean('x')` are evaluated once per group. A summary such as `mean('x')` used in `mutate()` is recycled within each group, as in R.
 - **Helper arguments:** the first argument of a helper is its input column. A string there is a column name; it can also be `col('x')`, another helper, or a row closure. Later arguments are values, so a string there is a literal; wrap it in `col()` to use a column.
-- **Dot-arguments** drop the dot: `.by` becomes `by`, `.keep` becomes `keep`, and so on: `mutate(z: ..., by: 'g')`. On a function that takes one, a named argument the option claims is read as the option, not as a column of that name.
+- **Dot-arguments** mostly drop the dot and read as camelCase: `.before` becomes `before`, `.keep_all` becomes `keepAll`. Six keep the dot as an underscore, because a column could have the same name: `_by`, `_keep`, `_groups`, `_id`, `_remove`, and `recode()`'s first argument. So `mutate(z: ..., _by: 'g')` groups the call, and `mutate(by: 1)` still makes a column called `by`. On a function that takes one of the camelCase options, a named argument the option claims is read as the option, not as a column of that name; `docs/coming-from-dplyr.qmd` lists the six and why they keep the prefix.
 - **Positions** are 1-based, as in R: `pull(1)`, `pull(-1)`, `slice(1, 3)`.
 - **NA is null.** Summaries return null when a value is missing, unless you pass `naRm: true`.
 - **Shadowed built-ins:** `count`, `min`, `max`, `round`, `abs`, `log`, `str_replace`, `str_pad`, `str_split` and a few others shadow PHP's built-ins in files that import them. Write `\count()` for the built-in.
@@ -70,16 +70,16 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 
 | Function | Example |
 | --- | --- |
-| `filter` | `filter(fn ($r) => $r->x > 0, between('y', 1, 5), by: 'g')` |
+| `filter` | `filter(fn ($r) => $r->x > 0, between('y', 1, 5), _by: 'g')` |
 | `select` | `select('id', starts_with('x'), except('tmp'))`, `select(['new' => 'old'], everything())` |
 | `mutate` | `mutate(z: fn ($r) => $r->x * 2, prev: lag('x'), avg: mean('x'), drop_me: null)` |
-| | Options: `by`, `keep: 'none'`, `before`, `after` |
+| | Options: `_by`, `_keep: 'none'`, `before`, `after` |
 | `transmute` | `transmute(z: fn ($r) => $r->x * 2)` |
 | `rename` / `rename_with` | `rename(new: 'old')`, `rename_with(strtoupper(...), starts_with('x'))` |
 | `relocate` | `relocate('score', before: 'g')`, `relocate('g', after: last_col())` |
 | `arrange` | `arrange('a', desc('b'), desc(fn ($r) => $r->x * $r->y), byGroup: true)` |
 | `group_by` / `ungroup` | `group_by('g', decade: fn ($r) => intdiv($r->year, 10) * 10, add: true)` |
-| `summarise` / `summarize` | `summarise(n: n(), avg: mean('x'), across(...), by: 'g', groups: 'drop')` |
+| `summarise` / `summarize` | `summarise(n: n(), avg: mean('x'), across(...), _by: 'g', _groups: 'drop')` |
 | `reframe` | `reframe(q: fn ($g) => [...several values...])` |
 | `count` / `tally` | `count('g', 'h', wt: 'w', sort: true, name: 'rows')`, `tally()` |
 | `add_count` / `add_tally` | `add_count('g', name: 'size')` |
@@ -90,7 +90,7 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 | `slice_sample` | `slice_sample(n: 10, replace: true, weightBy: 'w')`. Seed with `mt_srand()`. |
 | `head` | `head(6)`. Ignores groups. |
 | `pull` | `pull('x')`, `pull()` (the last column), `pull('x', name: 'id')` |
-| `bind_rows` / `bind_cols` | `bind_rows($b, id: 'src')`, `bind_cols($b)` |
+| `bind_rows` / `bind_cols` | `bind_rows($b, _id: 'src')`, `bind_cols($b)` |
 | `glimpse` | `glimpse()`. Prints a summary and passes the table on. |
 | Joins | `left_join($y, by: ['id' => 'key'], suffix: ['.x', '.y'], keep:, naMatches:, multiple:, unmatched:, relationship:)`. Also `inner_join`, `right_join`, `full_join`, `semi_join`, `anti_join` and `cross_join`. |
 | `rowwise` | `rowwise('id')`. Each row becomes its own group. |
@@ -148,7 +148,7 @@ The tidyr functions work the same way, with tidyr's argument names. The test sui
 | `crossing` / `expand_grid` | `crossing(x: [2, 1], y: ['a', 'b'])`. These return a new DataFrame. |
 | `fill` | `fill('price', direction: 'downup')`. Works within groups. |
 | `drop_na` / `replace_na` | `drop_na('wk1')`, `replace_na(['wk1' => 0])` |
-| `uncount` | `uncount('n', id: 'copy')` |
+| `uncount` | `uncount('n', _id: 'copy')` |
 | `unite` | `unite('date', 'year', 'month', sep: '-', remove: false, naRm: true)` |
 | `separate` | `separate('s', ['a', 'b'], sep: '-', extra: 'merge', fill: 'left', convert: true)` |
 | `separate_wider_*` | `separate_wider_delim('s', '-', names: [...])`, `separate_wider_position('code', ['state' => 2, 1, 'n' => 2])`, `separate_wider_regex('code', ['l' => '[A-Z]+', 'd' => '\d+'])` |
@@ -157,7 +157,7 @@ The tidyr functions work the same way, with tidyr's argument names. The test sui
 
 ## Expressions and databases
 
-`col('price')->mul(1.1)->gt(100)` and helpers such as `mean('x')` build inspectable `Phibble\Expr` trees when their arguments are column names, literals, or other helpers. phplyr passes them to the table. The in-memory DataFrame evaluates them, and `Phibble\tbl($pdo, 'sales')` compiles them to SQL (SQLite, PostgreSQL, MySQL). `show_query()` returns the SQL and `collect()` runs it. A PHP closure makes a database table load its rows and continue in memory. `mutate(keep: 'used' | 'unused')` works with expression arguments.
+`col('price')->mul(1.1)->gt(100)` and helpers such as `mean('x')` build inspectable `Phibble\Expr` trees when their arguments are column names, literals, or other helpers. phplyr passes them to the table. The in-memory DataFrame evaluates them, and `Phibble\tbl($pdo, 'sales')` compiles them to SQL (SQLite, PostgreSQL, MySQL). `show_query()` returns the SQL and `collect()` runs it. A PHP closure makes a database table load its rows and continue in memory. `mutate(_keep: 'used' | 'unused')` works with expression arguments.
 
 ## Models
 
