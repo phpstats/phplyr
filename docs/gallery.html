@@ -310,7 +310,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(expected<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$b0</span> <span class="op">+</span> <span class="va">$b_prior</span> <span class="op">*</span> <span class="va">$r</span>-&gt;prior_score <span class="op">+</span> <span class="va">$b_hours</span> <span class="op">*</span> <span class="va">$r</span>-&gt;study_hours)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(residual<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">-</span> <span class="va">$r</span>-&gt;expected)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    -&gt;group_by(<span class="st">'school'</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    -&gt;summarise(</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        students<span class="ot">:</span> n()<span class="ot">,</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>)<span class="ot">,</span></span>
@@ -380,7 +380,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="va">$random</span> <span class="op">=</span> <span class="va">$fit</span>[<span class="st">'random'</span>][<span class="dv">0</span>]<span class="ot">;</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="va">$effects</span> <span class="op">=</span> <span class="fu">array_combine</span>(<span class="va">$random</span>[<span class="st">'group_labels'</span>]<span class="ot">,</span> <span class="fu">array_column</span>(<span class="va">$random</span>[<span class="st">'effects'</span>]<span class="ot">,</span> <span class="dv">0</span>))<span class="ot">;</span></span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    -&gt;group_by(<span class="st">'school'</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    -&gt;summarise(students<span class="ot">:</span> n()<span class="ot">,</span> raw_mean<span class="ot">:</span> mean(<span class="st">'score'</span>))</span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(intercept_shift<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="fu">round</span>(<span class="va">$effects</span>[<span class="va">$r</span>-&gt;school]<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span> raw_mean<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;raw_mean<span class="ot">,</span> <span class="dv">1</span>))</span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(desc(<span class="st">'intercept_shift'</span>))</span>
@@ -494,7 +494,7 @@ school sd 4.458, residual sd 5.057, ICC 0.437
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$learning</span>)</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(hours_quartile<span class="ot">:</span> ntile(<span class="st">'study_hours'</span><span class="ot">,</span> <span class="dv">4</span>))</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    -&gt;group_by(<span class="st">'hours_quartile'</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'hours_quartile'</span>)</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    -&gt;summarise(</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        students<span class="ot">:</span> n()<span class="ot">,</span></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        min_hours<span class="ot">:</span> <span class="fu">min</span>(<span class="st">'study_hours'</span>)<span class="ot">,</span></span>

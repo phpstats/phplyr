@@ -12,7 +12,7 @@ $fit = phplyr($schools)->lm('score ~ prior_score + study_hours');
 echo phplyr($schools)
     ->mutate(expected: fn ($r) => $b0 + $b_prior * $r->prior_score + $b_hours * $r->study_hours)
     ->mutate(residual: fn ($r) => $r->score - $r->expected)
-    ->group_by('school')
+    ->groupBy('school')
     ->summarise(
         students: n(),
         avg_score: mean('score'),
