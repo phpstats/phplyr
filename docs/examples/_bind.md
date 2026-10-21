@@ -6,7 +6,7 @@
 $a = DataFrame::fromRows([['id' => 1, 'v' => 'a']]);
 $b = DataFrame::fromRows([['id' => 2, 'w' => true]]);
 
-echo phplyr($a)->bindRows($b, id: 'source');
+echo phplyr($a)->bindRows($b, _id: 'source');
 echo "\n", phplyr($a)->bindCols(DataFrame::fromRows([['id' => 10]]));
 ```
 
@@ -16,7 +16,7 @@ echo "\n", phplyr($a)->bindCols(DataFrame::fromRows([['id' => 10]]));
 $a = DataFrame::fromRows([['id' => 1, 'v' => 'a']]);
 $b = DataFrame::fromRows([['id' => 2, 'w' => true]]);
 
-echo $a |> bind_rows($b, id: 'source');
+echo $a |> bind_rows($b, _id: 'source');
 echo "\n", $a |> bind_cols(DataFrame::fromRows([['id' => 10]]));
 ```
 

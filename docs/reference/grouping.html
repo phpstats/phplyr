@@ -291,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><code>group_by()</code> sets the grouping columns. Selectors work, named arguments group by a computed column, and <code>add: true</code> adds to the existing groups. <code>drop: false</code> keeps groups for unused factor levels, so <code>summarise()</code> and <code>count()</code> return them with <code>n() = 0</code>, as dplyr does. <code>ungroup()</code> removes grouping, or only the named columns.</p>
-<p>Groups are ordered like dplyr’s: sorted by key, factors by level order, and NA last. <code>filter()</code>, <code>mutate()</code>, <code>summarise()</code>, and the slice functions work within groups. <code>by:</code> groups for a single call and returns an ungrouped table.</p>
+<p>Groups are ordered like dplyr’s: sorted by key, factors by level order, and NA last. <code>filter()</code>, <code>mutate()</code>, <code>summarise()</code>, and the slice functions work within groups. <code>_by:</code> groups for a single call and returns an ungrouped table.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Method chain (PHP 8.3+)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Pipe (PHP 8.5)</a></li></ul>
 <div class="tab-content" data-group="syntax">
@@ -392,7 +392,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>The table regrouped without unused factor levels</td>
 </tr>
 <tr class="odd">
-<td><code>group_nest(key:, keep:)</code></td>
+<td><code>group_nest(key:, _keep:)</code></td>
 <td>One row per group, with a list-column of tables</td>
 </tr>
 <tr class="even">
@@ -400,11 +400,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>group_nest()</code> as a rowwise table</td>
 </tr>
 <tr class="odd">
-<td><code>with_groups(groups, fn)</code></td>
+<td><code>with_groups(_groups, fn)</code></td>
 <td>The function’s result under other groups, with the original grouping restored</td>
 </tr>
 <tr class="even">
-<td><code>group_split(keep:)</code></td>
+<td><code>group_split(_keep:)</code></td>
 <td>A list of tables, one per group</td>
 </tr>
 <tr class="odd">

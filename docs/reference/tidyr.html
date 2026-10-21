@@ -292,7 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The tidyr functions use tidyr’s argument names. Arguments that start with a dot in tidyr drop the dot here and read as camelCase.</p>
+<p>The tidyr functions use tidyr’s argument names. Arguments that start with a dot in tidyr drop the dot here and read as camelCase, except <code>_id</code> and <code>_remove</code>, which keep the dot as an underscore because a column could have the same name.</p>
 <section id="pivoting" class="level2">
 <h2 class="anchored" data-anchor-id="pivoting">Pivoting</h2>
 <p><code>pivot_longer()</code> turns columns into rows of names and values. <code>namesPrefix</code> strips a regular expression from the start of each name. <code>namesSep</code> or <code>namesPattern</code> split names into several <code>namesTo</code> columns, and the special name <code>'.value'</code> takes the value column’s name from that part. <code>valuesDropNa: true</code> drops rows whose values are all NA. <code>namesTransform</code> and <code>valuesTransform</code> take a closure, or an array of closures by column. <code>colsVary: 'slowest'</code> keeps each source column’s rows together.</p>
@@ -446,7 +446,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Paste columns together</td>
 </tr>
 <tr class="even">
-<td><code>uncount('n', id:)</code></td>
+<td><code>uncount('n', _id:)</code></td>
 <td>Repeat rows by a weight column</td>
 </tr>
 <tr class="odd">
@@ -534,7 +534,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>One row per element, with names or positions in <code>{col}_id</code></td>
 </tr>
 <tr class="odd">
-<td><code>hoist(col, name: path, remove:)</code></td>
+<td><code>hoist(col, name: path, _remove:)</code></td>
 <td>Pull components out by name, 1-based position, or a list path</td>
 </tr>
 <tr class="even">

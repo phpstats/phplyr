@@ -15,7 +15,7 @@ echo phplyr($housing)
     ->mutate(across(where('double'), fn ($v) => round($v, 1)));
 
 echo "\n", phplyr($housing)
-    ->mutate(vs_group: fn ($r, $g) => round($r->per_m2 - mean('per_m2')($g), 2), by: 'bedrooms')
+    ->mutate(vs_group: fn ($r, $g) => round($r->per_m2 - mean('per_m2')($g), 2), _by: 'bedrooms')
     ->arrange('bedrooms', desc('vs_group'));
 ```
 
@@ -33,7 +33,7 @@ echo $housing
     |> mutate(across(where('double'), fn ($v) => round($v, 1)));
 
 echo "\n", $housing
-    |> mutate(vs_group: fn ($r, $g) => round($r->per_m2 - mean('per_m2')($g), 2), by: 'bedrooms')
+    |> mutate(vs_group: fn ($r, $g) => round($r->per_m2 - mean('per_m2')($g), 2), _by: 'bedrooms')
     |> arrange('bedrooms', desc('vs_group'));
 ```
 
