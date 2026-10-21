@@ -130,8 +130,8 @@ foreach ($sizes as $rows) {
         $sales['price'][] = \round(mt_rand(100, 10000) / 100, 2);
     }
     $stores = ['store' => range(1, 100), 'region' => array_map(fn ($s) => 'region-'.(($s - 1) % 5 + 1), range(1, 100))];
-    $frameSales = DataFrame::fromColumns($sales);
-    $frameStores = DataFrame::fromColumns($stores);
+    $salesDf = DataFrame::fromColumns($sales);
+    $storesDf = DataFrame::fromColumns($stores);
     if ($csvDir !== null) {
         @mkdir($csvDir, 0777, true);
         writeCsv("{$csvDir}/sales-{$rows}.csv", $sales);
@@ -154,9 +154,9 @@ foreach ($sizes as $rows) {
     $pdo->commit();
     unset($sales);
 
-    $tables = ['DataFrame' => [$frameSales, $frameStores]];
+    $tables = ['DataFrame' => [$salesDf, $storesDf]];
     if ($polars) {
-        $tables['PolarsTable'] = [PolarsTable::fromTable($frameSales), PolarsTable::fromTable($frameStores)];
+        $tables['PolarsTable'] = [PolarsTable::fromTable($salesDf), PolarsTable::fromTable($storesDf)];
     }
     $tables['SqlTable(SQLite)'] = [SqlTable::table($pdo, 'sales'), SqlTable::table($pdo, 'stores')];
 
