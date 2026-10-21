@@ -9,7 +9,8 @@
         "symfony/polyfill-php84": "^1.31"
     },
     "require-dev": {
-        "pestphp/pest": "^4.0"
+        "pestphp/pest": "^4.0",
+        "squizlabs/php_codesniffer": "^3.13"
     },
     "suggest": {
         "ext-phit": "Native descriptives (Phit\\stat_*) and model fitting (Phit\\fit_*), needed for lm(), glm(), lmer(), and glmer()"
