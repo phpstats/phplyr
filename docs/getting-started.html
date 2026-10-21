@@ -404,7 +404,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="named-arguments-and-options" class="level2">
 <h2 class="anchored" data-anchor-id="named-arguments-and-options">Named arguments and options</h2>
-<p>Functions that create columns name them with PHP named arguments: <code>mutate(total: ...)</code>, <code>summarise(n: n())</code>. dplyr’s dot-prefixed options drop the dot, because PHP named arguments cannot start with one: <code>by</code>, <code>keep</code>, <code>before</code>, <code>after</code>, <code>groups</code>, <code>keepAll</code>, and <code>byGroup</code>. On those functions a named argument one of these options claims is read as the option, so a column of that name is made another way.</p>
+<p>Functions that create columns name them with PHP named arguments: <code>mutate(total: ...)</code>, <code>summarise(n: n())</code>. dplyr’s dot-prefixed options keep the dot as a leading underscore, because PHP named arguments cannot start with a dot: <code>_by</code>, <code>_keep</code>, <code>_before</code>, <code>_after</code>, <code>_groups</code>, <code>_keepAll</code>, and <code>_byGroup</code>. The prefix is what tells an option from a column, so <code>mutate(_before: 'id')</code> places the new columns while <code>mutate(before: 1)</code> makes a column called <code>before</code>. See <a href="./coming-from-dplyr.html#underscored-arguments">Underscored arguments</a>.</p>
 <p>PHP does not allow positional arguments after named ones. Put <code>across()</code> and other positional arguments first: <code>summarise(across(...), n: n())</code>.</p>
 </section>
 <section id="printing-and-inspecting" class="level2">

@@ -395,7 +395,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="conventions" class="level2">
 <h2 class="anchored" data-anchor-id="conventions">Conventions</h2>
 <ul>
-<li><strong>Dot-arguments.</strong> Most of dplyr’s and tidyr’s dot-arguments drop the dot and read as camelCase: <code>.before</code>, <code>.after</code>, <code>.keep_all</code>, <code>.by_group</code>, and <code>.direction</code> are <code>before:</code>, <code>after:</code>, <code>keepAll:</code>, <code>byGroup:</code>, and <code>direction:</code>. Six keep the dot as an underscore; see <a href="#underscored-arguments">Underscored arguments</a>.</li>
+<li><strong>Dot-arguments</strong> keep the dot as a leading underscore, and a multi-word name is camelCase after it: <code>.by</code> is <code>_by:</code> and <code>.keep_all</code> is <code>_keepAll:</code>. See <a href="#underscored-arguments">Underscored arguments</a>.</li>
 <li><strong>Positions are 1-based</strong>, as in R: <code>pull(1)</code> is the first column, <code>pull(-1)</code> the last, and <code>slice(1, 3)</code> the first and third rows of each group.</li>
 <li><strong><code>var()</code> is <code>variance()</code></strong>, because <code>var</code> is a reserved word in PHP.</li>
 <li><strong><code>count</code>, <code>min</code>, and <code>max</code></strong> shadow PHP’s built-ins in files that import them.</li>
@@ -404,7 +404,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="underscored-arguments" class="level2">
 <h2 class="anchored" data-anchor-id="underscored-arguments">Underscored arguments</h2>
-<p>phplyr’s parameters are camelCase, like the rest of the phpstats family. Six arguments are an exception and keep dplyr’s and tidyr’s dot as a leading underscore:</p>
+<p>phplyr’s parameters are camelCase, like the rest of the phpstats family. Every argument that dplyr or tidyr writes with a dot keeps it here as a leading underscore. There are sixteen, and a multi-word name reads as camelCase after the underscore:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -430,31 +430,87 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>mutate()</code>, <code>group_nest()</code>, <code>nest_by()</code>, <code>group_split()</code>, <code>group_map()</code></td>
 </tr>
 <tr class="odd">
+<td><code>_keepAll</code></td>
+<td><code>.keep_all</code></td>
+<td><code>distinct()</code></td>
+</tr>
+<tr class="even">
 <td><code>_groups</code></td>
 <td><code>.groups</code></td>
 <td><code>summarise()</code>, <code>with_groups()</code></td>
 </tr>
+<tr class="odd">
+<td><code>_before</code></td>
+<td><code>.before</code></td>
+<td><code>mutate()</code>, <code>relocate()</code>, <code>add_row()</code></td>
+</tr>
 <tr class="even">
+<td><code>_after</code></td>
+<td><code>.after</code></td>
+<td><code>mutate()</code>, <code>relocate()</code>, <code>add_row()</code></td>
+</tr>
+<tr class="odd">
+<td><code>_add</code></td>
+<td><code>.add</code></td>
+<td><code>group_by()</code></td>
+</tr>
+<tr class="even">
+<td><code>_drop</code></td>
+<td><code>.drop</code></td>
+<td><code>group_by()</code></td>
+</tr>
+<tr class="odd">
+<td><code>_byGroup</code></td>
+<td><code>.by_group</code></td>
+<td><code>arrange()</code></td>
+</tr>
+<tr class="even">
+<td><code>_key</code></td>
+<td><code>.key</code></td>
+<td><code>group_nest()</code>, <code>nest_by()</code></td>
+</tr>
+<tr class="odd">
 <td><code>_id</code></td>
 <td><code>.id</code></td>
 <td><code>bind_rows()</code>, <code>uncount()</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>_remove</code></td>
 <td><code>.remove</code></td>
 <td><code>hoist()</code>, <code>uncount()</code></td>
 </tr>
+<tr class="odd">
+<td><code>_direction</code></td>
+<td><code>.direction</code></td>
+<td><code>fill()</code></td>
+</tr>
 <tr class="even">
+<td><code>_namesSep</code></td>
+<td><code>.names_sep</code></td>
+<td><code>pack()</code></td>
+</tr>
+<tr class="odd">
+<td><code>_default</code></td>
+<td><code>.default</code></td>
+<td><code>recode()</code></td>
+</tr>
+<tr class="even">
+<td><code>_missing</code></td>
+<td><code>.missing</code></td>
+<td><code>recode()</code></td>
+</tr>
+<tr class="odd">
 <td><code>$_x</code></td>
 <td><code>.x</code></td>
 <td><code>recode()</code></td>
 </tr>
 </tbody>
 </table>
-<p>These are the names a column is also likely to have, and most of the verbs that take them are variadic. A named argument to a variadic function lands in the same string-keyed array as the columns the call creates, so without the prefix the option would always win and the column would be unreachable. dplyr and tidyr use the dot for the same reason. With the prefix, both work:</p>
+<p>Most of the verbs that take one are variadic. A named argument to a variadic function lands in the same string-keyed array as the columns the call creates, so without the prefix the option would always win and a column of that name would be unreachable. dplyr and tidyr use the dot for the same reason. With the prefix, both work:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$t</span> <span class="op">|&gt;</span> mutate(m<span class="ot">:</span> mean(<span class="st">'x'</span>)<span class="ot">,</span> _by<span class="ot">:</span> <span class="st">'g'</span>)<span class="ot">;</span>   <span class="co">// grouped by g for this call</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">$t</span> <span class="op">|&gt;</span> mutate(by<span class="ot">:</span> <span class="dv">1</span>)<span class="ot">;</span>                    <span class="co">// a column called by</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The camelCase options are on verbs where the name is unlikely to clash, and there the option does win: <code>mutate(before: 'id')</code> places the new columns, so a column called <code>before</code> has to come from the array form, <code>mutate(['before' =&gt; 1])</code>. The same holds for <code>after</code>, <code>add</code>, <code>drop</code>, <code>key</code>, <code>direction</code>, <code>namesSep</code>, <code>byGroup</code>, <code>keepAll</code>, <code>default</code>, and <code>missing</code>.</p>
+<p>The prefix is the only spelling an option has. An unprefixed named argument is always data, so <code>mutate(before: 'id')</code> makes a column called <code>before</code> rather than placing the new columns. A prefixed name that is not an option for that verb is an error naming the ones that are.</p>
+<p>Everything else is camelCase, as the rest of the phpstats family is. These are arguments dplyr and tidyr write without a dot, so no exception applies: <code>naRm:</code>, <code>orderBy:</code>, <code>namesFrom:</code>, <code>namesTo:</code>, <code>withTies:</code>, and the rest.</p>
 </section>
 <section id="across-functions" class="level2">
 <h2 class="anchored" data-anchor-id="across-functions"><code>across()</code> functions</h2>

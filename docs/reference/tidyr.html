@@ -292,7 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The tidyr functions use tidyr’s argument names. Arguments that start with a dot in tidyr drop the dot here and read as camelCase, except <code>_id</code> and <code>_remove</code>, which keep the dot as an underscore because a column could have the same name.</p>
+<p>The tidyr functions use tidyr’s argument names. Arguments that start with a dot in tidyr keep the dot here as a leading underscore, camelCase after it: <code>.names_sep</code> on <code>pack()</code> is <code>_namesSep:</code>. See <a href="../coming-from-dplyr.html#underscored-arguments">Underscored arguments</a>.</p>
 <section id="pivoting" class="level2">
 <h2 class="anchored" data-anchor-id="pivoting">Pivoting</h2>
 <p><code>pivot_longer()</code> turns columns into rows of names and values. <code>namesPrefix</code> strips a regular expression from the start of each name. <code>namesSep</code> or <code>namesPattern</code> split names into several <code>namesTo</code> columns, and the special name <code>'.value'</code> takes the value column’s name from that part. <code>valuesDropNa: true</code> drops rows whose values are all NA. <code>namesTransform</code> and <code>valuesTransform</code> take a closure, or an array of closures by column. <code>colsVary: 'slowest'</code> keeps each source column’s rows together.</p>
@@ -372,7 +372,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 4 south     1     0
 5 south     2     7
 6 south     3     0</code></pre>
-<p><code>fill()</code> carries values down or up over NA within groups (<code>direction: 'down' | 'up' | 'downup' | 'updown'</code>). <code>drop_na()</code> drops rows with NA in the given columns, and <code>replace_na()</code> replaces NA per column.</p>
+<p><code>fill()</code> carries values down or up over NA within groups (<code>_direction: 'down' | 'up' | 'downup' | 'updown'</code>). <code>drop_na()</code> drops rows with NA in the given columns, and <code>replace_na()</code> replaces NA per column.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Method chain (PHP 8.3+)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Pipe (PHP 8.5)</a></li></ul>
 <div class="tab-content" data-group="syntax">
@@ -542,7 +542,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Collapse rows into list-columns and back</td>
 </tr>
 <tr class="odd">
-<td><code>pack(name: cols, namesSep:)</code>, <code>unpack(cols, namesSep:)</code></td>
+<td><code>pack(name: cols, _namesSep:)</code>, <code>unpack(cols, namesSep:)</code></td>
 <td>Columns into a column of named arrays and back</td>
 </tr>
 </tbody>
