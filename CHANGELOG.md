@@ -2,13 +2,12 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
-## Unreleased
+## 0.4.0 - 2026-10-30
 
 ### Added
 
 - `site/` holds phplyr's content for phplyr.phpstats.org: a manifest, benchmark and verification files, and three interactive vignettes (porting an R analysis, one pipeline on three backends, and reshaping with tidyr). `bin/site-manifest`, `bin/site-benchmarks`, and `bin/site-verifications` generate the JSON files.
 - `bench/backends.R` times the benchmark pipelines with dplyr on the same data and checks its results against phplyr's. The performance page compares the two.
-
 - `var_()` is the sample variance, named as in phibble and phpolars. `variance()` stays as an alias.
 - `where()` accepts `'datetime'` and `'list'`.
 - janitor's single-table functions: `clean_names()`, `make_clean_names()`, `remove_empty()`, `get_dupes()`, and one- and two-way `tabyl()`. Tests compare them with janitor 2.2 output from `tests/r/janitor.R`. With ext-intl, `make_clean_names()` transliterates names the way janitor does.
