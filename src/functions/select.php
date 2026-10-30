@@ -92,7 +92,8 @@ function any_of(array $names): Selector
 /**
  * Columns for which a predicate holds. The predicate receives
  * (list $values, Type $type, string $name). Shortcuts: a Phibble\Type, or
- * one of 'numeric', 'integer', 'double', 'character', 'logical', 'factor', 'date'.
+ * one of 'numeric', 'integer', 'double', 'character', 'logical', 'factor', 'date',
+ * 'datetime', 'list'.
  */
 function where(Closure|Type|string $predicate): Selector
 {
@@ -106,6 +107,8 @@ function where(Closure|Type|string $predicate): Selector
             $predicate === 'logical' => [Type::Bool],
             $predicate === 'factor' => [Type::Factor],
             $predicate === 'date' => [Type::Date],
+            $predicate === 'datetime' => [Type::DateTime],
+            $predicate === 'list' => [Type::List],
             default => throw new \InvalidArgumentException("where(): unknown type '{$predicate}'."),
         };
         $predicate = fn ($values, Type $type) => \in_array($type, $types, true);

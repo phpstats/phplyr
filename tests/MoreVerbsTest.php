@@ -3,8 +3,9 @@
 declare(strict_types=1);
 
 use Phibble\DataFrame;
+use Phibble\Type;
 
-use function Phplyr\{bind_cols, bind_rows, glimpse, group_by, group_map, group_modify, group_split, group_vars, group_walk, lag, mutate, n, pick, pipe, slice_sample, summarise, ungroup, vec};
+use function Phplyr\{bind_cols, bind_rows, glimpse, group_by, group_map, group_modify, group_split, group_vars, group_walk, lag, mutate, n, pick, pipe, select, slice_sample, summarise, ungroup, vec, where};
 
 function small(): DataFrame
 {
@@ -147,3 +148,16 @@ it('keeps empty factor-level groups with _drop: false', function () {
     expectRowsClose((pipe($d, group_by('f', 's', _drop: false), summarise(n: n(), _groups: 'drop')))->toRows(), $ref['two']);
     expect((pipe($d, group_by('f', _drop: false)))->dropsEmptyGroups())->toBeFalse();
 })->skip(fn () => ! method_exists(DataFrame::class, 'dropsEmptyGroups'), 'phibble lacks groupBy drop: false');
+
+it('selects datetime and list columns with where()', function () {
+    $t = DataFrame::fromColumns([
+        'id' => [1, 2],
+        'day' => [new DateTimeImmutable('2024-01-01'), new DateTimeImmutable('2024-01-02')],
+        'at' => [new DateTimeImmutable('2024-01-01 09:30'), new DateTimeImmutable('2024-01-02 17:00')],
+        'tags' => [['a'], ['b', 'c']],
+    ], ['day' => Type::Date, 'at' => Type::DateTime, 'tags' => Type::List]);
+
+    expect(pipe($t, select(where('datetime')))->columns())->toBe(['at'])
+        ->and(pipe($t, select(where('date')))->columns())->toBe(['day'])
+        ->and(pipe($t, select(where('list')))->columns())->toBe(['tags']);
+});
