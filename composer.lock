@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19f3631b6653e4ee59c1ddfebd514ec2",
+    "content-hash": "e9c07e2ee57c36971e961684af0b83ec",
     "packages": [
         {
             "name": "phpstats/phibble",
-            "version": "v0.3.0",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstats/phibble.git",
-                "reference": "b12503e32f462e7f1f8d19d31f2332055daa2407"
+                "reference": "876ea3d0b09ff9782be0efe848fd8f8a69012e9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstats/phibble/zipball/b12503e32f462e7f1f8d19d31f2332055daa2407",
-                "reference": "b12503e32f462e7f1f8d19d31f2332055daa2407",
+                "url": "https://api.github.com/repos/phpstats/phibble/zipball/876ea3d0b09ff9782be0efe848fd8f8a69012e9e",
+                "reference": "876ea3d0b09ff9782be0efe848fd8f8a69012e9e",
                 "shasum": ""
             },
             "require": {
@@ -26,13 +26,15 @@
                 "symfony/polyfill-php84": "^1.31"
             },
             "require-dev": {
-                "erikwestlund/phiz": "dev-main",
                 "illuminate/database": "^12.0",
-                "pestphp/pest": "^4.0"
+                "pestphp/pest": "^4.0",
+                "phpstats/phiz": "dev-main",
+                "squizlabs/php_codesniffer": "^3.13"
             },
             "suggest": {
                 "ext-pdo_sqlite": "Used by the test suite for the PDO source",
-                "ext-php_polars": "The Polars backend (Phibble\\Polars\\PolarsTable), from erikwestlund/phpolars",
+                "ext-phit": "Native CSV reading (Phit\\read_csv) and model fitting, from phpstats/phit",
+                "ext-php_polars": "The Polars backend (Phibble\\Polars\\PolarsTable), from phpstats/phpolars",
                 "illuminate/database": "Laravel integration: Collection::toDataFrame() and query builder ->phibble() / ->toDataFrame() macros (auto-discovered)"
             },
             "type": "library",
@@ -58,15 +60,24 @@
                     "Phibble\\Bench\\": "bench/src/"
                 }
             },
+            "scripts": {
+                "lint": [
+                    "phpcs",
+                    "@test:sniffs"
+                ],
+                "test:sniffs": [
+                    "php tools/phpcs/selftest/run.php"
+                ]
+            },
             "license": [
                 "MIT"
             ],
             "description": "A typed, immutable in-memory data frame for PHP.",
             "support": {
-                "source": "https://github.com/phpstats/phibble/tree/v0.3.0",
+                "source": "https://github.com/phpstats/phibble/tree/v0.4.0",
                 "issues": "https://github.com/phpstats/phibble/issues"
             },
-            "time": "2026-10-17T19:17:14+00:00"
+            "time": "2026-10-30T19:56:39+00:00"
         },
         {
             "name": "symfony/polyfill-php84",
