@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "phpstats/phibble",
-            "version": "v0.4.0",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstats/phibble.git",
-                "reference": "876ea3d0b09ff9782be0efe848fd8f8a69012e9e"
+                "reference": "b0ef42fd0ec8d8a8ab635925d672ff384d06b175"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstats/phibble/zipball/876ea3d0b09ff9782be0efe848fd8f8a69012e9e",
-                "reference": "876ea3d0b09ff9782be0efe848fd8f8a69012e9e",
+                "url": "https://api.github.com/repos/phpstats/phibble/zipball/b0ef42fd0ec8d8a8ab635925d672ff384d06b175",
+                "reference": "b0ef42fd0ec8d8a8ab635925d672ff384d06b175",
                 "shasum": ""
             },
             "require": {
@@ -74,10 +74,10 @@
             ],
             "description": "A typed, immutable in-memory data frame for PHP.",
             "support": {
-                "source": "https://github.com/phpstats/phibble/tree/v0.4.0",
+                "source": "https://github.com/phpstats/phibble/tree/v0.4.1",
                 "issues": "https://github.com/phpstats/phibble/issues"
             },
-            "time": "2026-10-30T19:56:39+00:00"
+            "time": "2026-10-30T22:00:16+00:00"
         },
         {
             "name": "symfony/polyfill-php84",
