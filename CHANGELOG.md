@@ -11,6 +11,7 @@ All notable changes to phplyr are recorded here. Versions follow semantic versio
 
 - `var_()` is the sample variance, named as in phibble and phpolars. `variance()` stays as an alias.
 - `where()` accepts `'datetime'` and `'list'`.
+- janitor's single-table functions: `clean_names()`, `make_clean_names()`, `remove_empty()`, `get_dupes()`, and one- and two-way `tabyl()`. Tests compare them with janitor 2.2 output from `tests/r/janitor.R`. With ext-intl, `make_clean_names()` transliterates names the way janitor does.
 
 ### Changed
 

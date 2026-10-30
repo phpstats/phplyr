@@ -1,0 +1,69 @@
+---
+title: "janitor"
+---
+
+phplyr has the single-table functions from R's janitor package. The test
+suite compares each one with janitor 2.2 output from `tests/r/janitor.R`.
+
+## Clean names
+
+`clean_names()` renames every column of a table, and `make_clean_names()`
+applies the same rules to a list of strings. The rules follow janitor's
+defaults:
+
+- `%` becomes `percent`, `#` becomes `number`, and quotes are dropped.
+- Accented and non-Latin characters are transliterated to ASCII: `Café`
+  becomes `cafe`, `straße` becomes `strasse`, and `αβγ` becomes `abg`.
+- Spaces and punctuation become single underscores, and leading and trailing
+  ones are dropped.
+- Case changes split words: `camelCaseVar` becomes `camel_case_var`, and
+  `HTMLParser` becomes `html_parser`. Digits stay attached to their word.
+- A name that would start with a digit gets an `x` prefix, and an empty name
+  becomes `x`.
+- A repeated name gets `_2`, `_3`, and so on, in order of appearance.
+
+Transliteration uses ext-intl, which gives the same results as janitor's
+stringi. Without ext-intl, phplyr falls back to iconv, and some names can
+differ from janitor's.
+
+```php
+make_clean_names(['First Name', 'first_name', '% Done', '1st Place']);
+// ['first_name', 'first_name_2', 'percent_done', 'x1st_place']
+
+pipe($survey, clean_names());
+```
+
+## Remove empty rows and columns
+
+`remove_empty()` drops rows and columns that are entirely NA. Pass `'rows'` or
+`'cols'` to drop only one kind. With `cutoff` below 1, a row or column is kept
+when its share of non-NA values is above the cutoff. A cutoff works with only
+one of `'rows'` and `'cols'`. An empty string is a value, as in R.
+
+## Duplicates
+
+`get_dupes('email')` returns the rows whose values in the given columns appear
+more than once. The result has the given columns first, then `dupe_count`, then
+the other columns. Rows are sorted by `dupe_count` (descending) and then by the
+given columns. With no columns, every column is used. A grouped table keeps its
+groups, but duplicates are found across the whole table.
+
+## Frequency tables
+
+`tabyl('g')` counts the values of one column. The result has the values, `n`,
+and `percent`. When the column has NAs, `valid_percent` gives each share with
+NA left out. `showNa: false` drops the NA row instead.
+
+`tabyl('g', 'h')` counts pairs of values. It has one row per value of `g` and
+one column of counts per value of `h`. An NA in `h` is counted in the `NA_`
+column, and an empty string in the `emptystring_` column.
+
+Values are sorted as in dplyr's `count()`, with NA last. Factors keep their
+level order, and `showMissingLevels: false` leaves out unused levels.
+
+```php
+pipe($people, tabyl('region'));
+pipe($people, tabyl('region', 'smoker', showNa: false));
+```
+
+janitor's `adorn_*()` functions and three-way tables are not included.

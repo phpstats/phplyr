@@ -28,6 +28,7 @@ website:
           - reference/strings-dates.qmd
           - reference/tidyselect.qmd
           - reference/tidyr.qmd
+          - reference/janitor.qmd
           - reference/models.qmd
           - reference/databases.qmd
       - gallery.qmd

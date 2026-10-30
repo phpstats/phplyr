@@ -112,7 +112,7 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 
 ## tidyselect and across()
 
-- **Selectors:** `starts_with`, `ends_with`, `contains`, `matches`, `num_range`, `everything`, `last_col`, `all_of`, `any_of`, and `where(fn ($values, $type, $name) => ...)`. `where` also takes a shortcut: `where('numeric')`.
+- **Selectors:** `starts_with`, `ends_with`, `contains`, `matches`, `num_range`, `everything`, `last_col`, `all_of`, `any_of`, and `where(fn ($values, $type, $name) => ...)`. `where` also takes a type name: `'numeric'`, `'integer'`, `'double'`, `'character'`, `'logical'`, `'factor'`, `'date'`, `'datetime'`, or `'list'`.
 - **Combining:** `except(...)` drops columns (dplyr's `-`). `any_selected` gives the union of selections and `all_selected` the intersection.
 - **Where they work:** `select`, `relocate`, `rename_with`, `arrange`, `distinct`, `group_by`, `count` and `across`.
 
@@ -154,6 +154,20 @@ The tidyr functions work the same way, with tidyr's argument names. The test sui
 | `separate_wider_*` | `separate_wider_delim('s', '-', names: [...])`, `separate_wider_position('code', ['state' => 2, 1, 'n' => 2])`, `separate_wider_regex('code', ['l' => '[A-Z]+', 'd' => '\d+'])` |
 | `separate_longer_*` | `separate_longer_delim('tags', ',')`, `separate_longer_position('code', 2)` |
 | `nest` / `unnest` | `nest()` after `group_by('g')`, `nest(data: ['x', 'y'])`, `unnest('data')` |
+
+## janitor
+
+phplyr has the data-cleaning functions from R's janitor package that work on a single table. The test suite compares them with janitor 2.2 output from `tests/r/janitor.R`.
+
+| Function | Example |
+| --- | --- |
+| `clean_names` | `clean_names()` renames every column with `make_clean_names()`. |
+| `make_clean_names` | `make_clean_names(['First Name', '% Done', '1st'])` returns `['first_name', 'percent_done', 'x1st']`. Names become snake_case and ASCII. Names that would start with a digit get an `x` prefix, and repeats get `_2`, `_3`, and so on. |
+| `remove_empty` | `remove_empty()`, `remove_empty('cols')`, `remove_empty('rows', cutoff: 0.5)` |
+| `get_dupes` | `get_dupes('email')` returns the rows whose email appears more than once, with a `dupe_count` column. With no columns, it uses all of them. |
+| `tabyl` | `tabyl('g')` gives counts and percents of one column. `tabyl('g', 'h')` gives a two-way table of counts. |
+
+`make_clean_names()` transliterates accented and non-Latin characters with ext-intl, which matches janitor's use of stringi. Without ext-intl, it falls back to iconv, and the results can differ from janitor's.
 
 ## Expressions and databases
 

@@ -13,6 +13,7 @@
         "squizlabs/php_codesniffer": "^3.13"
     },
     "suggest": {
+        "ext-intl": "Transliteration in make_clean_names() and clean_names() that matches janitor; without it, iconv is used",
         "ext-phit": "Native descriptives (Phit\\stat_*) and model fitting (Phit\\fit_*), needed for lm(), glm(), lmer(), and glmer()"
     },
     "autoload": {
@@ -31,7 +32,8 @@
             "src/functions/rows.php",
             "src/functions/scalar.php",
             "src/functions/strings.php",
-            "src/functions/dates.php"
+            "src/functions/dates.php",
+            "src/functions/janitor.php"
         ]
     },
     "autoload-dev": {
