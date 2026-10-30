@@ -11,7 +11,7 @@
         </testsuite>
         <!-- Tests written with the |> operator, which only parse on PHP 8.5. -->
         <testsuite name="pipe">
-            <directory suffix="Test.php">tests/Pipe</directory>
+            <directory suffix="Test.php" phpVersion="8.5.0" phpVersionOperator=">=">tests/Pipe</directory>
         </testsuite>
     </testsuites>
     <source>
