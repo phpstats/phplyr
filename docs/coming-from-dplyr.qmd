@@ -31,7 +31,7 @@ table below shows single calls.
 | `join_by(id, t >= start)` | `join_by('id', col('t')->ge(col('start')))` |
 | `join_by(closest(t >= start))` | `join_by(closest(col('t')->ge(col('start'))))` |
 | `pivot_longer(-id)` | `pivot_longer(except('id'))` |
-| `var(x)` | `variance('x')` |
+| `var(x)` | `var_('x')` |
 | `NA` | `null` |
 
 ## Conventions
@@ -41,7 +41,7 @@ table below shows single calls.
   See [Underscored arguments](#underscored-arguments).
 - **Positions are 1-based**, as in R: `pull(1)` is the first column, `pull(-1)`
   the last, and `slice(1, 3)` the first and third rows of each group.
-- **`var()` is `variance()`**, because `var` is a reserved word in PHP.
+- **`var()` is `var_()`**, because `var` is a reserved word in PHP (`variance()` is an alias).
 - **`count`, `min`, and `max`** shadow PHP's built-ins in files that import
   them.
 - **Group order** follows dplyr: groups are sorted by key, factors by level

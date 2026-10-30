@@ -19,13 +19,13 @@ row.
 | `n()` | Rows in the group |
 | `n_distinct('x', 'y')` | Distinct values or combinations |
 | `sum`, `mean`, `median` | As in R |
-| `sd`, `variance` | Sample statistics (n − 1) |
+| `sd`, `var_` (alias `variance`) | Sample statistics (n − 1) |
 | `quantile('x', 0.9)`, `iqr('x')` | Type 7 quantiles, R's default |
 | `min`, `max` | Smallest and largest values |
 | `first`, `last`, `nth('x', 2)` | Values by position, with `default:` |
 | `any`, `all` | Logical summaries with NA logic |
 
-With the phit extension loaded, `mean`, `sd`, `variance`, `median`, and
+With the phit extension loaded, `mean`, `sd`, `var_`, `median`, and
 `quantile` use it. Without it they run in PHP and give the same results.
 
 ## Window functions

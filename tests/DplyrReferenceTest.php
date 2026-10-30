@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phibble\DataFrame;
 
-use function Phplyr\{arrange, count, desc, distinct, filter, group_by, max, mean, median, min, mutate, n, pipe, quantile, rename, sd, select, summarise, ungroup, variance};
+use function Phplyr\{arrange, count, desc, distinct, filter, group_by, max, mean, median, min, mutate, n, pipe, quantile, rename, sd, select, summarise, ungroup, var_, variance};
 
 it('matches dplyr for a grouped summary', function () {
     bothBackends(function () {
@@ -17,7 +17,7 @@ it('matches dplyr for a grouped summary', function () {
                 n: n(),
                 mean_score: mean('score'),
                 sd_score: sd('score'),
-                var_gain: variance('gain'),
+                var_gain: var_('gain'),
                 median_hours: median('study_hours'),
                 q90_score: quantile('score', 0.9),
                 min_prior: min('prior_score'),
@@ -75,4 +75,11 @@ it('matches dplyr distinct', function () {
     );
 
     expectRowsClose($out->toRows(), reference('housing_rooms'));
+});
+
+it('keeps variance() as an alias of var_()', function () {
+    $t = DataFrame::fromCsv(fixturePath('schools.csv'));
+    $out = pipe($t, summarise(a: var_('score'), b: variance('score')))->toRows()[0];
+
+    expect($out['b'])->toBe($out['a']);
 });

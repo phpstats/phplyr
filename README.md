@@ -103,12 +103,12 @@ See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 
 ## Vector helpers
 
-- **Summaries:** `n`, `n_distinct`, `sum`, `mean`, `median`, `sd`, `variance`, `quantile(x, p)`, `iqr`, `min`, `max`, `first`, `last`, `nth(x, n)`, `any`, `all`.
+- **Summaries:** `n`, `n_distinct`, `sum`, `mean`, `median`, `sd`, `var_`, `quantile(x, p)`, `iqr`, `min`, `max`, `first`, `last`, `nth(x, n)`, `any`, `all`.
 - **Windows:** `lag`, `lead` (with `default:` and `orderBy:`), `row_number`, `min_rank`, `dense_rank`, `percent_rank`, `cume_dist`, `ntile`, `cumsum`, `cumprod`, `cummin`, `cummax`, `cummean`, `cumall`, `cumany`, `consecutive_id`.
 - **Conditionals and NA:** `if_else`, `case_when([cond, value], ..., default: ...)`, `replace_when`, `case_match`, `recode_values` / `replace_values` (cases or `from:` / `to:` lookup tables), `when_any` / `when_all`, `coalesce`, `na_if`, `between`, `near`.
 - **Building blocks:** `col('x')`, `vec(fn ($r) => ...)`, and `->map(fn ($value, $r) => ...)` on any helper.
 
-`sd` and `variance` use n - 1, and `quantile` uses R's type 7. The variance helper is called `variance()` because `var` is a reserved word in PHP. When the `phit` extension is loaded, the descriptive helpers use it; otherwise they fall back to pure PHP.
+`sd` and `var_` use n - 1, and `quantile` uses R's type 7. The variance helper is called `var_()`, as in phibble and phpolars, because `var` is a reserved word in PHP; `variance()` is an alias. When the `phit` extension is loaded, the descriptive helpers use it; otherwise they fall back to pure PHP.
 
 ## tidyselect and across()
 

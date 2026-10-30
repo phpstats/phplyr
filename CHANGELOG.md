@@ -9,9 +9,13 @@ All notable changes to phplyr are recorded here. Versions follow semantic versio
 - `site/` holds phplyr's content for phplyr.phpstats.org: a manifest, benchmark and verification files, and three interactive vignettes (porting an R analysis, one pipeline on three backends, and reshaping with tidyr). `bin/site-manifest`, `bin/site-benchmarks`, and `bin/site-verifications` generate the JSON files.
 - `bench/backends.R` times the benchmark pipelines with dplyr on the same data and checks its results against phplyr's. The performance page compares the two.
 
+- `var_()` is the sample variance, named as in phibble and phpolars. `variance()` stays as an alias.
+- `where()` accepts `'datetime'` and `'list'`.
+
 ### Changed
 
 - The benchmarks were rerun on phibble 0.3.0.
+- `vendor/bin/pest` runs the `tests/Pipe` suite only on PHP 8.5 and later, so a plain run works on 8.3 and 8.4.
 
 ## 0.3.0 - 2026-10-18
 

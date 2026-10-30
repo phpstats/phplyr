@@ -35,10 +35,13 @@
         <exclude-pattern>tests/*</exclude-pattern>
         <exclude-pattern>bench/*</exclude-pattern>
         <exclude-pattern>benchmarks/*</exclude-pattern>
-        <!-- An @internal helper, and the conventions do not reach internal code. -->
+        <!-- _tz is an @internal helper, and the conventions do not reach
+             internal code. var_ is R's sample variance var(): var is a PHP
+             reserved word, so the family names it var_, as phibble does. -->
         <properties>
             <property name="allowed" type="array">
                 <element value="_tz"/>
+                <element value="var_"/>
             </property>
         </properties>
     </rule>

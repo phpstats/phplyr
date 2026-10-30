@@ -80,10 +80,16 @@ function sd(mixed $x, bool $naRm = false): Vec
     return Internal::call('sd', [$x], Internal::naRm($naRm));
 }
 
-/** Sample variance (n - 1). Named variance() because var is reserved in PHP. */
-function variance(mixed $x, bool $naRm = false): Vec
+/** Sample variance (n - 1): R's var(). Named var_() because var is reserved in PHP, as in phibble and phpolars. */
+function var_(mixed $x, bool $naRm = false): Vec
 {
     return Internal::call('var', [$x], Internal::naRm($naRm));
+}
+
+/** Alias of var_(), kept from phplyr 0.3. */
+function variance(mixed $x, bool $naRm = false): Vec
+{
+    return var_($x, $naRm);
 }
 
 /** Type 7 quantile, R's default. */
