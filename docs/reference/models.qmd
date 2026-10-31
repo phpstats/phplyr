@@ -57,7 +57,7 @@ missing phit function.
 
 [phit-polyfill](https://github.com/phpstats/phit-polyfill) defines the same
 functions in PHP for systems without the extension, and phplyr calls them the
-same way. phplyr's test suite checks `lm()` and `glm()` against R with the
-extension. With phit-polyfill and without the extension, the same `lm()` and
-`glm()` cases gave R's coefficients within 1e-12 relative, checked by hand on
-2026-10-31. phplyr's tests do not run the polyfill.
+same way. CI runs phplyr's test suite twice for the models: once with the phit
+extension and once with phit-polyfill and no extension. Both runs compare
+`lm()` and `glm()` coefficients with R's and `lmer()` fixed effects with
+lme4's.

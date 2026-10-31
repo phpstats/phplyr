@@ -42,8 +42,8 @@ extension.
 composer require phpstats/phplyr
 ```
 
-composer.json allows PHP 8.3 and later 8.x versions. CI tests PHP 8.3, 8.4,
-and 8.5. Pipelines written with the pipe operator `|>` need PHP 8.5. On 8.3 and
+phplyr supports PHP 8.3, 8.4, and 8.5, and CI tests all three. It requires
+the mbstring extension. Pipelines written with the pipe operator `|>` need PHP 8.5. On 8.3 and
 8.4, the same pipelines are method chains, as the "PHP 8.3–8.4" tabs show.
 
 The following extensions are optional:

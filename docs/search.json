@@ -136,7 +136,7 @@
     "href": "reference/models.html#without-the-extension",
     "title": "Models",
     "section": "Without the extension",
-    "text": "Without the extension\nWithout phit, the four functions throw a RuntimeException that names the missing phit function.\nphit-polyfill defines the same functions in PHP for systems without the extension, and phplyr calls them the same way. phplyr’s test suite checks lm() and glm() against R with the extension. With phit-polyfill and without the extension, the same lm() and glm() cases gave R’s coefficients within 1e-12 relative, checked by hand on 2026-10-31. phplyr’s tests do not run the polyfill.",
+    "text": "Without the extension\nWithout phit, the four functions throw a RuntimeException that names the missing phit function.\nphit-polyfill defines the same functions in PHP for systems without the extension, and phplyr calls them the same way. CI runs phplyr’s test suite twice for the models: once with the phit extension and once with phit-polyfill and no extension. Both runs compare lm() and glm() coefficients with R’s and lmer() fixed effects with lme4’s.",
     "crumbs": [
       "Reference",
       "Models"
@@ -222,7 +222,7 @@
     "href": "index.html#install",
     "title": "phplyr",
     "section": "Install",
-    "text": "Install\ncomposer require phpstats/phplyr\ncomposer.json allows PHP 8.3 and later 8.x versions. CI tests PHP 8.3, 8.4, and 8.5. Pipelines written with the pipe operator |&gt; need PHP 8.5. On 8.3 and 8.4, the same pipelines are method chains, as the “PHP 8.3–8.4” tabs show.\nThe following extensions are optional:\n\nphit provides lm(), glm(), lmer(), and glmer(), and computes mean(), sd(), var_(), median(), and quantile() natively.\nphpolars provides Polars for phibble’s PolarsTable.\nintl transliterates names in make_clean_names() and clean_names() the way R’s janitor does.\n\nCompatibility and limitations lists the PHP and backend details and the dplyr features phplyr does not have.",
+    "text": "Install\ncomposer require phpstats/phplyr\nphplyr supports PHP 8.3, 8.4, and 8.5, and CI tests all three. It requires the mbstring extension. Pipelines written with the pipe operator |&gt; need PHP 8.5. On 8.3 and 8.4, the same pipelines are method chains, as the “PHP 8.3–8.4” tabs show.\nThe following extensions are optional:\n\nphit provides lm(), glm(), lmer(), and glmer(), and computes mean(), sd(), var_(), median(), and quantile() natively.\nphpolars provides Polars for phibble’s PolarsTable.\nintl transliterates names in make_clean_names() and clean_names() the way R’s janitor does.\n\nCompatibility and limitations lists the PHP and backend details and the dplyr features phplyr does not have.",
     "crumbs": [
       "phplyr"
     ]
@@ -298,7 +298,7 @@
     "href": "compatibility.html",
     "title": "Compatibility and limitations",
     "section": "",
-    "text": "composer.json allows PHP 8.3 and later 8.x versions. CI tests PHP 8.3, 8.4, and 8.5 on Linux.\nThe pipe operator |&gt; is PHP 8.5 syntax. On PHP 8.3 and 8.4, the same pipelines are method chains, or calls to pipe(). Every function works on all three versions.",
+    "text": "phplyr supports PHP 8.3, 8.4, and 8.5. CI tests all three on Linux.\nThe pipe operator |&gt; is PHP 8.5 syntax. On PHP 8.3 and 8.4, the same pipelines are method chains, or calls to pipe(). Every function works on all three versions.",
     "crumbs": [
       "Compatibility and limitations"
     ]
@@ -308,7 +308,7 @@
     "href": "compatibility.html#php-versions",
     "title": "Compatibility and limitations",
     "section": "",
-    "text": "composer.json allows PHP 8.3 and later 8.x versions. CI tests PHP 8.3, 8.4, and 8.5 on Linux.\nThe pipe operator |&gt; is PHP 8.5 syntax. On PHP 8.3 and 8.4, the same pipelines are method chains, or calls to pipe(). Every function works on all three versions.",
+    "text": "phplyr supports PHP 8.3, 8.4, and 8.5. CI tests all three on Linux.\nThe pipe operator |&gt; is PHP 8.5 syntax. On PHP 8.3 and 8.4, the same pipelines are method chains, or calls to pipe(). Every function works on all three versions.",
     "crumbs": [
       "Compatibility and limitations"
     ]
@@ -318,7 +318,7 @@
     "href": "compatibility.html#requirements",
     "title": "Compatibility and limitations",
     "section": "Requirements",
-    "text": "Requirements\nComposer installs these with phplyr:\n\nphibble (phpstats/phibble 0.3, 0.4, or 0.5), which provides the tables. phibble requires PHP’s PDO extension.\nsymfony/polyfill-php84, which provides PHP 8.4 functions on PHP 8.3.\n\nThe mbstring extension is used by the position-based tidyr functions (separate() with numeric positions, separate_wider_position(), and separate_longer_position()), by make_clean_names() and clean_names(), and by phibble when it prints a table.",
+    "text": "Requirements\nphplyr requires the mbstring extension. Composer installs these with phplyr:\n\nphibble (phpstats/phibble 0.3, 0.4, or 0.5), which provides the tables. phibble requires PHP’s PDO extension.\nsymfony/polyfill-php84, which provides PHP 8.4 functions on PHP 8.3.",
     "crumbs": [
       "Compatibility and limitations"
     ]
@@ -328,7 +328,7 @@
     "href": "compatibility.html#optional-extensions",
     "title": "Compatibility and limitations",
     "section": "Optional extensions",
-    "text": "Optional extensions\n\n\n\nExtension\nEnables\n\n\n\n\nphit\nlm(), glm(), lmer(), and glmer(), and native mean(), sd(), var_(), median(), and quantile()\n\n\nphpolars\nphibble’s PolarsTable backend\n\n\nintl\nTransliteration in make_clean_names() and clean_names() that matches R’s janitor\n\n\nA PDO driver (SQLite, PostgreSQL, or MySQL)\nDatabase tables through Phibble\\tbl()\n\n\n\nWithout phit, the descriptive helpers run in PHP, and the model functions throw a RuntimeException that names the missing function. Models describes phit-polyfill, which defines the model functions in PHP. Without intl, make_clean_names() transliterates with iconv, and some names can differ from janitor’s.",
+    "text": "Optional extensions\n\n\n\nExtension\nEnables\n\n\n\n\nphit\nlm(), glm(), lmer(), and glmer(), and native mean(), sd(), var_(), median(), and quantile()\n\n\nphpolars\nphibble’s PolarsTable backend\n\n\nintl\nTransliteration in make_clean_names() and clean_names() that matches R’s janitor\n\n\nA PDO driver (SQLite, PostgreSQL, or MySQL)\nDatabase tables through Phibble\\tbl()\n\n\n\nWithout phit, the descriptive helpers run in PHP, and the model functions throw a RuntimeException that names the missing function. phit-polyfill defines the model functions in PHP. See Models. Without intl, make_clean_names() transliterates with iconv, and some names can differ from janitor’s.",
     "crumbs": [
       "Compatibility and limitations"
     ]

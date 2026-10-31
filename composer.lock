@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "14f925a77be6eab686408f25713a4640",
+    "content-hash": "e8d5a33f50428607c6e317a7efdcfe84",
     "packages": [
         {
             "name": "phpstats/phibble",
@@ -4335,7 +4335,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.3"
+        "php": ">=8.3 <8.6",
+        "ext-mbstring": "*"
     },
     "platform-dev": {},
     "platform-overrides": {

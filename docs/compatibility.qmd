@@ -4,8 +4,7 @@ title: "Compatibility and limitations"
 
 ## PHP versions
 
-composer.json allows PHP 8.3 and later 8.x versions. CI tests PHP 8.3, 8.4, and
-8.5 on Linux.
+phplyr supports PHP 8.3, 8.4, and 8.5. CI tests all three on Linux.
 
 The pipe operator `|>` is PHP 8.5 syntax. On PHP 8.3 and 8.4, the same
 pipelines are method chains, or calls to `pipe()`. Every function works on all
@@ -13,16 +12,11 @@ three versions.
 
 ## Requirements
 
-Composer installs these with phplyr:
+phplyr requires the mbstring extension. Composer installs these with phplyr:
 
 - phibble (`phpstats/phibble` 0.3, 0.4, or 0.5), which provides the tables.
   phibble requires PHP's PDO extension.
 - `symfony/polyfill-php84`, which provides PHP 8.4 functions on PHP 8.3.
-
-The mbstring extension is used by the position-based tidyr functions
-(`separate()` with numeric positions, `separate_wider_position()`, and
-`separate_longer_position()`), by `make_clean_names()` and `clean_names()`,
-and by phibble when it prints a table.
 
 ## Optional extensions
 
@@ -35,8 +29,8 @@ and by phibble when it prints a table.
 
 Without phit, the descriptive helpers run in PHP, and the model functions throw
 a `RuntimeException` that names the missing function.
-[Models](reference/models.qmd) describes phit-polyfill, which defines the model
-functions in PHP. Without intl, `make_clean_names()` transliterates with
+phit-polyfill defines the model functions in PHP. See
+[Models](reference/models.qmd). Without intl, `make_clean_names()` transliterates with
 iconv, and some names can differ from janitor's.
 
 ## Backends

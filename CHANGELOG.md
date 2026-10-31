@@ -7,6 +7,9 @@ All notable changes to phplyr are recorded here. Versions follow semantic versio
 ### Changed
 
 - composer.json no longer lists phibble's GitHub repository, because phibble is on Packagist.
+- composer.json allows PHP 8.3, 8.4, and 8.5 (`>=8.3 <8.6`) and requires ext-mbstring.
+- CI runs the test suite with phit-polyfill and no phit extension, so the model functions are tested on both.
+- The documentation is at <https://phplyr.phpstats.org/docs>. The GitHub Pages address redirects there.
 - The documentation installs phplyr from Packagist, states the PHP versions composer.json allows and CI tests, and adds a Compatibility and limitations page. Code tabs read "PHP 8.5+" and "PHP 8.3–8.4", and examples use `summarize()`.
 - `site/site.json` has the `php`, `requires`, `optional`, `build`, `platforms`, and `quickstart` keys, and a janitor verification file.
 

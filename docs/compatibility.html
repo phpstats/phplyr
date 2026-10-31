@@ -306,17 +306,16 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="php-versions" class="level2">
 <h2 class="anchored" data-anchor-id="php-versions">PHP versions</h2>
-<p>composer.json allows PHP 8.3 and later 8.x versions. CI tests PHP 8.3, 8.4, and 8.5 on Linux.</p>
+<p>phplyr supports PHP 8.3, 8.4, and 8.5. CI tests all three on Linux.</p>
 <p>The pipe operator <code>|&gt;</code> is PHP 8.5 syntax. On PHP 8.3 and 8.4, the same pipelines are method chains, or calls to <code>pipe()</code>. Every function works on all three versions.</p>
 </section>
 <section id="requirements" class="level2">
 <h2 class="anchored" data-anchor-id="requirements">Requirements</h2>
-<p>Composer installs these with phplyr:</p>
+<p>phplyr requires the mbstring extension. Composer installs these with phplyr:</p>
 <ul>
 <li>phibble (<code>phpstats/phibble</code> 0.3, 0.4, or 0.5), which provides the tables. phibble requires PHP’s PDO extension.</li>
 <li><code>symfony/polyfill-php84</code>, which provides PHP 8.4 functions on PHP 8.3.</li>
 </ul>
-<p>The mbstring extension is used by the position-based tidyr functions (<code>separate()</code> with numeric positions, <code>separate_wider_position()</code>, and <code>separate_longer_position()</code>), by <code>make_clean_names()</code> and <code>clean_names()</code>, and by phibble when it prints a table.</p>
 </section>
 <section id="optional-extensions" class="level2">
 <h2 class="anchored" data-anchor-id="optional-extensions">Optional extensions</h2>
@@ -346,7 +345,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p>Without phit, the descriptive helpers run in PHP, and the model functions throw a <code>RuntimeException</code> that names the missing function. <a href="./reference/models.html">Models</a> describes phit-polyfill, which defines the model functions in PHP. Without intl, <code>make_clean_names()</code> transliterates with iconv, and some names can differ from janitor’s.</p>
+<p>Without phit, the descriptive helpers run in PHP, and the model functions throw a <code>RuntimeException</code> that names the missing function. phit-polyfill defines the model functions in PHP. See <a href="./reference/models.html">Models</a>. Without intl, <code>make_clean_names()</code> transliterates with iconv, and some names can differ from janitor’s.</p>
 </section>
 <section id="backends" class="level2">
 <h2 class="anchored" data-anchor-id="backends">Backends</h2>
@@ -455,7 +454,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/phpstats\.github\.io\/phplyr\/");
+        var filterRegex = new RegExp("https:\/\/phplyr\.phpstats\.org\/docs");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

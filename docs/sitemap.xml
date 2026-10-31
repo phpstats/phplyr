@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://phpstats.github.io/phplyr/reference/vectors.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/reference/vectors.html</loc>
     <lastmod>2026-10-31T14:46:05.207Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/reference/tidyselect.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/reference/tidyselect.html</loc>
     <lastmod>2026-10-31T14:46:05.207Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/reference/strings-dates.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/reference/strings-dates.html</loc>
     <lastmod>2026-10-31T14:48:34.014Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/reference/models.html</loc>
-    <lastmod>2026-10-31T14:45:44.807Z</lastmod>
+    <loc>https://phplyr.phpstats.org/docs/reference/models.html</loc>
+    <lastmod>2026-10-31T15:25:31.157Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/reference/grouping.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/reference/grouping.html</loc>
     <lastmod>2026-10-31T14:46:12.582Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/port-r-script.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/port-r-script.html</loc>
     <lastmod>2026-10-31T14:46:12.585Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/index.html</loc>
-    <lastmod>2026-10-31T14:43:41.718Z</lastmod>
+    <loc>https://phplyr.phpstats.org/docs/index.html</loc>
+    <lastmod>2026-10-31T15:25:31.156Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/gallery.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/gallery.html</loc>
     <lastmod>2026-10-31T14:46:05.207Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/compatibility.html</loc>
-    <lastmod>2026-10-31T14:48:34.014Z</lastmod>
+    <loc>https://phplyr.phpstats.org/docs/compatibility.html</loc>
+    <lastmod>2026-10-31T15:25:31.156Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/coming-from-dplyr.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/coming-from-dplyr.html</loc>
     <lastmod>2026-10-31T14:44:55.374Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/development.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/development.html</loc>
     <lastmod>2026-10-31T14:47:26.784Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/getting-started.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/getting-started.html</loc>
     <lastmod>2026-10-31T14:44:08.440Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/performance.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/performance.html</loc>
     <lastmod>2026-10-21T01:29:40.636Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/reference/databases.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/reference/databases.html</loc>
     <lastmod>2026-10-21T01:29:40.637Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/reference/janitor.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/reference/janitor.html</loc>
     <lastmod>2026-10-30T18:13:19.540Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/reference/single-table.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/reference/single-table.html</loc>
     <lastmod>2026-10-31T14:46:05.207Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/reference/tidyr.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/reference/tidyr.html</loc>
     <lastmod>2026-10-31T14:46:12.587Z</lastmod>
   </url>
   <url>
-    <loc>https://phpstats.github.io/phplyr/reference/two-table.html</loc>
+    <loc>https://phplyr.phpstats.org/docs/reference/two-table.html</loc>
     <lastmod>2026-10-31T14:46:05.207Z</lastmod>
   </url>
 </urlset>

@@ -90,6 +90,27 @@ jobs:
 
       - run: bin/test
 
+  phit-polyfill:
+    # The model verbs on phit-polyfill, the pure-PHP version of phit, with no
+    # extension loaded.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: pdo_sqlite
+          coverage: none
+
+      - run: composer install --no-interaction --no-progress
+
+      - run: composer require --dev phpstats/phit-polyfill:^0.3 --no-interaction --no-progress
+
+      - run: php -r 'require "vendor/autoload.php"; exit(! extension_loaded("phit") && function_exists("Phit\\fit_lm") ? 0 : 1);'
+
+      - run: bin/test
+
   lint:
     runs-on: ubuntu-latest
     steps:

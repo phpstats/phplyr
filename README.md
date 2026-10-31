@@ -37,7 +37,7 @@ $out = phplyr(DataFrame::fromCsv('sales.csv'))
 composer require phpstats/phplyr
 ```
 
-composer.json allows PHP 8.3 and later 8.x versions. CI tests PHP 8.3, 8.4, and 8.5. The pipe operator needs PHP 8.5.
+phplyr supports PHP 8.3, 8.4, and 8.5, and requires the mbstring extension. CI tests all three PHP versions. The pipe operator needs PHP 8.5.
 
 The [phit](https://github.com/phpstats/phit) extension is optional. It provides `lm()`, `glm()`, `lmer()`, and `glmer()`. [Compatibility and limitations](https://phplyr.phpstats.org/docs/compatibility) lists the other optional extensions and the backends.
 

@@ -433,7 +433,7 @@ logit coefficients: -3.171, 0.0637, 0.0342</code></pre>
 <section id="without-the-extension" class="level2">
 <h2 class="anchored" data-anchor-id="without-the-extension">Without the extension</h2>
 <p>Without phit, the four functions throw a <code>RuntimeException</code> that names the missing phit function.</p>
-<p><a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a> defines the same functions in PHP for systems without the extension, and phplyr calls them the same way. phplyr’s test suite checks <code>lm()</code> and <code>glm()</code> against R with the extension. With phit-polyfill and without the extension, the same <code>lm()</code> and <code>glm()</code> cases gave R’s coefficients within 1e-12 relative, checked by hand on 2026-10-31. phplyr’s tests do not run the polyfill.</p>
+<p><a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a> defines the same functions in PHP for systems without the extension, and phplyr calls them the same way. CI runs phplyr’s test suite twice for the models: once with the phit extension and once with phit-polyfill and no extension. Both runs compare <code>lm()</code> and <code>glm()</code> coefficients with R’s and <code>lmer()</code> fixed effects with lme4’s.</p>
 
 
 </section>
@@ -512,7 +512,7 @@ logit coefficients: -3.171, 0.0637, 0.0342</code></pre>
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/phpstats\.github\.io\/phplyr\/");
+        var filterRegex = new RegExp("https:\/\/phplyr\.phpstats\.org\/docs");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

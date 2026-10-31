@@ -9,7 +9,7 @@ project:
     - benchmarks/*.json
 
 website:
-  site-url: "https://phpstats.github.io/phplyr/"
+  site-url: "https://phplyr.phpstats.org/docs"
   title: "phplyr"
   repo-url: "https://github.com/phpstats/phplyr"
   sidebar:
