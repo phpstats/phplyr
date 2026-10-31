@@ -3,6 +3,13 @@
 ## PHP 8.5+
 
 ```php
+<?php
+
+require __DIR__.'/vendor/autoload.php';
+
+use Phibble\DataFrame;
+use function Phplyr\{filter, group_by, summarize, arrange, head, desc, n, mean, sd};
+
 $schools = DataFrame::fromCsv('schools.csv');
 
 echo $schools |>
@@ -16,6 +23,13 @@ echo $schools |>
 ## PHP 8.3–8.4
 
 ```php
+<?php
+
+require __DIR__.'/vendor/autoload.php';
+
+use Phibble\DataFrame;
+use function Phplyr\{phplyr, desc, n, mean, sd};
+
 $schools = DataFrame::fromCsv('schools.csv');
 
 echo phplyr($schools)

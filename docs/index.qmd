@@ -10,6 +10,24 @@ to the result. The functions and their arguments follow R's
 [dplyr](https://dplyr.tidyverse.org) and [tidyr](https://tidyr.tidyverse.org)
 packages, and the test suite compares their results with R's.
 
+## A first pipeline
+
+The script below reads a CSV file of test scores from 250 students in 12
+schools. It keeps the students who studied at least five hours, summarizes
+each school, and prints the five schools with the highest average score.
+
+To run it, create a Composer project in an empty directory and download the
+data:
+
+```bash
+composer require phpstats/phplyr
+curl -O https://raw.githubusercontent.com/phpstats/phplyr/main/docs/data/schools.csv
+```
+
+Save the script as `first.php` in the same directory and run `php first.php`.
+The "PHP 8.5+" version uses the pipe operator `|>`. The "PHP 8.3–8.4" version
+is the same pipeline as a method chain and runs on PHP 8.3 and later.
+
 {{< include examples/_first-pipeline.md >}}
 
 ## phplyr and phibble
@@ -42,19 +60,15 @@ extension.
 composer require phpstats/phplyr
 ```
 
-phplyr supports PHP 8.3, 8.4, and 8.5, and CI tests all three. It requires
-the mbstring extension. Pipelines written with the pipe operator `|>` need PHP 8.5. On 8.3 and
-8.4, the same pipelines are method chains, as the "PHP 8.3–8.4" tabs show.
+phplyr supports PHP 8.3, 8.4, and 8.5, and requires the mbstring and PDO
+extensions. Pipelines written with the pipe operator `|>` need PHP 8.5.
 
-The following extensions are optional:
-
-- [phit](https://github.com/phpstats/phit) provides `lm()`, `glm()`, `lmer()`,
-  and `glmer()`, and computes `mean()`, `sd()`, `var_()`, `median()`, and
-  `quantile()` natively.
-- [phpolars](https://github.com/phpstats/phpolars) provides Polars for
-  phibble's `PolarsTable`.
-- intl transliterates names in `make_clean_names()` and `clean_names()` the
-  way R's janitor does.
+The optional features are statistical models (the phit extension or
+phit-polyfill), native descriptive statistics (phit), the Polars backend
+(phpolars), janitor's transliteration of names (intl), and database tables (a
+PDO driver).
+[Installation](getting-started.qmd#installation) in Getting started describes
+the requirements and each optional feature.
 
 [Compatibility and limitations](compatibility.qmd) lists the PHP and backend
 details and the dplyr features phplyr does not have.

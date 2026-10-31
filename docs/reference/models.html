@@ -309,7 +309,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#results" id="toc-results" class="nav-link active" data-scroll-target="#results">Results</a></li>
-  <li><a href="#without-the-extension" id="toc-without-the-extension" class="nav-link" data-scroll-target="#without-the-extension">Without the extension</a></li>
   </ul>
 </nav>
     </div>
@@ -335,7 +334,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code> pass the table to the phit extension’s <code>Phit\fit_lm()</code>, <code>Phit\fit_glm()</code>, <code>Phit\fit_lmer()</code>, and <code>Phit\fit_glmer()</code>. phplyr adds no model code of its own. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model.</p>
+<p><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code> pass the table to phit’s <code>Phit\fit_lm()</code>, <code>Phit\fit_glm()</code>, <code>Phit\fit_lmer()</code>, and <code>Phit\fit_glmer()</code>. phplyr adds no model code of its own. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model.</p>
+<p>Two implementations of these functions are supported, and phplyr calls both the same way:</p>
+<ul>
+<li>The <a href="https://github.com/phpstats/phit">phit</a> extension, written in Rust.</li>
+<li><a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, a PHP port of the extension’s code, for systems where the extension cannot be installed. Install it with <code>composer require phpstats/phit-polyfill</code>. When the extension is loaded, the polyfill defines nothing.</li>
+</ul>
+<p>CI runs phplyr’s test suite with each one. Both runs compare <code>lm()</code> and <code>glm()</code> coefficients with R’s and <code>lmer()</code> fixed effects with lme4’s.</p>
+<p>phit-polyfill has the same functions, arguments, and results for the models, with these differences:</p>
+<ul>
+<li>It is slower. In phit-polyfill’s benchmarks, linear models took about 9 times as long as with the extension, logistic models about 22 times, and mixed models 13 to 78 times.</li>
+<li>Its functions throw an exception while OPcache’s JIT is enabled. Set <code>opcache.jit=disable</code> where it runs.</li>
+<li>It does not speed up the descriptive helpers. <code>mean()</code>, <code>sd()</code>, <code>var_()</code>, <code>median()</code>, and <code>quantile()</code> call phit only when the extension is loaded, and otherwise run in PHP with the same results.</li>
+<li>It leaves out phit’s CSV reader, which phplyr does not use.</li>
+</ul>
+<p>With neither installed, the four functions throw a <code>RuntimeException</code> that names the missing phit function.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
@@ -429,11 +442,6 @@ study_hours    1.5135  (se 0.2256)
 prior_score    0.3074  (se 0.0736)
 R² = 0.4914, n = 193
 logit coefficients: -3.171, 0.0637, 0.0342</code></pre>
-</section>
-<section id="without-the-extension" class="level2">
-<h2 class="anchored" data-anchor-id="without-the-extension">Without the extension</h2>
-<p>Without phit, the four functions throw a <code>RuntimeException</code> that names the missing phit function.</p>
-<p><a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a> defines the same functions in PHP for systems without the extension, and phplyr calls them the same way. CI runs phplyr’s test suite twice for the models: once with the phit extension and once with phit-polyfill and no extension. Both runs compare <code>lm()</code> and <code>glm()</code> coefficients with R’s and <code>lmer()</code> fixed effects with lme4’s.</p>
 
 
 </section>

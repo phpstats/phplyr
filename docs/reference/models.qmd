@@ -2,10 +2,38 @@
 title: "Models"
 ---
 
-`lm()`, `glm()`, `lmer()`, and `glmer()` pass the table to the phit extension's
+`lm()`, `glm()`, `lmer()`, and `glmer()` pass the table to phit's
 `Phit\fit_lm()`, `Phit\fit_glm()`, `Phit\fit_lmer()`, and `Phit\fit_glmer()`.
 phplyr adds no model code of its own. phit reads factor levels from the table,
 builds the model matrix from an R formula, and fits the model.
+
+Two implementations of these functions are supported, and phplyr calls both
+the same way:
+
+- The [phit](https://github.com/phpstats/phit) extension, written in Rust.
+- [phit-polyfill](https://github.com/phpstats/phit-polyfill), a PHP port of
+  the extension's code, for systems where the extension cannot be installed.
+  Install it with `composer require phpstats/phit-polyfill`. When the
+  extension is loaded, the polyfill defines nothing.
+
+CI runs phplyr's test suite with each one. Both runs compare `lm()` and
+`glm()` coefficients with R's and `lmer()` fixed effects with lme4's.
+
+phit-polyfill has the same functions, arguments, and results for the models,
+with these differences:
+
+- It is slower. In phit-polyfill's benchmarks, linear models took about 9
+  times as long as with the extension, logistic models about 22 times, and
+  mixed models 13 to 78 times.
+- Its functions throw an exception while OPcache's JIT is enabled. Set
+  `opcache.jit=disable` where it runs.
+- It does not speed up the descriptive helpers. `mean()`, `sd()`, `var_()`,
+  `median()`, and `quantile()` call phit only when the extension is loaded,
+  and otherwise run in PHP with the same results.
+- It leaves out phit's CSV reader, which phplyr does not use.
+
+With neither installed, the four functions throw a `RuntimeException` that
+names the missing phit function.
 
 ::: {.panel-tabset group="syntax"}
 
@@ -49,15 +77,3 @@ The array also has the fitted values, residuals, fit statistics such as
 rows used and the rows dropped for missing values.
 
 {{< include ../examples/_models.md >}}
-
-## Without the extension
-
-Without phit, the four functions throw a `RuntimeException` that names the
-missing phit function.
-
-[phit-polyfill](https://github.com/phpstats/phit-polyfill) defines the same
-functions in PHP for systems without the extension, and phplyr calls them the
-same way. CI runs phplyr's test suite twice for the models: once with the phit
-extension and once with phit-polyfill and no extension. Both runs compare
-`lm()` and `glm()` coefficients with R's and `lmer()` fixed effects with
-lme4's.

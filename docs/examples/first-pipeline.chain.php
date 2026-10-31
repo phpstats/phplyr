@@ -1,5 +1,10 @@
 <?php
 
+require __DIR__.'/vendor/autoload.php';
+
+use Phibble\DataFrame;
+use function Phplyr\{phplyr, desc, n, mean, sd};
+
 $schools = DataFrame::fromCsv('schools.csv');
 
 echo phplyr($schools)
