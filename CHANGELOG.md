@@ -2,6 +2,12 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
+## 0.4.2 - 2026-10-30
+
+### Changed
+
+- phplyr allows phibble ^0.3, ^0.4, or ^0.5, and the lock file installs phibble 0.5.0.
+
 ## 0.4.1 - 2026-10-30
 
 ### Changed
