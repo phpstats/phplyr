@@ -1,0 +1,60 @@
+#!/usr/bin/env php
+<?php
+
+/*
+ * Write the GitHub Pages copy of the documentation: one redirect page per
+ * rendered page in docs/, to the same page at phplyr.phpstats.org/docs, plus
+ * docs/sitemap.xml. docs/ itself is unchanged, because phpstats.org imports
+ * its HTML. The Pages workflow (.github/workflows/pages.yml) deploys the
+ * result.
+ *
+ * Usage: bin/pages-redirects <output-dir>
+ */
+
+declare(strict_types=1);
+
+$root = dirname(__DIR__);
+$out = $argv[1] ?? null;
+if ($out === null) {
+    fwrite(STDERR, "usage: bin/pages-redirects <output-dir>\n");
+    exit(1);
+}
+$base = 'https://phplyr.phpstats.org/docs';
+
+$page = function (string $url): string {
+    $u = htmlspecialchars($url, ENT_QUOTES);
+
+    return <<<HTML
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="utf-8">
+        <title>phplyr documentation</title>
+        <link rel="canonical" href="{$u}">
+        <meta http-equiv="refresh" content="0; url={$u}">
+        </head>
+        <body>
+        <p>The phplyr documentation is at <a href="{$u}">{$u}</a>.</p>
+        </body>
+        </html>
+
+        HTML;
+};
+
+$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root.'/docs', FilesystemIterator::SKIP_DOTS));
+$count = 0;
+foreach ($files as $file) {
+    $path = substr($file->getPathname(), strlen($root.'/docs/'));
+    if (! str_ends_with($path, '.html') || preg_match('#^(_site|site_libs|examples|benchmarks|data)/#', $path)) {
+        continue;
+    }
+    $stem = substr($path, 0, -5);
+    $url = $stem === 'index' ? $base : $base.'/'.preg_replace('#/index$#', '', $stem);
+    @mkdir(dirname($out.'/'.$path), 0777, true);
+    file_put_contents($out.'/'.$path, $page($url));
+    $count++;
+}
+file_put_contents($out.'/404.html', $page($base));
+copy($root.'/docs/sitemap.xml', $out.'/sitemap.xml');
+touch($out.'/.nojekyll');
+echo "{$count} redirect pages written to {$out}\n";

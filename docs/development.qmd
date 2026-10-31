@@ -54,8 +54,10 @@ PHP=/path/to/php85 bin/docs-examples   # refresh example output
 PHP=/path/to/php85 bin/render-docs     # examples, quarto render, publish to docs/
 ```
 
-Commit the rendered HTML. GitHub Pages serves it from `main:/docs`, and
-phpstats.org imports it from the commit it pins.
+Commit the rendered HTML. phpstats.org imports it from the commit it pins
+and serves it at <https://phplyr.phpstats.org/docs>. GitHub Pages serves
+redirects to those pages, which `.github/workflows/pages.yml` builds with
+`bin/pages-redirects`.
 
 ## Site content
 
