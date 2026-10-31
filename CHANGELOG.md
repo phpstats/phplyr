@@ -2,7 +2,7 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
-## Unreleased
+## 0.4.3 - 2026-10-31
 
 ### Changed
 
