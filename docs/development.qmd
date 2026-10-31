@@ -49,6 +49,14 @@ their output differs. The page shows the two in tabs labeled "PHP 8.5+" and
 "PHP 8.3–8.4", with the output once. `bin/docs-examples` needs PHP 8.5, and it
 loads phit from `.ext/libphit.dylib` for the model examples.
 
+Most examples leave out the `require` line and the imports, and
+`bin/docs-examples` adds them before it runs the code. An example that
+requires `vendor/autoload.php` itself is a complete script. It runs as
+written, so a missing import fails the run, and the page shows the whole file.
+The first example and the pages in the Examples section
+(`docs/examples/<slug>.qmd`, with their code in `docs/examples/pages/`) are
+complete scripts.
+
 ```bash
 PHP=/path/to/php85 bin/docs-examples   # refresh example output
 PHP=/path/to/php85 bin/render-docs     # examples, quarto render, publish to docs/
@@ -66,10 +74,10 @@ reads it at a pinned commit.
 
 | Path | Contents | Made by |
 | --- | --- | --- |
-| `site/site.json` | Manifest: summary, install, example, docs pages, and file lists | `bin/site-manifest` |
+| `site/site.json` | Manifest: summary, install, example, docs pages, examples, and file lists | `bin/site-manifest` |
 | `site/benchmarks/backends.json` | Backend and dplyr timings | `bin/site-benchmarks`, from `docs/benchmarks/` |
 | `site/verifications/*.json` | Every test that checks phplyr against R, with its assertion count and largest floating-point error | `bin/site-verifications` |
-| `site/vignettes/*.php` | Interactive examples the site runs on each request | By hand |
+| `site/vignettes/*.php` | The interactive version of Porting an R script, which the site runs on each request | By hand |
 | `site/data/` | Data files for the vignettes | By hand |
 
 `bin/site-verifications` runs the test suite with `PHPLYR_VERIFY_LOG` set.

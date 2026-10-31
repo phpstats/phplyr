@@ -12,7 +12,7 @@
  * A <name>.chain.php beside an example is its method-chain version. Both
  * must print the same output, and the page shows them in tabs.
  *
- * An example that requires __DIR__.'/vendor/autoload.php' is a complete
+ * An example that requires 'vendor/autoload.php' is a complete
  * starter script. It runs as written, without the prelude, and the page shows
  * the whole file.
  *
@@ -73,8 +73,8 @@ foreach ([...glob($root.'/docs/examples/*.R'), ...glob($root.'/docs/examples/*/*
 $run = function (string $file, string $name) use ($root, $php, $args, $preludeFor): ?array {
     $source = file_get_contents($file);
     $autoload = 'require '.var_export($root.'/vendor/autoload.php', true).';';
-    $starter = "require __DIR__.'/vendor/autoload.php';";
-    if (str_contains($source, $starter)) {
+    $starter = preg_match('/^require (__DIR__\.)?\'\/?vendor\/autoload\.php\';$/m', $source, $r) === 1 ? $r[0] : null;
+    if ($starter !== null) {
         // A complete starter script runs as written, without the prelude, so
         // its own imports are checked. The page shows the whole file.
         $code = trim($source);

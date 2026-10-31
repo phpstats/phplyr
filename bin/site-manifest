@@ -32,6 +32,10 @@ $nav = [
     ['title' => 'Cleaning with janitor', 'path' => 'reference/janitor.qmd'],
     ['title' => 'Models', 'path' => 'reference/models.qmd'],
     ['title' => 'Databases and expressions', 'path' => 'reference/databases.qmd'],
+    ['title' => 'Filter rows and add columns', 'path' => 'examples/filter-and-mutate.qmd'],
+    ['title' => 'Summarize groups', 'path' => 'examples/group-and-summarize.qmd'],
+    ['title' => 'Join two tables', 'path' => 'examples/join.qmd'],
+    ['title' => 'Reshape with pivot_longer and pivot_wider', 'path' => 'examples/pivot.qmd'],
     ['title' => 'Gallery', 'path' => 'gallery.qmd'],
     ['title' => 'Compatibility and limitations', 'path' => 'compatibility.qmd'],
     ['title' => 'Performance', 'path' => 'performance.qmd'],
@@ -47,8 +51,6 @@ foreach ($nav as $entry) {
 
 $vignettes = [
     ['slug' => 'port-r-script', 'title' => 'Porting an R analysis', 'summary' => 'A dplyr and tidyr analysis of 250 students, translated line by line and run live, with the pass mark and study-time bands as inputs.', 'uses' => ['phibble', 'phplyr', 'phit']],
-    ['slug' => 'backends', 'title' => 'One pipeline, three backends', 'summary' => 'Join, summarize, and rank sales on phibble\'s DataFrame, on SQLite, and on Polars, with timings and a check that every backend returns the same rows.', 'uses' => ['phibble', 'phplyr']],
-    ['slug' => 'reshaping', 'title' => 'Reshaping with tidyr', 'summary' => 'Summarize to one row per school and band, pivot the bands into columns, split the school id, and pivot back.', 'uses' => ['phibble', 'phplyr']],
 ];
 foreach ($vignettes as &$v) {
     $v['script'] = "site/vignettes/{$v['slug']}.php";
@@ -63,6 +65,21 @@ $files = fn (string $dir) => array_map(fn ($f) => 'site/'.$dir.'/'.basename($f),
 $order = ['dplyr', 'tidyr', 'additions', 'lubridate-stringr', 'janitor', 'models', 'polars'];
 $verifications = $files('verifications');
 usort($verifications, fn ($a, $b) => array_search(basename($a, '.json'), $order, true) <=> array_search(basename($b, '.json'), $order, true));
+
+// The curated examples, in nav order. Each path is a page in the docs'
+// Examples section.
+$examples = [
+    ['path' => 'examples/filter-and-mutate', 'title' => 'Filter rows and add columns', 'description' => 'Keeps the orders with a positive quantity and adds a total and a size column.'],
+    ['path' => 'examples/group-and-summarize', 'title' => 'Summarize groups', 'description' => 'Counts, totals, and averages sales by region, leaving out a missing value.'],
+    ['path' => 'examples/join', 'title' => 'Join two tables', 'description' => 'Adds customer details to orders with a left join, including an order with no matching customer.'],
+    ['path' => 'examples/pivot', 'title' => 'Reshape with pivot_longer and pivot_wider', 'description' => 'Turns a wide table of yearly sales into one row per store and year and back.'],
+];
+foreach ($examples as $example) {
+    if (! \in_array($example['path'].'.qmd', array_column($nav, 'path'), true)) {
+        fwrite(STDERR, "{$example['path']} is not in the docs nav\n");
+        exit(1);
+    }
+}
 
 $manifest = [
     'package' => 'phplyr',
@@ -95,6 +112,7 @@ $manifest = [
     'docs' => ['root' => 'docs', 'format' => 'quarto', 'nav' => $nav],
     'benchmarks' => $files('benchmarks'),
     'verifications' => $verifications,
+    'examples' => $examples,
     'vignettes' => $vignettes,
 ];
 file_put_contents($root.'/site/site.json', json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n");

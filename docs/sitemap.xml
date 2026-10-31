@@ -33,6 +33,14 @@
     <lastmod>2026-10-31T14:46:05.207Z</lastmod>
   </url>
   <url>
+    <loc>https://phplyr.phpstats.org/docs/examples/join.html</loc>
+    <lastmod>2026-10-31T21:56:46.258Z</lastmod>
+  </url>
+  <url>
+    <loc>https://phplyr.phpstats.org/docs/examples/filter-and-mutate.html</loc>
+    <lastmod>2026-10-31T21:56:46.258Z</lastmod>
+  </url>
+  <url>
     <loc>https://phplyr.phpstats.org/docs/compatibility.html</loc>
     <lastmod>2026-10-31T15:25:31.156Z</lastmod>
   </url>
@@ -42,7 +50,15 @@
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/development.html</loc>
-    <lastmod>2026-10-31T15:29:36.241Z</lastmod>
+    <lastmod>2026-10-31T21:57:11.251Z</lastmod>
+  </url>
+  <url>
+    <loc>https://phplyr.phpstats.org/docs/examples/group-and-summarize.html</loc>
+    <lastmod>2026-10-31T21:56:46.258Z</lastmod>
+  </url>
+  <url>
+    <loc>https://phplyr.phpstats.org/docs/examples/pivot.html</loc>
+    <lastmod>2026-10-31T21:56:46.258Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/getting-started.html</loc>

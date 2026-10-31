@@ -45,7 +45,7 @@ $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root.'/do
 $count = 0;
 foreach ($files as $file) {
     $path = substr($file->getPathname(), strlen($root.'/docs/'));
-    if (! str_ends_with($path, '.html') || preg_match('#^(_site|site_libs|examples|benchmarks|data)/#', $path)) {
+    if (! str_ends_with($path, '.html') || preg_match('#^(_site|site_libs|examples/pages|examples/port|benchmarks|data)/#', $path)) {
         continue;
     }
     $stem = substr($path, 0, -5);

@@ -4,6 +4,7 @@ project:
   render:
     - "*.qmd"
     - "reference/*.qmd"
+    - "examples/*.qmd"
   resources:
     - data/*.csv
     - benchmarks/*.json
@@ -36,6 +37,10 @@ website:
           - reference/databases.qmd
       - section: "Examples"
         contents:
+          - examples/filter-and-mutate.qmd
+          - examples/group-and-summarize.qmd
+          - examples/join.qmd
+          - examples/pivot.qmd
           - gallery.qmd
       - compatibility.qmd
       - performance.qmd

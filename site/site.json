@@ -112,6 +112,22 @@
                 "path": "reference/databases.qmd"
             },
             {
+                "title": "Filter rows and add columns",
+                "path": "examples/filter-and-mutate.qmd"
+            },
+            {
+                "title": "Summarize groups",
+                "path": "examples/group-and-summarize.qmd"
+            },
+            {
+                "title": "Join two tables",
+                "path": "examples/join.qmd"
+            },
+            {
+                "title": "Reshape with pivot_longer and pivot_wider",
+                "path": "examples/pivot.qmd"
+            },
+            {
                 "title": "Gallery",
                 "path": "gallery.qmd"
             },
@@ -141,6 +157,28 @@
         "site/verifications/models.json",
         "site/verifications/polars.json"
     ],
+    "examples": [
+        {
+            "path": "examples/filter-and-mutate",
+            "title": "Filter rows and add columns",
+            "description": "Keeps the orders with a positive quantity and adds a total and a size column."
+        },
+        {
+            "path": "examples/group-and-summarize",
+            "title": "Summarize groups",
+            "description": "Counts, totals, and averages sales by region, leaving out a missing value."
+        },
+        {
+            "path": "examples/join",
+            "title": "Join two tables",
+            "description": "Adds customer details to orders with a left join, including an order with no matching customer."
+        },
+        {
+            "path": "examples/pivot",
+            "title": "Reshape with pivot_longer and pivot_wider",
+            "description": "Turns a wide table of yearly sales into one row per store and year and back."
+        }
+    ],
     "vignettes": [
         {
             "slug": "port-r-script",
@@ -152,26 +190,6 @@
                 "phit"
             ],
             "script": "site/vignettes/port-r-script.php"
-        },
-        {
-            "slug": "backends",
-            "title": "One pipeline, three backends",
-            "summary": "Join, summarize, and rank sales on phibble's DataFrame, on SQLite, and on Polars, with timings and a check that every backend returns the same rows.",
-            "uses": [
-                "phibble",
-                "phplyr"
-            ],
-            "script": "site/vignettes/backends.php"
-        },
-        {
-            "slug": "reshaping",
-            "title": "Reshaping with tidyr",
-            "summary": "Summarize to one row per school and band, pivot the bands into columns, split the school id, and pivot back.",
-            "uses": [
-                "phibble",
-                "phplyr"
-            ],
-            "script": "site/vignettes/reshaping.php"
         }
     ]
 }

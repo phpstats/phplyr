@@ -1,0 +1,23 @@
+---
+title: "Filter rows and add columns"
+---
+
+This example keeps the rows that match a condition and adds two computed
+columns.
+
+Prerequisites: PHP 8.3 or later and `composer require phpstats/phplyr`. The pipe version needs PHP 8.5. See [Installation](../getting-started.qmd#installation).
+
+The orders table is created inline. Save the script as `example.php` in the
+project directory and run `php example.php`.
+
+{{< include pages/_filter-and-mutate.md >}}
+
+`filter()` keeps the rows for which the row closure returns `true`, so order
+2, with a quantity of zero, is dropped. `mutate()` adds a column for each
+named argument. `total` comes from a row closure, which reads the row's
+columns as properties. `size` uses `if_else()` with a column expression,
+`col('qty')->ge(20)`.
+
+See [Single-table functions](../reference/single-table.qmd) for `filter()`
+and `mutate()`, and [Vector helpers](../reference/vectors.qmd#conditionals-and-na)
+for `if_else()`.

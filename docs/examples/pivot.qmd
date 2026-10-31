@@ -1,0 +1,27 @@
+---
+title: "Reshape with pivot_longer and pivot_wider"
+---
+
+This example turns a wide table of yearly sales into one row per store and
+year, and back.
+
+Prerequisites: PHP 8.3 or later and `composer require phpstats/phplyr`. The pipe version needs PHP 8.5. See [Installation](../getting-started.qmd#installation).
+
+The sales table is created inline. Save the script as `example.php` in the
+project directory and run `php example.php`. The script prints the wide
+input, the long table, and the wide table rebuilt from it.
+
+{{< include pages/_pivot.md >}}
+
+`pivot_longer()` turns the columns that `starts_with('sales_')` selects into
+rows. Each column name goes into `year`, without the `sales_` prefix, and
+each value goes into `sales`. The two stores and three years give six rows.
+The years are strings, because they come from column names.
+
+`pivot_wider()` reverses it. It makes one column for each value of `year`,
+adds the `sales_` prefix back, and fills the columns from `sales`. The
+remaining column, `store`, identifies the rows.
+
+See [tidyr](../reference/tidyr.qmd#pivoting) for the other options, such as
+`valuesDropNa` and `valuesFill`, and [tidyselect and across()](../reference/tidyselect.qmd#selectors)
+for `starts_with()`.
