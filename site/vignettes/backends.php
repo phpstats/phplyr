@@ -77,7 +77,7 @@ return [
             ->filter(col('units')->gt(0))
             ->leftJoin($stores, by: 'store')
             ->groupBy('region', 'product')
-            ->summarise(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))
+            ->summarize(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))
             ->groupBy('region')
             ->mutate(rank: min_rank(desc('revenue')))
             ->filter(col('rank')->le($top))
@@ -104,7 +104,7 @@ return [
             ->filter(col('units')->gt(0))
             ->leftJoin($stores, by: 'store')
             ->groupBy('region', 'product')
-            ->summarise(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))
+            ->summarize(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))
             ->groupBy('region')
             ->mutate(rank: min_rank(desc('revenue')))
             ->filter(col('rank')->le(3))
@@ -113,16 +113,16 @@ return [
             ->get();
         PHP;
         $pipe = <<<'PHP'
-        $top = $sales
-            |> filter(col('units')->gt(0))
-            |> left_join($stores, by: 'store')
-            |> group_by('region', 'product')
-            |> summarise(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))
-            |> group_by('region')
-            |> mutate(rank: min_rank(desc('revenue')))
-            |> filter(col('rank')->le(3))
-            |> arrange('region', 'rank')
-            |> collect();
+        $top = $sales |>
+            filter(col('units')->gt(0)) |>
+            left_join($stores, by: 'store') |>
+            group_by('region', 'product') |>
+            summarize(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price')) |>
+            group_by('region') |>
+            mutate(rank: min_rank(desc('revenue'))) |>
+            filter(col('rank')->le(3)) |>
+            arrange('region', 'rank') |>
+            collect();
         PHP;
 
         $blocks = [
@@ -164,7 +164,7 @@ return [
                 ->filter(col('units')->gt(0))
                 ->leftJoin($st, by: 'store')
                 ->groupBy('region', 'product')
-                ->summarise(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))
+                ->summarize(orders: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))
                 ->groupBy('region')
                 ->mutate(rank: min_rank(desc('revenue')))
                 ->filter(col('rank')->le($top))

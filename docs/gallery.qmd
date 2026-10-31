@@ -5,6 +5,8 @@ title: "Gallery"
 These analyses use the small datasets from phit's documentation. Each
 example ran when the documentation was built, and the output shown is the
 output it produced. The CSV files are in [`docs/data`](https://github.com/phpstats/phplyr/tree/main/docs/data).
+The school, mixed-model, and pass-rate examples fit models, so they need the
+phit extension.
 
 ## School value added
 

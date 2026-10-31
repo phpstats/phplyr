@@ -5,7 +5,7 @@ echo phplyr(DataFrame::fromRows([
     ['id' => 'b', 'q1' => 4, 'q2' => 1, 'q3' => 2],
 ]))
     ->rowwise('id')
-    ->summarise(total: fn ($row) => Stats::sum(
+    ->summarize(total: fn ($row) => Stats::sum(
         [...$row->column('q1'), ...$row->column('q2'), ...$row->column('q3')],
         naRm: true,
     ));

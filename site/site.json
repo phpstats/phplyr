@@ -2,22 +2,48 @@
     "package": "phplyr",
     "title": "phplyr",
     "tagline": "A PHP port of the Tidyverse's dplyr and tidyr.",
-    "summary": "phplyr ports R's dplyr and tidyr to PHP: filter, mutate, summarise, joins, pivots, and the rest, with dplyr's names, arguments, and results. Pipelines are method chains on PHP 8.3 and later, or use the pipe operator on PHP 8.5. They run on phibble's in-memory DataFrame, on databases through SQL, and on Polars. Every function is checked against the same pipelines run in R.",
+    "summary": "phplyr brings R's dplyr and tidyr to PHP: filtering, grouped summaries, window functions, joins, pivots, and the rest, with dplyr's function names and arguments. Pipelines use PHP 8.5's pipe operator, or method chains on PHP 8.3 and 8.4. They run on phibble's in-memory DataFrame, on databases through SQL, and on Polars.",
     "install": [
         "composer require phpstats/phplyr"
     ],
+    "php": [
+        "8.3",
+        "8.4",
+        "8.5"
+    ],
     "requires": [
-        "PHP 8.3+",
-        "phpstats/phibble"
+        "phibble (installed by Composer)",
+        "PDO extension",
+        "mbstring extension"
     ],
     "optional": [
-        "phit extension",
-        "php_polars extension"
+        {
+            "name": "phit extension",
+            "for": "lm(), glm(), lmer(), and glmer(), and native descriptive statistics"
+        },
+        {
+            "name": "phpolars extension",
+            "for": "phibble's PolarsTable backend"
+        },
+        {
+            "name": "intl extension",
+            "for": "janitor-matching transliteration in clean_names() and make_clean_names()"
+        },
+        {
+            "name": "PDO driver for SQLite, PostgreSQL, or MySQL",
+            "for": "database tables through Phibble\\tbl()"
+        }
     ],
+    "build": [],
+    "platforms": [
+        "Linux",
+        "macOS"
+    ],
+    "quickstart": "getting-started",
     "repository": "https://github.com/phpstats/phplyr",
     "example": {
-        "chain": "$schools = DataFrame::fromCsv('schools.csv');\n\necho phplyr($schools)\n    ->filter(fn ($r) => $r->study_hours >= 5)\n    ->groupBy('school')\n    ->summarise(students: n(), avg_score: mean('score'), sd_score: sd('score'))\n    ->arrange(desc('avg_score'))\n    ->head(5);",
-        "pipe": "$schools = DataFrame::fromCsv('schools.csv');\n\necho $schools\n    |> filter(fn ($r) => $r->study_hours >= 5)\n    |> group_by('school')\n    |> summarise(students: n(), avg_score: mean('score'), sd_score: sd('score'))\n    |> arrange(desc('avg_score'))\n    |> head(5);",
+        "chain": "$schools = DataFrame::fromCsv('schools.csv');\n\necho phplyr($schools)\n    ->filter(fn ($r) => $r->study_hours >= 5)\n    ->groupBy('school')\n    ->summarize(students: n(), avg_score: mean('score'), sd_score: sd('score'))\n    ->arrange(desc('avg_score'))\n    ->head(5);",
+        "pipe": "$schools = DataFrame::fromCsv('schools.csv');\n\necho $schools |>\n    filter(fn ($r) => $r->study_hours >= 5) |>\n    group_by('school') |>\n    summarize(students: n(), avg_score: mean('score'), sd_score: sd('score')) |>\n    arrange(desc('avg_score')) |>\n    head(5);",
         "output": "# A tibble: 5 × 4\n  school    students avg_score sd_score\n  <chr>        <int>     <dbl>    <dbl>\n1 school-07       14      86.9     6.32\n2 school-06       20      80.9     8.90\n3 school-02       12      79.7     8.22\n4 school-09       11      79.3     6.67\n5 school-11       13      77.6     7.31"
     },
     "docs": {
@@ -35,6 +61,10 @@
             {
                 "title": "Coming from dplyr",
                 "path": "coming-from-dplyr.qmd"
+            },
+            {
+                "title": "Porting an R script",
+                "path": "port-r-script.qmd"
             },
             {
                 "title": "Single-table functions",
@@ -65,11 +95,15 @@
                 "path": "reference/tidyr.qmd"
             },
             {
+                "title": "Cleaning with janitor",
+                "path": "reference/janitor.qmd"
+            },
+            {
                 "title": "Models",
                 "path": "reference/models.qmd"
             },
             {
-                "title": "Databases",
+                "title": "Databases and expressions",
                 "path": "reference/databases.qmd"
             },
             {
@@ -77,8 +111,8 @@
                 "path": "gallery.qmd"
             },
             {
-                "title": "Porting an R script",
-                "path": "port-r-script.qmd"
+                "title": "Compatibility and limitations",
+                "path": "compatibility.qmd"
             },
             {
                 "title": "Performance",
@@ -98,6 +132,7 @@
         "site/verifications/tidyr.json",
         "site/verifications/additions.json",
         "site/verifications/lubridate-stringr.json",
+        "site/verifications/janitor.json",
         "site/verifications/models.json",
         "site/verifications/polars.json"
     ],
@@ -116,7 +151,7 @@
         {
             "slug": "backends",
             "title": "One pipeline, three backends",
-            "summary": "Join, summarise, and rank sales on phibble's DataFrame, on SQLite, and on Polars, with timings and a check that every backend returns the same rows.",
+            "summary": "Join, summarize, and rank sales on phibble's DataFrame, on SQLite, and on Polars, with timings and a check that every backend returns the same rows.",
             "uses": [
                 "phibble",
                 "phplyr"
@@ -126,7 +161,7 @@
         {
             "slug": "reshaping",
             "title": "Reshaping with tidyr",
-            "summary": "Summarise to one row per school and band, pivot the bands into columns, split the school id, and pivot back.",
+            "summary": "Summarize to one row per school and band, pivot the bands into columns, split the school id, and pivot back.",
             "uses": [
                 "phibble",
                 "phplyr"

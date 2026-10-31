@@ -1,16 +1,6 @@
 ::: {.panel-tabset group="syntax"}
 
-## Method chain (PHP 8.3+)
-
-```php
-$housing = DataFrame::fromCsv('housing.csv');
-
-echo phplyr($housing)->distinct('bedrooms')->arrange('bedrooms');
-echo "\n", json_encode(phplyr($housing)->arrange('area_m2')->pull('monthly_rent')), "\n";
-echo json_encode(phplyr($housing)->pull(-1)), "\n";
-```
-
-## Pipe (PHP 8.5)
+## PHP 8.5+
 
 ```php
 $housing = DataFrame::fromCsv('housing.csv');
@@ -18,6 +8,16 @@ $housing = DataFrame::fromCsv('housing.csv');
 echo $housing |> distinct('bedrooms') |> arrange('bedrooms');
 echo "\n", json_encode($housing |> arrange('area_m2') |> pull('monthly_rent')), "\n";
 echo json_encode($housing |> pull(-1)), "\n";
+```
+
+## PHP 8.3–8.4
+
+```php
+$housing = DataFrame::fromCsv('housing.csv');
+
+echo phplyr($housing)->distinct('bedrooms')->arrange('bedrooms');
+echo "\n", json_encode(phplyr($housing)->arrange('area_m2')->pull('monthly_rent')), "\n";
+echo json_encode(phplyr($housing)->pull(-1)), "\n";
 ```
 
 :::

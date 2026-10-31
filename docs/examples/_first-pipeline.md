@@ -1,6 +1,19 @@
 ::: {.panel-tabset group="syntax"}
 
-## Method chain (PHP 8.3+)
+## PHP 8.5+
+
+```php
+$schools = DataFrame::fromCsv('schools.csv');
+
+echo $schools |>
+    filter(fn ($r) => $r->study_hours >= 5) |>
+    group_by('school') |>
+    summarize(students: n(), avg_score: mean('score'), sd_score: sd('score')) |>
+    arrange(desc('avg_score')) |>
+    head(5);
+```
+
+## PHP 8.3–8.4
 
 ```php
 $schools = DataFrame::fromCsv('schools.csv');
@@ -8,22 +21,9 @@ $schools = DataFrame::fromCsv('schools.csv');
 echo phplyr($schools)
     ->filter(fn ($r) => $r->study_hours >= 5)
     ->groupBy('school')
-    ->summarise(students: n(), avg_score: mean('score'), sd_score: sd('score'))
+    ->summarize(students: n(), avg_score: mean('score'), sd_score: sd('score'))
     ->arrange(desc('avg_score'))
     ->head(5);
-```
-
-## Pipe (PHP 8.5)
-
-```php
-$schools = DataFrame::fromCsv('schools.csv');
-
-echo $schools
-    |> filter(fn ($r) => $r->study_hours >= 5)
-    |> group_by('school')
-    |> summarise(students: n(), avg_score: mean('score'), sd_score: sd('score'))
-    |> arrange(desc('avg_score'))
-    |> head(5);
 ```
 
 :::

@@ -112,7 +112,7 @@ foreach ([...glob($root.'/docs/examples/*.php'), ...glob($root.'/docs/examples/*
 
             continue;
         }
-        $md = "::: {.panel-tabset group=\"syntax\"}\n\n## Method chain (PHP 8.3+)\n\n```php\n{$chain[0]}\n```\n\n## Pipe (PHP 8.5)\n\n```php\n{$code}\n```\n\n:::\n\n";
+        $md = "::: {.panel-tabset group=\"syntax\"}\n\n## PHP 8.5+\n\n```php\n{$code}\n```\n\n## PHP 8.3–8.4\n\n```php\n{$chain[0]}\n```\n\n:::\n\n";
     }
     if (trim($out) !== '') {
         $md .= "```{.text .output}\n".rtrim($out)."\n```\n";

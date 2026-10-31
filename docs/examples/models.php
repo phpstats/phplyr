@@ -1,8 +1,8 @@
 <?php
 
-$fit = DataFrame::fromCsv('schools.csv')
-    |> filter(fn ($r) => $r->prior_score > 50)
-    |> lm('score ~ study_hours + prior_score');
+$fit = DataFrame::fromCsv('schools.csv') |>
+    filter(fn ($r) => $r->prior_score > 50) |>
+    lm('score ~ study_hours + prior_score');
 
 foreach (['(Intercept)', 'study_hours', 'prior_score'] as $i => $term) {
     printf("%-12s %8.4f  (se %.4f)\n", $term, $fit['coefficients'][$i], $fit['std_errors'][$i]);

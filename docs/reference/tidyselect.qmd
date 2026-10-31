@@ -22,12 +22,13 @@ Selectors pick columns by name, pattern, or type. They work in `select()`,
 | `any_selected(...)`, `all_selected(...)` | Union and intersection |
 
 `where()` accepts `'numeric'`, `'integer'`, `'double'`, `'character'`,
-`'logical'`, `'factor'`, and `'date'`, or a `Phibble\Type`.
+`'logical'`, `'factor'`, `'date'`, `'datetime'`, and `'list'`, or a
+`Phibble\Type`. `'numeric'` selects integer and double columns.
 
 ## across()
 
 `across(cols, fns, names:)` applies functions to several columns inside
-`mutate()` or `summarise()`. Grouping columns are never selected. `fns` is one
+`mutate()` or `summarize()`. Grouping columns are never selected. `fns` is one
 function or an associative array of named functions. Output names default to
 `{col}` for one function and `{col}_{fn}` for several.
 
@@ -37,7 +38,7 @@ What each function receives:
 
 - A phplyr helper passed as a first-class callable, such as `mean(...)`, is
   called with the column name.
-- In `summarise()`, other closures receive the column's values as a list.
+- In `summarize()`, other closures receive the column's values as a list.
 - In `mutate()`, other closures receive one value at a time, or the whole
   column if the first parameter is typed `array`.
 - A closure may return a helper's result, as in

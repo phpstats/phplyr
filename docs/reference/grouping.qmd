@@ -4,12 +4,12 @@ title: "Grouping"
 
 `group_by()` sets the grouping columns. Selectors work, named arguments group
 by a computed column, and `_add: true` adds to the existing groups.
-`_drop: false` keeps groups for unused factor levels, so `summarise()` and
+`_drop: false` keeps groups for unused factor levels, so `summarize()` and
 `count()` return them with `n() = 0`, as dplyr does.
 `ungroup()` removes grouping, or only the named columns.
 
 Groups are ordered like dplyr's: sorted by key, factors by level order, and NA
-last. `filter()`, `mutate()`, `summarise()`, and the slice functions work
+last. `filter()`, `mutate()`, `summarize()`, and the slice functions work
 within groups. `_by:` groups for a single call and returns an ungrouped table.
 
 {{< include ../examples/_grouping.md >}}
@@ -34,15 +34,15 @@ within groups. `_by:` groups for a single call and returns an ungrouped table.
 | `group_modify(fn ($table, $key))` | A grouped table built from the returned tables |
 | `group_walk(fn ($table, $key))` | The table, after calling the function per group |
 | `group_cols()` | A selector for the grouping columns |
-| `cur_group_id()` | The current group's number, in `mutate()`, `summarise()`, and `reframe()` |
+| `cur_group_id()` | The current group's number, in `mutate()`, `summarize()`, and `reframe()` |
 | `cur_group_rows()` | The current group's row numbers, in `mutate()` and `reframe()` |
 | `cur_group()` | The current group's key as an array of column => value |
 
 ## Row-wise operations
 
-`rowwise()` makes each row its own group. Closures in `summarise()` and vector
+`rowwise()` makes each row its own group. Closures in `summarize()` and vector
 helpers then see one row at a time. Optional id columns stay as groups in the
-result of `summarise()`. `c_across(cols)` gives the current row's values of
+result of `summarize()`. `c_across(cols)` gives the current row's values of
 the selected columns, for helpers such as `sum(c_across(starts_with('x')))`.
 
 {{< include ../examples/_rowwise.md >}}

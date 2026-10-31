@@ -18,7 +18,10 @@ website:
     contents:
       - index.qmd
       - getting-started.qmd
-      - coming-from-dplyr.qmd
+      - section: "Guides"
+        contents:
+          - coming-from-dplyr.qmd
+          - port-r-script.qmd
       - section: "Reference"
         contents:
           - reference/single-table.qmd
@@ -31,10 +34,14 @@ website:
           - reference/janitor.qmd
           - reference/models.qmd
           - reference/databases.qmd
-      - gallery.qmd
-      - port-r-script.qmd
+      - section: "Examples"
+        contents:
+          - gallery.qmd
+      - compatibility.qmd
       - performance.qmd
-      - development.qmd
+      - section: "Contributing"
+        contents:
+          - development.qmd
 
 format:
   html:

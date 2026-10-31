@@ -12,7 +12,7 @@ foreach (DataFrame::fromCsv('schools.csv')->toRows() as $row) {
 $query = phplyr(tbl($pdo, 'schools'))
     ->filter(col('study_hours')->ge(5))
     ->groupBy('school')
-    ->summarise(students: n(), avg_score: mean('score'))
+    ->summarize(students: n(), avg_score: mean('score'))
     ->filter(col('students')->ge(12))
     ->arrange(desc('avg_score'))
     ->get();

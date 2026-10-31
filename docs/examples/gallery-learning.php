@@ -3,10 +3,10 @@
 // Pass rates by study-hour quartile, then a logistic regression.
 $learning = DataFrame::fromCsv('learning.csv');
 
-echo $learning
-    |> mutate(hours_quartile: ntile('study_hours', 4))
-    |> group_by('hours_quartile')
-    |> summarise(
+echo $learning |>
+    mutate(hours_quartile: ntile('study_hours', 4)) |>
+    group_by('hours_quartile') |>
+    summarize(
         students: n(),
         min_hours: min('study_hours'),
         max_hours: max('study_hours'),

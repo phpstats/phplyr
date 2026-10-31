@@ -7,9 +7,13 @@ format:
 
 This page takes a typical R analysis of the schools data and translates it to
 PHP with phplyr and phit. The analysis reads a CSV file, cleans and
-reshapes it, summarises it, and fits a linear, a logistic, and a
+reshapes it, summarizes it, and fits a linear, a logistic, and a
 random-intercept model. Both scripts ran when the documentation was built.
 The output under each script is what it printed.
+
+The data is [`schools.csv`](https://github.com/phpstats/phplyr/blob/main/docs/data/schools.csv).
+The R script needs dplyr, tidyr, and lme4. The PHP script needs phplyr and
+the phit extension for the models.
 
 ::: {.columns}
 

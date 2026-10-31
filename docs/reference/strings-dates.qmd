@@ -28,8 +28,12 @@ text literally, and `regex('ab', ignoreCase: true)` sets options.
 | `str_squish`, `str_trim(x, side)` | Remove whitespace |
 | `str_length`, `str_sub(x, start, end)` | Length and substrings |
 
-`str_replace`, `str_pad`, and `str_split` shadow PHP built-ins in files that
-import them.
+Strings are UTF-8. `str_length()`, `str_sub()`, `str_pad()`, and the other
+functions count UTF-8 characters, and the case functions change accented
+letters too.
+
+`str_replace`, `str_pad`, and `str_split` have the names of PHP built-ins. In a
+file that imports them, write `\str_replace()` for the built-in.
 
 ## Dates and times
 
@@ -44,6 +48,15 @@ import them.
 | `difftime(x, y, units:)` | The difference as a number |
 | `with_tz(x, tz)`, `force_tz(x, tz)` | Change the displayed zone, or the zone itself |
 | `today(tz:)`, `now(tz:)` | The current date or time |
+
+The parsing functions return UTC date-times unless `tz:` names a zone, as in
+lubridate. PHP's default time zone does not change the result. `with_tz()`
+keeps the instant and changes the zone it is shown in, and `force_tz()` keeps
+the clock time and changes the zone.
+
+On a database table, a function without a SQL translation for that database
+loads the rows and runs in PHP, as
+[Databases and expressions](databases.qmd#database-tables) describes.
 
 Month and year arithmetic that lands on a date that doesn't exist, such as
 January 31 plus one month, gives NA, as in lubridate. Subtracting dates gives

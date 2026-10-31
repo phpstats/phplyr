@@ -9,12 +9,12 @@ foreach (DataFrame::fromCsv('schools.csv')->toRows() as $row) {
 }
 
 // The same functions build a query. Nothing runs until collect().
-$query = tbl($pdo, 'schools')
-    |> filter(col('study_hours')->ge(5))
-    |> group_by('school')
-    |> summarise(students: n(), avg_score: mean('score'))
-    |> filter(col('students')->ge(12))
-    |> arrange(desc('avg_score'));
+$query = tbl($pdo, 'schools') |>
+    filter(col('study_hours')->ge(5)) |>
+    group_by('school') |>
+    summarize(students: n(), avg_score: mean('score')) |>
+    filter(col('students')->ge(12)) |>
+    arrange(desc('avg_score'));
 
 echo $query |> show_query(), "\n\n";
 echo $query |> collect();

@@ -50,6 +50,13 @@ $families = [
         'tolerance' => 'All values equal.',
         'fixtures' => ['lubridate-stringr.json'],
     ],
+    'janitor' => [
+        'title' => 'janitor functions',
+        'description' => 'make_clean_names(), clean_names(), remove_empty(), get_dupes(), and one- and two-way tabyl(), compared with janitor in R.',
+        'reference' => 'R 4.6.1 with janitor 2.2.1 and dplyr 1.2.1',
+        'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
+        'fixtures' => ['janitor-reference.json'],
+    ],
     'models' => [
         'title' => 'Models',
         'description' => 'lm(), glm(), and lmer() through the phit extension, compared with the coefficients and residual standard deviation from R\'s lm(), glm(), and lme4\'s lmer().',

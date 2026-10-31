@@ -1,0 +1,182 @@
+{
+    "title": "janitor functions",
+    "description": "make_clean_names(), clean_names(), remove_empty(), get_dupes(), and one- and two-way tabyl(), compared with janitor in R.",
+    "reference": "R 4.6.1 with janitor 2.2.1 and dplyr 1.2.1",
+    "tolerance": "Floating-point table values within 1e-9 relative; all other values equal.",
+    "environment": {
+        "php": "8.5.10",
+        "commit": "f7edd6e",
+        "date": "2026-10-31"
+    },
+    "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
+    "cases": [
+        {
+            "name": "Matches janitor on names with case, punctuation, unicode, leading digits, and repeats",
+            "quantity": "values",
+            "n_compared": 1,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"rows and cols\"  with data set \"dataset \"rows and cols\"\"",
+            "quantity": "table values",
+            "n_compared": 13,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"rows\"  with data set \"dataset \"rows\"\"",
+            "quantity": "table values",
+            "n_compared": 16,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"cols\"  with data set \"dataset \"cols\"\"",
+            "quantity": "table values",
+            "n_compared": 21,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"rows with a cutoff\"  with data set \"dataset \"rows with a cutoff\"\"",
+            "quantity": "table values",
+            "n_compared": 6,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"cols with a cutoff\"  with data set \"dataset \"cols with a cutoff\"\"",
+            "quantity": "table values",
+            "n_compared": 16,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"all columns\"  with data set \"dataset \"all columns\"\"",
+            "quantity": "table values",
+            "n_compared": 17,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"one column\"  with data set \"dataset \"one column\"\"",
+            "quantity": "table values",
+            "n_compared": 31,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"two columns\"  with data set \"dataset \"two columns\"\"",
+            "quantity": "table values",
+            "n_compared": 21,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"a numeric column\"  with data set \"dataset \"a numeric column\"\"",
+            "quantity": "table values",
+            "n_compared": 26,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"characters with NA\"  with data set \"dataset \"characters with NA\"\"",
+            "quantity": "table values",
+            "n_compared": 21,
+            "max_abs_error": 4.440892098500626e-16,
+            "max_rel_error": 1.0362081563168119e-15,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"characters without NA\"  with data set \"dataset \"characters without NA\"\"",
+            "quantity": "table values",
+            "n_compared": 13,
+            "max_abs_error": 4.440892098500626e-16,
+            "max_rel_error": 1.0362081563168119e-15,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"numbers\"  with data set \"dataset \"numbers\"\"",
+            "quantity": "table values",
+            "n_compared": 21,
+            "max_abs_error": 4.440892098500626e-16,
+            "max_rel_error": 1.0362081563168119e-15,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"logicals\"  with data set \"dataset \"logicals\"\"",
+            "quantity": "table values",
+            "n_compared": 16,
+            "max_abs_error": 3.3306690738754696e-16,
+            "max_rel_error": 9.71445146547011e-16,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"a factor with an unused level\"  with data set \"dataset \"a factor with an unused level\"\"",
+            "quantity": "table values",
+            "n_compared": 21,
+            "max_abs_error": 4.440892098500626e-16,
+            "max_rel_error": 1.0362081563168119e-15,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"a factor without unused levels\"  with data set \"dataset \"a factor without unused levels\"\"",
+            "quantity": "table values",
+            "n_compared": 16,
+            "max_abs_error": 4.440892098500626e-16,
+            "max_rel_error": 1.0362081563168119e-15,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"an empty string\"  with data set \"dataset \"an empty string\"\"",
+            "quantity": "table values",
+            "n_compared": 13,
+            "max_abs_error": 4.440892098500626e-16,
+            "max_rel_error": 9.71445146547011e-16,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"two ways\"  with data set \"dataset \"two ways\"\"",
+            "quantity": "values",
+            "n_compared": 25,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"two ways without NA\"  with data set \"dataset \"two ways without NA\"\"",
+            "quantity": "values",
+            "n_compared": 16,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"two ways by a number\"  with data set \"dataset \"two ways by a number\"\"",
+            "quantity": "values",
+            "n_compared": 25,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        },
+        {
+            "name": "Matches janitor with dataset \"two ways by factor and logical\"  with data set \"dataset \"two ways by factor and logical\"\"",
+            "quantity": "values",
+            "n_compared": 21,
+            "max_abs_error": 0,
+            "max_rel_error": 0,
+            "passed": true
+        }
+    ]
+}

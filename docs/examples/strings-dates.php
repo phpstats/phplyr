@@ -9,21 +9,21 @@ $notes = DataFrame::fromRows([
 ]);
 
 // Dates: parse, round, shift by a month (an invalid date gives NA), weekday.
-echo $notes
-    |> mutate(
+echo $notes |>
+    mutate(
         date: ymd('when'),
         month_start: floor_date(ymd('when'), 'month'),
         next_month: ymd('when')->add(months(1)),
         weekday: wday(ymd('when'), weekStart: 1),
-    )
-    |> select(except('note')), "\n";
+    ) |>
+    select(except('note')), "\n";
 
 // Strings: patterns are regular expressions unless wrapped in fixed().
-echo $notes
-    |> mutate(
+echo $notes |>
+    mutate(
         invoice: str_extract('note', regex('inv-\d+', ignoreCase: true)),
         literal: str_detect('note', fixed('INV')),
         masked: str_replace_all('note', '\d', '#'),
         title: str_to_title('note'),
-    )
-    |> select(except('when', 'note'));
+    ) |>
+    select(except('when', 'note'));

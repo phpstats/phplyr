@@ -1,0 +1,85 @@
+---
+title: "Compatibility and limitations"
+---
+
+## PHP versions
+
+composer.json allows PHP 8.3 and later 8.x versions. CI tests PHP 8.3, 8.4, and
+8.5 on Linux.
+
+The pipe operator `|>` is PHP 8.5 syntax. On PHP 8.3 and 8.4, the same
+pipelines are method chains, or calls to `pipe()`. Every function works on all
+three versions.
+
+## Requirements
+
+Composer installs these with phplyr:
+
+- phibble (`phpstats/phibble` 0.3, 0.4, or 0.5), which provides the tables.
+  phibble requires PHP's PDO extension.
+- `symfony/polyfill-php84`, which provides PHP 8.4 functions on PHP 8.3.
+
+The mbstring extension is used by the position-based tidyr functions
+(`separate()` with numeric positions, `separate_wider_position()`, and
+`separate_longer_position()`), by `make_clean_names()` and `clean_names()`,
+and by phibble when it prints a table.
+
+## Optional extensions
+
+| Extension | Enables |
+| --- | --- |
+| [phit](https://github.com/phpstats/phit) | `lm()`, `glm()`, `lmer()`, and `glmer()`, and native `mean()`, `sd()`, `var_()`, `median()`, and `quantile()` |
+| [phpolars](https://github.com/phpstats/phpolars) | phibble's `PolarsTable` backend |
+| intl | Transliteration in `make_clean_names()` and `clean_names()` that matches R's janitor |
+| A PDO driver (SQLite, PostgreSQL, or MySQL) | Database tables through `Phibble\tbl()` |
+
+Without phit, the descriptive helpers run in PHP, and the model functions throw
+a `RuntimeException` that names the missing function.
+[Models](reference/models.qmd) describes phit-polyfill, which defines the model
+functions in PHP. Without intl, `make_clean_names()` transliterates with
+iconv, and some names can differ from janitor's.
+
+## Backends
+
+A phplyr function calls the methods of phibble's `Table` contract, so a
+pipeline runs on any table that implements it:
+
+- `Phibble\DataFrame` holds the data in PHP memory.
+- `Phibble\tbl($pdo, 'table')` builds SQL for SQLite, PostgreSQL, or MySQL.
+  A function given a PHP closure, and an expression without a SQL translation,
+  runs the query so far, loads the rows, and continues in memory.
+  [Databases and expressions](reference/databases.qmd) lists those
+  expressions.
+- `Phibble\Polars\PolarsTable` belongs to phibble and runs pipelines in Polars
+  through the phpolars extension. A closure step converts the data to a
+  `DataFrame` and back.
+
+The test suite runs about 120 pipelines on both `DataFrame` and `PolarsTable`
+and requires the same columns, types, groups, and rows from each.
+
+## Not supported
+
+- **Bare column names and tidy evaluation.** Columns are strings, and
+  expressions are closures, helpers, or `col()` expressions.
+- **`mutate(_keep: 'used')` and `_keep: 'unused'` with closures.** These work
+  with expression arguments such as `col('x')->mul(2)`, whose columns phplyr
+  can read. A PHP closure does not expose the columns it reads, so phplyr
+  throws an `InvalidArgumentException`.
+- **`cur_data()` and `cur_data_all()`**, which dplyr has deprecated. Use
+  `pick()`.
+- **Data frame columns and `across(.unpack)`.** `pack()` makes a column of
+  named arrays.
+- **The scoped `_at`, `_if`, and `_all` variants**, such as `mutate_at()`. Use
+  `across()`.
+- **janitor's `adorn_*()` functions and three-way `tabyl()`.**
+
+## Differences in behavior
+
+- **`_by` sorts groups.** dplyr keeps the order of first appearance for
+  `.by`. phplyr sorts by key, as it does for `group_by()`.
+- **Strings are UTF-8.** String functions count UTF-8 characters.
+- **Date-times parse to UTC** unless a function is given `tz:`, whatever PHP's
+  default time zone is, as in lubridate.
+- **Models return arrays.** `lm()` and the other model functions return phit's
+  result array, with R's coefficient names in `columns`, in place of a model
+  object.

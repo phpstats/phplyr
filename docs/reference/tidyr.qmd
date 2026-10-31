@@ -25,7 +25,7 @@ rows (by default every other column). `valuesFill` fills missing cells,
 duplicate cells turn the value column into list-columns and raise tidyr's
 warning. `namesVary: 'slowest'` groups each name's value columns together.
 `namesExpand` and `idExpand` add every combination of the `namesFrom` and
-`idCols` values (sorted, factors by level). `unusedFn` summarises the
+`idCols` values (sorted, factors by level). `unusedFn` summarizes the
 columns that are in none of `idCols`, `namesFrom`, and `valuesFrom`.
 
 Both functions build tidyr's pivot spec in phplyr and pass it to the table's

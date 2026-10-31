@@ -10,7 +10,7 @@ echo phplyr($schools)
     ->mutate(expected: fn ($r) => $b0 + $b_prior * $r->prior_score + $b_hours * $r->study_hours)
     ->mutate(residual: fn ($r) => $r->score - $r->expected)
     ->groupBy('school')
-    ->summarise(
+    ->summarize(
         students: n(),
         avg_score: mean('score'),
         avg_residual: mean('residual'),

@@ -1,6 +1,18 @@
 ::: {.panel-tabset group="syntax"}
 
-## Method chain (PHP 8.3+)
+## PHP 8.5+
+
+```php
+echo DataFrame::fromCsv('housing.csv') |>
+    mutate(
+        rent_per_m2: fn ($r) => round($r->monthly_rent / $r->area_m2, 2),
+        size: if_else(fn ($r) => $r->area_m2 >= 60, 'large', 'small'),
+        rank: min_rank(desc('monthly_rent')),
+    ) |>
+    arrange('rank');
+```
+
+## PHP 8.3–8.4
 
 ```php
 echo phplyr(DataFrame::fromCsv('housing.csv'))
@@ -10,18 +22,6 @@ echo phplyr(DataFrame::fromCsv('housing.csv'))
         rank: min_rank(desc('monthly_rent')),
     )
     ->arrange('rank');
-```
-
-## Pipe (PHP 8.5)
-
-```php
-echo DataFrame::fromCsv('housing.csv')
-    |> mutate(
-        rent_per_m2: fn ($r) => round($r->monthly_rent / $r->area_m2, 2),
-        size: if_else(fn ($r) => $r->area_m2 >= 60, 'large', 'small'),
-        rank: min_rank(desc('monthly_rent')),
-    )
-    |> arrange('rank');
 ```
 
 :::

@@ -37,6 +37,11 @@ The options follow dplyr 1.1:
 
 {{< include ../examples/_join-options.md >}}
 
+A row of x that matches several rows of y appears once per match, so a join
+can return more rows than x has. The result keeps x's row order, with several
+matches in y's order. Unmatched rows of x get NA in y's columns in a left or
+full join. `multiple:` and `relationship:` limit or check the matches.
+
 Joins keep x's grouping, except for a grouping column that the join renames.
 
 ## join_by()

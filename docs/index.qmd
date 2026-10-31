@@ -3,53 +3,58 @@ title: "phplyr"
 subtitle: "A PHP port of the Tidyverse's dplyr and tidyr."
 ---
 
-phplyr is a port of R's dplyr and tidyr to PHP. It works on
-[phibble](https://github.com/phpstats/phibble) tables. A pipeline is a method chain on PHP 8.3 and
-later, or uses the pipe operator on PHP 8.5, and reads like its R equivalent.
+phplyr is a library of functions for filtering, transforming, summarizing,
+joining, and reshaping tables of data in PHP. Each function takes a table and
+returns a new one, so a sequence of them reads as a pipeline from the raw data
+to the result. The functions and their arguments follow R's
+[dplyr](https://dplyr.tidyverse.org) and [tidyr](https://tidyr.tidyverse.org)
+packages, and the test suite compares their results with R's.
 
 {{< include examples/_first-pipeline.md >}}
 
-Each table function returns a closure taking one table. In a method
-chain, `phplyr($t)->filter(...)` runs `filter()` on the table, and `get()`
-returns the result. On PHP 8.5, the `|>` operator passes the table from one
-function to the next. The functions call the methods of
-phibble's `Table` contract, so the same pipeline runs on the in-memory `DataFrame`
-and on other backends that implement the contract.
+## phplyr and phibble
 
-Results follow dplyr 1.2 and tidyr 1.3. The test suite runs the same
-pipelines in R and PHP and compares the output. The reference scripts are in
-`tests/r/`.
+The tables come from [phibble](https://github.com/phpstats/phibble), which
+Composer installs with phplyr. phibble reads CSV files, database queries, and
+PHP arrays into a typed, immutable `DataFrame`. Its methods, such as
+`filter()`, `mutate()`, `groupBy()`, `summarize()`, `arrange()`, and `join()`,
+are the operations every phibble table implements. They take closures,
+arrays of column definitions, and phibble expressions.
+
+phplyr is built on those methods and adds:
+
+- dplyr's functions and arguments, including grouped window functions such as
+  `lag()` and `min_rank()`, `across()`, column selectors such as
+  `starts_with()`, `join_by()` conditions, and the `slice_*()` family.
+- tidyr's pivoting, completing, splitting, nesting, and list-column functions.
+- janitor's `clean_names()`, `remove_empty()`, `get_dupes()`, and `tabyl()`.
+- Adapters that pass a table to phit's `lm()`, `glm()`, `lmer()`, and
+  `glmer()`.
+
+A phplyr pipeline runs on any phibble table: the in-memory `DataFrame`, a
+database table from `Phibble\tbl()`, which runs the pipeline as SQL, and
+`Phibble\Polars\PolarsTable`, which runs it in Polars through the phpolars
+extension.
 
 ## Install
 
-phplyr needs PHP 8.3 or later. The pipe operator needs PHP 8.5. Neither phplyr
-nor phibble is on Packagist yet, so add both GitHub repositories and require
-phplyr from its main branch:
-
 ```bash
-composer config repositories.phibble vcs https://github.com/phpstats/phibble
-composer config repositories.phplyr vcs https://github.com/phpstats/phplyr
-composer require phpstats/phplyr:dev-main
+composer require phpstats/phplyr
 ```
 
-The optional [phit](https://github.com/phpstats/phit) extension
-speeds up the descriptive helpers and provides `lm()` and `glm()`.
+composer.json allows PHP 8.3 and later 8.x versions. CI tests PHP 8.3, 8.4,
+and 8.5. Pipelines written with the pipe operator `|>` need PHP 8.5. On 8.3 and
+8.4, the same pipelines are method chains, as the "PHP 8.3–8.4" tabs show.
 
-## Where to go next
+The following extensions are optional:
 
-- [Getting started](getting-started.qmd) covers imports, loading data, and how
-  table functions, row closures, and vector helpers fit together.
-- [Coming from dplyr](coming-from-dplyr.qmd) lists the syntax differences and
-  what is not supported.
-- The reference pages document each group of functions with runnable examples.
-- The [gallery](gallery.qmd) has longer analyses on small example datasets.
+- [phit](https://github.com/phpstats/phit) provides `lm()`, `glm()`, `lmer()`,
+  and `glmer()`, and computes `mean()`, `sd()`, `var_()`, `median()`, and
+  `quantile()` natively.
+- [phpolars](https://github.com/phpstats/phpolars) provides Polars for
+  phibble's `PolarsTable`.
+- intl transliterates names in `make_clean_names()` and `clean_names()` the
+  way R's janitor does.
 
-## The family
-
-- **phibble** provides the typed data frame, CSV and database sources, and the
-  `Table` contract.
-- **phplyr** provides the dplyr and tidyr functions.
-- **phit** is a native extension for statistical models and descriptive
-  statistics.
-- **phpolars** is a native extension that binds Polars. phibble's
-  `PolarsTable` uses it to run the same pipelines in Polars.
+[Compatibility and limitations](compatibility.qmd) lists the PHP and backend
+details and the dplyr features phplyr does not have.

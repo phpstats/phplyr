@@ -158,21 +158,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Getting started</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../coming-from-dplyr.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Coming from dplyr</span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Reference</span></a>
+ <span class="menu-text">Guides</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../coming-from-dplyr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Coming from dplyr</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../port-r-script.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Porting an R script</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Reference</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../reference/single-table.html" class="sidebar-item-text sidebar-link">
@@ -235,16 +252,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../gallery.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Gallery</span></a>
   </div>
 </li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../port-r-script.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Porting an R script</span></a>
+  <a href="../compatibility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Compatibility and limitations</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -253,12 +281,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Performance</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../development.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Development</span></a>
   </div>
 </li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -341,40 +380,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p><code>by:</code> names the key columns. A string or list joins on columns with the same name in both tables, and an associative array maps differing names: <code>by: ['school' =&gt; 'school_id']</code>. The forms mix, as in <code>['id', 'code' =&gt; 'country_code']</code>. Without <code>by:</code>, the tables join on every column they share.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Method chain (PHP 8.3+)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Pipe (PHP 8.5)</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    -&gt;summarise(avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>))</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="va">$districts</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-01'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-02'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-03'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'South'</span>]<span class="ot">,</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-99'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'East'</span>]<span class="ot">,</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)-&gt;innerJoin(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>])<span class="ot">;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$schools</span>)-&gt;leftJoin(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>])-&gt;head(<span class="dv">5</span>)<span class="ot">;</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$districts</span>)-&gt;antiJoin(<span class="va">$schools</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school_id'</span> =&gt; <span class="st">'school'</span>])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'school'</span>) <span class="op">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    summarize(avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>))<span class="ot">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="va">$districts</span> <span class="op">=</span> DataFrame::fromRows([</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-01'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-02'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-03'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'South'</span>]<span class="ot">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-99'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'East'</span>]<span class="ot">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span> inner_join(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>])<span class="ot">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$schools</span> <span class="op">|&gt;</span> left_join(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>]) <span class="op">|&gt;</span> head(<span class="dv">5</span>)<span class="ot">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$districts</span> <span class="op">|&gt;</span> anti_join(<span class="va">$schools</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school_id'</span> =&gt; <span class="st">'school'</span>])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">|&gt;</span> group_by(<span class="st">'school'</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">|&gt;</span> summarise(avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>))<span class="ot">;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">$districts</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-01'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-02'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-03'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'South'</span>]<span class="ot">,</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-99'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'East'</span>]<span class="ot">,</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span> inner_join(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>])<span class="ot">;</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$schools</span> <span class="op">|&gt;</span> left_join(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>]) <span class="op">|&gt;</span> head(<span class="dv">5</span>)<span class="ot">;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$districts</span> <span class="op">|&gt;</span> anti_join(<span class="va">$schools</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school_id'</span> =&gt; <span class="st">'school'</span>])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="va">$districts</span> <span class="op">=</span> DataFrame::fromRows([</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-01'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-02'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-03'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'South'</span>]<span class="ot">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-99'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'East'</span>]<span class="ot">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)-&gt;innerJoin(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>])<span class="ot">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$schools</span>)-&gt;leftJoin(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>])-&gt;head(<span class="dv">5</span>)<span class="ot">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$districts</span>)-&gt;antiJoin(<span class="va">$schools</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school_id'</span> =&gt; <span class="st">'school'</span>])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -406,27 +445,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>relationship:</code> checks <code>'one-to-one'</code>, <code>'one-to-many'</code>, <code>'many-to-one'</code>, or <code>'many-to-many'</code>. An unexpected many-to-many join raises dplyr’s warning.</li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Method chain (PHP 8.3+)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Pipe (PHP 8.5)</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">$x</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'a'</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'b'</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="kw">null</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'c'</span>]])<span class="ot">;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">$y</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'B'</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'B2'</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="kw">null</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'C'</span>]])<span class="ot">;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Clashing columns get suffixes; NA keys match each other, as in dplyr.</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$x</span>)-&gt;leftJoin(<span class="va">$y</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'id'</span>)<span class="ot">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$x</span> <span class="op">|&gt;</span> left_join(<span class="va">$y</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'id'</span>)<span class="ot">;</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Keep only the first match, and never match NA keys.</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$x</span>)-&gt;leftJoin(<span class="va">$y</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'id'</span><span class="ot">,</span> multiple<span class="ot">:</span> <span class="st">'first'</span><span class="ot">,</span> naMatches<span class="ot">:</span> <span class="st">'never'</span><span class="ot">,</span> suffix<span class="ot">:</span> [<span class="st">'x'</span><span class="ot">,</span> <span class="st">'_y'</span>])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$x</span> <span class="op">|&gt;</span> left_join(<span class="va">$y</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'id'</span><span class="ot">,</span> multiple<span class="ot">:</span> <span class="st">'first'</span><span class="ot">,</span> naMatches<span class="ot">:</span> <span class="st">'never'</span><span class="ot">,</span> suffix<span class="ot">:</span> [<span class="st">'x'</span><span class="ot">,</span> <span class="st">'_y'</span>])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">$x</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'a'</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'b'</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="kw">null</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'c'</span>]])<span class="ot">;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="va">$y</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'B'</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'B2'</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="kw">null</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'C'</span>]])<span class="ot">;</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Clashing columns get suffixes; NA keys match each other, as in dplyr.</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$x</span> <span class="op">|&gt;</span> left_join(<span class="va">$y</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'id'</span>)<span class="ot">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$x</span>)-&gt;leftJoin(<span class="va">$y</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'id'</span>)<span class="ot">;</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Keep only the first match, and never match NA keys.</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$x</span> <span class="op">|&gt;</span> left_join(<span class="va">$y</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'id'</span><span class="ot">,</span> multiple<span class="ot">:</span> <span class="st">'first'</span><span class="ot">,</span> naMatches<span class="ot">:</span> <span class="st">'never'</span><span class="ot">,</span> suffix<span class="ot">:</span> [<span class="st">'x'</span><span class="ot">,</span> <span class="st">'_y'</span>])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$x</span>)-&gt;leftJoin(<span class="va">$y</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'id'</span><span class="ot">,</span> multiple<span class="ot">:</span> <span class="st">'first'</span><span class="ot">,</span> naMatches<span class="ot">:</span> <span class="st">'never'</span><span class="ot">,</span> suffix<span class="ot">:</span> [<span class="st">'x'</span><span class="ot">,</span> <span class="st">'_y'</span>])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -443,6 +482,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 1     1 a     &lt;NA&gt; 
 2     2 b     B    
 3    NA c     &lt;NA&gt;</code></pre>
+<p>A row of x that matches several rows of y appears once per match, so a join can return more rows than x has. The result keeps x’s row order, with several matches in y’s order. Unmatched rows of x get NA in y’s columns in a left or full join. <code>multiple:</code> and <code>relationship:</code> limit or check the matches.</p>
 <p>Joins keep x’s grouping, except for a grouping column that the join renames.</p>
 </section>
 <section id="join_by" class="level2">
@@ -460,21 +500,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="binding">Binding</h2>
 <p><code>bind_rows()</code> stacks tables under the input one, matching columns by name and filling missing columns with NA. <code>_id:</code> adds a column with each row’s source. <code>bind_cols()</code> puts tables side by side and renames duplicate names as <code>name...position</code>.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Method chain (PHP 8.3+)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Pipe (PHP 8.5)</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">$a</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'a'</span>]])<span class="ot">;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'w'</span> =&gt; <span class="kw">true</span>]])<span class="ot">;</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$a</span>)-&gt;bindRows(<span class="va">$b</span><span class="ot">,</span> _id<span class="ot">:</span> <span class="st">'source'</span>)<span class="ot">;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$a</span>)-&gt;bindCols(DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">10</span>]]))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$a</span> <span class="op">|&gt;</span> bind_rows(<span class="va">$b</span><span class="ot">,</span> _id<span class="ot">:</span> <span class="st">'source'</span>)<span class="ot">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$a</span> <span class="op">|&gt;</span> bind_cols(DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">10</span>]]))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">$a</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'v'</span> =&gt; <span class="st">'a'</span>]])<span class="ot">;</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'w'</span> =&gt; <span class="kw">true</span>]])<span class="ot">;</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$a</span> <span class="op">|&gt;</span> bind_rows(<span class="va">$b</span><span class="ot">,</span> _id<span class="ot">:</span> <span class="st">'source'</span>)<span class="ot">;</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$a</span> <span class="op">|&gt;</span> bind_cols(DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">10</span>]]))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$a</span>)-&gt;bindRows(<span class="va">$b</span><span class="ot">,</span> _id<span class="ot">:</span> <span class="st">'source'</span>)<span class="ot">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$a</span>)-&gt;bindCols(DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">10</span>]]))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -502,7 +542,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p><code>unmatched: 'ignore'</code> allows y keys that x lacks.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Method chain (PHP 8.3+)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">Pipe (PHP 8.5)</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">$stock</span> <span class="op">=</span> DataFrame::fromRows([</span>
@@ -512,9 +552,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="va">$delivery</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'sku'</span> =&gt; <span class="st">'B2'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">12</span>]<span class="ot">,</span> [<span class="st">'sku'</span> =&gt; <span class="st">'D4'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">3</span>]])<span class="ot">;</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$stock</span>)-&gt;rowsUpsert(<span class="va">$delivery</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'sku'</span>)<span class="ot">;</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$stock</span>)-&gt;rowsPatch(<span class="va">$delivery</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'sku'</span><span class="ot">,</span> unmatched<span class="ot">:</span> <span class="st">'ignore'</span>)<span class="ot">;</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$stock</span>)-&gt;setdiff(DataFrame::fromRows([[<span class="st">'sku'</span> =&gt; <span class="st">'C3'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">0</span>]]))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$stock</span> <span class="op">|&gt;</span> rows_upsert(<span class="va">$delivery</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'sku'</span>)<span class="ot">;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$stock</span> <span class="op">|&gt;</span> rows_patch(<span class="va">$delivery</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'sku'</span><span class="ot">,</span> unmatched<span class="ot">:</span> <span class="st">'ignore'</span>)<span class="ot">;</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$stock</span> <span class="op">|&gt;</span> setdiff(DataFrame::fromRows([[<span class="st">'sku'</span> =&gt; <span class="st">'C3'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">0</span>]]))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="va">$stock</span> <span class="op">=</span> DataFrame::fromRows([</span>
@@ -524,9 +564,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="va">$delivery</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'sku'</span> =&gt; <span class="st">'B2'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">12</span>]<span class="ot">,</span> [<span class="st">'sku'</span> =&gt; <span class="st">'D4'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">3</span>]])<span class="ot">;</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$stock</span> <span class="op">|&gt;</span> rows_upsert(<span class="va">$delivery</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'sku'</span>)<span class="ot">;</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$stock</span> <span class="op">|&gt;</span> rows_patch(<span class="va">$delivery</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'sku'</span><span class="ot">,</span> unmatched<span class="ot">:</span> <span class="st">'ignore'</span>)<span class="ot">;</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$stock</span> <span class="op">|&gt;</span> setdiff(DataFrame::fromRows([[<span class="st">'sku'</span> =&gt; <span class="st">'C3'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">0</span>]]))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$stock</span>)-&gt;rowsUpsert(<span class="va">$delivery</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'sku'</span>)<span class="ot">;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$stock</span>)-&gt;rowsPatch(<span class="va">$delivery</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'sku'</span><span class="ot">,</span> unmatched<span class="ot">:</span> <span class="st">'ignore'</span>)<span class="ot">;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$stock</span>)-&gt;setdiff(DataFrame::fromRows([[<span class="st">'sku'</span> =&gt; <span class="st">'C3'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">0</span>]]))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>

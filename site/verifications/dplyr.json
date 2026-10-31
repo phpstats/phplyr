@@ -5,8 +5,8 @@
     "tolerance": "Floating-point table values within 1e-9 relative; all other values equal.",
     "environment": {
         "php": "8.5.10",
-        "commit": "a741c88",
-        "date": "2026-10-18"
+        "commit": "f7edd6e",
+        "date": "2026-10-31"
     },
     "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
     "cases": [
@@ -339,7 +339,7 @@
             "passed": true
         },
         {
-            "name": "Matches dplyr for mutate _keep used and unused",
+            "name": "Matches dplyr for mutate keep used and unused",
             "quantity": "table values",
             "n_compared": 209,
             "max_abs_error": 0,

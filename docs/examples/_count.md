@@ -1,6 +1,20 @@
 ::: {.panel-tabset group="syntax"}
 
-## Method chain (PHP 8.3+)
+## PHP 8.5+
+
+```php
+$schools = DataFrame::fromCsv('schools.csv') |>
+    mutate(band: case_when(
+        [fn ($r) => $r->study_hours < 4, 'light'],
+        [fn ($r) => $r->study_hours < 8, 'moderate'],
+        default: 'heavy',
+    ));
+
+echo $schools |> count('band', sort: true);
+echo "\n", $schools |> count('band', wt: 'study_hours', name: 'hours');
+```
+
+## PHP 8.3–8.4
 
 ```php
 $schools = phplyr(DataFrame::fromCsv('schools.csv'))
@@ -13,20 +27,6 @@ $schools = phplyr(DataFrame::fromCsv('schools.csv'))
 
 echo phplyr($schools)->count('band', sort: true);
 echo "\n", phplyr($schools)->count('band', wt: 'study_hours', name: 'hours');
-```
-
-## Pipe (PHP 8.5)
-
-```php
-$schools = DataFrame::fromCsv('schools.csv')
-    |> mutate(band: case_when(
-        [fn ($r) => $r->study_hours < 4, 'light'],
-        [fn ($r) => $r->study_hours < 8, 'moderate'],
-        default: 'heavy',
-    ));
-
-echo $schools |> count('band', sort: true);
-echo "\n", $schools |> count('band', wt: 'study_hours', name: 'hours');
 ```
 
 :::

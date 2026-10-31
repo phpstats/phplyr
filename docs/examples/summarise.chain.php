@@ -1,7 +1,7 @@
 <?php
 
 echo phplyr(DataFrame::fromCsv('schools.csv'))
-    ->summarise(
+    ->summarize(
         students: n(),
         schools: n_distinct('school'),
         median_hours: median('study_hours'),

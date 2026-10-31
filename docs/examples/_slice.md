@@ -1,6 +1,18 @@
 ::: {.panel-tabset group="syntax"}
 
-## Method chain (PHP 8.3+)
+## PHP 8.5+
+
+```php
+$schools = DataFrame::fromCsv('schools.csv') |> group_by('school');
+
+// The two best students in each of the first three schools.
+echo $schools |>
+    slice_max('score', n: 2) |>
+    filter(fn ($r) => $r->school <= 'school-03') |>
+    select('school', 'score');
+```
+
+## PHP 8.3–8.4
 
 ```php
 $schools = phplyr(DataFrame::fromCsv('schools.csv'))->groupBy('school')->get();
@@ -10,18 +22,6 @@ echo phplyr($schools)
     ->sliceMax('score', n: 2)
     ->filter(fn ($r) => $r->school <= 'school-03')
     ->select('school', 'score');
-```
-
-## Pipe (PHP 8.5)
-
-```php
-$schools = DataFrame::fromCsv('schools.csv') |> group_by('school');
-
-// The two best students in each of the first three schools.
-echo $schools
-    |> slice_max('score', n: 2)
-    |> filter(fn ($r) => $r->school <= 'school-03')
-    |> select('school', 'score');
 ```
 
 :::

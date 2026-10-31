@@ -1,16 +1,6 @@
 ::: {.panel-tabset group="syntax"}
 
-## Method chain (PHP 8.3+)
-
-```php
-$a = DataFrame::fromRows([['id' => 1, 'v' => 'a']]);
-$b = DataFrame::fromRows([['id' => 2, 'w' => true]]);
-
-echo phplyr($a)->bindRows($b, _id: 'source');
-echo "\n", phplyr($a)->bindCols(DataFrame::fromRows([['id' => 10]]));
-```
-
-## Pipe (PHP 8.5)
+## PHP 8.5+
 
 ```php
 $a = DataFrame::fromRows([['id' => 1, 'v' => 'a']]);
@@ -18,6 +8,16 @@ $b = DataFrame::fromRows([['id' => 2, 'w' => true]]);
 
 echo $a |> bind_rows($b, _id: 'source');
 echo "\n", $a |> bind_cols(DataFrame::fromRows([['id' => 10]]));
+```
+
+## PHP 8.3–8.4
+
+```php
+$a = DataFrame::fromRows([['id' => 1, 'v' => 'a']]);
+$b = DataFrame::fromRows([['id' => 2, 'w' => true]]);
+
+echo phplyr($a)->bindRows($b, _id: 'source');
+echo "\n", phplyr($a)->bindCols(DataFrame::fromRows([['id' => 10]]));
 ```
 
 :::

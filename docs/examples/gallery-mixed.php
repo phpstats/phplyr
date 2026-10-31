@@ -14,9 +14,9 @@ printf("school sd %.3f, residual sd %.3f, ICC %.3f\n\n", $schoolSd, $fit['sigma'
 // Compare each school's raw mean with its estimated intercept shift.
 $random = $fit['random'][0];
 $effects = array_combine($random['group_labels'], array_column($random['effects'], 0));
-echo $schools
-    |> group_by('school')
-    |> summarise(students: n(), raw_mean: mean('score'))
-    |> mutate(intercept_shift: fn ($r) => round($effects[$r->school], 2), raw_mean: fn ($r) => round($r->raw_mean, 1))
-    |> arrange(desc('intercept_shift'))
-    |> head(5);
+echo $schools |>
+    group_by('school') |>
+    summarize(students: n(), raw_mean: mean('score')) |>
+    mutate(intercept_shift: fn ($r) => round($effects[$r->school], 2), raw_mean: fn ($r) => round($r->raw_mean, 1)) |>
+    arrange(desc('intercept_shift')) |>
+    head(5);

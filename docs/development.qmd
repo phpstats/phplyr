@@ -24,11 +24,17 @@ pipelines with dplyr and tidyr and write JSON fixtures to `tests/Fixtures/`:
 
 ```bash
 Rscript tests/r/reference.R   # single-table functions, windows, across, tidyselect
+Rscript tests/r/expr.R        # expressions
 Rscript tests/r/joins.R       # joins and rowwise
+Rscript tests/r/join_by.R     # join_by() conditions
 Rscript tests/r/tidyr.R       # tidyr functions
 Rscript tests/r/rows.R        # set operations, rows_*(), dplyr 1.2 helpers
+Rscript tests/r/coverage.R    # functions added after phplyr 0.1.0
 Rscript tests/r/models.R      # lm() and glm() coefficients
+Rscript tests/r/janitor.R     # janitor functions (needs the janitor package)
 ```
+
+`composer lint` checks the naming conventions with PHP_CodeSniffer.
 
 ## Documentation
 
@@ -39,14 +45,17 @@ output, which the pages include. Rendering never executes PHP.
 
 An example uses `|>`, and `docs/examples/<name>.chain.php` beside it is the
 same example as a method chain. `bin/docs-examples` runs both and fails if
-their output differs. The page shows the two in tabs, with the output once.
+their output differs. The page shows the two in tabs labeled "PHP 8.5+" and
+"PHP 8.3–8.4", with the output once. `bin/docs-examples` needs PHP 8.5, and it
+loads phit from `.ext/libphit.dylib` for the model examples.
 
 ```bash
 PHP=/path/to/php85 bin/docs-examples   # refresh example output
 PHP=/path/to/php85 bin/render-docs     # examples, quarto render, publish to docs/
 ```
 
-GitHub Pages serves the rendered site from `main:/docs`.
+Commit the rendered HTML. GitHub Pages serves it from `main:/docs`, and
+phpstats.org imports it from the commit it pins.
 
 ## Site content
 

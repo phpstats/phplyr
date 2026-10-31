@@ -2,27 +2,29 @@
 title: "Coming from dplyr"
 ---
 
-phplyr keeps dplyr's function names, argument names, and results. The
-differences come from PHP syntax.
+phplyr keeps dplyr's and tidyr's function names, argument names, and results.
+This page lists the differences that come from PHP syntax.
+[Compatibility and limitations](compatibility.qmd#not-supported) lists the
+dplyr features phplyr does not have.
 
 ## Syntax translation
 
-In R, functions are chained with `%>%` or `|>`. In PHP, they are chained as
-methods, `phplyr($t)->filter(...)->arrange(...)`, or on PHP 8.5 with `|>`. The
-table below shows single calls.
+In R, functions are chained with `%>%` or `|>`. In PHP 8.5, they are chained
+with `|>`. On PHP 8.3 and 8.4, they are methods of a chain:
+`phplyr($t)->filter(...)->arrange(...)`. The table below shows single calls.
 
 | dplyr | phplyr |
 | --- | --- |
 | `filter(x > 1)` | `filter(fn ($r) => $r->x > 1)` |
 | `mutate(z = x * 2)` | `mutate(z: fn ($r) => $r->x * 2)` or `mutate(z: col('x')->mul(2))` |
 | `mutate(z = lag(x))` | `mutate(z: lag('x'))` |
-| `summarise(m = mean(x, na.rm = TRUE))` | `summarise(m: mean('x', naRm: true))` |
+| `summarise(m = mean(x, na.rm = TRUE))` | `summarize(m: mean('x', naRm: true))` |
 | `select(-id)` | `select(except('id'))` |
 | `select(new = old, everything())` | `select(['new' => 'old'], everything())` |
 | `rename(new = old)` | `rename(new: 'old')` |
 | `arrange(desc(x))` | `arrange(desc('x'))` |
 | `mutate(..., .by = g)` | `mutate(..., _by: 'g')` |
-| `summarise(..., .groups = "drop")` | `summarise(..., _groups: 'drop')` |
+| `summarise(..., .groups = "drop")` | `summarize(..., _groups: 'drop')` |
 | `across(c(a, b), mean)` | `across(['a', 'b'], mean(...))` |
 | `across(c(a, b), \(x) x * 2)` | `across(['a', 'b'], fn ($x) => $x * 2)` |
 | `case_when(x < 0 ~ "neg", .default = "pos")` | `case_when([fn ($r) => $r->x < 0, 'neg'], default: 'pos')` |
@@ -41,9 +43,12 @@ table below shows single calls.
   See [Underscored arguments](#underscored-arguments).
 - **Positions are 1-based**, as in R: `pull(1)` is the first column, `pull(-1)`
   the last, and `slice(1, 3)` the first and third rows of each group.
-- **`var()` is `var_()`**, because `var` is a reserved word in PHP (`variance()` is an alias).
-- **`count`, `min`, and `max`** shadow PHP's built-ins in files that import
-  them.
+- **`var()` is `var_()`**, because `var` is a reserved word in PHP.
+  `variance()` is an alias.
+- **`summarise()` and `summarize()`** are the same function, as in dplyr.
+- **`count()`, `min()`, `max()`, `rename()`, and other functions** have the
+  names of PHP built-ins. In a file that imports them, write `\count()` for
+  the built-in. [Imports](getting-started.qmd#imports) lists them.
 - **Group order** follows dplyr: groups are sorted by key, factors by level
   order, and NA last. `_by` also sorts groups (dplyr keeps first-appearance
   order for `.by`).
@@ -52,8 +57,9 @@ table below shows single calls.
 
 phplyr's parameters are camelCase, like the rest of the phpstats family.
 Every argument that dplyr or tidyr writes with a dot keeps it here as a
-leading underscore. There are sixteen, and a multi-word name reads as
-camelCase after the underscore:
+leading underscore, and a multi-word name is camelCase after the underscore.
+There are sixteen options. `recode()` also names its first parameter `$_x`,
+after dplyr's `.x`:
 
 | phplyr | dplyr / tidyr | On |
 | --- | --- | --- |
@@ -81,19 +87,54 @@ so without the prefix the option would always win and a column of that name
 would be unreachable. dplyr and tidyr use the dot for the same reason. With
 the prefix, both work:
 
+::: {.panel-tabset group="syntax"}
+
+## PHP 8.5+
+
 ```php
-$t |> mutate(m: mean('x'), _by: 'g');   // grouped by g for this call
-$t |> mutate(by: 1);                    // a column called by
+$t |> mutate(m: mean('x'), _by: 'g');
+$t |> mutate(by: 1);
 ```
+
+## PHP 8.3–8.4
+
+```php
+phplyr($t)->mutate(m: mean('x'), _by: 'g');
+phplyr($t)->mutate(by: 1);
+```
+
+:::
+
+The first call computes `m` within each group of `g`. The second makes a
+column called `by`.
 
 The prefix is the only spelling an option has. An unprefixed named argument is
 always data, so `mutate(before: 'id')` makes a column called `before` rather
 than placing the new columns. A prefixed name that is not an option for that
 verb is an error naming the ones that are.
 
-Everything else is camelCase, as the rest of the phpstats family is. These
-are arguments dplyr and tidyr write without a dot, so no exception applies:
-`naRm:`, `orderBy:`, `namesFrom:`, `namesTo:`, `withTies:`, and the rest.
+Every other argument is camelCase, as in the rest of the phpstats packages.
+dplyr and tidyr write these without a dot: `naRm:`, `orderBy:`, `namesFrom:`,
+`namesTo:`, `withTies:`, and the rest.
+
+## phplyr options and phibble methods
+
+phplyr functions and phibble methods both take and return phibble tables, so a
+pipeline can use both. phibble's methods have their own conventions:
+
+- A phibble method takes an array: `$df->mutate(['z' => $expr])`,
+  `$df->groupBy(['g'])`, `$df->arrange([['x', 'desc']])`. A phplyr function
+  takes named arguments: `mutate(z: ...)`, `group_by('g')`,
+  `arrange(desc('x'))`.
+- phibble methods have no underscored options. Grouping is a separate method
+  call, and `summarise(array $aggregates, ?string $groups)` takes the `.groups`
+  value as a second argument.
+- A phplyr helper such as `mean('x')` returns a `Phplyr\Vec` that holds a
+  `Phibble\Expr` tree, the kind phibble's expression functions build. phplyr
+  passes the tree to the table. A database table compiles it to SQL where a
+  translation exists and otherwise loads the rows and evaluates it in PHP, as
+  [Databases and expressions](reference/databases.qmd#database-tables)
+  describes.
 
 ## `across()` functions
 
@@ -102,20 +143,6 @@ convention, so phplyr decides what a function receives:
 
 - A phplyr helper passed as a first-class callable, such as `mean(...)` or
   `lag(...)`, is called with each column's name.
-- In `summarise()`, any other closure receives the column's values as a list.
+- In `summarize()`, any other closure receives the column's values as a list.
 - In `mutate()`, a closure receives one value at a time. If its first parameter
   is typed `array`, it receives the whole column instead.
-
-## Not supported
-
-- **Bare column names and tidy evaluation.** Columns are strings, and
-  expressions are closures or phplyr helpers.
-- **`mutate(.keep = "used")` and `.keep = "unused"` with closures.** These work
-  with expression arguments such as `col('x')->mul(2)`, whose columns can be
-  read. A PHP closure does not expose the columns it reads.
-- **`cur_group()`, `cur_column()`, and `cur_data()`.** `cur_group_id()` and
-  `cur_group_rows()` are supported in `mutate()`, `summarise()`, and `reframe()`.
-- **Data frame columns**, `across(.unpack)`, and `nest_join()`.
-- **Superseded functions** such as `top_n()`, `sample_n()`, the scoped `_at`,
-  `_if`, and `_all` variants, and `recode()`. Use `slice_max()`,
-  `slice_sample()`, `across()`, and `recode_values()`.

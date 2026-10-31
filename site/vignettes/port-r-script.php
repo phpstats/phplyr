@@ -37,7 +37,7 @@ return [
             ->pivotLonger(['prior', 'final'], namesTo: 'test', valuesTo: 'points')
             ->get();
 
-        $tests = phplyr($long)->groupBy('test')->summarise(mean: mean('points'), sd: sd('points'))->get();
+        $tests = phplyr($long)->groupBy('test')->summarize(mean: mean('points'), sd: sd('points'))->get();
 
         $bands = phplyr($clean)
             ->count('school', 'hours_band')
@@ -46,13 +46,13 @@ return [
 
         $gains = phplyr($clean)
             ->groupBy('school')
-            ->summarise(n: n(), mean_gain: mean('gain'), pass_rate: mean('passed'))
+            ->summarize(n: n(), mean_gain: mean('gain'), pass_rate: mean('passed'))
             ->arrange(desc('mean_gain'))
             ->get();
 
         $byBand = phplyr($clean)
             ->groupBy('hours_band')
-            ->summarise(students: n(), mean_gain: mean('gain'), pass_rate: mean('passed'))
+            ->summarize(students: n(), mean_gain: mean('gain'), pass_rate: mean('passed'))
             ->get();
 
         $r = <<<'R'
@@ -66,7 +66,7 @@ return [
 
         clean |>
           group_by(school) |>
-          summarise(n = n(), mean_gain = mean(gain), pass_rate = mean(passed)) |>
+          summarize(n = n(), mean_gain = mean(gain), pass_rate = mean(passed)) |>
           arrange(desc(mean_gain))
         R;
 
@@ -82,24 +82,24 @@ return [
 
         $gains = phplyr($clean)
             ->groupBy('school')
-            ->summarise(n: n(), mean_gain: mean('gain'), pass_rate: mean('passed'))
+            ->summarize(n: n(), mean_gain: mean('gain'), pass_rate: mean('passed'))
             ->arrange(desc('mean_gain'))
             ->get();
         PHP;
 
         $pipe = <<<'PHP'
-        $clean = $schools
-            |> filter(col('score')->isNa()->not(), col('study_hours')->gt(0))
-            |> mutate(
+        $clean = $schools |>
+            filter(col('score')->isNa()->not(), col('study_hours')->gt(0)) |>
+            mutate(
                 hours_band: case_when([col('study_hours')->lt(4), 'low'], [col('study_hours')->lt(8), 'mid'], default: 'high'),
                 gain: col('score')->sub(col('prior_score')),
                 passed: if_else(col('score')->ge(75), 1, 0),
             );
 
-        $gains = $clean
-            |> group_by('school')
-            |> summarise(n: n(), mean_gain: mean('gain'), pass_rate: mean('passed'))
-            |> arrange(desc('mean_gain'));
+        $gains = $clean |>
+            group_by('school') |>
+            summarize(n: n(), mean_gain: mean('gain'), pass_rate: mean('passed')) |>
+            arrange(desc('mean_gain'));
         PHP;
 
         $blocks = [

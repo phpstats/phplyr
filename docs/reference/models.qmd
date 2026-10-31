@@ -2,36 +2,62 @@
 title: "Models"
 ---
 
-`lm()`, `glm()`, `lmer()`, and `glmer()` pass the input table to the phit
-extension's `Phit\fit_lm()`, `Phit\fit_glm()`, `Phit\fit_lmer()`, and `Phit\fit_glmer()`. The extension reads factor levels from the
-table, builds the model matrix, and returns coefficients, standard errors, and
-fit statistics in the same order as R.
+`lm()`, `glm()`, `lmer()`, and `glmer()` pass the table to the phit extension's
+`Phit\fit_lm()`, `Phit\fit_glm()`, `Phit\fit_lmer()`, and `Phit\fit_glmer()`.
+phplyr adds no model code of its own. phit reads factor levels from the table,
+builds the model matrix from an R formula, and fits the model.
 
 ::: {.panel-tabset group="syntax"}
 
-## Method chain (PHP 8.3+)
-
-```php
-phplyr($table)->lm('y ~ x + group');
-phplyr($table)->glm('passed ~ hours', family: 'binomial');   // also 'poisson', link:
-phplyr($table)->lmer('score ~ hours + (1 | school)');        // REML; reml: false for ML
-phplyr($table)->glmer('passed ~ hours + (1 | school)', family: 'binomial');
-```
-
-## Pipe (PHP 8.5)
+## PHP 8.5+
 
 ```php
 $table |> lm('y ~ x + group');
-$table |> glm('passed ~ hours', family: 'binomial');   // also 'poisson', link:
-$table |> lmer('score ~ hours + (1 | school)');        // REML; reml: false for ML
+$table |> glm('passed ~ hours', family: 'binomial');
+$table |> lmer('score ~ hours + (1 | school)');
 $table |> glmer('passed ~ hours + (1 | school)', family: 'binomial');
+```
+
+## PHP 8.3–8.4
+
+```php
+phplyr($table)->lm('y ~ x + group');
+phplyr($table)->glm('passed ~ hours', family: 'binomial');
+phplyr($table)->lmer('score ~ hours + (1 | school)');
+phplyr($table)->glmer('passed ~ hours + (1 | school)', family: 'binomial');
 ```
 
 :::
 
-`lmer()` and `glmer()` take lme4's random-effect bars. The result includes
-`columns` with R's coefficient names. All four need phit with the formula
-functions. Without the extension they
-throw an exception that says so.
+| Function | Model | Options |
+| --- | --- | --- |
+| `lm($formula)` | Linear regression | |
+| `glm($formula, family:)` | Generalized linear model | `family: 'gaussian'` (the default), `'binomial'`, or `'poisson'`, and `link:` |
+| `lmer($formula)` | Linear mixed model with lme4's random-effect terms, such as `(1 \| school)` | REML by default; `reml: false` fits by maximum likelihood |
+| `glmer($formula, family:)` | Generalized linear mixed model | `family: 'binomial'` by default |
+
+Other named arguments go to phit's function unchanged. phit's documentation
+lists them and the formula syntax it accepts.
+
+## Results
+
+Each function returns phit's result array in place of a table, so it ends a
+method chain. `columns` holds R's coefficient names, in R's order, and
+`coefficients`, `std_errors`, `p_values`, and `conf_int` follow the same order.
+The array also has the fitted values, residuals, fit statistics such as
+`r_squared` and `sigma`, and `n_observations` and `n_dropped`, which count the
+rows used and the rows dropped for missing values.
 
 {{< include ../examples/_models.md >}}
+
+## Without the extension
+
+Without phit, the four functions throw a `RuntimeException` that names the
+missing phit function.
+
+[phit-polyfill](https://github.com/phpstats/phit-polyfill) defines the same
+functions in PHP for systems without the extension, and phplyr calls them the
+same way. phplyr's test suite checks `lm()` and `glm()` against R with the
+extension. With phit-polyfill and without the extension, the same `lm()` and
+`glm()` cases gave R's coefficients within 1e-12 relative, checked by hand on
+2026-10-31. phplyr's tests do not run the polyfill.

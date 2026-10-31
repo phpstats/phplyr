@@ -1,17 +1,17 @@
 ::: {.panel-tabset group="syntax"}
 
-## Method chain (PHP 8.3+)
+## PHP 8.5+
+
+```php
+echo DataFrame::fromCsv('housing.csv') |>
+    arrange('bedrooms', desc(fn ($r) => $r->monthly_rent / $r->area_m2));
+```
+
+## PHP 8.3–8.4
 
 ```php
 echo phplyr(DataFrame::fromCsv('housing.csv'))
     ->arrange('bedrooms', desc(fn ($r) => $r->monthly_rent / $r->area_m2));
-```
-
-## Pipe (PHP 8.5)
-
-```php
-echo DataFrame::fromCsv('housing.csv')
-    |> arrange('bedrooms', desc(fn ($r) => $r->monthly_rent / $r->area_m2));
 ```
 
 :::

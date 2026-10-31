@@ -2,6 +2,14 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
+## Unreleased
+
+### Changed
+
+- composer.json no longer lists phibble's GitHub repository, because phibble is on Packagist.
+- The documentation installs phplyr from Packagist, states the PHP versions composer.json allows and CI tests, and adds a Compatibility and limitations page. Code tabs read "PHP 8.5+" and "PHP 8.3–8.4", and examples use `summarize()`.
+- `site/site.json` has the `php`, `requires`, `optional`, `build`, `platforms`, and `quickstart` keys, and a janitor verification file.
+
 ## 0.4.2 - 2026-10-30
 
 ### Changed

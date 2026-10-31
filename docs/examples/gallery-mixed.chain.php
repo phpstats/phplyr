@@ -16,7 +16,7 @@ $random = $fit['random'][0];
 $effects = array_combine($random['group_labels'], array_column($random['effects'], 0));
 echo phplyr($schools)
     ->groupBy('school')
-    ->summarise(students: n(), raw_mean: mean('score'))
+    ->summarize(students: n(), raw_mean: mean('score'))
     ->mutate(intercept_shift: fn ($r) => round($effects[$r->school], 2), raw_mean: fn ($r) => round($r->raw_mean, 1))
     ->arrange(desc('intercept_shift'))
     ->head(5);

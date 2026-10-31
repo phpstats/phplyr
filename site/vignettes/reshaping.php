@@ -29,7 +29,7 @@ return [
                 gain: col('score')->sub(col('prior_score')),
             )
             ->groupBy('school', 'band')
-            ->summarise(students: n(), mean_score: mean('score', naRm: true), mean_gain: mean('gain', naRm: true))
+            ->summarize(students: n(), mean_score: mean('score', naRm: true), mean_gain: mean('gain', naRm: true))
             ->get();
 
         // Wide: one row per school, one column per band.
@@ -48,7 +48,7 @@ return [
         $long = phplyr($schools)
             ->mutate(band: case_when([col('study_hours')->lt(4), 'low'], [col('study_hours')->lt(8), 'mid'], default: 'high'))
             ->groupBy('school', 'band')
-            ->summarise(students: n(), mean_score: mean('score', naRm: true))
+            ->summarize(students: n(), mean_score: mean('score', naRm: true))
             ->get();
 
         $wide = phplyr($long)
@@ -61,17 +61,17 @@ return [
             ->get();
         PHP;
         $pipe = <<<'PHP'
-        $long = $schools
-            |> mutate(band: case_when([col('study_hours')->lt(4), 'low'], [col('study_hours')->lt(8), 'mid'], default: 'high'))
-            |> group_by('school', 'band')
-            |> summarise(students: n(), mean_score: mean('score', naRm: true));
+        $long = $schools |>
+            mutate(band: case_when([col('study_hours')->lt(4), 'low'], [col('study_hours')->lt(8), 'mid'], default: 'high')) |>
+            group_by('school', 'band') |>
+            summarize(students: n(), mean_score: mean('score', naRm: true));
 
-        $wide = $long
-            |> pivot_wider(idCols: 'school', namesFrom: 'band', valuesFrom: 'mean_score', namesPrefix: 'band_')
-            |> separate_wider_delim('school', '-', names: ['kind', 'number'], colsRemove: false);
+        $wide = $long |>
+            pivot_wider(idCols: 'school', namesFrom: 'band', valuesFrom: 'mean_score', namesPrefix: 'band_') |>
+            separate_wider_delim('school', '-', names: ['kind', 'number'], colsRemove: false);
 
-        $back = $wide
-            |> pivot_longer(starts_with('band_'), namesTo: 'band', namesPrefix: 'band_', valuesTo: 'mean_score');
+        $back = $wide |>
+            pivot_longer(starts_with('band_'), namesTo: 'band', namesPrefix: 'band_', valuesTo: 'mean_score');
         PHP;
 
         $label = ['students' => 'Students', 'mean_score' => 'Mean final score', 'mean_gain' => 'Mean gain'][$measure];
@@ -82,7 +82,7 @@ return [
 
         return [
             ['type' => 'text', 'content' => 'tidyr\'s reshaping functions move data between long and wide layouts. '
-                .'Here the schools data is summarised to one row per school and study-time band, '
+                .'Here the schools data is summarized to one row per school and study-time band, '
                 .'`pivot_wider()` turns the bands into columns, `separate_wider_delim()` splits the school id, '
                 .'and `pivot_longer()` turns the band columns back into rows.'],
             ['type' => 'code', 'chain' => $chain, 'pipe' => $pipe],

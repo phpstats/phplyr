@@ -2,7 +2,7 @@
 
 $schools = phplyr(DataFrame::fromCsv('schools.csv'))
     ->groupBy('school')
-    ->summarise(avg_score: mean('score'))
+    ->summarize(avg_score: mean('score'))
     ->get();
 
 $districts = DataFrame::fromRows([

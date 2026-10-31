@@ -74,14 +74,14 @@ new columns. `transmute()` is `mutate()` that keeps only the new columns.
 
 ## Summaries
 
-`summarise()` returns one row per group. Each named argument is a summary
+`summarize()` returns one row per group. `summarise()` is the same function. Each named argument is a summary
 helper or a closure that receives the group's table and returns one value.
 With several grouping columns, the result drops the last one, as in dplyr.
 `_groups` accepts `'drop_last'`, `'drop'`, `'keep'`, and `'rowwise'`.
 
 {{< include ../examples/_summarise.md >}}
 
-`reframe()` is `summarise()` for summaries that return several values. Results
+`reframe()` is `summarize()` for summaries that return several values. Results
 are recycled to a common length within each group, and the output is
 ungrouped.
 

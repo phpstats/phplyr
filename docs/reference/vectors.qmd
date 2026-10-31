@@ -3,7 +3,7 @@ title: "Vector helpers"
 ---
 
 Vector helpers are evaluated once per group on whole columns. Use them as
-`mutate()`, `filter()`, and `summarise()` arguments. They follow R's NA rules:
+`mutate()`, `filter()`, and `summarize()` arguments. They follow R's NA rules:
 a summary returns NA when its input has an NA unless `naRm: true`, ranks keep
 NA, and cumulative functions stay NA after the first NA.
 
@@ -26,7 +26,8 @@ row.
 | `any`, `all` | Logical summaries with NA logic |
 
 With the phit extension loaded, `mean`, `sd`, `var_`, `median`, and
-`quantile` use it. Without it they run in PHP and give the same results.
+`quantile` use it. Without it, they run in PHP. The test suite checks both
+against R.
 
 ## Window functions
 

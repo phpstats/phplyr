@@ -1,6 +1,20 @@
 ::: {.panel-tabset group="syntax"}
 
-## Method chain (PHP 8.3+)
+## PHP 8.5+
+
+```php
+echo DataFrame::fromRows([
+    ['id' => 'a', 'q1' => 3, 'q2' => 5, 'q3' => null],
+    ['id' => 'b', 'q1' => 4, 'q2' => 1, 'q3' => 2],
+]) |>
+    rowwise('id') |>
+    summarize(total: fn ($row) => Stats::sum(
+        [...$row->column('q1'), ...$row->column('q2'), ...$row->column('q3')],
+        naRm: true,
+    ));
+```
+
+## PHP 8.3–8.4
 
 ```php
 echo phplyr(DataFrame::fromRows([
@@ -8,21 +22,7 @@ echo phplyr(DataFrame::fromRows([
     ['id' => 'b', 'q1' => 4, 'q2' => 1, 'q3' => 2],
 ]))
     ->rowwise('id')
-    ->summarise(total: fn ($row) => Stats::sum(
-        [...$row->column('q1'), ...$row->column('q2'), ...$row->column('q3')],
-        naRm: true,
-    ));
-```
-
-## Pipe (PHP 8.5)
-
-```php
-echo DataFrame::fromRows([
-    ['id' => 'a', 'q1' => 3, 'q2' => 5, 'q3' => null],
-    ['id' => 'b', 'q1' => 4, 'q2' => 1, 'q3' => 2],
-])
-    |> rowwise('id')
-    |> summarise(total: fn ($row) => Stats::sum(
+    ->summarize(total: fn ($row) => Stats::sum(
         [...$row->column('q1'), ...$row->column('q2'), ...$row->column('q3')],
         naRm: true,
     ));

@@ -1,6 +1,20 @@
 ::: {.panel-tabset group="syntax"}
 
-## Method chain (PHP 8.3+)
+## PHP 8.5+
+
+```php
+$schools = DataFrame::fromCsv('schools.csv');
+
+// Several conditions are combined with AND; NA counts as false.
+echo $schools |>
+    filter(fn ($r) => $r->prior_score > 75, between('study_hours', 2, 6)) |>
+    head(4);
+
+// filter_out() drops the rows where every condition is true.
+echo "\n", $schools |> filter_out(fn ($r) => $r->prior_score < 70) |> count();
+```
+
+## PHP 8.3–8.4
 
 ```php
 $schools = DataFrame::fromCsv('schools.csv');
@@ -12,20 +26,6 @@ echo phplyr($schools)
 
 // filter_out() drops the rows where every condition is true.
 echo "\n", phplyr($schools)->filterOut(fn ($r) => $r->prior_score < 70)->count();
-```
-
-## Pipe (PHP 8.5)
-
-```php
-$schools = DataFrame::fromCsv('schools.csv');
-
-// Several conditions are combined with AND; NA counts as false.
-echo $schools
-    |> filter(fn ($r) => $r->prior_score > 75, between('study_hours', 2, 6))
-    |> head(4);
-
-// filter_out() drops the rows where every condition is true.
-echo "\n", $schools |> filter_out(fn ($r) => $r->prior_score < 70) |> count();
 ```
 
 :::

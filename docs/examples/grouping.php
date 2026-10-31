@@ -9,10 +9,10 @@ echo json_encode([
 ]), "\n\n";
 
 // Grouped mutate: helpers are evaluated within each group.
-echo $schools
-    |> mutate(centered: fn ($r, $g) => round($r->score - mean('score')($g), 2), rank_in_school: min_rank(desc('score')))
-    |> ungroup()
-    |> head(4);
+echo $schools |>
+    mutate(centered: fn ($r, $g) => round($r->score - mean('score')($g), 2), rank_in_school: min_rank(desc('score'))) |>
+    ungroup() |>
+    head(4);
 
 // One table per group.
 $parts = $schools |> group_split();
