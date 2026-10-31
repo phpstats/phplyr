@@ -22,10 +22,6 @@
             "for": "statistical models and native descriptive statistics"
         },
         {
-            "name": "phit-polyfill",
-            "for": "statistical models without the phit extension"
-        },
-        {
             "name": "phpolars extension",
             "for": "the Polars backend"
         },
@@ -40,7 +36,8 @@
     ],
     "build": [],
     "platforms": [
-        "Linux"
+        "Linux",
+        "macOS"
     ],
     "installation": "getting-started#installation",
     "quickstart": "getting-started",
@@ -48,7 +45,7 @@
     "example": {
         "setup": [
             "composer require phpstats/phplyr",
-            "curl -O https://raw.githubusercontent.com/phpstats/phplyr/main/docs/data/schools.csv"
+            "curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv"
         ],
         "chain": "require __DIR__.'/vendor/autoload.php';\n\nuse Phibble\\DataFrame;\nuse function Phplyr\\{phplyr, desc, n, mean, sd};\n\n$schools = DataFrame::fromCsv('schools.csv');\n\necho phplyr($schools)\n    ->filter(fn ($r) => $r->study_hours >= 5)\n    ->groupBy('school')\n    ->summarize(students: n(), avg_score: mean('score'), sd_score: sd('score'))\n    ->arrange(desc('avg_score'))\n    ->head(5);",
         "pipe": "require __DIR__.'/vendor/autoload.php';\n\nuse Phibble\\DataFrame;\nuse function Phplyr\\{filter, group_by, summarize, arrange, head, desc, n, mean, sd};\n\n$schools = DataFrame::fromCsv('schools.csv');\n\necho $schools |>\n    filter(fn ($r) => $r->study_hours >= 5) |>\n    group_by('school') |>\n    summarize(students: n(), avg_score: mean('score'), sd_score: sd('score')) |>\n    arrange(desc('avg_score')) |>\n    head(5);",

@@ -21,7 +21,7 @@ data:
 
 ```bash
 composer require phpstats/phplyr
-curl -O https://raw.githubusercontent.com/phpstats/phplyr/main/docs/data/schools.csv
+curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv
 ```
 
 Save the script as `first.php` in the same directory and run `php first.php`.

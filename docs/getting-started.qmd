@@ -57,7 +57,7 @@ test scores from 250 students in 12 schools:
 
 ```bash
 composer require phpstats/phplyr
-curl -O https://raw.githubusercontent.com/phpstats/phplyr/main/docs/data/schools.csv
+curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv
 ```
 
 Save one of the scripts below as `first.php` and run `php first.php`. Both

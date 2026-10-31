@@ -74,20 +74,19 @@ $manifest = [
     'requires' => ['phibble (installed by Composer)', 'PDO extension', 'mbstring extension'],
     'optional' => [
         ['name' => 'phit extension', 'for' => 'statistical models and native descriptive statistics'],
-        ['name' => 'phit-polyfill', 'for' => 'statistical models without the phit extension'],
         ['name' => 'phpolars extension', 'for' => 'the Polars backend'],
         ['name' => 'intl extension', 'for' => 'janitor\'s transliteration of names'],
         ['name' => 'PDO driver for SQLite, PostgreSQL, or MySQL', 'for' => 'database tables'],
     ],
     'build' => [],
-    'platforms' => ['Linux'],
+    'platforms' => ['Linux', 'macOS'],
     'installation' => 'getting-started#installation',
     'quickstart' => 'getting-started',
     'repository' => 'https://github.com/phpstats/phplyr',
     'example' => [
         'setup' => [
             'composer require phpstats/phplyr',
-            'curl -O https://raw.githubusercontent.com/phpstats/phplyr/main/docs/data/schools.csv',
+            'curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv',
         ],
         'chain' => $code('first-pipeline.chain.php'),
         'pipe' => $code('first-pipeline.php'),
