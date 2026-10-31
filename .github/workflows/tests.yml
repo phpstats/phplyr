@@ -107,7 +107,9 @@ jobs:
 
       - run: composer require --dev phpstats/phit-polyfill:^0.3 --no-interaction --no-progress
 
-      - run: php -r 'require "vendor/autoload.php"; exit(! extension_loaded("phit") && function_exists("Phit\\fit_lm") ? 0 : 1);'
+      - name: Check that phit-polyfill is in use
+        run: |
+          php -r 'require "vendor/autoload.php"; exit(! extension_loaded("phit") && function_exists("Phit\\fit_lm") ? 0 : 1);'
 
       - run: bin/test
 
