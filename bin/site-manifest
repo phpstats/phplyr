@@ -5,7 +5,7 @@
  * Write site/site.json, the manifest the phpstats site reads for
  * phplyr.phpstats.org. The example comes from docs/examples/first-pipeline
  * (both versions and the output bin/docs-examples recorded), and the lists of
- * benchmark, verification, and vignette files come from site/.
+ * benchmark and verification files come from site/.
  *
  * Usage: bin/site-manifest
  */
@@ -48,18 +48,6 @@ foreach ($nav as $entry) {
         exit(1);
     }
 }
-
-$vignettes = [
-    ['slug' => 'port-r-script', 'title' => 'Porting an R analysis', 'summary' => 'A dplyr and tidyr analysis of 250 students, translated line by line and run live, with the pass mark and study-time bands as inputs.', 'uses' => ['phibble', 'phplyr', 'phit']],
-];
-foreach ($vignettes as &$v) {
-    $v['script'] = "site/vignettes/{$v['slug']}.php";
-    if (! is_file($root.'/'.$v['script'])) {
-        fwrite(STDERR, "missing {$v['script']}\n");
-        exit(1);
-    }
-}
-unset($v);
 
 $files = fn (string $dir) => array_map(fn ($f) => 'site/'.$dir.'/'.basename($f), glob($root.'/site/'.$dir.'/*.json'));
 $order = ['dplyr', 'tidyr', 'additions', 'lubridate-stringr', 'janitor', 'models', 'polars'];
@@ -113,7 +101,6 @@ $manifest = [
     'benchmarks' => $files('benchmarks'),
     'verifications' => $verifications,
     'examples' => $examples,
-    'vignettes' => $vignettes,
 ];
 file_put_contents($root.'/site/site.json', json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n");
 echo "site/site.json written\n";

@@ -422,20 +422,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Every test that checks phplyr against R, with its assertion count and largest floating-point error</td>
 <td><code>bin/site-verifications</code></td>
 </tr>
-<tr class="even">
-<td><code>site/vignettes/*.php</code></td>
-<td>The interactive version of Porting an R script, which the site runs on each request</td>
-<td>By hand</td>
-</tr>
-<tr class="odd">
-<td><code>site/data/</code></td>
-<td>Data files for the vignettes</td>
-<td>By hand</td>
-</tr>
 </tbody>
 </table>
 <p><code>bin/site-verifications</code> runs the test suite with <code>PHPLYR_VERIFY_LOG</code> set. Each test that reads an R fixture through <code>rReference()</code> then logs its assertions and the differences recorded by <code>expectClose()</code>. The script writes nothing unless every test passes. Set <code>POLARS_PHP</code> to a PHP command that loads php_polars to add the PolarsTable parity file.</p>
-<p>To refresh the benchmarks, run <code>bench/backends.php --csv-dir=bench/data</code>, then <code>Rscript bench/backends.R</code>, then <code>bin/site-benchmarks</code>. <code>tests/SiteTest.php</code> runs each vignette at its default inputs.</p>
+<p>To refresh the benchmarks, run <code>bench/backends.php --csv-dir=bench/data</code>, then <code>Rscript bench/backends.R</code>, then <code>bin/site-benchmarks</code>. <code>tests/SiteTest.php</code> checks that the files and pages site.json names exist.</p>
 </section>
 <section id="layout" class="level2">
 <h2 class="anchored" data-anchor-id="layout">Layout</h2>

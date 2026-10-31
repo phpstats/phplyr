@@ -178,18 +178,5 @@
             "title": "Reshape with pivot_longer and pivot_wider",
             "description": "Turns a wide table of yearly sales into one row per store and year and back."
         }
-    ],
-    "vignettes": [
-        {
-            "slug": "port-r-script",
-            "title": "Porting an R analysis",
-            "summary": "A dplyr and tidyr analysis of 250 students, translated line by line and run live, with the pass mark and study-time bands as inputs.",
-            "uses": [
-                "phibble",
-                "phplyr",
-                "phit"
-            ],
-            "script": "site/vignettes/port-r-script.php"
-        }
     ]
 }

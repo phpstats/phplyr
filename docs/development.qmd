@@ -77,8 +77,6 @@ reads it at a pinned commit.
 | `site/site.json` | Manifest: summary, install, example, docs pages, examples, and file lists | `bin/site-manifest` |
 | `site/benchmarks/backends.json` | Backend and dplyr timings | `bin/site-benchmarks`, from `docs/benchmarks/` |
 | `site/verifications/*.json` | Every test that checks phplyr against R, with its assertion count and largest floating-point error | `bin/site-verifications` |
-| `site/vignettes/*.php` | The interactive version of Porting an R script, which the site runs on each request | By hand |
-| `site/data/` | Data files for the vignettes | By hand |
 
 `bin/site-verifications` runs the test suite with `PHPLYR_VERIFY_LOG` set.
 Each test that reads an R fixture through `rReference()` then logs its
@@ -88,7 +86,7 @@ php_polars to add the PolarsTable parity file.
 
 To refresh the benchmarks, run `bench/backends.php --csv-dir=bench/data`,
 then `Rscript bench/backends.R`, then `bin/site-benchmarks`. `tests/SiteTest.php`
-runs each vignette at its default inputs.
+checks that the files and pages site.json names exist.
 
 ## Layout
 
