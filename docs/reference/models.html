@@ -386,7 +386,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, its PHP port, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them.</p>
+<p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, its PHP port, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them. The extension is faster in phit-polyfill’s <a href="https://github.com/phpstats/phit-polyfill#performance">recorded benchmarks</a>, which time phit’s matrix fitting functions:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fit</th>
+<th style="text-align: right;">Extension</th>
+<th style="text-align: right;"><span class="text-muted">Polyfill</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Linear, n = 100,000, 10 predictors</td>
+<td style="text-align: right;">29 ms</td>
+<td style="text-align: right;"><span class="text-muted">262 ms</span></td>
+</tr>
+<tr class="even">
+<td>Logistic, n = 100,000, 10 predictors</td>
+<td style="text-align: right;">72 ms</td>
+<td style="text-align: right;"><span class="text-muted">1.60 s</span></td>
+</tr>
+<tr class="odd">
+<td>Mixed logistic, n = 185, Laplace</td>
+<td style="text-align: right;">1.3 ms</td>
+<td style="text-align: right;"><span class="text-muted">26 ms</span></td>
+</tr>
+<tr class="even">
+<td>Linear mixed, nested, 84 random coefficients</td>
+<td style="text-align: right;">7.8 ms</td>
+<td style="text-align: right;"><span class="text-muted">604 ms</span></td>
+</tr>
+</tbody>
+</table>
+<p>Apple M5 Ultra, PHP 8.5.10 with OPcache on and the JIT off, both in one process. The polyfill’s linear mixed fits take time roughly proportional to the cube of the number of random coefficients.</p>
 <ul>
 <li>Install the polyfill with <code>composer require phpstats/phit-polyfill</code>. When the extension is loaded, the polyfill defines nothing.</li>
 <li>The polyfill throws an exception while OPcache’s JIT is enabled. Set <code>opcache.jit=disable</code> where it runs.</li>

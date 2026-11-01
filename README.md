@@ -6,7 +6,7 @@ To run the example below, create a Composer project in an empty directory, downl
 
 ```bash
 composer require phpstats/phplyr
-curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv
+curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.5/docs/data/schools.csv
 ```
 
 **PHP 8.5+**

@@ -13,7 +13,7 @@ print the five schools with the highest average score.
 
 ```bash
 composer require phpstats/phplyr
-curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv
+curl -O https://raw.githubusercontent.com/phpstats/phplyr/{{< var release >}}/docs/data/schools.csv
 ```
 
 {{< include examples/_first-pipeline.md >}}

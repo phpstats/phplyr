@@ -12,6 +12,16 @@ function siteManifest(): array
     return json_decode(file_get_contents(dirname(__DIR__).'/site/site.json'), true);
 }
 
+it('points the data URLs at the latest release', function () {
+    $root = dirname(__DIR__);
+    preg_match('/^## (\d+\.\d+\.\d+)/m', file_get_contents("{$root}/CHANGELOG.md"), $c);
+    preg_match('/^release: (\S+)$/m', file_get_contents("{$root}/docs/_variables.yml"), $v);
+    expect($v[1])->toBe('v'.$c[1]);
+    $url = "phplyr/{$v[1]}/docs/data/schools.csv";
+    expect(file_get_contents("{$root}/README.md"))->toContain($url);
+    expect(implode("\n", siteManifest()['example']['setup']))->toContain($url);
+});
+
 it('lists files that exist in the site manifest', function () {
     $root = dirname(__DIR__);
     $m = siteManifest();
