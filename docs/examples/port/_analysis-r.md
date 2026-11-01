@@ -7,11 +7,16 @@ suppressPackageStartupMessages({
 
 schools <- as_tibble(read.csv("schools.csv"))
 
-# Clean: drop incomplete rows, band study time, compute the gain.
+# Clean: drop incomplete rows, band study time,
+# compute the gain.
 clean <- schools |>
   filter(!is.na(score), study_hours > 0) |>
   mutate(
-    hours_band = case_when(study_hours < 4 ~ "low", study_hours < 8 ~ "mid", .default = "high"),
+    hours_band = case_when(
+      study_hours < 4 ~ "low",
+      study_hours < 8 ~ "mid",
+      .default = "high"
+    ),
     gain = score - prior_score,
     passed = as.integer(score >= 75)
   )
@@ -19,15 +24,21 @@ clean <- schools |>
 # Reshape: one row per student and test.
 long <- clean |>
   mutate(student = row_number()) |>
-  select(student, school, prior = prior_score, final = score) |>
-  pivot_longer(c(prior, final), names_to = "test", values_to = "points")
+  select(student, school, prior = prior_score,
+         final = score) |>
+  pivot_longer(c(prior, final), names_to = "test",
+               values_to = "points")
 
-long |> group_by(test) |> summarise(mean = mean(points), sd = sd(points))
+long |>
+  group_by(test) |>
+  summarise(mean = mean(points), sd = sd(points))
 
-# Summarise: students per school and band, then the schools with the largest gains.
+# Summarize: students per school and band, then
+# the schools with the largest mean gains.
 clean |>
   count(school, hours_band) |>
-  pivot_wider(names_from = hours_band, values_from = n, values_fill = 0) |>
+  pivot_wider(names_from = hours_band, values_from = n,
+              values_fill = 0) |>
   head(3)
 
 clean |>
@@ -37,9 +48,17 @@ clean |>
   head(3)
 
 # Model: linear, logistic, and random-intercept fits.
-round(coef(lm(score ~ study_hours + prior_score, data = clean)), 4)
-round(coef(glm(passed ~ study_hours + prior_score, family = binomial, data = clean)), 4)
-round(fixef(lmer(score ~ study_hours + prior_score + (1 | school), data = clean)), 4)
+fit_lm <- lm(score ~ study_hours + prior_score,
+             data = clean)
+fit_glm <- glm(passed ~ study_hours + prior_score,
+               family = binomial, data = clean)
+fit_lmer <- lmer(
+  score ~ study_hours + prior_score + (1 | school),
+  data = clean
+)
+round(coef(fit_lm), 4)
+round(coef(fit_glm), 4)
+round(fixef(fit_lmer), 4)
 ```
 
 ```{.text .output}

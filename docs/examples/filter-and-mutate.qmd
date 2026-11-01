@@ -11,8 +11,8 @@ label to each.
 - `mutate()` adds one column for each named argument.
 - A row closure such as `fn ($r) => $r->qty * $r->price` runs once per row
   and reads the row's columns as properties.
-- A column expression such as `col('qty')->ge(20)` works on the whole column.
-  `if_else()` takes one and picks `'bulk'` or `'single'` for each row.
+- A column expression such as `col('qty')->ge(20)` works on the whole
+  column, and `if_else()` uses it to pick `'bulk'` or `'single'`.
 
 Reference: [Single-table functions](../reference/single-table.qmd) ·
 [Vector helpers](../reference/vectors.qmd#conditionals-and-na)

@@ -8,9 +8,8 @@ then rebuild the wide table.
 {{< include pages/_pivot.md >}}
 
 - `pivot_longer()` stacks the columns that `starts_with('sales_')` selects.
-  Each column name, without the `sales_` prefix, goes into `year`, and each
-  value goes into `sales`. The other columns, here `store`, repeat for each
-  stacked value.
+- Each column name, without the `sales_` prefix, goes into `year`, and each
+  value goes into `sales`. `store` repeats for each stacked value.
 - `year` holds strings, because the values come from column names.
 - `pivot_wider()` makes one column for each value of `year`, adds the
   `sales_` prefix, and fills the columns from `sales`.

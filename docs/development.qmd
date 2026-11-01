@@ -55,8 +55,10 @@ requires `vendor/autoload.php` itself is a complete script. It runs as
 written, so a missing import fails the run, and the page shows the whole file.
 The first example and the pages in the Examples section
 (`docs/examples/<slug>.qmd`, with their code in `docs/examples/pages/`) are
-complete scripts. The Examples pages leave out the opening tag and the
-`require` line.
+complete scripts. In a subdirectory, the page leaves out the opening tag
+and the `require` line. A subdirectory's `_prelude.php`, such as the
+Gallery's, replaces the generated prelude for its examples, and the page
+shows it once.
 
 ```bash
 PHP=/path/to/php85 bin/docs-examples   # refresh example output

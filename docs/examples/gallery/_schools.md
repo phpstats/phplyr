@@ -3,46 +3,74 @@
 ## PHP 8.5+
 
 ```php
-// Which schools do better than their students' prior scores predict?
-// Fit one regression on all students, then average each school's residuals.
+// Fit one regression on all students, then average
+// each school's residuals.
 $schools = DataFrame::fromCsv('schools.csv');
-$fit = $schools |> lm('score ~ prior_score + study_hours');
-[$b0, $b_prior, $b_hours] = $fit['coefficients'];
+$fit = $schools |>
+    lm('score ~ prior_score + study_hours');
+[$b0, $bPrior, $bHours] = $fit['coefficients'];
+
+$expected = fn ($r) => $b0
+    + $bPrior * $r->prior_score
+    + $bHours * $r->study_hours;
+$shareAbove = fn ($g) => round(\count(array_filter(
+    $g->column('residual'),
+    fn ($e) => $e > 0,
+)) / $g->nrow(), 2);
 
 echo $schools |>
-    mutate(expected: fn ($r) => $b0 + $b_prior * $r->prior_score + $b_hours * $r->study_hours) |>
-    mutate(residual: fn ($r) => $r->score - $r->expected) |>
+    mutate(
+        residual: fn ($r) => $r->score - $expected($r),
+    ) |>
     group_by('school') |>
     summarize(
         students: n(),
         avg_score: mean('score'),
         avg_residual: mean('residual'),
-        share_above: fn ($g) => round(\count(array_filter($g->column('residual'), fn ($e) => $e > 0)) / $g->nrow(), 2),
+        share_above: $shareAbove,
     ) |>
-    mutate(rank: min_rank(desc('avg_residual')), avg_score: fn ($r) => round($r->avg_score, 1), avg_residual: fn ($r) => round($r->avg_residual, 2)) |>
+    mutate(
+        rank: min_rank(desc('avg_residual')),
+        avg_score: fn ($r) => round($r->avg_score, 1),
+        avg_residual: fn ($r) => round($r->avg_residual, 2),
+    ) |>
     arrange('rank');
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-// Which schools do better than their students' prior scores predict?
-// Fit one regression on all students, then average each school's residuals.
+// Fit one regression on all students, then average
+// each school's residuals.
 $schools = DataFrame::fromCsv('schools.csv');
-$fit = phplyr($schools)->lm('score ~ prior_score + study_hours');
-[$b0, $b_prior, $b_hours] = $fit['coefficients'];
+$fit = phplyr($schools)
+    ->lm('score ~ prior_score + study_hours');
+[$b0, $bPrior, $bHours] = $fit['coefficients'];
+
+$expected = fn ($r) => $b0
+    + $bPrior * $r->prior_score
+    + $bHours * $r->study_hours;
+$shareAbove = fn ($g) => round(\count(array_filter(
+    $g->column('residual'),
+    fn ($e) => $e > 0,
+)) / $g->nrow(), 2);
 
 echo phplyr($schools)
-    ->mutate(expected: fn ($r) => $b0 + $b_prior * $r->prior_score + $b_hours * $r->study_hours)
-    ->mutate(residual: fn ($r) => $r->score - $r->expected)
+    ->mutate(
+        residual: fn ($r) => $r->score - $expected($r),
+    )
     ->groupBy('school')
     ->summarize(
         students: n(),
         avg_score: mean('score'),
         avg_residual: mean('residual'),
-        share_above: fn ($g) => round(\count(array_filter($g->column('residual'), fn ($e) => $e > 0)) / $g->nrow(), 2),
+        share_above: $shareAbove,
     )
-    ->mutate(rank: min_rank(desc('avg_residual')), avg_score: fn ($r) => round($r->avg_score, 1), avg_residual: fn ($r) => round($r->avg_residual, 2))
+    ->mutate(
+        rank: min_rank(desc('avg_residual')),
+        avg_score: fn ($r) => round($r->avg_score, 1),
+        avg_residual: fn ($r) => round($r->avg_residual, 2),
+    )
     ->arrange('rank');
 ```
 

@@ -2,18 +2,27 @@
 
 require 'vendor/autoload.php';
 
-use Phibble\DataFrame;
-use function Phplyr\{pivot_longer, pivot_wider, starts_with};
+use function Phibble\tribble;
+use function Phplyr\{pivot_longer, pivot_wider};
+use function Phplyr\starts_with;
 
-$wide = DataFrame::fromRows([
-    ['store' => 'Leeds', 'sales_2023' => 120, 'sales_2024' => 135, 'sales_2025' => 150],
-    ['store' => 'Lyon', 'sales_2023' => 95, 'sales_2024' => 110, 'sales_2025' => 104],
-]);
+$wide = tribble(
+    ['store', 'sales_2023', 'sales_2024', 'sales_2025'],
+    'Leeds', 120, 135, 150,
+    'Lyon', 95, 110, 104,
+);
 echo $wide, "\n\n";
 
-$long = $wide |>
-    pivot_longer(starts_with('sales_'), namesTo: 'year', namesPrefix: 'sales_', valuesTo: 'sales');
+$long = $wide |> pivot_longer(
+    starts_with('sales_'),
+    namesTo: 'year',
+    namesPrefix: 'sales_',
+    valuesTo: 'sales',
+);
 echo $long, "\n\n";
 
-echo $long |>
-    pivot_wider(namesFrom: 'year', valuesFrom: 'sales', namesPrefix: 'sales_');
+echo $long |> pivot_wider(
+    namesFrom: 'year',
+    valuesFrom: 'sales',
+    namesPrefix: 'sales_',
+);

@@ -1,0 +1,82 @@
+::: {.panel-tabset group="syntax"}
+
+## PHP 8.5+
+
+```php
+// Mean calls by staffing level and visitor volume, as a
+// cross-tabulation.
+$levels = ['low', 'mid', 'high'];
+
+echo DataFrame::fromCsv('clinic.csv') |>
+    mutate(
+        staffing: case_when(
+            [fn ($r) => $r->staff < 4, 'low'],
+            [fn ($r) => $r->staff < 6, 'mid'],
+            default: 'high',
+        ),
+        volume: if_else(
+            fn ($r) => $r->visitors >= 250,
+            'busy',
+            'quiet',
+        ),
+    ) |>
+    group_by('staffing', 'volume') |>
+    summarize(mean_calls: mean('calls'), _groups: 'drop') |>
+    mutate(
+        mean_calls: fn ($r) => round($r->mean_calls, 2),
+    ) |>
+    pivot_wider(
+        namesFrom: 'volume',
+        valuesFrom: 'mean_calls',
+        namesSort: true,
+    ) |>
+    arrange(
+        fn ($r) => array_search($r->staffing, $levels),
+    );
+```
+
+## PHP 8.3–8.4
+
+```php
+// Mean calls by staffing level and visitor volume, as a
+// cross-tabulation.
+$levels = ['low', 'mid', 'high'];
+
+echo phplyr(DataFrame::fromCsv('clinic.csv'))
+    ->mutate(
+        staffing: case_when(
+            [fn ($r) => $r->staff < 4, 'low'],
+            [fn ($r) => $r->staff < 6, 'mid'],
+            default: 'high',
+        ),
+        volume: if_else(
+            fn ($r) => $r->visitors >= 250,
+            'busy',
+            'quiet',
+        ),
+    )
+    ->groupBy('staffing', 'volume')
+    ->summarize(mean_calls: mean('calls'), _groups: 'drop')
+    ->mutate(
+        mean_calls: fn ($r) => round($r->mean_calls, 2),
+    )
+    ->pivotWider(
+        namesFrom: 'volume',
+        valuesFrom: 'mean_calls',
+        namesSort: true,
+    )
+    ->arrange(
+        fn ($r) => array_search($r->staffing, $levels),
+    );
+```
+
+:::
+
+```{.text .output}
+# A tibble: 3 × 3
+  staffing  busy quiet
+  <chr>    <dbl> <dbl>
+1 low      NA     1.9 
+2 mid       1.79  1.64
+3 high      1.8  NA
+```

@@ -1,6 +1,7 @@
 <?php
 
-// Pass rates by study-hour quartile, then a logistic regression.
+// Pass rates by study-hour quartile, then a logistic
+// regression.
 $learning = DataFrame::fromCsv('learning.csv');
 
 echo $learning |>
@@ -13,5 +14,11 @@ echo $learning |>
         pass_rate: mean('passed'),
     );
 
-$fit = $learning |> glm('passed ~ study_hours + practice_score', family: 'binomial');
-printf("\nOdds ratio per extra study hour: %.3f\n", exp($fit['coefficients'][1]));
+$fit = $learning |> glm(
+    'passed ~ study_hours + practice_score',
+    family: 'binomial',
+);
+printf(
+    "\nOdds ratio for study_hours: %.3f\n",
+    exp($fit['coefficients'][1]),
+);

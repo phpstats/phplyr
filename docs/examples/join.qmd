@@ -11,9 +11,9 @@ the `customer_id` column.
 - An order with no matching customer gets NA in the new columns. A customer
   with no orders is left out.
 - Each order gets one output row per matching customer. If `customers` had
-  two rows for c1, each c1 order would appear twice and the result would have
-  more rows than `orders`. Pass `relationship: 'many-to-one'` to throw an
-  exception instead.
+  two rows for c1, each c1 order would appear twice.
+- `relationship: 'many-to-one'` throws an exception when a key in `orders`
+  matches more than one customer.
 - `inner_join()` drops the orders with no match. `full_join()` also keeps
   customers with no orders and adds them after the matched rows.
 

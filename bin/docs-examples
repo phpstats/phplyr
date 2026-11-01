@@ -14,8 +14,12 @@
  *
  * An example that requires 'vendor/autoload.php' is a complete
  * starter script. It runs as written, without the prelude. The page shows
- * the whole file, except in docs/examples/pages, where it leaves out the
- * opening tag and the require line.
+ * the whole file at the top level of docs/examples, and leaves out the
+ * opening tag and the require line in a subdirectory.
+ *
+ * A subdirectory's _prelude.php, if present, replaces the generated prelude
+ * for its examples, so its imports are checked, and is written to
+ * _prelude.md for the page to show once.
  *
  * R examples (.R files in docs/examples and its subdirectories) run with Rscript the same way and write
  * _<name>-r.md, for side-by-side comparisons. Examples in a subdirectory are
@@ -71,7 +75,11 @@ foreach ([...glob($root.'/docs/examples/*.R'), ...glob($root.'/docs/examples/*/*
     echo "{$name} (R): ok\n";
 }
 // Run one PHP example; return its code and output, or null if it failed.
-$run = function (string $file, string $name) use ($root, $php, $args, $preludeFor): ?array {
+$sharedCode = fn (string $file) => trim((string) preg_replace('/^<\?php\s*/', '', file_get_contents($file)));
+foreach (glob($root.'/docs/examples/*/_prelude.php') as $file) {
+    file_put_contents(dirname($file).'/_prelude.md', "```php\n".$sharedCode($file)."\n```\n");
+}
+$run = function (string $file, string $name) use ($root, $php, $args, $preludeFor, $sharedCode): ?array {
     $source = file_get_contents($file);
     $autoload = 'require '.var_export($root.'/vendor/autoload.php', true).';';
     $starter = preg_match('/^require (__DIR__\.)?\'\/?vendor\/autoload\.php\';$/m', $source, $r) === 1 ? $r[0] : null;
@@ -80,12 +88,14 @@ $run = function (string $file, string $name) use ($root, $php, $args, $preludeFo
         // its own imports are checked. The page shows the whole file.
         $code = trim($source);
         $body = str_replace($starter, $autoload, $code);
-        if (basename(dirname($file)) === 'pages') {
+        if (dirname($file) !== $root.'/docs/examples') {
             $code = trim(str_replace(["<?php\n", $starter."\n"], '', $code));
         }
     } else {
         $code = trim((string) preg_replace('/^<\?php\s*(declare\(strict_types=1\);\s*)?/', '', $source));
-        $body = "<?php\n\ndeclare(strict_types=1);\n\n{$autoload}\n\n".$preludeFor($code)."\n".$code."\n";
+        $shared = dirname($file).'/_prelude.php';
+        $prelude = is_file($shared) ? $sharedCode($shared)."\n" : $preludeFor($code);
+        $body = "<?php\n\ndeclare(strict_types=1);\n\n{$autoload}\n\n".$prelude."\n".$code."\n";
     }
     $script = tempnam(sys_get_temp_dir(), 'phplyr-doc').'.php';
     file_put_contents($script, $body."\n");
@@ -106,7 +116,7 @@ $run = function (string $file, string $name) use ($root, $php, $args, $preludeFo
 // An example <name>.php uses |>. Its method-chain version, <name>.chain.php,
 // must print the same output; the page shows both in tabs and the output once.
 foreach ([...glob($root.'/docs/examples/*.php'), ...glob($root.'/docs/examples/*/*.php')] as $file) {
-    if (str_ends_with($file, '.chain.php')) {
+    if (str_ends_with($file, '.chain.php') || str_starts_with(basename($file), '_')) {
         continue;
     }
     $name = $nameOf($file, '.php');

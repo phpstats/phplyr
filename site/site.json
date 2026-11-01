@@ -161,22 +161,22 @@
         {
             "path": "examples/filter-and-mutate",
             "title": "Filter rows and add columns",
-            "description": "Keeps rows with filter() and adds columns with mutate(), using row closures and if_else()."
+            "description": "Keep matching rows and compute new columns, row by row or from whole columns."
         },
         {
             "path": "examples/group-and-summarize",
             "title": "Summarize groups",
-            "description": "Counts, sums, and averages per group with group_by() and summarize(), leaving out missing values."
+            "description": "Count, total, and average within groups when some values are missing."
         },
         {
             "path": "examples/join",
             "title": "Join two tables",
-            "description": "Adds matching columns with left_join() and shows how unmatched and repeated keys affect the rows."
+            "description": "Combine tables on a shared key, including keys with no match or several."
         },
         {
             "path": "examples/pivot",
             "title": "Pivot between wide and long",
-            "description": "Moves yearly columns into rows with pivot_longer() and back with pivot_wider()."
+            "description": "Turn one column per year into one row per year, and back."
         }
     ]
 }
