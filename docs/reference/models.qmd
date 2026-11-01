@@ -20,9 +20,9 @@ The functions come from the [phit](https://github.com/phpstats/phit)
 extension or from [phit-polyfill](https://github.com/phpstats/phit-polyfill),
 its PHP port, and phplyr calls both the same way. phit's
 [Extension or polyfill](https://phit.phpstats.org/docs/extension-or-polyfill)
-page compares them, and
-[Models: phit extension and phit-polyfill](https://phplyr.phpstats.org/benchmarks/models)
-times both through phplyr.
+page compares them. The
+[Models benchmark](https://phplyr.phpstats.org/benchmarks/models) times both
+through phplyr.
 
 - Install the polyfill with `composer require phpstats/phit-polyfill`. When
   the extension is loaded, the polyfill defines nothing.
@@ -36,7 +36,7 @@ times both through phplyr.
 
 CI runs phplyr's tests with each implementation. Both runs compare `lm()` and
 `glm()` coefficients with R's, and `lmer()` fixed effects with lme4's.
-[Models: agreement with R](https://phplyr.phpstats.org/verification/models)
+The [Models verification](https://phplyr.phpstats.org/verification/models)
 lists the comparisons.
 
 ::: {.panel-tabset group="syntax"}

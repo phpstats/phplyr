@@ -1,9 +1,9 @@
 {
-    "title": "tidyr functions",
+    "title": "tidyr",
     "label": "tidyr",
     "kind": "reference",
-    "checked": "Pivoting, completing, filling, separating, nesting, and unnesting give the same tables as tidyr.",
-    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "checked": "Pivoting, completing, filling, separating, nesting, and unnesting. Output tables compared with tidyr's.",
+    "description": "Reference results computed in R by tests/r/tidyr.R and stored in tests/Fixtures/. The same operations run in phplyr in tests/TidyrTest.php, which compare every value. Values compared is the number of assertions in a case; a case fails if any assertion fails.",
     "reference": "R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2",
     "versions": {
         "R": "4.6.1",
@@ -48,7 +48,7 @@
         {
             "id": "values",
             "kind": "tolerance",
-            "applies_to": "floating-point values; in the same case, column names, row counts and order, strings, integers, booleans, and missing values must be identical",
+            "applies_to": "Floating-point values",
             "atol": 1.0e-9,
             "rtol": 1.0e-9,
             "rel_floor": 1
@@ -56,48 +56,48 @@
         {
             "id": "exact",
             "kind": "exact",
-            "applies_to": "column names, row counts and order, strings, integers, booleans, dates, and missing values"
+            "applies_to": "Column names, row counts and order, strings, integers, booleans, dates, and missing values"
         }
     ],
     "cases": [
         {
             "name": "longer",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 46
         },
         {
             "name": "longer_drop",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 31
         },
         {
             "name": "longer_sep",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 31
         },
         {
             "name": "longer_pattern",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 37
         },
         {
             "name": "longer_value",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 26
         },
         {
             "name": "wider",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 13,
@@ -106,7 +106,7 @@
         },
         {
             "name": "wider_fill",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 13,
@@ -115,7 +115,7 @@
         },
         {
             "name": "wider_fn",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 16,
@@ -124,7 +124,7 @@
         },
         {
             "name": "wider_multi",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 19,
@@ -133,7 +133,7 @@
         },
         {
             "name": "wider_sort",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 13,
@@ -142,7 +142,7 @@
         },
         {
             "name": "wider_glue",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 13,
@@ -151,7 +151,7 @@
         },
         {
             "name": "complete",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 37,
@@ -160,63 +160,63 @@
         },
         {
             "name": "complete_fill",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 37
         },
         {
             "name": "complete_nesting",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 33
         },
         {
             "name": "complete_grouped",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 29
         },
         {
             "name": "expand",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 28
         },
         {
             "name": "expand_nesting",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 16
         },
         {
             "name": "crossing",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 13
         },
         {
             "name": "fill_down",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 19
         },
         {
             "name": "fill_up",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 19
         },
         {
             "name": "fill_grouped",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 49,
@@ -225,35 +225,35 @@
         },
         {
             "name": "drop_na_all",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 7
         },
         {
             "name": "drop_na_col",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 13
         },
         {
             "name": "replace_na",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 19
         },
         {
             "name": "uncount",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 19
         },
         {
             "name": "unite",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 19,
@@ -262,7 +262,7 @@
         },
         {
             "name": "unite_keep",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 25,
@@ -271,63 +271,63 @@
         },
         {
             "name": "separate",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 17
         },
         {
             "name": "separate_merge",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 17
         },
         {
             "name": "separate_pos",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 17
         },
         {
             "name": "wider_delim",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 21
         },
         {
             "name": "wider_delim_sep",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 21
         },
         {
             "name": "wider_position",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 17
         },
         {
             "name": "wider_regex",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 17
         },
         {
             "name": "longer_delim",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 22
         },
         {
             "name": "longer_position",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 34
@@ -340,7 +340,7 @@
     "data": "tests/Fixtures",
     "environment": {
         "date": "2026-11-01",
-        "commit": "8056422",
+        "commit": "ce20607",
         "php": "8.5.10",
         "os": "Darwin 27.0.0 (arm64)"
     }

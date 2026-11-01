@@ -1,27 +1,27 @@
 {
     "title": "Descriptive statistics",
-    "label": "Descriptives",
+    "label": "Descriptive statistics",
     "kind": "reference",
-    "checked": "mean(), var(), sd(), median(), quantile(), sum(), min(), and max(), and their handling of missing values, give the same values as R, once with the phit extension and once in PHP.",
-    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "checked": "mean(), var(), sd(), median(), quantile(), sum(), min(), and max(), including missing values. Each computed with the phit extension and in PHP, and compared with R.",
+    "description": "Reference results computed in R by tests/r/stats.R and stored in tests/Fixtures/. The same operations run in phplyr in tests/StatsTest.php, which compare every value. Values compared is the number of assertions in a case; a case fails if any assertion fails.",
     "reference": "R 4.6.1",
     "versions": {
         "R": "4.6.1",
         "PHP": "8.5.10",
         "phibble": "v0.6.0 (6b9f06a)",
-        "phit": "0.4.4 (v0.4.3-20-g066e2e1)"
+        "phit": "0.4.4"
     },
     "inputs": [
         {
             "name": "x",
-            "detail": "c(2, 4, 4, 5, 7, 9), and c(1, NA, 3) and c(1, NaN, 3) for missing values."
+            "detail": "c(2, 4, 4, 5, 7, 9); c(1, NA, 3) and c(1, NaN, 3) for missing values."
         }
     ],
     "comparison": [
         {
             "id": "values",
             "kind": "tolerance",
-            "applies_to": "numeric results",
+            "applies_to": "Numerical results",
             "atol": 1.0e-12,
             "rtol": 1.0e-12,
             "rel_floor": 1
@@ -29,13 +29,14 @@
         {
             "id": "exact",
             "kind": "exact",
-            "applies_to": "missing results (R's NA, phplyr's null)"
+            "applies_to": "Missing results; R's NA as null"
         }
     ],
     "cases": [
         {
             "name": "mean(x)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -46,7 +47,8 @@
         },
         {
             "name": "mean(x)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -57,7 +59,8 @@
         },
         {
             "name": "var(x)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -68,7 +71,8 @@
         },
         {
             "name": "var(x)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -79,7 +83,8 @@
         },
         {
             "name": "sd(x)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -90,7 +95,8 @@
         },
         {
             "name": "sd(x)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -101,7 +107,8 @@
         },
         {
             "name": "median(x)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -112,7 +119,8 @@
         },
         {
             "name": "median(x)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -123,7 +131,8 @@
         },
         {
             "name": "quantile(x, 0.9)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -134,7 +143,8 @@
         },
         {
             "name": "quantile(x, 0.9)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -145,7 +155,8 @@
         },
         {
             "name": "quantile(x, 0)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -156,7 +167,8 @@
         },
         {
             "name": "quantile(x, 0)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -167,7 +179,8 @@
         },
         {
             "name": "quantile(x, 1)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -178,7 +191,8 @@
         },
         {
             "name": "quantile(x, 1)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -189,7 +203,8 @@
         },
         {
             "name": "sum(x)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -200,7 +215,8 @@
         },
         {
             "name": "sum(x)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -211,7 +227,8 @@
         },
         {
             "name": "min(x)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -222,7 +239,8 @@
         },
         {
             "name": "min(x)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -233,7 +251,8 @@
         },
         {
             "name": "max(x)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -244,7 +263,8 @@
         },
         {
             "name": "max(x)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -255,21 +275,24 @@
         },
         {
             "name": "mean(c(1, NA, 3))",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "exact",
             "n_compared": 1
         },
         {
             "name": "mean(c(1, NA, 3))",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "exact",
             "n_compared": 1
         },
         {
             "name": "mean(c(1, NA, 3), na.rm = TRUE)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -280,7 +303,8 @@
         },
         {
             "name": "mean(c(1, NA, 3), na.rm = TRUE)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -291,7 +315,8 @@
         },
         {
             "name": "sd(c(1, NaN, 3), na.rm = TRUE)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -302,7 +327,8 @@
         },
         {
             "name": "sd(c(1, NaN, 3), na.rm = TRUE)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "values",
             "n_compared": 1,
@@ -313,14 +339,16 @@
         },
         {
             "name": "var(1)",
-            "quantity": "values, phit extension",
+            "quantity": "Values",
+            "implementation": "phit extension",
             "status": "pass",
             "rule": "exact",
             "n_compared": 1
         },
         {
             "name": "var(1)",
-            "quantity": "values, PHP",
+            "quantity": "Values",
+            "implementation": "PHP",
             "status": "pass",
             "rule": "exact",
             "n_compared": 1
@@ -333,7 +361,7 @@
     "data": "tests/Fixtures",
     "environment": {
         "date": "2026-11-01",
-        "commit": "8056422",
+        "commit": "ce20607",
         "php": "8.5.10",
         "os": "Darwin 27.0.0 (arm64)"
     }

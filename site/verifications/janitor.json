@@ -1,9 +1,9 @@
 {
-    "title": "janitor functions",
+    "title": "janitor",
     "label": "janitor",
     "kind": "reference",
-    "checked": "make_clean_names(), clean_names(), remove_empty(), get_dupes(), and one- and two-way tabyl() give the same results as janitor.",
-    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "checked": "make_clean_names(), clean_names(), remove_empty(), get_dupes(), and one- and two-way tabyl(). Results compared with janitor's.",
+    "description": "Reference results computed in R by tests/r/janitor.R and stored in tests/Fixtures/. The same operations run in phplyr in tests/JanitorTest.php, which compare every value. Values compared is the number of assertions in a case; a case fails if any assertion fails.",
     "reference": "R 4.6.1 with janitor 2.2.1, dplyr 1.2.1",
     "versions": {
         "R": "4.6.1",
@@ -14,15 +14,15 @@
     },
     "inputs": [
         {
-            "name": "Small tables in the tests",
-            "detail": "Built in tests/r/janitor.R and tests/JanitorTest.php."
+            "name": "Inline tables",
+            "detail": "Defined in tests/r/janitor.R and tests/JanitorTest.php."
         }
     ],
     "comparison": [
         {
             "id": "values",
             "kind": "tolerance",
-            "applies_to": "floating-point values; in the same case, column names, row counts and order, strings, integers, booleans, and missing values must be identical",
+            "applies_to": "Floating-point values",
             "atol": 1.0e-9,
             "rtol": 1.0e-9,
             "rel_floor": 1
@@ -30,20 +30,20 @@
         {
             "id": "exact",
             "kind": "exact",
-            "applies_to": "column names, row counts and order, strings, integers, booleans, dates, and missing values"
+            "applies_to": "Column names, row counts and order, strings, integers, booleans, dates, and missing values"
         }
     ],
     "cases": [
         {
             "name": "Matches janitor on names with case, punctuation, unicode, leading digits, and repeats",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 1
         },
         {
             "name": "rows and cols",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 13,
@@ -52,7 +52,7 @@
         },
         {
             "name": "rows",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 16,
@@ -61,7 +61,7 @@
         },
         {
             "name": "cols",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 21,
@@ -70,7 +70,7 @@
         },
         {
             "name": "rows with a cutoff",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 6,
@@ -79,7 +79,7 @@
         },
         {
             "name": "cols with a cutoff",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 16,
@@ -88,7 +88,7 @@
         },
         {
             "name": "all columns",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 17,
@@ -97,7 +97,7 @@
         },
         {
             "name": "one column",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 31,
@@ -106,7 +106,7 @@
         },
         {
             "name": "two columns",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 21,
@@ -115,7 +115,7 @@
         },
         {
             "name": "a numeric column",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 26,
@@ -124,7 +124,7 @@
         },
         {
             "name": "characters with NA",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 21,
@@ -133,7 +133,7 @@
         },
         {
             "name": "characters without NA",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 13,
@@ -142,7 +142,7 @@
         },
         {
             "name": "numbers",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 21,
@@ -151,7 +151,7 @@
         },
         {
             "name": "logicals",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 16,
@@ -160,7 +160,7 @@
         },
         {
             "name": "a factor with an unused level",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 21,
@@ -169,7 +169,7 @@
         },
         {
             "name": "a factor without unused levels",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 16,
@@ -178,7 +178,7 @@
         },
         {
             "name": "an empty string",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 13,
@@ -187,35 +187,35 @@
         },
         {
             "name": "two ways",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 25
         },
         {
             "name": "two ways without NA",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 16
         },
         {
             "name": "two ways by a number",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 25
         },
         {
             "name": "two ways by factor and logical",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 21
         }
     ],
     "known_differences": [
-        "Without the intl extension, clean_names() transliterates with iconv, and some names differ from janitor's. The name check is skipped then."
+        "Without the intl extension, clean_names() transliterates with iconv, and some names differ from janitor's; the name check is then skipped."
     ],
     "reproduce": [
         "Rscript tests/r/janitor.R",
@@ -224,7 +224,7 @@
     "data": "tests/Fixtures",
     "environment": {
         "date": "2026-11-01",
-        "commit": "8056422",
+        "commit": "ce20607",
         "php": "8.5.10",
         "os": "Darwin 27.0.0 (arm64)"
     }

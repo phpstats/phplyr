@@ -1,8 +1,8 @@
 {
-    "title": "phplyr backends and dplyr",
-    "label": "Backends and dplyr",
-    "description": "Three pipelines on a generated sales table of 100,000 and 1,000,000 rows, joined to a 100-row stores table. A filters, joins, summarises by two keys, and ranks within groups. B computes lag(), cumsum(), and a share of the group total over every row. C is A with a PHP closure in filter(), so it has no dplyr version. The PHP backends run the same phplyr code.",
-    "workload": "100,000 and 1,000,000 sales rows, 100 stores",
+    "title": "Backend pipelines",
+    "label": "Backend pipelines",
+    "description": "Three pipelines on a generated sales table joined to a 100-row stores table. A: filter, join, summarise by two keys, and rank within groups. B: lag(), cumsum(), and a share of the group total over every row. C: A with a PHP closure in filter(); no dplyr equivalent. The PHP backends run identical phplyr code.",
+    "workload": "Three pipelines, 100,000 and 1,000,000 sales rows, 100 stores",
     "dataset": {
         "rows": [
             100000,
@@ -16,8 +16,8 @@
         }
     },
     "check": {
-        "php_backends": "Every backend returned the same rows as DataFrame, compared as sorted rows with floats to 9 significant digits.",
-        "dplyr": "dplyr's row counts and numeric column sums matched DataFrame's within 1e-9 relative."
+        "php_backends": "Rows identical to DataFrame's on every backend, compared sorted, with floating-point values to 9 significant digits.",
+        "dplyr": "Row counts and numeric column sums equal to DataFrame's within 1e-9, relative."
     },
     "implementations": {
         "DataFrame": "phplyr on phibble's in-memory DataFrame",
@@ -29,7 +29,7 @@
     "unit": "s",
     "statistic": "median",
     "method": "PHP: the pipeline through collect(), with the tables already loaded. dplyr: the pipeline on a tibble already in memory. Reading and generating the data are not timed.",
-    "time_spent_in": "the PHP process for DataFrame, PolarsTable, and SQLite, which run inside it; the R process for dplyr.",
+    "time_spent_in": "The PHP process for DataFrame, PolarsTable, and SQLite; the R process for dplyr",
     "code": {
         "A: filter, join, summarise, and rank (100,000 rows)": {
             "DataFrame": "fn (Table $s, Table $st) => $s\n    |> filter(col('units')->gt(0))\n    |> left_join($st, by: 'store')\n    |> group_by('region', 'product')\n    |> summarise(n: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))\n    |> group_by('region')\n    |> mutate(rank: min_rank(desc('revenue')))\n    |> filter(col('rank')->le(10))\n    |> arrange('region', 'rank')"

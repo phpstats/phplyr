@@ -1,8 +1,8 @@
 {
-    "title": "phibble workloads at 1,000,000 rows",
-    "label": "phibble workloads",
-    "description": "phibble's shared benchmark workloads on an events table of 1,000,000 rows (id, key with 10,000 values, g with 8 labels, x with about 2% missing, and a datetime t) and a dims table of 100,000 rows. Each workload runs as a phplyr pipeline and as the equivalent direct phibble Table calls, which shows the time phplyr adds. Data from bench/generate.php, with phibble's generator and seed.",
-    "workload": "1,000,000 rows; joins add 100,000 rows",
+    "title": "Workloads",
+    "label": "Workloads",
+    "description": "phibble's eight shared workloads: grouped summaries with expressions and with closures, a grouped window, filters with an expression and with a closure, a mutate, a left join, and a sort. Each workload runs as a phplyr pipeline and as the equivalent direct phibble Table calls; the difference is the time phplyr adds. Input: an events table of 1,000,000 rows (id, key with 10,000 values, g with 8 labels, x with about 2% missing, and a datetime t) and a dims table of 100,000 rows, from bench/generate.php with phibble's generator and seed.",
+    "workload": "Eight workloads, 1,000,000 rows; the join adds 100,000 rows",
     "dataset": {
         "rows": 1000000,
         "generator": "bench/generate.php"
@@ -19,7 +19,7 @@
     "unit": "s",
     "statistic": "median",
     "method": "From the first call of the workload through collect(), in one PHP process. Loading the CSV files and building the tables are not timed.",
-    "time_spent_in": "the PHP process. SQLite and Polars run inside it, through PDO and the php_polars extension.",
+    "time_spent_in": "The PHP process, including SQLite through PDO and Polars through the php_polars extension",
     "environment": {
         "cpu": "AMD Ryzen 9 9955HX 16-Core Processor",
         "cores": 2,

@@ -32,28 +32,33 @@ $csv = function (string $name, string $detail = ''): array {
 
     return ['name' => $name, 'detail' => trim(number_format(\count($lines) - 1).' rows: '.str_replace(',', ', ', $columns).'. '.$detail), 'url' => "tests/Fixtures/{$name}"];
 };
-$inline = fn (string $where) => ['name' => 'Small tables in the tests', 'detail' => "Built in {$where}."];
+$inline = fn (string $where) => ['name' => 'Inline tables', 'detail' => "Defined in {$where}."];
 
-$floats = fn (float $tol) => ['id' => 'values', 'kind' => 'tolerance', 'applies_to' => 'floating-point values; in the same case, column names, row counts and order, strings, integers, booleans, and missing values must be identical', 'atol' => $tol, 'rtol' => $tol, 'rel_floor' => 1];
-$exact = ['id' => 'exact', 'kind' => 'exact', 'applies_to' => 'column names, row counts and order, strings, integers, booleans, dates, and missing values'];
+$floats = fn (float $tol) => ['id' => 'values', 'kind' => 'tolerance', 'applies_to' => 'Floating-point values', 'atol' => $tol, 'rtol' => $tol, 'rel_floor' => 1];
+$exact = ['id' => 'exact', 'kind' => 'exact', 'applies_to' => 'Column names, row counts and order, strings, integers, booleans, dates, and missing values'];
+
+// The Method paragraph shared by the records compared with R.
+$fromR = fn (string $scripts, string $tests) => "Reference results computed in R by {$scripts} and stored in tests/Fixtures/. The same operations run in phplyr in {$tests}, which compare every value. Values compared is the number of assertions in a case; a case fails if any assertion fails.";
 
 $records = [
     'dplyr' => [
-        'title' => 'dplyr functions and helpers',
-        'label' => 'dplyr',
+        'title' => 'dplyr functions',
+        'label' => 'dplyr functions',
         'kind' => 'reference',
-        'checked' => 'Single-table functions, window and summary helpers, expressions, grouping, joins, join_by() conditions, set operations, and rows_*() give the same tables as the same pipelines in dplyr.',
+        'checked' => 'Single-table functions, window and summary helpers, expressions, grouping, joins, join_by() conditions, set operations, and rows_*(). Output tables compared with dplyr\'s.',
+        'description' => $fromR('tests/r/reference.R, expr.R, groups.R, joins.R, join_by.R, and rows.R', 'the Pest tests that read those fixtures'),
         'fixtures' => ['dplyr-reference.json', 'expr-reference.json', 'cur-group-reference.json', 'drop-reference.json', 'joins-reference.json', 'join-by-reference.json', 'rows-reference.json'],
         'packages' => ['dplyr'],
         'scripts' => ['reference.R', 'expr.R', 'groups.R', 'joins.R', 'join_by.R', 'rows.R'],
-        'inputs' => [$csv('panel.csv'), $csv('schools.csv'), $csv('housing.csv'), $csv('join_x.csv'), $csv('join_y.csv'), $csv('events.csv'), $csv('periods.csv'), $inline('tests/r/groups.R and tests/r/rows.R, and the same tables in the PHP tests')],
+        'inputs' => [$csv('panel.csv'), $csv('schools.csv'), $csv('housing.csv'), $csv('join_x.csv'), $csv('join_y.csv'), $csv('events.csv'), $csv('periods.csv'), $inline('tests/r/groups.R, tests/r/rows.R, and the matching PHP tests')],
         'comparison' => [$floats(1e-9), $exact],
     ],
     'tidyr' => [
-        'title' => 'tidyr functions',
+        'title' => 'tidyr',
         'label' => 'tidyr',
         'kind' => 'reference',
-        'checked' => 'Pivoting, completing, filling, separating, nesting, and unnesting give the same tables as tidyr.',
+        'checked' => 'Pivoting, completing, filling, separating, nesting, and unnesting. Output tables compared with tidyr\'s.',
+        'description' => $fromR('tests/r/tidyr.R', 'tests/TidyrTest.php'),
         'fixtures' => ['tidyr-reference.json'],
         'packages' => ['dplyr', 'tidyr'],
         'scripts' => ['tidyr.R'],
@@ -61,10 +66,11 @@ $records = [
         'comparison' => [$floats(1e-9), $exact],
     ],
     'additions' => [
-        'title' => 'Later dplyr 1.1 and tidyr 1.3 functions',
-        'label' => 'dplyr 1.1 and tidyr 1.3',
+        'title' => 'Later dplyr and tidyr functions',
+        'label' => 'Later dplyr and tidyr functions',
         'kind' => 'reference',
-        'checked' => 'across() edge cases, group helpers, superseded functions, pivot options and specs, rectangling, and other dplyr 1.1 and tidyr 1.3 functions give the same results as R.',
+        'checked' => 'across() edge cases, group helpers, superseded functions, pivot options and specifications, rectangling, and other dplyr 1.1 and tidyr 1.3 functions. Results compared with R\'s.',
+        'description' => $fromR('tests/r/coverage.R', 'tests/CoverageTest.php'),
         'fixtures' => ['coverage-reference.json'],
         'packages' => ['dplyr', 'tidyr'],
         'scripts' => ['coverage.R'],
@@ -72,74 +78,80 @@ $records = [
         'comparison' => [$floats(1e-9), $exact],
     ],
     'lubridate-stringr' => [
-        'title' => 'lubridate and stringr helpers',
-        'label' => 'lubridate and stringr',
+        'title' => 'Dates and strings',
+        'label' => 'Dates and strings',
         'kind' => 'reference',
-        'checked' => 'Date parsing, date parts, rounding, periods, time zones, and string functions give the same values as lubridate and stringr.',
+        'checked' => 'Date parsing, date parts, rounding, periods, time zones, and string functions. Values compared with lubridate\'s and stringr\'s.',
+        'description' => $fromR('tests/r/lubridate_stringr.R', 'tests/LubridateStringrTest.php'),
         'fixtures' => ['lubridate-stringr.json'],
         'packages' => ['lubridate', 'stringr'],
         'scripts' => ['lubridate_stringr.R'],
-        'inputs' => [['name' => 'Five dates, datetimes, and strings', 'detail' => 'Including a missing value, a leap day, and a daylight-saving gap. Built in tests/r/lubridate_stringr.R and tests/LubridateStringrTest.php.']],
-        'comparison' => [['id' => 'exact', 'kind' => 'exact', 'applies_to' => 'every value: dates as YYYY-MM-DD, datetimes as YYYY-MM-DD HH:MM:SS +hhmm, numbers, strings, and missing values']],
+        'inputs' => [['name' => 'Inline vectors', 'detail' => 'Five dates, datetimes, and strings, including a missing value, a leap day, and a daylight-saving gap.']],
+        'comparison' => [['id' => 'exact', 'kind' => 'exact', 'applies_to' => 'All values; dates as YYYY-MM-DD, datetimes as YYYY-MM-DD HH:MM:SS +hhmm']],
     ],
     'janitor' => [
-        'title' => 'janitor functions',
+        'title' => 'janitor',
         'label' => 'janitor',
         'kind' => 'reference',
-        'checked' => 'make_clean_names(), clean_names(), remove_empty(), get_dupes(), and one- and two-way tabyl() give the same results as janitor.',
+        'checked' => 'make_clean_names(), clean_names(), remove_empty(), get_dupes(), and one- and two-way tabyl(). Results compared with janitor\'s.',
+        'description' => $fromR('tests/r/janitor.R', 'tests/JanitorTest.php'),
         'fixtures' => ['janitor-reference.json'],
         'packages' => ['janitor', 'dplyr'],
         'scripts' => ['janitor.R'],
         'inputs' => [$inline('tests/r/janitor.R and tests/JanitorTest.php')],
         'comparison' => [$floats(1e-9), $exact],
-        'known_differences' => ['Without the intl extension, clean_names() transliterates with iconv, and some names differ from janitor\'s. The name check is skipped then.'],
+        'known_differences' => ['Without the intl extension, clean_names() transliterates with iconv, and some names differ from janitor\'s; the name check is then skipped.'],
     ],
     'models' => [
-        'title' => 'Models: agreement with R',
+        'title' => 'Models',
         'label' => 'Models',
         'kind' => 'reference',
-        'checked' => 'lm(), glm(), and lmer() through the phit extension give the same coefficients as R\'s lm() and glm() and the same fixed effects and residual SD as lme4\'s lmer().',
+        'checked' => 'lm() and glm() coefficients, lmer() fixed effects, and the lmer() residual standard deviation, fitted through the phit extension. Compared with R\'s lm() and glm() and lme4\'s lmer().',
+        'description' => $fromR('tests/r/models.R and expr.R', 'tests/ModelsTest.php and tests/ExprTest.php'),
         'fixtures' => ['models-reference.json', 'expr-reference.json'],
         'grouped_only' => true,
         'packages' => ['lme4'],
         'scripts' => ['models.R', 'expr.R'],
         'inputs' => [$csv('schools.csv'), $csv('learning.csv')],
         'comparison' => [
-            ['id' => 'coefficients', 'kind' => 'tolerance', 'applies_to' => 'coefficients and fixed effects', 'atol' => 1e-6, 'rtol' => 1e-6, 'rel_floor' => 1],
-            ['id' => 'sigma', 'kind' => 'tolerance', 'applies_to' => 'the residual standard deviation of lmer()', 'atol' => 1e-5, 'rel_floor' => 1],
+            ['id' => 'coefficients', 'kind' => 'tolerance', 'applies_to' => 'Coefficients and fixed effects', 'atol' => 1e-6, 'rtol' => 1e-6, 'rel_floor' => 1],
+            ['id' => 'sigma', 'kind' => 'tolerance', 'applies_to' => 'Residual standard deviation; lmer()', 'atol' => 1e-5, 'rel_floor' => 1],
         ],
-        'exclusions' => ['glmer() is not compared with lme4.', 'phit-polyfill is not compared with R here. The models benchmark checks its coefficients against the extension\'s.'],
+        'exclusions' => ['glmer() is not compared with lme4.', 'phit-polyfill is not compared with R; the Models benchmark compares its coefficients with the extension\'s.'],
     ],
     'descriptives' => [
         'title' => 'Descriptive statistics',
-        'label' => 'Descriptives',
+        'label' => 'Descriptive statistics',
         'kind' => 'reference',
-        'checked' => 'mean(), var(), sd(), median(), quantile(), sum(), min(), and max(), and their handling of missing values, give the same values as R, once with the phit extension and once in PHP.',
+        'checked' => 'mean(), var(), sd(), median(), quantile(), sum(), min(), and max(), including missing values. Each computed with the phit extension and in PHP, and compared with R.',
+        'description' => $fromR('tests/r/stats.R', 'tests/StatsTest.php'),
         'fixtures' => ['stats-reference.json'],
         'packages' => [],
         'scripts' => ['stats.R'],
-        'inputs' => [['name' => 'x', 'detail' => 'c(2, 4, 4, 5, 7, 9), and c(1, NA, 3) and c(1, NaN, 3) for missing values.']],
+        'inputs' => [['name' => 'x', 'detail' => 'c(2, 4, 4, 5, 7, 9); c(1, NA, 3) and c(1, NaN, 3) for missing values.']],
         'comparison' => [
-            ['id' => 'values', 'kind' => 'tolerance', 'applies_to' => 'numeric results', 'atol' => 1e-12, 'rtol' => 1e-12, 'rel_floor' => 1],
-            ['id' => 'exact', 'kind' => 'exact', 'applies_to' => 'missing results (R\'s NA, phplyr\'s null)'],
+            ['id' => 'values', 'kind' => 'tolerance', 'applies_to' => 'Numerical results', 'atol' => 1e-12, 'rtol' => 1e-12, 'rel_floor' => 1],
+            ['id' => 'exact', 'kind' => 'exact', 'applies_to' => 'Missing results; R\'s NA as null'],
         ],
     ],
     'polars' => [
         'title' => 'PolarsTable parity',
-        'label' => 'PolarsTable',
+        'label' => 'PolarsTable parity',
         'kind' => 'reference',
-        'checked' => 'About 120 pipelines give the same columns, types, groups, and rows on phibble\'s Polars backend, PolarsTable, as on its in-memory DataFrame.',
+        'checked' => 'Columns, types, groups, and rows from about 120 pipelines on PolarsTable, phibble\'s Polars backend. Compared with the same pipelines on DataFrame.',
+        'description' => 'tests/PolarsTest.php runs each pipeline on DataFrame and on PolarsTable and compares every value. Values compared is the number of assertions in a case; a case fails if any assertion fails.',
         'fixtures' => ['DataFrame'],
         'reference' => 'phplyr on phibble\'s DataFrame',
         'inputs' => [$csv('panel.csv'), $csv('schools.csv'), $csv('events.csv'), $csv('periods.csv'), $csv('join_x.csv'), $csv('join_y.csv'), $csv('wide.csv'), $csv('long.csv'), $csv('who.csv'), $csv('strings.csv')],
         'comparison' => [$floats(1e-9), $exact],
     ],
     'sqlite' => [
-        'title' => 'SQLite backend',
+        'title' => 'SQLite',
         'label' => 'SQLite',
         'kind' => 'integration',
-        'checked' => 'Expression pipelines on a SQLite table through Phibble\tbl() stay in SQL and give the same rows as on DataFrame. Grouped windows, counts, and joins run in SQL, and closures fall back to memory.',
-        'reference' => 'phplyr on phibble\'s DataFrame, and expected values written in the tests',
+        'checked' => 'Expression pipelines, grouped windows, counts, and joins on a SQLite table through Phibble\tbl(). Results compared with DataFrame or with expected values; lazy evaluation in SQL and the in-memory fallback for closures.',
+        'description' => 'tests/SqlTest.php loads panel.csv into an in-memory SQLite database, runs each pipeline on the SQLite table and on DataFrame, and checks the class of each result. Values compared is the number of assertions in a case; a case fails if any assertion fails.',
+        'reference' => 'phplyr on phibble\'s DataFrame, and expected values in the tests',
         'inputs' => [$csv('panel.csv', 'Loaded into an in-memory SQLite database with declared column types.')],
         'comparison' => [$floats(1e-9), $exact],
     ],
@@ -167,15 +179,12 @@ $tests = array_map(fn ($l) => json_decode($l, true, flags: JSON_THROW_ON_ERROR),
 
 $php = getenv('PHP') ?: 'php';
 $phpVersion = trim((string) shell_exec(escapeshellarg($php).' -r "echo PHP_VERSION;"'));
-// phit as bin/test loads it, with the commit when it was built in a checkout.
+// phit as bin/test loads it. The checkout's commit is not recorded: it need
+// not be the commit the extension was built from.
 $phitVersion = null;
 $ext = getenv('PHIT_EXTENSION') ?: (is_file('.ext/libphit.dylib') ? $root.'/.ext/libphit.dylib' : null);
 if ($ext !== null && ! getenv('NO_EXT')) {
     $phitVersion = trim((string) shell_exec(escapeshellarg($php).' -d extension='.escapeshellarg($ext).' -r "echo phpversion(\'phit\');"')) ?: null;
-    $described = trim((string) shell_exec('git -C '.escapeshellarg(dirname($ext)).' describe --tags 2>/dev/null'));
-    if ($phitVersion !== null && $described !== '') {
-        $phitVersion .= " ({$described})";
-    }
 }
 $installed = json_decode(file_get_contents('vendor/composer/installed.json'), true)['packages'];
 $phibble = current(array_filter($installed, fn ($p) => $p['name'] === 'phpstats/phibble'));
@@ -187,7 +196,7 @@ $environment = ['date' => gmdate('Y-m-d'), 'commit' => trim((string) shell_exec(
 $rVersions = json_decode(file_get_contents('tests/Fixtures/r-versions.json'), true);
 
 // A case is named by its first dataset, such as "windows", or by the test's
-// description; further datasets, such as the backend, go into its quantity.
+// description; further datasets, such as the backend, are its implementation.
 $generic = '/^(Matches (dplyr|tidyr|janitor|lubridate and stringr through phplyr)|Gives the same result on PolarsTable for|Computes descriptives like R|Fits models like R)$/';
 $caseName = function (array $test) use ($generic): array {
     $description = ucfirst((string) preg_replace(['/^`[^`]+` → /u', '/^it /', '/ with dataset .*$/s'], '', $test['test']));
@@ -225,9 +234,11 @@ foreach ($records as $slug => $record) {
         [$name, $more] = $caseName($test);
         $case = [
             'name' => $name,
-            'quantity' => implode(', ', [$test['kinds'] === [] ? 'values' : implode(', ', $test['kinds']), ...$more]),
+            'quantity' => ucfirst(implode(', ', array_map(fn ($k) => $k === 'sigma' ? 'residual standard deviation' : $k, $test['kinds'] === [] ? ['values'] : $test['kinds']))),
+            'implementation' => $more === [] ? null : implode(', ', $more),
             'status' => $test['status'],
         ];
+        $case = array_filter($case, fn ($v) => $v !== null);
         if ($test['status'] !== 'pass') {
             $case['reason'] = (string) preg_replace('/\s+/', ' ', trim((string) $test['reason'])) ?: 'No message.';
         }
@@ -278,7 +289,7 @@ foreach ($records as $slug => $record) {
         'label' => $record['label'],
         'kind' => $record['kind'],
         'checked' => $record['checked'],
-        'description' => 'n_compared counts the assertions in each test. A case fails if any of its assertions fails.',
+        'description' => $record['description'],
         'reference' => $reference,
         'versions' => $versions,
         'inputs' => $record['inputs'],

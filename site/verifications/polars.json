@@ -1,9 +1,9 @@
 {
     "title": "PolarsTable parity",
-    "label": "PolarsTable",
+    "label": "PolarsTable parity",
     "kind": "reference",
-    "checked": "About 120 pipelines give the same columns, types, groups, and rows on phibble's Polars backend, PolarsTable, as on its in-memory DataFrame.",
-    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "checked": "Columns, types, groups, and rows from about 120 pipelines on PolarsTable, phibble's Polars backend. Compared with the same pipelines on DataFrame.",
+    "description": "tests/PolarsTest.php runs each pipeline on DataFrame and on PolarsTable and compares every value. Values compared is the number of assertions in a case; a case fails if any assertion fails.",
     "reference": "phplyr on phibble's DataFrame",
     "versions": {
         "PHP": "8.5.10",
@@ -66,7 +66,7 @@
         {
             "id": "values",
             "kind": "tolerance",
-            "applies_to": "floating-point values; in the same case, column names, row counts and order, strings, integers, booleans, and missing values must be identical",
+            "applies_to": "Floating-point values",
             "atol": 1.0e-9,
             "rtol": 1.0e-9,
             "rel_floor": 1
@@ -74,13 +74,13 @@
         {
             "id": "exact",
             "kind": "exact",
-            "applies_to": "column names, row counts and order, strings, integers, booleans, dates, and missing values"
+            "applies_to": "Column names, row counts and order, strings, integers, booleans, dates, and missing values"
         }
     ],
     "cases": [
         {
             "name": "filter expr",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 33,
@@ -89,7 +89,7 @@
         },
         {
             "name": "filter closure",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 61,
@@ -98,7 +98,7 @@
         },
         {
             "name": "filter grouped",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 47,
@@ -107,7 +107,7 @@
         },
         {
             "name": "filter_out",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 54,
@@ -116,7 +116,7 @@
         },
         {
             "name": "filter if_any",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 61,
@@ -125,7 +125,7 @@
         },
         {
             "name": "filter if_all",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 47,
@@ -134,7 +134,7 @@
         },
         {
             "name": "arrange",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 89,
@@ -143,7 +143,7 @@
         },
         {
             "name": "arrange by group",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 89,
@@ -152,14 +152,14 @@
         },
         {
             "name": "distinct",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 32
         },
         {
             "name": "distinct keep all",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 26,
@@ -168,7 +168,7 @@
         },
         {
             "name": "slice",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 26,
@@ -177,7 +177,7 @@
         },
         {
             "name": "slice_head grouped",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 47,
@@ -186,7 +186,7 @@
         },
         {
             "name": "slice_tail",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 26,
@@ -195,7 +195,7 @@
         },
         {
             "name": "slice_min ties",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 40,
@@ -204,7 +204,7 @@
         },
         {
             "name": "slice_max prop",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 26,
@@ -213,7 +213,7 @@
         },
         {
             "name": "top_n",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 47,
@@ -222,7 +222,7 @@
         },
         {
             "name": "head",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 26,
@@ -231,7 +231,7 @@
         },
         {
             "name": "drop_na",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 75,
@@ -240,14 +240,14 @@
         },
         {
             "name": "select helpers",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 53
         },
         {
             "name": "select where",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 65,
@@ -256,14 +256,14 @@
         },
         {
             "name": "select rename",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 41
         },
         {
             "name": "rename",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 89,
@@ -272,7 +272,7 @@
         },
         {
             "name": "rename_with",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 89,
@@ -281,7 +281,7 @@
         },
         {
             "name": "relocate",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 89,
@@ -290,7 +290,7 @@
         },
         {
             "name": "mutate expr",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 113,
@@ -299,7 +299,7 @@
         },
         {
             "name": "mutate closure",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -308,7 +308,7 @@
         },
         {
             "name": "mutate grouped",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 125,
@@ -317,14 +317,14 @@
         },
         {
             "name": "mutate keep used",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 41
         },
         {
             "name": "mutate before",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -333,7 +333,7 @@
         },
         {
             "name": "mutate by",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -342,7 +342,7 @@
         },
         {
             "name": "transmute",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 41,
@@ -351,7 +351,7 @@
         },
         {
             "name": "if_else and case_when",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 113,
@@ -360,7 +360,7 @@
         },
         {
             "name": "coalesce na_if between",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 125,
@@ -369,7 +369,7 @@
         },
         {
             "name": "recode_values",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -378,7 +378,7 @@
         },
         {
             "name": "windows",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 221,
@@ -387,7 +387,7 @@
         },
         {
             "name": "lag order_by",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -396,7 +396,7 @@
         },
         {
             "name": "consecutive_id",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -405,7 +405,7 @@
         },
         {
             "name": "across mutate",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 89,
@@ -414,7 +414,7 @@
         },
         {
             "name": "across helpers",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 137,
@@ -423,7 +423,7 @@
         },
         {
             "name": "str helpers",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 113,
@@ -432,7 +432,7 @@
         },
         {
             "name": "cur_group_id",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -441,7 +441,7 @@
         },
         {
             "name": "summarise",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 29,
@@ -450,35 +450,35 @@
         },
         {
             "name": "summarise first last nth",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 23
         },
         {
             "name": "summarise closure",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 14
         },
         {
             "name": "summarise groups keep",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 41
         },
         {
             "name": "summarise by",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 41
         },
         {
             "name": "summarise across",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 77,
@@ -487,42 +487,42 @@
         },
         {
             "name": "summarise pick",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 14
         },
         {
             "name": "reframe",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 32
         },
         {
             "name": "count",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 41
         },
         {
             "name": "count wt",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 14
         },
         {
             "name": "tally",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 14
         },
         {
             "name": "add_count",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -531,7 +531,7 @@
         },
         {
             "name": "add_tally",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -540,7 +540,7 @@
         },
         {
             "name": "rowwise",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -549,7 +549,7 @@
         },
         {
             "name": "ungroup",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -558,7 +558,7 @@
         },
         {
             "name": "group_modify",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 26,
@@ -567,14 +567,14 @@
         },
         {
             "name": "pull",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 1
         },
         {
             "name": "add_row",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 26,
@@ -585,7 +585,7 @@
         },
         {
             "name": "big pipeline",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 77,
@@ -594,28 +594,28 @@
         },
         {
             "name": "pivot_longer",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 35
         },
         {
             "name": "pivot_longer sep",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 35
         },
         {
             "name": "pivot_longer slowest",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 50
         },
         {
             "name": "pivot_wider",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 17,
@@ -624,7 +624,7 @@
         },
         {
             "name": "pivot_wider multi",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 23,
@@ -633,7 +633,7 @@
         },
         {
             "name": "pivot_wider values_fn",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 20,
@@ -642,21 +642,21 @@
         },
         {
             "name": "complete",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 45
         },
         {
             "name": "expand nesting",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 149
         },
         {
             "name": "fill",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 89,
@@ -665,7 +665,7 @@
         },
         {
             "name": "replace_na",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 89,
@@ -674,14 +674,14 @@
         },
         {
             "name": "uncount",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 23
         },
         {
             "name": "unite",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 77,
@@ -690,56 +690,56 @@
         },
         {
             "name": "separate",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 21
         },
         {
             "name": "separate_wider_delim",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 25
         },
         {
             "name": "separate_longer_delim",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 26
         },
         {
             "name": "separate_rows",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 26
         },
         {
             "name": "extract",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 21
         },
         {
             "name": "nest",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 41
         },
         {
             "name": "group_nest sizes",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 14
         },
         {
             "name": "unnest",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 89,
@@ -748,7 +748,7 @@
         },
         {
             "name": "cur_group",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -757,7 +757,7 @@
         },
         {
             "name": "c_across",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -766,7 +766,7 @@
         },
         {
             "name": "order_by",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -775,7 +775,7 @@
         },
         {
             "name": "with_groups",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -784,7 +784,7 @@
         },
         {
             "name": "recode",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 101,
@@ -793,14 +793,14 @@
         },
         {
             "name": "group_data",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 14
         },
         {
             "name": "top_frac",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 26,
@@ -809,14 +809,14 @@
         },
         {
             "name": "pivot names_transform",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 50
         },
         {
             "name": "pivot unused_fn",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 20,
@@ -825,7 +825,7 @@
         },
         {
             "name": "pivot id_expand",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 17,
@@ -834,7 +834,7 @@
         },
         {
             "name": "pivot specs",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 17,
@@ -843,14 +843,14 @@
         },
         {
             "name": "gather",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 35
         },
         {
             "name": "spread",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 17,
@@ -859,21 +859,21 @@
         },
         {
             "name": "chop unchop",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 53
         },
         {
             "name": "chop",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 14
         },
         {
             "name": "pack unpack",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 89,
@@ -882,147 +882,147 @@
         },
         {
             "name": "unnest_wider",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 77
         },
         {
             "name": "unnest_longer",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 115
         },
         {
             "name": "hoist",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 77
         },
         {
             "name": "Joins and binds: inner_join",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 41
         },
         {
             "name": "Joins and binds: left_join suffix",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 47
         },
         {
             "name": "Joins and binds: right_join",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 35
         },
         {
             "name": "Joins and binds: full_join",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 40
         },
         {
             "name": "Joins and binds: semi_join",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 21
         },
         {
             "name": "Joins and binds: anti_join",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 9
         },
         {
             "name": "Joins and binds: cross_join",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 33
         },
         {
             "name": "Joins and binds: join_by inequality",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 47
         },
         {
             "name": "Joins and binds: bind_rows",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 75
         },
         {
             "name": "Joins and binds: bind_cols",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 20
         },
         {
             "name": "Joins and binds: union",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 17
         },
         {
             "name": "Joins and binds: union_all",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 25
         },
         {
             "name": "Joins and binds: intersect",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 13
         },
         {
             "name": "Joins and binds: setdiff",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 7
         },
         {
             "name": "Joins and binds: symdiff",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 9
         },
         {
             "name": "Joins and binds: rows_update",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 25
         },
         {
             "name": "Joins and binds: rows_upsert",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 23
         },
         {
             "name": "Runs rolling and overlap joins the same on PolarsTable",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 66
@@ -1033,7 +1033,7 @@
     ],
     "environment": {
         "date": "2026-11-01",
-        "commit": "8056422",
+        "commit": "ce20607",
         "php": "8.5.10",
         "os": "Darwin 27.0.0 (arm64)"
     }

@@ -386,14 +386,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>phit 0.4 also has the older names, such as <code>fit_lm()</code>, as deprecated aliases. phplyr calls the current names.</p>
-<p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, its PHP port, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them, and <a href="https://phplyr.phpstats.org/benchmarks/models">Models: phit extension and phit-polyfill</a> times both through phplyr.</p>
+<p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, its PHP port, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them. The <a href="https://phplyr.phpstats.org/benchmarks/models">Models benchmark</a> times both through phplyr.</p>
 <ul>
 <li>Install the polyfill with <code>composer require phpstats/phit-polyfill</code>. When the extension is loaded, the polyfill defines nothing.</li>
 <li>The polyfill throws an exception while OPcache’s JIT is enabled. Set <code>opcache.jit=disable</code> where it runs.</li>
 <li><code>mean()</code>, <code>sd()</code>, <code>var_()</code>, <code>median()</code>, and <code>quantile()</code> call phit only when the extension is loaded. Otherwise, including with the polyfill, they run in PHP with the same results.</li>
 <li>With neither installed, the four functions throw a <code>RuntimeException</code> that names the missing phit function.</li>
 </ul>
-<p>CI runs phplyr’s tests with each implementation. Both runs compare <code>lm()</code> and <code>glm()</code> coefficients with R’s, and <code>lmer()</code> fixed effects with lme4’s. <a href="https://phplyr.phpstats.org/verification/models">Models: agreement with R</a> lists the comparisons.</p>
+<p>CI runs phplyr’s tests with each implementation. Both runs compare <code>lm()</code> and <code>glm()</code> coefficients with R’s, and <code>lmer()</code> fixed effects with lme4’s. The <a href="https://phplyr.phpstats.org/verification/models">Models verification</a> lists the comparisons.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">

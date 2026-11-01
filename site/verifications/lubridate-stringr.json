@@ -1,9 +1,9 @@
 {
-    "title": "lubridate and stringr helpers",
-    "label": "lubridate and stringr",
+    "title": "Dates and strings",
+    "label": "Dates and strings",
     "kind": "reference",
-    "checked": "Date parsing, date parts, rounding, periods, time zones, and string functions give the same values as lubridate and stringr.",
-    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "checked": "Date parsing, date parts, rounding, periods, time zones, and string functions. Values compared with lubridate's and stringr's.",
+    "description": "Reference results computed in R by tests/r/lubridate_stringr.R and stored in tests/Fixtures/. The same operations run in phplyr in tests/LubridateStringrTest.php, which compare every value. Values compared is the number of assertions in a case; a case fails if any assertion fails.",
     "reference": "R 4.6.1 with lubridate 1.9.5, stringr 1.6.0",
     "versions": {
         "R": "4.6.1",
@@ -14,469 +14,469 @@
     },
     "inputs": [
         {
-            "name": "Five dates, datetimes, and strings",
-            "detail": "Including a missing value, a leap day, and a daylight-saving gap. Built in tests/r/lubridate_stringr.R and tests/LubridateStringrTest.php."
+            "name": "Inline vectors",
+            "detail": "Five dates, datetimes, and strings, including a missing value, a leap day, and a daylight-saving gap."
         }
     ],
     "comparison": [
         {
             "id": "exact",
             "kind": "exact",
-            "applies_to": "every value: dates as YYYY-MM-DD, datetimes as YYYY-MM-DD HH:MM:SS +hhmm, numbers, strings, and missing values"
+            "applies_to": "All values; dates as YYYY-MM-DD, datetimes as YYYY-MM-DD HH:MM:SS +hhmm"
         }
     ],
     "cases": [
         {
             "name": "ymd",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "ymd_hms",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "dmy",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "mdy",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "parse_dt",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "year",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "month",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "day",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "wday",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "wday_mon",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "yday",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "quarter",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "hour",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "minute",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "second",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "year_t",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "floor_hour",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "floor_15min",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "floor_week",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "floor_month_d",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "floor_quarter_d",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "floor_year_d",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "ceiling_month_d",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "ceiling_hour",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "round_day",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "round_month_d",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "plus_days",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "plus_months",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "plus_years",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "minus_weeks",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "plus_hours",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "plus_minutes",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "diff_days",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "difftime_hours",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "difftime_weeks",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "with_tz",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "force_tz",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_detect",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_detect_fixed",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_detect_ic",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_detect_negate",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_starts",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_ends",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_count",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_count_fixed",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_count_class",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_extract",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_extract_all",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_split",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_split_i",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_split_i_neg",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_replace",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_replace_all",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_replace_all_fixed",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_replace_na",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_pad",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_pad_right",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_pad_both",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_trunc",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_trunc_left",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_trunc_center",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_to_title",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_to_upper",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_squish",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "str_length",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
@@ -489,7 +489,7 @@
     "data": "tests/Fixtures",
     "environment": {
         "date": "2026-11-01",
-        "commit": "8056422",
+        "commit": "ce20607",
         "php": "8.5.10",
         "os": "Darwin 27.0.0 (arm64)"
     }

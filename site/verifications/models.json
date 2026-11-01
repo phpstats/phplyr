@@ -1,16 +1,16 @@
 {
-    "title": "Models: agreement with R",
+    "title": "Models",
     "label": "Models",
     "kind": "reference",
-    "checked": "lm(), glm(), and lmer() through the phit extension give the same coefficients as R's lm() and glm() and the same fixed effects and residual SD as lme4's lmer().",
-    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "checked": "lm() and glm() coefficients, lmer() fixed effects, and the lmer() residual standard deviation, fitted through the phit extension. Compared with R's lm() and glm() and lme4's lmer().",
+    "description": "Reference results computed in R by tests/r/models.R and expr.R and stored in tests/Fixtures/. The same operations run in phplyr in tests/ModelsTest.php and tests/ExprTest.php, which compare every value. Values compared is the number of assertions in a case; a case fails if any assertion fails.",
     "reference": "R 4.6.1 with lme4 2.0.6",
     "versions": {
         "R": "4.6.1",
         "lme4": "2.0.6",
         "PHP": "8.5.10",
         "phibble": "v0.6.0 (6b9f06a)",
-        "phit": "0.4.4 (v0.4.3-20-g066e2e1)"
+        "phit": "0.4.4"
     },
     "inputs": [
         {
@@ -28,7 +28,7 @@
         {
             "id": "coefficients",
             "kind": "tolerance",
-            "applies_to": "coefficients and fixed effects",
+            "applies_to": "Coefficients and fixed effects",
             "atol": 1.0e-6,
             "rtol": 1.0e-6,
             "rel_floor": 1
@@ -36,7 +36,7 @@
         {
             "id": "sigma",
             "kind": "tolerance",
-            "applies_to": "the residual standard deviation of lmer()",
+            "applies_to": "Residual standard deviation; lmer()",
             "atol": 1.0e-5,
             "rel_floor": 1
         }
@@ -44,7 +44,7 @@
     "cases": [
         {
             "name": "Fits mixed models like lme4",
-            "quantity": "coefficients",
+            "quantity": "Coefficients",
             "status": "pass",
             "rule": "coefficients",
             "n_compared": 4,
@@ -53,7 +53,7 @@
         },
         {
             "name": "Estimates the residual SD of a mixed model like lme4",
-            "quantity": "sigma",
+            "quantity": "Residual standard deviation",
             "status": "pass",
             "rule": "sigma",
             "n_compared": 1,
@@ -64,7 +64,7 @@
         },
         {
             "name": "lm(score ~ study_hours + prior_score + school) on schools",
-            "quantity": "coefficients",
+            "quantity": "Coefficients",
             "status": "pass",
             "rule": "coefficients",
             "n_compared": 15,
@@ -73,7 +73,7 @@
         },
         {
             "name": "lm(score ~ study_hours) on schools with prior_score > 60",
-            "quantity": "coefficients",
+            "quantity": "Coefficients",
             "status": "pass",
             "rule": "coefficients",
             "n_compared": 3,
@@ -82,7 +82,7 @@
         },
         {
             "name": "glm(passed ~ study_hours + practice_score, binomial) on learning",
-            "quantity": "coefficients",
+            "quantity": "Coefficients",
             "status": "pass",
             "rule": "coefficients",
             "n_compared": 4,
@@ -92,7 +92,7 @@
     ],
     "exclusions": [
         "glmer() is not compared with lme4.",
-        "phit-polyfill is not compared with R here. The models benchmark checks its coefficients against the extension's."
+        "phit-polyfill is not compared with R; the Models benchmark compares its coefficients with the extension's."
     ],
     "reproduce": [
         "Rscript tests/r/models.R",
@@ -102,7 +102,7 @@
     "data": "tests/Fixtures",
     "environment": {
         "date": "2026-11-01",
-        "commit": "8056422",
+        "commit": "ce20607",
         "php": "8.5.10",
         "os": "Darwin 27.0.0 (arm64)"
     }

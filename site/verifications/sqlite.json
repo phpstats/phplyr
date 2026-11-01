@@ -1,10 +1,10 @@
 {
-    "title": "SQLite backend",
+    "title": "SQLite",
     "label": "SQLite",
     "kind": "integration",
-    "checked": "Expression pipelines on a SQLite table through Phibble\\tbl() stay in SQL and give the same rows as on DataFrame. Grouped windows, counts, and joins run in SQL, and closures fall back to memory.",
-    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
-    "reference": "phplyr on phibble's DataFrame, and expected values written in the tests",
+    "checked": "Expression pipelines, grouped windows, counts, and joins on a SQLite table through Phibble\\tbl(). Results compared with DataFrame or with expected values; lazy evaluation in SQL and the in-memory fallback for closures.",
+    "description": "tests/SqlTest.php loads panel.csv into an in-memory SQLite database, runs each pipeline on the SQLite table and on DataFrame, and checks the class of each result. Values compared is the number of assertions in a case; a case fails if any assertion fails.",
+    "reference": "phplyr on phibble's DataFrame, and expected values in the tests",
     "versions": {
         "PHP": "8.5.10",
         "phibble": "v0.6.0 (6b9f06a)"
@@ -20,7 +20,7 @@
         {
             "id": "values",
             "kind": "tolerance",
-            "applies_to": "floating-point values; in the same case, column names, row counts and order, strings, integers, booleans, and missing values must be identical",
+            "applies_to": "Floating-point values",
             "atol": 1.0e-9,
             "rtol": 1.0e-9,
             "rel_floor": 1
@@ -28,13 +28,13 @@
         {
             "id": "exact",
             "kind": "exact",
-            "applies_to": "column names, row counts and order, strings, integers, booleans, dates, and missing values"
+            "applies_to": "Column names, row counts and order, strings, integers, booleans, dates, and missing values"
         }
     ],
     "cases": [
         {
             "name": "Keeps expression pipelines lazy and matches the in-memory result",
-            "quantity": "table values",
+            "quantity": "Table values",
             "status": "pass",
             "rule": "values",
             "n_compared": 18,
@@ -43,21 +43,21 @@
         },
         {
             "name": "Runs grouped windows, counts and joins in SQL",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 66
         },
         {
             "name": "Falls back to memory for closures",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 2
         },
         {
             "name": "Accepts Phibble\\Expr nodes directly and stays lazy",
-            "quantity": "values",
+            "quantity": "Values",
             "status": "pass",
             "rule": "exact",
             "n_compared": 3
@@ -68,7 +68,7 @@
     ],
     "environment": {
         "date": "2026-11-01",
-        "commit": "8056422",
+        "commit": "ce20607",
         "php": "8.5.10",
         "os": "Darwin 27.0.0 (arm64)"
     }
