@@ -9,7 +9,7 @@
  * pipelines and result check.
  *
  *   php -d memory_limit=-1 [-d extension=.../libphp_polars.dylib] bench/backends.php \
- *       [--rows=100000,1000000] [--repeats=3] [--out=docs/benchmarks/backends-results.json] [--csv-dir=bench/data]
+ *       [--rows=100000,1000000] [--repeats=7] [--out=docs/benchmarks/backends-results.json] [--csv-dir=bench/data]
  *
  * With --csv-dir, the generated tables are also written there as
  * sales-<rows>.csv and stores.csv, for bench/backends.R to time with dplyr.
@@ -37,12 +37,20 @@ ini_set('memory_limit', '-1');
 $options = getopt('', ['rows:', 'repeats:', 'out:', 'csv-dir:']);
 $csvDir = $options['csv-dir'] ?? null;
 $sizes = array_map('intval', explode(',', $options['rows'] ?? '100000,1000000'));
-$repeats = (int) ($options['repeats'] ?? 3);
+$repeats = (int) ($options['repeats'] ?? 7);
 $root = dirname(__DIR__);
 $out = $options['out'] ?? $root.'/docs/benchmarks/backends-results.json';
 
 $polarsDir = getenv('PHPOLARS_DIR') ?: null;
 $polars = \extension_loaded('php_polars') && class_exists(PolarsTable::class);
+
+function median(array $xs): float
+{
+    sort($xs);
+    $m = intdiv(\count($xs), 2);
+
+    return \count($xs) % 2 ? $xs[$m] : ($xs[$m - 1] + $xs[$m]) / 2;
+}
 
 $pipelines = [
     'A' => ['filter, join, grouped summary, ranked window', fn (Table $s, Table $st) => $s
@@ -114,7 +122,6 @@ function pipelineSource(string $id): string
 }
 
 $git = fn (string $dir) => trim((string) shell_exec('git -C '.escapeshellarg($dir).' rev-parse --short HEAD 2>/dev/null')) ?: null;
-$sysctl = fn (string $key) => trim((string) shell_exec('sysctl -n '.escapeshellarg($key).' 2>/dev/null')) ?: null;
 
 $results = [];
 foreach ($sizes as $rows) {
@@ -185,7 +192,7 @@ foreach ($sizes as $rows) {
                 'backend' => $backend,
                 'rows_in' => $rows,
                 'rows_out' => $error === null ? $result->nrow() : null,
-                'seconds' => $error === null ? \min($times) : null,
+                'seconds' => $error === null ? median($times) : null,
                 'seconds_all' => $times,
                 'fallbacks' => $backend === 'PolarsTable' ? intdiv(PolarsTable::$fallbacks - $before, $repeats) : null,
                 'matches_frame' => $error === null ? $hash === $reference : null,
@@ -202,19 +209,14 @@ $report = [
     'schema' => 'phplyr-backends/1',
     'generated_at' => gmdate('Y-m-d\TH:i:s\Z'),
     'method' => [
-        'statistic' => 'best',
+        'statistic' => 'median',
         'repeats' => $repeats,
         'timing' => 'pipeline through collect(); data preloaded and not timed',
         'verification' => 'rows canonicalised (floats to 9 significant digits, sorted) and hashed, then compared with the reference backend',
         'reference' => 'DataFrame',
         'polars_threads' => $polars ? Phpolars\thread_pool_size() : null,
         'threads_note' => 'polars_threads applies to PolarsTable only; DataFrame and SqlTable(SQLite) run single-threaded',
-        'machine' => [
-            'os' => php_uname('s').' '.php_uname('r').' '.php_uname('m'),
-            'cpu' => $sysctl('machdep.cpu.brand_string'),
-            'cores' => ($c = $sysctl('hw.ncpu')) === null ? null : (int) $c,
-            'memory_gb' => ($m = $sysctl('hw.memsize')) === null ? null : (int) \round($m / 1024 ** 3),
-        ],
+        'machine' => (require __DIR__.'/machine.php')(),
         'php' => PHP_VERSION,
         'versions' => [
             'phplyr' => $git($root),

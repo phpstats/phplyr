@@ -428,7 +428,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p><code>bin/site-verifications</code> runs the test suite with <code>PHPLYR_VERIFY_LOG</code> set. Each test that reads an R fixture through <code>rReference()</code> then logs its assertions and the differences recorded by <code>expectClose()</code>. The script writes nothing unless every test passes. Set <code>POLARS_PHP</code> to a PHP command that loads php_polars to add the PolarsTable parity file.</p>
-<p>To refresh the benchmarks, run <code>bench/backends.php --csv-dir=bench/data</code>, then <code>Rscript bench/backends.R</code>, then <code>bin/site-benchmarks</code>. <code>tests/SiteTest.php</code> checks that the files and pages site.json names exist.</p>
+<p>Published benchmark records come from the Linux benchmark machine. The scripts in <code>bench/</code> write them to <code>docs/benchmarks/</code>: <code>harness-&lt;backend&gt;.json</code>, <code>backends-results.json</code>, <code>dplyr-results.json</code> (run <code>bench/backends.php --csv-dir=bench/data</code> first), and <code>models-results.json</code>. Then <code>bin/site-benchmarks</code> writes <code>site/benchmarks/backends.json</code>. <code>tests/SiteTest.php</code> checks that the files and pages site.json names exist.</p>
 </section>
 <section id="layout" class="level2">
 <h2 class="anchored" data-anchor-id="layout">Layout</h2>

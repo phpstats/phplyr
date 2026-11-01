@@ -61,9 +61,9 @@ for (rows in unique(vapply(php_results$results, function(r) r$rows_in, numeric(1
     ok <- matches(result, ref$checksums)
     results[[length(results) + 1]] <- list(
       pipeline = id, backend = "dplyr", rows_in = rows, rows_out = nrow(result),
-      seconds = min(times), seconds_all = times, matches_frame = ok
+      seconds = median(times), seconds_all = times, matches_frame = ok
     )
-    message(sprintf("%9s %s dplyr %8.4f s %s", format(as.integer(rows), big.mark = ","), id, min(times), if (ok) "" else "RESULT DIFFERS"))
+    message(sprintf("%9s %s dplyr %8.4f s %s", format(as.integer(rows), big.mark = ","), id, median(times), if (ok) "" else "RESULT DIFFERS"))
   }
 }
 
@@ -71,7 +71,7 @@ write_json(list(
   schema = "phplyr-dplyr-backends/1",
   generated_at = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
   method = list(
-    statistic = "best", repeats = repeats,
+    statistic = "median", repeats = repeats,
     timing = "pipeline on a preloaded tibble; reading the CSV is not timed",
     verification = "row count and numeric column sums compared with phplyr's DataFrame result (relative 1e-9)",
     r = R.version.string, dplyr = as.character(packageVersion("dplyr"))

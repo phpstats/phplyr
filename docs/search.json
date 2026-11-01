@@ -114,18 +114,7 @@
     "href": "reference/models.html",
     "title": "Models",
     "section": "",
-    "text": "lm(), glm(), lmer(), and glmer() fit models with phit. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model. phplyr adds no model code of its own.\nThe functions come from the phit extension or from phit-polyfill, its PHP port, and phplyr calls both the same way. phit’s Extension or polyfill page compares them. The extension is faster in phit-polyfill’s recorded benchmarks, which time phit’s matrix fitting functions:\nApple M5 Ultra, PHP 8.5.10 with OPcache on and the JIT off, both in one process. The polyfill’s linear mixed fits take time roughly proportional to the cube of the number of random coefficients.\nCI runs phplyr’s tests with each implementation. Both runs compare lm() and glm() coefficients with R’s, and lmer() fixed effects with lme4’s.\nOther named arguments go to phit’s function unchanged. phit’s documentation lists them and the formula syntax it accepts.",
-    "crumbs": [
-      "Reference",
-      "Models"
-    ]
-  },
-  {
-    "objectID": "reference/models.html#phit-0.3-and-earlier",
-    "href": "reference/models.html#phit-0.3-and-earlier",
-    "title": "Models",
-    "section": "phit 0.3 and earlier",
-    "text": "phit 0.3 and earlier\nphit 0.3 and earlier name the functions fit_lm(), fit_glm(), fit_lmer(), and fit_glmer(). phplyr calls those names when the current ones are missing, so it works with phit 0.1 and later. phit 0.4 keeps the old names as deprecated aliases, which phplyr doesn’t call.",
+    "text": "lm(), glm(), lmer(), and glmer() fit models with phit. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model. phplyr adds no model code of its own.\nphit 0.4 also has the older names, such as fit_lm(), as deprecated aliases. phplyr calls the current names.\nThe functions come from the phit extension or from phit-polyfill, its PHP port, and phplyr calls both the same way. phit’s Extension or polyfill page compares them.\nCI runs phplyr’s tests with each implementation. Both runs compare lm() and glm() coefficients with R’s, and lmer() fixed effects with lme4’s.\nOther named arguments go to phit’s function unchanged. phit’s documentation lists them and the formula syntax it accepts.",
     "crumbs": [
       "Reference",
       "Models"
@@ -479,7 +468,7 @@
     "href": "development.html#site-content",
     "title": "Development",
     "section": "Site content",
-    "text": "Site content\nsite/ holds phplyr’s content for phplyr.phpstats.org. The phpstats site reads it at a pinned commit.\n\n\n\n\n\n\n\n\nPath\nContents\nMade by\n\n\n\n\nsite/site.json\nManifest: summary, install, example, docs pages, examples, and file lists\nbin/site-manifest\n\n\nsite/benchmarks/backends.json\nBackend and dplyr timings\nbin/site-benchmarks, from docs/benchmarks/\n\n\nsite/verifications/*.json\nEvery test that checks phplyr against R, with its assertion count and largest floating-point error\nbin/site-verifications\n\n\n\nbin/site-verifications runs the test suite with PHPLYR_VERIFY_LOG set. Each test that reads an R fixture through rReference() then logs its assertions and the differences recorded by expectClose(). The script writes nothing unless every test passes. Set POLARS_PHP to a PHP command that loads php_polars to add the PolarsTable parity file.\nTo refresh the benchmarks, run bench/backends.php --csv-dir=bench/data, then Rscript bench/backends.R, then bin/site-benchmarks. tests/SiteTest.php checks that the files and pages site.json names exist.",
+    "text": "Site content\nsite/ holds phplyr’s content for phplyr.phpstats.org. The phpstats site reads it at a pinned commit.\n\n\n\n\n\n\n\n\nPath\nContents\nMade by\n\n\n\n\nsite/site.json\nManifest: summary, install, example, docs pages, examples, and file lists\nbin/site-manifest\n\n\nsite/benchmarks/backends.json\nBackend and dplyr timings\nbin/site-benchmarks, from docs/benchmarks/\n\n\nsite/verifications/*.json\nEvery test that checks phplyr against R, with its assertion count and largest floating-point error\nbin/site-verifications\n\n\n\nbin/site-verifications runs the test suite with PHPLYR_VERIFY_LOG set. Each test that reads an R fixture through rReference() then logs its assertions and the differences recorded by expectClose(). The script writes nothing unless every test passes. Set POLARS_PHP to a PHP command that loads php_polars to add the PolarsTable parity file.\nPublished benchmark records come from the Linux benchmark machine. The scripts in bench/ write them to docs/benchmarks/: harness-&lt;backend&gt;.json, backends-results.json, dplyr-results.json (run bench/backends.php --csv-dir=bench/data first), and models-results.json. Then bin/site-benchmarks writes site/benchmarks/backends.json. tests/SiteTest.php checks that the files and pages site.json names exist.",
     "crumbs": [
       "Contributing",
       "Development"
@@ -613,37 +602,7 @@
     "href": "performance.html",
     "title": "Performance",
     "section": "",
-    "text": "phplyr’s functions call one or two methods of the table they are given, so the backend determines how fast a pipeline runs. These timings cover the workloads and machines below.",
-    "crumbs": [
-      "Performance"
-    ]
-  },
-  {
-    "objectID": "performance.html#methods",
-    "href": "performance.html#methods",
-    "title": "Performance",
-    "section": "Methods",
-    "text": "Methods\nBoth benchmark sets ran on 2026-11-01 on an Apple M5 Ultra with PHP 8.5.10, phibble 0.6.0, and phpolars 0.2.1 (Polars 0.55.2, two threads). DataFrame and SQLite run single-threaded.\n\n\n\n\n\n\n\n\n\nphibble workloads\nBackend pipelines\n\n\n\n\nScript\nbench/harness.php\nbench/backends.php, and bench/backends.R for dplyr 1.2.1\n\n\nData\nbench/generate.php, with phibble’s generator and seed. events.csv: 1,000,000 rows of id, key (10,000 values), g (8 labels), x (float, about 2% NA), and t (datetime). dims.csv: 100,000 rows of key, label, and w.\nsales: 1,000,000 rows, with no date or datetime columns. stores: 100 rows.\n\n\nBackends\nDataFrame, SQLite, and PolarsTable, each as a phplyr pipeline and as direct table calls\nDataFrame, PolarsTable, SQLite, and dplyr\n\n\nStatistic\nMedian of three runs\nBest of three runs\n\n\nTimer\nThrough collect(); loading the data is not timed\nThrough collect(); loading the data is not timed\n\n\n\nphp bench/generate.php 1000000\nphp bench/harness.php --backend=dataframe --runs=3\nphp bench/harness.php --backend=sqlite --runs=3\nphp -d extension=php_polars bench/harness.php --backend=polars --runs=3\nphp -d extension=php_polars bench/backends.php --csv-dir=bench/data\nRscript bench/backends.R",
-    "crumbs": [
-      "Performance"
-    ]
-  },
-  {
-    "objectID": "performance.html#phplyrs-overhead",
-    "href": "performance.html#phplyrs-overhead",
-    "title": "Performance",
-    "section": "phplyr’s overhead",
-    "text": "phplyr’s overhead\nThe phplyr pipeline and the same calls made directly on the table differed in both directions, by at most 13% at 1,000,000 rows. At 100,000 rows, the largest difference was 16 ms. Grouped slices, pivot_*(), and complete() build on the same table methods.",
-    "crumbs": [
-      "Performance"
-    ]
-  },
-  {
-    "objectID": "performance.html#phibble-workloads-at-1000000-rows",
-    "href": "performance.html#phibble-workloads-at-1000000-rows",
-    "title": "Performance",
-    "section": "phibble workloads at 1,000,000 rows",
-    "text": "phibble workloads at 1,000,000 rows\n\n\n\n\n\n\n\n\n\nWorkload\nDataFrame (s)\nSQLite (s)\nPolarsTable (s)\n\n\n\n\nGrouped summarise() of n(), mean(), and sum() by key\n0.17\n0.61\n0.02\n\n\nThe same with closures\n0.40\n2.02\n0.62\n\n\nGrouped arrange(t), then mutate() with lag(), cumsum(), and row_number()\n0.94\n5.44\n0.38\n\n\nfilter(col('x')-&gt;gt(0)-&gt;and(...))\n0.13\n0.38\n0.04\n\n\nThe same filter as a closure\n0.85\n2.58\n1.09\n\n\nmutate() with two expressions\n0.24\n1.90\n0.29\n\n\nleft_join() of 1M × 100k rows on key\n0.25\n2.83\n0.39\n\n\narrange(desc('x'), 'id')\n0.74\n2.10\n0.37\n\n\n\nDataFrame peaked at about 1.3 GB of memory for the 1M-row table and its results.",
+    "text": "phplyr’s functions call one or two methods of the table they are given, so the backend determines how fast a pipeline runs.",
     "crumbs": [
       "Performance"
     ]
@@ -653,17 +612,17 @@
     "href": "performance.html#choosing-a-backend",
     "title": "Performance",
     "section": "Choosing a backend",
-    "text": "Choosing a backend\n\nIn-memory DataFrame suits data that fits in memory. In the grouped summary above, expression arguments took 0.17 s and closures 0.40 s, because phibble computes expressions in one pass without building a table per group.\nA database table (Phibble\\tbl()) avoids loading the data into PHP. With expressions, filter() and summarise() run in the database, and only the result reaches PHP. These timings exclude loading the data.\nPipelines that return every row (mutate(), arrange(), unfiltered joins) spend most of their database time transferring rows to PHP.\nClosures on a database table load all rows first and then run in memory. Use col() expressions and phplyr’s helpers to keep the work in SQL.\nSQLite columns need declared types. PDO binds values as strings. In an untyped column, SQLite stores them as text and compares numbers as text.\nPolarsTable (phibble’s Polars backend, on the phpolars extension) runs expressions in Polars. A closure step converts the data to a DataFrame and back, so the closure workloads above were slower on PolarsTable than on DataFrame.",
+    "text": "Choosing a backend\n\nIn-memory DataFrame suits data that fits in memory. Expression arguments such as mean('x') let phibble compute a grouped summary in one pass, without building a table per group as a closure does.\nA database table (Phibble\\tbl()) avoids loading the data into PHP. With expressions, filter() and summarise() run in the database, and only the result reaches PHP.\nPipelines that return every row (mutate(), arrange(), unfiltered joins) spend most of their database time transferring rows to PHP.\nClosures on a database table load all rows first and then run in memory. Use col() expressions and phplyr’s helpers to keep the work in SQL.\nSQLite columns need declared types. PDO binds values as strings. In an untyped column, SQLite stores them as text and compares numbers as text.\nPolarsTable (phibble’s Polars backend, on the phpolars extension) runs expressions in Polars. A closure step converts the data to a DataFrame and back. PolarsTable::fromPolars(Phpolars\\read_csv($path)) skips phibble’s CSV parse.",
     "crumbs": [
       "Performance"
     ]
   },
   {
-    "objectID": "performance.html#backend-pipelines",
-    "href": "performance.html#backend-pipelines",
+    "objectID": "performance.html#benchmarks",
+    "href": "performance.html#benchmarks",
     "title": "Performance",
-    "section": "Backend pipelines",
-    "text": "Backend pipelines\nbench/backends.php times three phplyr pipelines and checks that DataFrame, PolarsTable, and SQLite return the same rows. It is adapted from phpolars’ benchmark script. bench/backends.R runs pipelines A and B with dplyr and checks that its row counts and column sums match phplyr’s.\n\nA: filter, join a store lookup, two-key summarise, then a ranking window.\nB: grouped lag(orderBy:), cumsum(), and a share of the group total over all rows.\nC: pipeline A with a closure in filter(). It has no dplyr version, because its closure is PHP code.\n\n\n\n\n\n\n\n\n\n\n\nPipeline, 1M rows\nDataFrame (s)\nPolarsTable (s)\nSQLite (s)\ndplyr (s)\n\n\n\n\nA: reduce to a ranked summary\n0.62\n0.08\n0.54\n0.08\n\n\nB: windows over every row\n1.58\n0.39\n3.85\n0.02\n\n\nC: A with a closure\n1.17\n0.91\n2.08\n\n\n\n\nThe full results, with every repeat and version, are in benchmarks/backends-results.json and benchmarks/dplyr-results.json.\nPolarsTable’s cost outside Polars is converting results to PHP values and running closure steps. Measured separately on the 1M-row events.csv, best of three:\n\nCollecting four plain columns took 0.15 s, and the datetime column t added about 0.01 s.\nA closure in filter() took 0.88 s, most of it converting the data to a DataFrame and back.\n\nPolarsTable suits pipelines written in expressions, especially ones that reduce the data before collecting, and data that starts in Polars: PolarsTable::fromPolars(Phpolars\\read_csv($path)) skips phibble’s CSV parse.",
+    "section": "Benchmarks",
+    "text": "Benchmarks\n\n\n\n\n\n\n\nScript\nMeasures\n\n\n\n\nbench/harness.php\nphibble’s shared workloads on DataFrame, SQLite, and PolarsTable, each as a phplyr pipeline and as direct table calls\n\n\nbench/backends.php\nThree pipelines on DataFrame, PolarsTable, and SQLite, checking that all return the same rows\n\n\nbench/backends.R\nTwo of those pipelines with dplyr, checking row counts and column sums against phplyr’s\n\n\nbench/models.php\nlm(), glm(), lmer(), and glmer() on the phit extension and phit-polyfill, one fresh process per run\n\n\n\nEach reports the median of seven runs and lists every run. bench/generate.php writes the harness data with phibble’s generator and seed.",
     "crumbs": [
       "Performance"
     ]

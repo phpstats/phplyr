@@ -26,41 +26,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -332,11 +297,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#methods" id="toc-methods" class="nav-link active" data-scroll-target="#methods">Methods</a></li>
-  <li><a href="#phplyrs-overhead" id="toc-phplyrs-overhead" class="nav-link" data-scroll-target="#phplyrs-overhead">phplyr’s overhead</a></li>
-  <li><a href="#phibble-workloads-at-1000000-rows" id="toc-phibble-workloads-at-1000000-rows" class="nav-link" data-scroll-target="#phibble-workloads-at-1000000-rows">phibble workloads at 1,000,000 rows</a></li>
-  <li><a href="#choosing-a-backend" id="toc-choosing-a-backend" class="nav-link" data-scroll-target="#choosing-a-backend">Choosing a backend</a></li>
-  <li><a href="#backend-pipelines" id="toc-backend-pipelines" class="nav-link" data-scroll-target="#backend-pipelines">Backend pipelines</a></li>
+  <li><a href="#choosing-a-backend" id="toc-choosing-a-backend" class="nav-link active" data-scroll-target="#choosing-a-backend">Choosing a backend</a></li>
+  <li><a href="#benchmarks" id="toc-benchmarks" class="nav-link" data-scroll-target="#benchmarks">Benchmarks</a></li>
   </ul>
 </nav>
     </div>
@@ -362,199 +324,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>phplyr’s functions call one or two methods of the table they are given, so the backend determines how fast a pipeline runs. These timings cover the workloads and machines below.</p>
-<section id="methods" class="level2">
-<h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<p>Both benchmark sets ran on 2026-11-01 on an Apple M5 Ultra with PHP 8.5.10, phibble 0.6.0, and phpolars 0.2.1 (Polars 0.55.2, two threads). DataFrame and SQLite run single-threaded.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th></th>
-<th>phibble workloads</th>
-<th>Backend pipelines</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Script</td>
-<td><code>bench/harness.php</code></td>
-<td><code>bench/backends.php</code>, and <code>bench/backends.R</code> for dplyr 1.2.1</td>
-</tr>
-<tr class="even">
-<td>Data</td>
-<td><code>bench/generate.php</code>, with phibble’s generator and seed. <code>events.csv</code>: 1,000,000 rows of <code>id</code>, <code>key</code> (10,000 values), <code>g</code> (8 labels), <code>x</code> (float, about 2% NA), and <code>t</code> (datetime). <code>dims.csv</code>: 100,000 rows of <code>key</code>, <code>label</code>, and <code>w</code>.</td>
-<td><code>sales</code>: 1,000,000 rows, with no date or datetime columns. <code>stores</code>: 100 rows.</td>
-</tr>
-<tr class="odd">
-<td>Backends</td>
-<td>DataFrame, SQLite, and PolarsTable, each as a phplyr pipeline and as direct table calls</td>
-<td>DataFrame, PolarsTable, SQLite, and dplyr</td>
-</tr>
-<tr class="even">
-<td>Statistic</td>
-<td>Median of three runs</td>
-<td>Best of three runs</td>
-</tr>
-<tr class="odd">
-<td>Timer</td>
-<td>Through <code>collect()</code>; loading the data is not timed</td>
-<td>Through <code>collect()</code>; loading the data is not timed</td>
-</tr>
-</tbody>
-</table>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> bench/generate.php 1000000</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> bench/harness.php <span class="at">--backend</span><span class="op">=</span>dataframe <span class="at">--runs</span><span class="op">=</span>3</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> bench/harness.php <span class="at">--backend</span><span class="op">=</span>sqlite <span class="at">--runs</span><span class="op">=</span>3</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> <span class="at">-d</span> extension=php_polars bench/harness.php <span class="at">--backend</span><span class="op">=</span>polars <span class="at">--runs</span><span class="op">=</span>3</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> <span class="at">-d</span> extension=php_polars bench/backends.php <span class="at">--csv-dir</span><span class="op">=</span>bench/data</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> bench/backends.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="phplyrs-overhead" class="level2">
-<h2 class="anchored" data-anchor-id="phplyrs-overhead">phplyr’s overhead</h2>
-<p>The phplyr pipeline and the same calls made directly on the table differed in both directions, by at most 13% at 1,000,000 rows. At 100,000 rows, the largest difference was 16 ms. Grouped slices, <code>pivot_*()</code>, and <code>complete()</code> build on the same table methods.</p>
-</section>
-<section id="phibble-workloads-at-1000000-rows" class="level2">
-<h2 class="anchored" data-anchor-id="phibble-workloads-at-1000000-rows">phibble workloads at 1,000,000 rows</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Workload</th>
-<th style="text-align: right;">DataFrame (s)</th>
-<th style="text-align: right;">SQLite (s)</th>
-<th style="text-align: right;">PolarsTable (s)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Grouped <code>summarise()</code> of <code>n()</code>, <code>mean()</code>, and <code>sum()</code> by <code>key</code></td>
-<td style="text-align: right;">0.17</td>
-<td style="text-align: right;">0.61</td>
-<td style="text-align: right;">0.02</td>
-</tr>
-<tr class="even">
-<td>The same with closures</td>
-<td style="text-align: right;">0.40</td>
-<td style="text-align: right;">2.02</td>
-<td style="text-align: right;">0.62</td>
-</tr>
-<tr class="odd">
-<td>Grouped <code>arrange(t)</code>, then <code>mutate()</code> with <code>lag()</code>, <code>cumsum()</code>, and <code>row_number()</code></td>
-<td style="text-align: right;">0.94</td>
-<td style="text-align: right;">5.44</td>
-<td style="text-align: right;">0.38</td>
-</tr>
-<tr class="even">
-<td><code>filter(col('x')-&gt;gt(0)-&gt;and(...))</code></td>
-<td style="text-align: right;">0.13</td>
-<td style="text-align: right;">0.38</td>
-<td style="text-align: right;">0.04</td>
-</tr>
-<tr class="odd">
-<td>The same filter as a closure</td>
-<td style="text-align: right;">0.85</td>
-<td style="text-align: right;">2.58</td>
-<td style="text-align: right;">1.09</td>
-</tr>
-<tr class="even">
-<td><code>mutate()</code> with two expressions</td>
-<td style="text-align: right;">0.24</td>
-<td style="text-align: right;">1.90</td>
-<td style="text-align: right;">0.29</td>
-</tr>
-<tr class="odd">
-<td><code>left_join()</code> of 1M × 100k rows on <code>key</code></td>
-<td style="text-align: right;">0.25</td>
-<td style="text-align: right;">2.83</td>
-<td style="text-align: right;">0.39</td>
-</tr>
-<tr class="even">
-<td><code>arrange(desc('x'), 'id')</code></td>
-<td style="text-align: right;">0.74</td>
-<td style="text-align: right;">2.10</td>
-<td style="text-align: right;">0.37</td>
-</tr>
-</tbody>
-</table>
-<p>DataFrame peaked at about 1.3 GB of memory for the 1M-row table and its results.</p>
-</section>
+<p>phplyr’s functions call one or two methods of the table they are given, so the backend determines how fast a pipeline runs.</p>
 <section id="choosing-a-backend" class="level2">
 <h2 class="anchored" data-anchor-id="choosing-a-backend">Choosing a backend</h2>
 <ul>
-<li><strong>In-memory <code>DataFrame</code></strong> suits data that fits in memory. In the grouped summary above, expression arguments took 0.17 s and closures 0.40 s, because phibble computes expressions in one pass without building a table per group.</li>
-<li><strong>A database table (<code>Phibble\tbl()</code>)</strong> avoids loading the data into PHP. With expressions, <code>filter()</code> and <code>summarise()</code> run in the database, and only the result reaches PHP. These timings exclude loading the data.</li>
+<li><strong>In-memory <code>DataFrame</code></strong> suits data that fits in memory. Expression arguments such as <code>mean('x')</code> let phibble compute a grouped summary in one pass, without building a table per group as a closure does.</li>
+<li><strong>A database table (<code>Phibble\tbl()</code>)</strong> avoids loading the data into PHP. With expressions, <code>filter()</code> and <code>summarise()</code> run in the database, and only the result reaches PHP.</li>
 <li><strong>Pipelines that return every row</strong> (<code>mutate()</code>, <code>arrange()</code>, unfiltered joins) spend most of their database time transferring rows to PHP.</li>
 <li><strong>Closures on a database table</strong> load all rows first and then run in memory. Use <code>col()</code> expressions and phplyr’s helpers to keep the work in SQL.</li>
 <li><strong>SQLite columns need declared types.</strong> PDO binds values as strings. In an untyped column, SQLite stores them as text and compares numbers as text.</li>
-<li><strong>PolarsTable</strong> (phibble’s Polars backend, on the phpolars extension) runs expressions in Polars. A closure step converts the data to a DataFrame and back, so the closure workloads above were slower on PolarsTable than on DataFrame.</li>
+<li><strong>PolarsTable</strong> (phibble’s Polars backend, on the phpolars extension) runs expressions in Polars. A closure step converts the data to a DataFrame and back. <code>PolarsTable::fromPolars(Phpolars\read_csv($path))</code> skips phibble’s CSV parse.</li>
 </ul>
 </section>
-<section id="backend-pipelines" class="level2">
-<h2 class="anchored" data-anchor-id="backend-pipelines">Backend pipelines</h2>
-<p><code>bench/backends.php</code> times three phplyr pipelines and checks that DataFrame, PolarsTable, and SQLite return the same rows. It is adapted from phpolars’ benchmark script. <code>bench/backends.R</code> runs pipelines A and B with dplyr and checks that its row counts and column sums match phplyr’s.</p>
-<ul>
-<li><strong>A:</strong> filter, join a store lookup, two-key summarise, then a ranking window.</li>
-<li><strong>B:</strong> grouped <code>lag(orderBy:)</code>, <code>cumsum()</code>, and a share of the group total over all rows.</li>
-<li><strong>C:</strong> pipeline A with a closure in <code>filter()</code>. It has no dplyr version, because its closure is PHP code.</li>
-</ul>
+<section id="benchmarks" class="level2">
+<h2 class="anchored" data-anchor-id="benchmarks">Benchmarks</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
+<col style="width: 50%">
+<col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Pipeline, 1M rows</th>
-<th style="text-align: right;">DataFrame (s)</th>
-<th style="text-align: right;">PolarsTable (s)</th>
-<th style="text-align: right;">SQLite (s)</th>
-<th style="text-align: right;">dplyr (s)</th>
+<th>Script</th>
+<th>Measures</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>A: reduce to a ranked summary</td>
-<td style="text-align: right;">0.62</td>
-<td style="text-align: right;">0.08</td>
-<td style="text-align: right;">0.54</td>
-<td style="text-align: right;">0.08</td>
+<td><code>bench/harness.php</code></td>
+<td>phibble’s shared workloads on DataFrame, SQLite, and PolarsTable, each as a phplyr pipeline and as direct table calls</td>
 </tr>
 <tr class="even">
-<td>B: windows over every row</td>
-<td style="text-align: right;">1.58</td>
-<td style="text-align: right;">0.39</td>
-<td style="text-align: right;">3.85</td>
-<td style="text-align: right;">0.02</td>
+<td><code>bench/backends.php</code></td>
+<td>Three pipelines on DataFrame, PolarsTable, and SQLite, checking that all return the same rows</td>
 </tr>
 <tr class="odd">
-<td>C: A with a closure</td>
-<td style="text-align: right;">1.17</td>
-<td style="text-align: right;">0.91</td>
-<td style="text-align: right;">2.08</td>
-<td style="text-align: right;"></td>
+<td><code>bench/backends.R</code></td>
+<td>Two of those pipelines with dplyr, checking row counts and column sums against phplyr’s</td>
+</tr>
+<tr class="even">
+<td><code>bench/models.php</code></td>
+<td><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code> on the phit extension and phit-polyfill, one fresh process per run</td>
 </tr>
 </tbody>
 </table>
-<p>The full results, with every repeat and version, are in <a href="benchmarks/backends-results.json"><code>benchmarks/backends-results.json</code></a> and <a href="benchmarks/dplyr-results.json"><code>benchmarks/dplyr-results.json</code></a>.</p>
-<p>PolarsTable’s cost outside Polars is converting results to PHP values and running closure steps. Measured separately on the 1M-row <code>events.csv</code>, best of three:</p>
-<ul>
-<li>Collecting four plain columns took 0.15 s, and the datetime column <code>t</code> added about 0.01 s.</li>
-<li>A closure in <code>filter()</code> took 0.88 s, most of it converting the data to a DataFrame and back.</li>
-</ul>
-<p>PolarsTable suits pipelines written in expressions, especially ones that reduce the data before collecting, and data that starts in Polars: <code>PolarsTable::fromPolars(Phpolars\read_csv($path))</code> skips phibble’s CSV parse.</p>
+<p>Each reports the median of seven runs and lists every run. <code>bench/generate.php</code> writes the harness data with phibble’s generator and seed.</p>
 
 
 </section>

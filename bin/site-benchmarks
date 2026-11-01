@@ -53,10 +53,14 @@ $m = $php['method'];
 $out = [
     'title' => 'phplyr backends and dplyr',
     'description' => 'Three pipelines on a generated sales table of 100,000 and 1,000,000 rows, joined to a 100-row store table. phplyr runs each on phibble\'s in-memory DataFrame, on PolarsTable (Polars at '.$m['polars_threads'].' threads), and on SQLite through SqlTable. dplyr runs the first two pipelines on the same data. The pipeline with a PHP closure has no dplyr version. Every backend returned the same rows as DataFrame, and dplyr\'s row counts and column sums matched.',
-    'measure' => 'Best of '.$m['repeats'].' runs; '.$m['timing'],
+    'measure' => ($m['statistic'] === 'median' ? 'Median' : 'Best').' of '.$m['repeats'].' runs; '.$m['timing'],
     'unit' => 's',
     'environment' => [
         'cpu' => $m['machine']['cpu'],
+        'cores' => $m['machine']['cores'] ?? null,
+        'memory_gb' => $m['machine']['memory_gb'] ?? null,
+        'os' => $m['machine']['os'] ?? null,
+        'repeats' => $m['repeats'],
         'php' => $m['php'],
         'date' => substr($php['generated_at'], 0, 10),
         'commit' => $m['versions']['phplyr'],

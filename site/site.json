@@ -145,9 +145,7 @@
             }
         ]
     },
-    "benchmarks": [
-        "site/benchmarks/backends.json"
-    ],
+    "benchmarks": [],
     "verifications": [
         "site/verifications/dplyr.json",
         "site/verifications/tidyr.json",

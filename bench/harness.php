@@ -5,11 +5,12 @@
  * numbers line up with phibble's bin/bench. Each workload also runs as the
  * equivalent direct Table method calls ("direct") to show phplyr's own cost.
  *
- * Usage: php bench/harness.php [--backend=dataframe|sqlite|polars] [--runs=3] [workload ...]
+ * Usage: php bench/harness.php [--backend=dataframe|sqlite|polars] [--runs=7] [--out=file.json] [workload ...]
  * Data: php bench/generate.php [rows]
  *
- * Prints one JSON line per workload and form: backend, form, workload, rows,
- * median and min seconds, peak memory in MB.
+ * Prints one JSON line per workload and form: backend, form, workload, input
+ * and result rows, the median, and every run in seconds. With --out, also
+ * writes them as one record with the machine and versions.
  */
 
 declare(strict_types=1);
@@ -24,9 +25,9 @@ use function Phplyr\{arrange, col, cumsum, desc, filter, group_by, lag, left_joi
 
 ini_set('memory_limit', '-1');
 
-$options = getopt('', ['backend:', 'runs:'], $rest);
+$options = getopt('', ['backend:', 'runs:', 'out:'], $rest);
 $backendName = $options['backend'] ?? 'dataframe';
-$runs = (int) ($options['runs'] ?? 3);
+$runs = (int) ($options['runs'] ?? 7);
 $only = array_slice($argv, $rest);
 $data = __DIR__.'/data';
 if (! is_file("{$data}/events.csv")) {
@@ -119,6 +120,7 @@ $workloads = [
 $events = $load("{$data}/events.csv");
 $dims = $load("{$data}/dims.csv");
 
+$results = [];
 foreach ($workloads as $name => $forms) {
     if ($only !== [] && ! \in_array($name, $only, true)) {
         continue;
@@ -132,15 +134,41 @@ foreach ($workloads as $name => $forms) {
             $rows = $work($events, $dims)->collect()->nrow();
             $times[] = (hrtime(true) - $start) / 1e9;
         }
-        sort($times);
-        echo json_encode([
+        $sorted = $times;
+        sort($sorted);
+        $m = intdiv(\count($sorted), 2);
+        $result = [
             'backend' => $backendName,
             'form' => $form,
             'workload' => $name,
-            'rows' => $rows,
-            'median_s' => round($times[intdiv(\count($times), 2)], 3),
-            'min_s' => round($times[0], 3),
-            'peak_mb' => round(memory_get_peak_usage(true) / 1e6),
-        ]), "\n";
+            'rows_in' => $events->nrow(),
+            'rows_out' => $rows,
+            'median_s' => round(\count($sorted) % 2 ? $sorted[$m] : ($sorted[$m - 1] + $sorted[$m]) / 2, 4),
+            'runs_s' => array_map(fn ($t) => round($t, 4), $times),
+        ];
+        $results[] = $result;
+        echo json_encode($result), "\n";
     }
+}
+
+if (isset($options['out'])) {
+    $git = fn (string $dir) => trim((string) shell_exec('git -C '.escapeshellarg($dir).' rev-parse --short HEAD 2>/dev/null')) ?: null;
+    file_put_contents($options['out'], json_encode([
+        'schema' => 'phplyr-harness/1',
+        'generated_at' => gmdate('Y-m-d\\TH:i:s\\Z'),
+        'method' => [
+            'statistic' => 'median',
+            'runs' => $runs,
+            'timing' => 'workload through collect(), in one process; loading the data is not timed',
+            'machine' => (require __DIR__.'/machine.php')(),
+            'versions' => [
+                'phplyr' => $git(dirname(__DIR__)),
+                'phibble' => Composer\InstalledVersions::getPrettyVersion('phpstats/phibble'),
+                'phpolars' => \function_exists('Phpolars\\version') ? Phpolars\version() : null,
+                'polars_threads' => \function_exists('Phpolars\\thread_pool_size') ? Phpolars\thread_pool_size() : null,
+                'sqlite' => (new PDO('sqlite::memory:'))->query('select sqlite_version()')->fetchColumn(),
+            ],
+        ],
+        'results' => $results,
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n");
 }
