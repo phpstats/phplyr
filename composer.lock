@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae3b418f98ec39d8d6f3d5148e354b12",
+    "content-hash": "877edbf670b9adb20ae95836300b0d38",
     "packages": [
         {
             "name": "phpstats/phibble",
-            "version": "v0.6.0",
+            "version": "v0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstats/phibble.git",
-                "reference": "6b9f06aa0b35d6625611f8d9817053d6dd765c83"
+                "reference": "7cf161c27b0f91cc7b592ecf8caf5e5ec2b999bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstats/phibble/zipball/6b9f06aa0b35d6625611f8d9817053d6dd765c83",
-                "reference": "6b9f06aa0b35d6625611f8d9817053d6dd765c83",
+                "url": "https://api.github.com/repos/phpstats/phibble/zipball/7cf161c27b0f91cc7b592ecf8caf5e5ec2b999bd",
+                "reference": "7cf161c27b0f91cc7b592ecf8caf5e5ec2b999bd",
                 "shasum": ""
             },
             "require": {
@@ -62,9 +62,9 @@
             "description": "A typed, immutable in-memory data frame for PHP.",
             "support": {
                 "issues": "https://github.com/phpstats/phibble/issues",
-                "source": "https://github.com/phpstats/phibble/tree/v0.6.0"
+                "source": "https://github.com/phpstats/phibble/tree/v0.7.0"
             },
-            "time": "2026-11-01T14:15:56+00:00"
+            "time": "2026-11-01T23:48:55+00:00"
         },
         {
             "name": "symfony/polyfill-php84",

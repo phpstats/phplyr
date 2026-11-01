@@ -45,7 +45,7 @@
     "example": {
         "setup": [
             "composer require phpstats/phplyr",
-            "curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.5/docs/data/schools.csv"
+            "curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.6/docs/data/schools.csv"
         ],
         "chain": "use Phibble\\DataFrame;\nuse function Phplyr\\{phplyr, desc, n, mean, sd};\n\n$schools = DataFrame::fromCsv('schools.csv');\n\necho phplyr($schools)\n    ->filter(fn ($r) => $r->study_hours >= 5)\n    ->groupBy('school')\n    ->summarize(\n        students: n(),\n        avg_score: mean('score'),\n        sd_score: sd('score'),\n    )\n    ->arrange(desc('avg_score'))\n    ->head(5);",
         "pipe": "use Phibble\\DataFrame;\nuse function Phplyr\\{filter, group_by, summarize};\nuse function Phplyr\\{arrange, head, desc, n, mean, sd};\n\n$schools = DataFrame::fromCsv('schools.csv');\n\necho $schools |>\n    filter(fn ($r) => $r->study_hours >= 5) |>\n    group_by('school') |>\n    summarize(\n        students: n(),\n        avg_score: mean('score'),\n        sd_score: sd('score'),\n    ) |>\n    arrange(desc('avg_score')) |>\n    head(5);",

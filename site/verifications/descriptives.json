@@ -8,7 +8,7 @@
     "versions": {
         "R": "4.6.1",
         "PHP": "8.5.10",
-        "phibble": "v0.6.0 (6b9f06a)",
+        "phibble": "v0.7.0 (7cf161c)",
         "phit": "0.4.4"
     },
     "inputs": [
@@ -361,7 +361,7 @@
     "data": "tests/Fixtures",
     "environment": {
         "date": "2026-11-01",
-        "commit": "ce20607",
+        "commit": "b874176",
         "php": "8.5.10",
         "os": "Darwin 27.0.0 (arm64)"
     }

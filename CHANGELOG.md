@@ -2,6 +2,13 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
+## 0.4.6 - 2026-11-01
+
+### Changed
+
+- phplyr allows phibble ^0.7 as well as ^0.3, ^0.4, ^0.5, and ^0.6, and the lock file installs phibble 0.7.0. phibble 0.7's changes to `row_number()`, `ntile()`, `isIn()`, `coalesce()`, `str_pad()`, `parse_date_time()`, and periods reach phplyr's helpers of the same names; phplyr's tests against R pass with it.
+- The documentation has a Functions and methods index and a reference entry for every function, chain method, and expression method, generated from the source by `bin/api-reference`.
+- The verification and benchmark records in `site/` follow phpstats.org's evidence record format.
 ## 0.4.5 - 2026-11-01
 
 ### Added
