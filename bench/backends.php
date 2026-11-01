@@ -220,7 +220,7 @@ $report = [
         'php' => PHP_VERSION,
         'versions' => [
             'phplyr' => $git($root),
-            'phibble' => substr((string) InstalledVersions::getReference('phpstats/phibble'), 0, 7) ?: null,
+            'phibble' => InstalledVersions::getPrettyVersion('phpstats/phibble').' ('.substr((string) InstalledVersions::getReference('phpstats/phibble'), 0, 7).')',
             'phpolars' => $polars ? [
                 'sha' => $polarsDir === null ? null : $git($polarsDir),
                 'extension' => Phpolars\version(),

@@ -163,7 +163,7 @@ if (isset($options['out'])) {
             'machine' => (require __DIR__.'/machine.php')(),
             'versions' => [
                 'phplyr' => $git(dirname(__DIR__)),
-                'phibble' => Composer\InstalledVersions::getPrettyVersion('phpstats/phibble'),
+                'phibble' => Composer\InstalledVersions::getPrettyVersion('phpstats/phibble').' ('.substr((string) Composer\InstalledVersions::getReference('phpstats/phibble'), 0, 7).')',
                 'phpolars' => \function_exists('Phpolars\\version') ? Phpolars\version() : null,
                 'polars_threads' => \function_exists('Phpolars\\thread_pool_size') ? Phpolars\thread_pool_size() : null,
                 'sqlite' => (new PDO('sqlite::memory:'))->query('select sqlite_version()')->fetchColumn(),

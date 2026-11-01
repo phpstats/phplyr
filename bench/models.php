@@ -74,6 +74,7 @@ if (isset($options['child'])) {
     exit(0);
 }
 
+require dirname(__DIR__).'/vendor/autoload.php';
 $extension = getenv('PHIT_EXTENSION') ?: throw new RuntimeException('Set PHIT_EXTENSION to the phit extension.');
 $polyfill = getenv('PHIT_POLYFILL') ?: throw new RuntimeException('Set PHIT_POLYFILL to a phit-polyfill checkout.');
 $runs = (int) ($options['runs'] ?? 7);
@@ -160,6 +161,7 @@ $record = [
         'machine' => (require __DIR__.'/machine.php')(),
         'versions' => [
             'phplyr' => $git(dirname(__DIR__)),
+            'phibble' => Composer\InstalledVersions::getPrettyVersion('phpstats/phibble').' ('.substr((string) Composer\InstalledVersions::getReference('phpstats/phibble'), 0, 7).')',
             'phit_extension' => $git(dirname($extension, 3)),
             'phit_polyfill' => $git($polyfill),
         ],
