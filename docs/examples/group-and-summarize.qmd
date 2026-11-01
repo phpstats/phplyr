@@ -2,28 +2,20 @@
 title: "Summarize groups"
 ---
 
-This example computes a count, a total, and a mean for each region and sorts
-the regions by their totals.
-
-Prerequisites: PHP 8.3 or later and `composer require phpstats/phplyr`. The pipe version needs PHP 8.5. See [Installation](../getting-started.qmd#installation).
-
-The sales table is created inline. Save the script as `example.php` in the
-project directory and run `php example.php`.
+Count the orders, total the units, and average the units for each region,
+then sort the regions by total.
 
 {{< include pages/_group-and-summarize.md >}}
 
-`group_by('region')` makes each region a group, and `summarize()` returns one
-row per group with a column for each named argument. `n()` counts the rows in
-the group. The South region has a missing `units` value, so `naRm: true`
-leaves it out of the sum and the mean, as R's `na.rm = TRUE` does. Without
-it, both would be NA. `arrange(desc('total_units'))` sorts the summary from
-the largest total to the smallest.
+- `summarize()` after `group_by('region')` returns one row per region.
+- `n()` counts every row in the group, including the row whose `units` is
+  missing.
+- `naRm: true` leaves missing values out of `sum()` and `mean()`. Without it,
+  the South total and mean are NA, as in R.
+- The summaries evaluate in order, and each can use the ones before it. A
+  summary named `units` would replace the `units` column for the mean that
+  follows, so the total is named `total_units`.
 
-Each argument of `summarize()` can use the columns created before it. A
-summary named `units` would replace the `units` column for the arguments
-after it, as in dplyr, which is why the total is called `total_units`.
-
-See [Single-table functions](../reference/single-table.qmd#summaries) for `summarize()`,
-[Grouping](../reference/grouping.qmd) for `group_by()`, and
-[Vector helpers](../reference/vectors.qmd#summaries) for `n()`, `sum()`, and
-`mean()`.
+Reference: [Single-table functions](../reference/single-table.qmd#summaries) ·
+[Grouping](../reference/grouping.qmd) ·
+[Vector helpers](../reference/vectors.qmd#summaries)

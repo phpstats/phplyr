@@ -2,22 +2,19 @@
 title: "Join two tables"
 ---
 
-This example adds each order's customer details from a second table.
-
-Prerequisites: PHP 8.3 or later and `composer require phpstats/phplyr`. The pipe version needs PHP 8.5. See [Installation](../getting-started.qmd#installation).
-
-Both tables are created inline. Save the script as `example.php` in the
-project directory and run `php example.php`.
+Add each order's customer name and city from a customers table that shares
+the `customer_id` column.
 
 {{< include pages/_join.md >}}
 
-`left_join()` keeps every row of the left table, `orders`, and adds the
-columns of `customers` from the row with the same `customer_id`. Customer
-c1 has two orders, so both rows get Ana's details. Order 4's customer, c9, is
-not in `customers`, so its `name` and `city` are NA. Customer c3 has no
-orders and does not appear. The result keeps the left table's row order.
+- `left_join()` keeps every row of `orders` in its original order.
+- An order with no matching customer gets NA in the new columns. A customer
+  with no orders is left out.
+- Each order gets one output row per matching customer. If `customers` had
+  two rows for c1, each c1 order would appear twice and the result would have
+  more rows than `orders`. Pass `relationship: 'many-to-one'` to throw an
+  exception instead.
+- `inner_join()` drops the orders with no match. `full_join()` also keeps
+  customers with no orders and adds them after the matched rows.
 
-`inner_join()` would drop order 4, and `full_join()` would also add a row
-for c3. [Joins, binding, and set operations](../reference/two-table.qmd#joins)
-describes the other joins, their options, and `join_by()` for joins on
-differently named columns and inequalities.
+Reference: [Joins, binding, and set operations](../reference/two-table.qmd#joins)

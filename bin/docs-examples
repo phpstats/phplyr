@@ -13,8 +13,9 @@
  * must print the same output, and the page shows them in tabs.
  *
  * An example that requires 'vendor/autoload.php' is a complete
- * starter script. It runs as written, without the prelude, and the page shows
- * the whole file.
+ * starter script. It runs as written, without the prelude. The page shows
+ * the whole file, except in docs/examples/pages, where it leaves out the
+ * opening tag and the require line.
  *
  * R examples (.R files in docs/examples and its subdirectories) run with Rscript the same way and write
  * _<name>-r.md, for side-by-side comparisons. Examples in a subdirectory are
@@ -79,6 +80,9 @@ $run = function (string $file, string $name) use ($root, $php, $args, $preludeFo
         // its own imports are checked. The page shows the whole file.
         $code = trim($source);
         $body = str_replace($starter, $autoload, $code);
+        if (basename(dirname($file)) === 'pages') {
+            $code = trim(str_replace(["<?php\n", $starter."\n"], '', $code));
+        }
     } else {
         $code = trim((string) preg_replace('/^<\?php\s*(declare\(strict_types=1\);\s*)?/', '', $source));
         $body = "<?php\n\ndeclare(strict_types=1);\n\n{$autoload}\n\n".$preludeFor($code)."\n".$code."\n";

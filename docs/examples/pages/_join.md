@@ -3,10 +3,6 @@
 ## PHP 8.5+
 
 ```php
-<?php
-
-require 'vendor/autoload.php';
-
 use Phibble\DataFrame;
 use function Phplyr\left_join;
 
@@ -28,10 +24,6 @@ echo $orders |> left_join($customers, by: 'customer_id');
 ## PHP 8.3–8.4
 
 ```php
-<?php
-
-require 'vendor/autoload.php';
-
 use Phibble\DataFrame;
 use function Phplyr\phplyr;
 

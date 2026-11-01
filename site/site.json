@@ -124,7 +124,7 @@
                 "path": "examples/join.qmd"
             },
             {
-                "title": "Reshape with pivot_longer and pivot_wider",
+                "title": "Pivot between wide and long",
                 "path": "examples/pivot.qmd"
             },
             {
@@ -161,22 +161,22 @@
         {
             "path": "examples/filter-and-mutate",
             "title": "Filter rows and add columns",
-            "description": "Keeps the orders with a positive quantity and adds a total and a size column."
+            "description": "Keeps rows with filter() and adds columns with mutate(), using row closures and if_else()."
         },
         {
             "path": "examples/group-and-summarize",
             "title": "Summarize groups",
-            "description": "Counts, totals, and averages sales by region, leaving out a missing value."
+            "description": "Counts, sums, and averages per group with group_by() and summarize(), leaving out missing values."
         },
         {
             "path": "examples/join",
             "title": "Join two tables",
-            "description": "Adds customer details to orders with a left join, including an order with no matching customer."
+            "description": "Adds matching columns with left_join() and shows how unmatched and repeated keys affect the rows."
         },
         {
             "path": "examples/pivot",
-            "title": "Reshape with pivot_longer and pivot_wider",
-            "description": "Turns a wide table of yearly sales into one row per store and year and back."
+            "title": "Pivot between wide and long",
+            "description": "Moves yearly columns into rows with pivot_longer() and back with pivot_wider()."
         }
     ]
 }

@@ -282,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../examples/pivot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Reshape with pivot_longer and pivot_wider</span></a>
+ <span class="menu-text">Pivot between wide and long</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -352,55 +352,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This example keeps the rows that match a condition and adds two computed columns.</p>
-<p>Prerequisites: PHP 8.3 or later and <code>composer require phpstats/phplyr</code>. The pipe version needs PHP 8.5. See <a href="../getting-started.html#installation">Installation</a>.</p>
-<p>The orders table is created inline. Save the script as <code>example.php</code> in the project directory and run <code>php example.php</code>.</p>
+<p>Keep the orders with a positive quantity and add a line total and a size label to each.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="st">'vendor/autoload.php'</span><span class="ot">;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{filter<span class="ot">,</span> mutate<span class="ot">,</span> if_else<span class="ot">,</span> col}<span class="ot">;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="va">$orders</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'pen'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">10</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">1.50</span>]<span class="ot">,</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'notebook'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">0</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">4.00</span>]<span class="ot">,</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">3</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'stapler'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">12.00</span>]<span class="ot">,</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">4</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'pen'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">40</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">1.25</span>]<span class="ot">,</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$orders</span> <span class="op">|&gt;</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;qty <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">|&gt;</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    mutate(</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        total<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;qty <span class="op">*</span> <span class="va">$r</span>-&gt;price<span class="ot">,</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        size<span class="ot">:</span> if_else(col(<span class="st">'qty'</span>)-&gt;ge(<span class="dv">20</span>)<span class="ot">,</span> <span class="st">'bulk'</span><span class="ot">,</span> <span class="st">'single'</span>)<span class="ot">,</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{filter<span class="ot">,</span> mutate<span class="ot">,</span> if_else<span class="ot">,</span> col}<span class="ot">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">$orders</span> <span class="op">=</span> DataFrame::fromRows([</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'pen'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">10</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">1.50</span>]<span class="ot">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'notebook'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">0</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">4.00</span>]<span class="ot">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">3</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'stapler'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">12.00</span>]<span class="ot">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">4</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'pen'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">40</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">1.25</span>]<span class="ot">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$orders</span> <span class="op">|&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;qty <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">|&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    mutate(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        total<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;qty <span class="op">*</span> <span class="va">$r</span>-&gt;price<span class="ot">,</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        size<span class="ot">:</span> if_else(col(<span class="st">'qty'</span>)-&gt;ge(<span class="dv">20</span>)<span class="ot">,</span> <span class="st">'bulk'</span><span class="ot">,</span> <span class="st">'single'</span>)<span class="ot">,</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="st">'vendor/autoload.php'</span><span class="ot">;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> if_else<span class="ot">,</span> col}<span class="ot">;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="va">$orders</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'pen'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">10</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">1.50</span>]<span class="ot">,</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'notebook'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">0</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">4.00</span>]<span class="ot">,</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">3</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'stapler'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">12.00</span>]<span class="ot">,</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">4</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'pen'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">40</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">1.25</span>]<span class="ot">,</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$orders</span>)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;qty <span class="op">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        total<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;qty <span class="op">*</span> <span class="va">$r</span>-&gt;price<span class="ot">,</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        size<span class="ot">:</span> if_else(col(<span class="st">'qty'</span>)-&gt;ge(<span class="dv">20</span>)<span class="ot">,</span> <span class="st">'bulk'</span><span class="ot">,</span> <span class="st">'single'</span>)<span class="ot">,</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> if_else<span class="ot">,</span> col}<span class="ot">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">$orders</span> <span class="op">=</span> DataFrame::fromRows([</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'pen'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">10</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">1.50</span>]<span class="ot">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'notebook'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">0</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">4.00</span>]<span class="ot">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">3</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'stapler'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">12.00</span>]<span class="ot">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">4</span><span class="ot">,</span> <span class="st">'product'</span> =&gt; <span class="st">'pen'</span><span class="ot">,</span> <span class="st">'qty'</span> =&gt; <span class="dv">40</span><span class="ot">,</span> <span class="st">'price'</span> =&gt; <span class="fl">1.25</span>]<span class="ot">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$orders</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;qty <span class="op">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        total<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;qty <span class="op">*</span> <span class="va">$r</span>-&gt;price<span class="ot">,</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        size<span class="ot">:</span> if_else(col(<span class="st">'qty'</span>)-&gt;ge(<span class="dv">20</span>)<span class="ot">,</span> <span class="st">'bulk'</span><span class="ot">,</span> <span class="st">'single'</span>)<span class="ot">,</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -410,8 +400,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 1     1 pen        10  1.5     15 single
 2     3 stapler     2 12       24 single
 3     4 pen        40  1.25    50 bulk</code></pre>
-<p><code>filter()</code> keeps the rows for which the row closure returns <code>true</code>, so order 2, with a quantity of zero, is dropped. <code>mutate()</code> adds a column for each named argument. <code>total</code> comes from a row closure, which reads the row’s columns as properties. <code>size</code> uses <code>if_else()</code> with a column expression, <code>col('qty')-&gt;ge(20)</code>.</p>
-<p>See <a href="../reference/single-table.html">Single-table functions</a> for <code>filter()</code> and <code>mutate()</code>, and <a href="../reference/vectors.html#conditionals-and-na">Vector helpers</a> for <code>if_else()</code>.</p>
+<ul>
+<li><code>filter()</code> keeps the rows for which the row closure returns <code>true</code>.</li>
+<li><code>mutate()</code> adds one column for each named argument.</li>
+<li>A row closure such as <code>fn ($r) =&gt; $r-&gt;qty * $r-&gt;price</code> runs once per row and reads the row’s columns as properties.</li>
+<li>A column expression such as <code>col('qty')-&gt;ge(20)</code> works on the whole column. <code>if_else()</code> takes one and picks <code>'bulk'</code> or <code>'single'</code> for each row.</li>
+</ul>
+<p>Reference: <a href="../reference/single-table.html">Single-table functions</a> · <a href="../reference/vectors.html#conditionals-and-na">Vector helpers</a></p>
 
 
 

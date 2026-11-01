@@ -3,10 +3,6 @@
 ## PHP 8.5+
 
 ```php
-<?php
-
-require 'vendor/autoload.php';
-
 use Phibble\DataFrame;
 use function Phplyr\{group_by, summarize, arrange, desc, n, sum, mean};
 
@@ -28,10 +24,6 @@ echo $sales |>
 ## PHP 8.3–8.4
 
 ```php
-<?php
-
-require 'vendor/autoload.php';
-
 use Phibble\DataFrame;
 use function Phplyr\{phplyr, desc, n, sum, mean};
 

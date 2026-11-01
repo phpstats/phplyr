@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Reshape with pivot_longer and pivot_wider – phplyr</title>
+<title>Pivot between wide and long – phplyr</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -121,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../examples/filter-and-mutate.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/pivot.html">Reshape with pivot_longer and pivot_wider</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../examples/filter-and-mutate.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/pivot.html">Pivot between wide and long</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -282,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../examples/pivot.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Reshape with pivot_longer and pivot_wider</span></a>
+ <span class="menu-text">Pivot between wide and long</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -333,9 +333,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../examples/filter-and-mutate.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/pivot.html">Reshape with pivot_longer and pivot_wider</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../examples/filter-and-mutate.html">Examples</a></li><li class="breadcrumb-item"><a href="../examples/pivot.html">Pivot between wide and long</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Reshape with pivot_longer and pivot_wider</h1>
+<h1 class="title">Pivot between wide and long</h1>
 </div>
 
 
@@ -352,54 +352,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This example turns a wide table of yearly sales into one row per store and year, and back.</p>
-<p>Prerequisites: PHP 8.3 or later and <code>composer require phpstats/phplyr</code>. The pipe version needs PHP 8.5. See <a href="../getting-started.html#installation">Installation</a>.</p>
-<p>The sales table is created inline. Save the script as <code>example.php</code> in the project directory and run <code>php example.php</code>. The script prints the wide input, the long table, and the wide table rebuilt from it.</p>
+<p>Turn a table with one sales column per year into one row per store and year, then rebuild the wide table.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="st">'vendor/autoload.php'</span><span class="ot">;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{pivot_longer<span class="ot">,</span> pivot_wider<span class="ot">,</span> starts_with}<span class="ot">;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="va">$wide</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'store'</span> =&gt; <span class="st">'Leeds'</span><span class="ot">,</span> <span class="st">'sales_2023'</span> =&gt; <span class="dv">120</span><span class="ot">,</span> <span class="st">'sales_2024'</span> =&gt; <span class="dv">135</span><span class="ot">,</span> <span class="st">'sales_2025'</span> =&gt; <span class="dv">150</span>]<span class="ot">,</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'store'</span> =&gt; <span class="st">'Lyon'</span><span class="ot">,</span> <span class="st">'sales_2023'</span> =&gt; <span class="dv">95</span><span class="ot">,</span> <span class="st">'sales_2024'</span> =&gt; <span class="dv">110</span><span class="ot">,</span> <span class="st">'sales_2025'</span> =&gt; <span class="dv">104</span>]<span class="ot">,</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$wide</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{pivot_longer<span class="ot">,</span> pivot_wider<span class="ot">,</span> starts_with}<span class="ot">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">$wide</span> <span class="op">=</span> DataFrame::fromRows([</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'store'</span> =&gt; <span class="st">'Leeds'</span><span class="ot">,</span> <span class="st">'sales_2023'</span> =&gt; <span class="dv">120</span><span class="ot">,</span> <span class="st">'sales_2024'</span> =&gt; <span class="dv">135</span><span class="ot">,</span> <span class="st">'sales_2025'</span> =&gt; <span class="dv">150</span>]<span class="ot">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'store'</span> =&gt; <span class="st">'Lyon'</span><span class="ot">,</span> <span class="st">'sales_2023'</span> =&gt; <span class="dv">95</span><span class="ot">,</span> <span class="st">'sales_2024'</span> =&gt; <span class="dv">110</span><span class="ot">,</span> <span class="st">'sales_2025'</span> =&gt; <span class="dv">104</span>]<span class="ot">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$wide</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="va">$long</span> <span class="op">=</span> <span class="va">$wide</span> <span class="op">|&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    pivot_longer(starts_with(<span class="st">'sales_'</span>)<span class="ot">,</span> namesTo<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span> namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span><span class="ot">,</span> valuesTo<span class="ot">:</span> <span class="st">'sales'</span>)<span class="ot">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$long</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="va">$long</span> <span class="op">=</span> <span class="va">$wide</span> <span class="op">|&gt;</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    pivot_longer(starts_with(<span class="st">'sales_'</span>)<span class="ot">,</span> namesTo<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span> namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span><span class="ot">,</span> valuesTo<span class="ot">:</span> <span class="st">'sales'</span>)<span class="ot">;</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$long</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$long</span> <span class="op">|&gt;</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    pivot_wider(namesFrom<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span> valuesFrom<span class="ot">:</span> <span class="st">'sales'</span><span class="ot">,</span> namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$long</span> <span class="op">|&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    pivot_wider(namesFrom<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span> valuesFrom<span class="ot">:</span> <span class="st">'sales'</span><span class="ot">,</span> namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="st">'vendor/autoload.php'</span><span class="ot">;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> starts_with}<span class="ot">;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="va">$wide</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'store'</span> =&gt; <span class="st">'Leeds'</span><span class="ot">,</span> <span class="st">'sales_2023'</span> =&gt; <span class="dv">120</span><span class="ot">,</span> <span class="st">'sales_2024'</span> =&gt; <span class="dv">135</span><span class="ot">,</span> <span class="st">'sales_2025'</span> =&gt; <span class="dv">150</span>]<span class="ot">,</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'store'</span> =&gt; <span class="st">'Lyon'</span><span class="ot">,</span> <span class="st">'sales_2023'</span> =&gt; <span class="dv">95</span><span class="ot">,</span> <span class="st">'sales_2024'</span> =&gt; <span class="dv">110</span><span class="ot">,</span> <span class="st">'sales_2025'</span> =&gt; <span class="dv">104</span>]<span class="ot">,</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$wide</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="va">$long</span> <span class="op">=</span> phplyr(<span class="va">$wide</span>)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    -&gt;pivotLonger(starts_with(<span class="st">'sales_'</span>)<span class="ot">,</span> namesTo<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span> namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span><span class="ot">,</span> valuesTo<span class="ot">:</span> <span class="st">'sales'</span>)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$long</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$long</span>)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    -&gt;pivotWider(namesFrom<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span> valuesFrom<span class="ot">:</span> <span class="st">'sales'</span><span class="ot">,</span> namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> starts_with}<span class="ot">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">$wide</span> <span class="op">=</span> DataFrame::fromRows([</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'store'</span> =&gt; <span class="st">'Leeds'</span><span class="ot">,</span> <span class="st">'sales_2023'</span> =&gt; <span class="dv">120</span><span class="ot">,</span> <span class="st">'sales_2024'</span> =&gt; <span class="dv">135</span><span class="ot">,</span> <span class="st">'sales_2025'</span> =&gt; <span class="dv">150</span>]<span class="ot">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'store'</span> =&gt; <span class="st">'Lyon'</span><span class="ot">,</span> <span class="st">'sales_2023'</span> =&gt; <span class="dv">95</span><span class="ot">,</span> <span class="st">'sales_2024'</span> =&gt; <span class="dv">110</span><span class="ot">,</span> <span class="st">'sales_2025'</span> =&gt; <span class="dv">104</span>]<span class="ot">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$wide</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="va">$long</span> <span class="op">=</span> phplyr(<span class="va">$wide</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    -&gt;pivotLonger(starts_with(<span class="st">'sales_'</span>)<span class="ot">,</span> namesTo<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span> namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span><span class="ot">,</span> valuesTo<span class="ot">:</span> <span class="st">'sales'</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$long</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$long</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    -&gt;pivotWider(namesFrom<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span> valuesFrom<span class="ot">:</span> <span class="st">'sales'</span><span class="ot">,</span> namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -424,9 +414,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   &lt;chr&gt;      &lt;int&gt;      &lt;int&gt;      &lt;int&gt;
 1 Leeds        120        135        150
 2 Lyon          95        110        104</code></pre>
-<p><code>pivot_longer()</code> turns the columns that <code>starts_with('sales_')</code> selects into rows. Each column name goes into <code>year</code>, without the <code>sales_</code> prefix, and each value goes into <code>sales</code>. The two stores and three years give six rows. The years are strings, because they come from column names.</p>
-<p><code>pivot_wider()</code> reverses it. It makes one column for each value of <code>year</code>, adds the <code>sales_</code> prefix back, and fills the columns from <code>sales</code>. The remaining column, <code>store</code>, identifies the rows.</p>
-<p>See <a href="../reference/tidyr.html#pivoting">tidyr</a> for the other options, such as <code>valuesDropNa</code> and <code>valuesFill</code>, and <a href="../reference/tidyselect.html#selectors">tidyselect and across()</a> for <code>starts_with()</code>.</p>
+<ul>
+<li><code>pivot_longer()</code> stacks the columns that <code>starts_with('sales_')</code> selects. Each column name, without the <code>sales_</code> prefix, goes into <code>year</code>, and each value goes into <code>sales</code>. The other columns, here <code>store</code>, repeat for each stacked value.</li>
+<li><code>year</code> holds strings, because the values come from column names.</li>
+<li><code>pivot_wider()</code> makes one column for each value of <code>year</code>, adds the <code>sales_</code> prefix, and fills the columns from <code>sales</code>.</li>
+<li>The columns <code>pivot_wider()</code> doesn’t use, here <code>store</code>, identify the output rows. Each distinct combination of them becomes one row.</li>
+</ul>
+<p>Reference: <a href="../reference/tidyr.html#pivoting">tidyr</a> · <a href="../reference/tidyselect.html#selectors">tidyselect and across()</a></p>
 
 
 

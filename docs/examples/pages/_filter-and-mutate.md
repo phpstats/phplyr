@@ -3,10 +3,6 @@
 ## PHP 8.5+
 
 ```php
-<?php
-
-require 'vendor/autoload.php';
-
 use Phibble\DataFrame;
 use function Phplyr\{filter, mutate, if_else, col};
 
@@ -28,10 +24,6 @@ echo $orders |>
 ## PHP 8.3–8.4
 
 ```php
-<?php
-
-require 'vendor/autoload.php';
-
 use Phibble\DataFrame;
 use function Phplyr\{phplyr, if_else, col};
 

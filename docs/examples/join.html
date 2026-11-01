@@ -282,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../examples/pivot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Reshape with pivot_longer and pivot_wider</span></a>
+ <span class="menu-text">Pivot between wide and long</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -352,55 +352,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This example adds each order’s customer details from a second table.</p>
-<p>Prerequisites: PHP 8.3 or later and <code>composer require phpstats/phplyr</code>. The pipe version needs PHP 8.5. See <a href="../getting-started.html#installation">Installation</a>.</p>
-<p>Both tables are created inline. Save the script as <code>example.php</code> in the project directory and run <code>php example.php</code>.</p>
+<p>Add each order’s customer name and city from a customers table that shares the <code>customer_id</code> column.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="st">'vendor/autoload.php'</span><span class="ot">;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\left_join<span class="ot">;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="va">$orders</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">25.00</span>]<span class="ot">,</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c2'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">12.50</span>]<span class="ot">,</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">3</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">8.00</span>]<span class="ot">,</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">4</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c9'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">40.00</span>]<span class="ot">,</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="va">$customers</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Ana'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Lisbon'</span>]<span class="ot">,</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c2'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Ben'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Leeds'</span>]<span class="ot">,</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c3'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Cleo'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Lyon'</span>]<span class="ot">,</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$orders</span> <span class="op">|&gt;</span> left_join(<span class="va">$customers</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'customer_id'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\left_join<span class="ot">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">$orders</span> <span class="op">=</span> DataFrame::fromRows([</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">25.00</span>]<span class="ot">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c2'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">12.50</span>]<span class="ot">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">3</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">8.00</span>]<span class="ot">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">4</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c9'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">40.00</span>]<span class="ot">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="va">$customers</span> <span class="op">=</span> DataFrame::fromRows([</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Ana'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Lisbon'</span>]<span class="ot">,</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c2'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Ben'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Leeds'</span>]<span class="ot">,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c3'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Cleo'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Lyon'</span>]<span class="ot">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$orders</span> <span class="op">|&gt;</span> left_join(<span class="va">$customers</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'customer_id'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="st">'vendor/autoload.php'</span><span class="ot">;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\phplyr<span class="ot">;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="va">$orders</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">25.00</span>]<span class="ot">,</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c2'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">12.50</span>]<span class="ot">,</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">3</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">8.00</span>]<span class="ot">,</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">4</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c9'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">40.00</span>]<span class="ot">,</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="va">$customers</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Ana'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Lisbon'</span>]<span class="ot">,</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c2'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Ben'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Leeds'</span>]<span class="ot">,</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c3'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Cleo'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Lyon'</span>]<span class="ot">,</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$orders</span>)-&gt;leftJoin(<span class="va">$customers</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'customer_id'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\phplyr<span class="ot">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">$orders</span> <span class="op">=</span> DataFrame::fromRows([</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">25.00</span>]<span class="ot">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c2'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">12.50</span>]<span class="ot">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">3</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">8.00</span>]<span class="ot">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'order'</span> =&gt; <span class="dv">4</span><span class="ot">,</span> <span class="st">'customer_id'</span> =&gt; <span class="st">'c9'</span><span class="ot">,</span> <span class="st">'amount'</span> =&gt; <span class="fl">40.00</span>]<span class="ot">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="va">$customers</span> <span class="op">=</span> DataFrame::fromRows([</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c1'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Ana'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Lisbon'</span>]<span class="ot">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c2'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Ben'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Leeds'</span>]<span class="ot">,</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'customer_id'</span> =&gt; <span class="st">'c3'</span><span class="ot">,</span> <span class="st">'name'</span> =&gt; <span class="st">'Cleo'</span><span class="ot">,</span> <span class="st">'city'</span> =&gt; <span class="st">'Lyon'</span>]<span class="ot">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$orders</span>)-&gt;leftJoin(<span class="va">$customers</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'customer_id'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -411,8 +401,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 2     2 c2            12.5 Ben   Leeds 
 3     3 c1             8   Ana   Lisbon
 4     4 c9            40   &lt;NA&gt;  &lt;NA&gt;</code></pre>
-<p><code>left_join()</code> keeps every row of the left table, <code>orders</code>, and adds the columns of <code>customers</code> from the row with the same <code>customer_id</code>. Customer c1 has two orders, so both rows get Ana’s details. Order 4’s customer, c9, is not in <code>customers</code>, so its <code>name</code> and <code>city</code> are NA. Customer c3 has no orders and does not appear. The result keeps the left table’s row order.</p>
-<p><code>inner_join()</code> would drop order 4, and <code>full_join()</code> would also add a row for c3. <a href="../reference/two-table.html#joins">Joins, binding, and set operations</a> describes the other joins, their options, and <code>join_by()</code> for joins on differently named columns and inequalities.</p>
+<ul>
+<li><code>left_join()</code> keeps every row of <code>orders</code> in its original order.</li>
+<li>An order with no matching customer gets NA in the new columns. A customer with no orders is left out.</li>
+<li>Each order gets one output row per matching customer. If <code>customers</code> had two rows for c1, each c1 order would appear twice and the result would have more rows than <code>orders</code>. Pass <code>relationship: 'many-to-one'</code> to throw an exception instead.</li>
+<li><code>inner_join()</code> drops the orders with no match. <code>full_join()</code> also keeps customers with no orders and adds them after the matched rows.</li>
+</ul>
+<p>Reference: <a href="../reference/two-table.html#joins">Joins, binding, and set operations</a></p>
 
 
 
