@@ -98,7 +98,7 @@ $once = function (string $case, array $cmd) use ($darwin): array {
     return $run;
 };
 
-$git = fn (string $dir) => trim((string) shell_exec('git -C '.escapeshellarg($dir).' rev-parse --short HEAD 2>/dev/null')) ?: null;
+$git = fn (string $dir) => trim((string) shell_exec('git -C '.escapeshellarg($dir).' describe --tags --always 2>/dev/null')) ?: null;
 $median = function (array $xs): float {
     sort($xs);
     $m = intdiv(\count($xs), 2);

@@ -2,10 +2,16 @@
 <?php
 
 /*
- * Write site/benchmarks/backends.json for the phpstats site from
- * docs/benchmarks/backends-results.json (bench/backends.php) and
- * docs/benchmarks/dplyr-results.json (bench/backends.R). Only results whose
- * rows matched the DataFrame reference are included.
+ * Write site/benchmarks/*.json for the phpstats site, in the format of
+ * phpstats.org's docs/evidence-records.md, from the raw records in
+ * docs/benchmarks/:
+ *
+ *   workloads.json  harness-{dataframe,sqlite,polars}.json (bench/harness.php)
+ *   backends.json   backends-results.json (bench/backends.php) and
+ *                   dplyr-results.json (bench/backends.R)
+ *   models.json     models-results.json (bench/models.php)
+ *
+ * Only results whose output matched the reference are included.
  *
  * Usage: bin/site-benchmarks
  */
@@ -13,64 +19,230 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__);
-$php = json_decode(file_get_contents($root.'/docs/benchmarks/backends-results.json'), true);
-$dplyrFile = $root.'/docs/benchmarks/dplyr-results.json';
-$dplyr = is_file($dplyrFile) ? json_decode(file_get_contents($dplyrFile), true) : null;
+$read = fn (string $name) => json_decode(file_get_contents("{$root}/docs/benchmarks/{$name}"), true, flags: JSON_THROW_ON_ERROR);
+$os = fn (string $os) => str_starts_with($os, 'Ubuntu') ? 'Linux, '.preg_replace('/, kernel.*/', '', $os) : $os;
+$machine = fn (array $m, string $generatedAt, ?string $commit) => [
+    'cpu' => $m['cpu'],
+    'cores' => $m['cores'],
+    'pinned_cpus' => $m['pinned_cpus'] ?? null,
+    'memory_gb' => $m['memory_gb'],
+    'os' => $os($m['os']),
+    'php' => $m['php'],
+    'date' => substr($generatedAt, 0, 10),
+    'commit' => $commit,
+];
+// phibble as "v0.6.0 (6b9f06a)"; older records hold the tag or the commit alone.
+$phibble = fn (?string $v) => $v === null ? null : (preg_match('/^[0-9a-f]{7}$/', $v) ? "commit {$v}" : $v);
+$write = function (string $id, array $record) use ($root): void {
+    $record = array_filter($record, fn ($v) => $v !== null);
+    $record['environment'] = array_filter($record['environment'], fn ($v) => $v !== null);
+    file_put_contents("{$root}/site/benchmarks/{$id}.json", json_encode($record, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)."\n");
+    echo "site/benchmarks/{$id}.json: ".\count($record['rows'])." rows\n";
+};
+@mkdir($root.'/site/benchmarks', 0777, true);
 
+// phibble's workloads through phplyr and as direct Table calls.
+$harness = ['dataframe' => 'DataFrame', 'sqlite' => 'SQLite', 'polars' => 'PolarsTable'];
+$workloads = [
+    'group_summarise' => 'Grouped summarise() of n(), mean(), and sum() by key',
+    'group_summarise_closure' => 'The same summary with closures',
+    'grouped_window' => 'Grouped arrange(t), then mutate() with lag(), cumsum(), and row_number()',
+    'filter_expr' => 'filter() with an expression on x and g',
+    'filter_closure' => 'The same filter as a closure',
+    'mutate_expr' => 'mutate() with two expressions',
+    'join' => 'left_join() of 1,000,000 × 100,000 rows on key',
+    'arrange' => 'arrange(desc(x), id)',
+];
+$rows = [];
+$records = [];
+foreach ($harness as $file => $label) {
+    $records[$label] = $h = $read("harness-{$file}.json");
+    foreach ($h['results'] as $r) {
+        $rows[] = [
+            'case' => $workloads[$r['workload']],
+            'implementation' => $r['form'] === 'phplyr' ? $label : "{$label}, direct calls",
+            'value' => $r['median_s'],
+            'reps' => $r['runs_s'],
+            'rows_out' => $r['rows_out'],
+            '_order' => [array_search($r['workload'], array_keys($workloads), true), $r['form'] === 'phplyr' ? 0 : 1, array_search($label, $harness, true)],
+        ];
+    }
+}
+usort($rows, fn ($a, $b) => $a['_order'] <=> $b['_order']);
+$first = $records['DataFrame'];
+$polars = $records['PolarsTable']['method']['versions'];
+$write('workloads', [
+    'title' => 'phibble workloads at 1,000,000 rows',
+    'label' => 'phibble workloads',
+    'description' => 'phibble\'s shared benchmark workloads on an events table of 1,000,000 rows (id, key with 10,000 values, g with 8 labels, x with about 2% missing, and a datetime t) and a dims table of 100,000 rows. Each workload runs as a phplyr pipeline and as the equivalent direct phibble Table calls, which shows the time phplyr adds. Data from bench/generate.php, with phibble\'s generator and seed.',
+    'workload' => '1,000,000 rows; joins add 100,000 rows',
+    'dataset' => ['rows' => $first['results'][0]['rows_in'], 'generator' => 'bench/generate.php'],
+    'implementations' => [
+        'DataFrame' => 'phplyr on phibble\'s in-memory DataFrame',
+        'SQLite' => 'phplyr on phibble\'s SqlTable, SQLite '.$first['method']['versions']['sqlite'].' through PDO, with typed columns and an index on key',
+        'PolarsTable' => 'phplyr on phibble\'s PolarsTable, php_polars '.$polars['phpolars'],
+        'DataFrame, direct calls' => 'The same workload as DataFrame method calls',
+        'SQLite, direct calls' => 'The same workload as SqlTable method calls',
+        'PolarsTable, direct calls' => 'The same workload as PolarsTable method calls',
+    ],
+    'measure' => 'Elapsed time',
+    'unit' => 's',
+    'statistic' => $first['method']['statistic'],
+    'method' => 'From the first call of the workload through collect(), in one PHP process. Loading the CSV files and building the tables are not timed.',
+    'time_spent_in' => 'the PHP process. SQLite and Polars run inside it, through PDO and the php_polars extension.',
+    'environment' => [
+        ...$machine($first['method']['machine'], $first['generated_at'], $first['method']['versions']['phplyr']),
+        'versions' => array_filter(['phibble' => $phibble($first['method']['versions']['phibble']), 'SQLite' => $first['method']['versions']['sqlite'], 'php_polars' => $polars['phpolars'], 'Polars threads' => (string) $polars['polars_threads']]),
+        'threads' => ['DataFrame' => 1, 'SQLite' => 1, 'PolarsTable' => $polars['polars_threads']],
+        'cache' => 'warm',
+        'repeats' => $first['method']['runs'],
+        'warmups' => 0,
+    ],
+    'rows' => array_map(function (array $r) {
+        unset($r['_order']);
+
+        return $r;
+    }, $rows),
+    'reproduce' => [
+        'php bench/generate.php 1000000',
+        'php bench/harness.php --backend=dataframe --out=docs/benchmarks/harness-dataframe.json',
+        'php bench/harness.php --backend=sqlite --out=docs/benchmarks/harness-sqlite.json',
+        'php -d extension=/path/to/libphp_polars.so bench/harness.php --backend=polars --out=docs/benchmarks/harness-polars.json',
+        'bin/site-benchmarks',
+    ],
+    'source' => 'bench/harness.php',
+]);
+
+// Pipelines A, B, and C on every backend, and A and B in dplyr.
+$php = $read('backends-results.json');
+$dplyr = $read('dplyr-results.json');
+$m = $php['method'];
 $titles = [
-    'A' => 'Filter, join, summarise, and rank',
-    'B' => 'Grouped windows over every row',
-    'C' => 'Filter with a PHP closure, join, summarise, and rank',
+    'A' => 'A: filter, join, summarise, and rank',
+    'B' => 'B: grouped windows over every row',
+    'C' => 'C: A with a PHP closure in filter()',
 ];
 $names = [
-    'DataFrame' => 'phplyr on DataFrame',
-    'PolarsTable' => 'phplyr on PolarsTable',
-    'SqlTable(SQLite)' => 'phplyr on SQLite',
-    'dplyr' => 'dplyr '.($dplyr['method']['dplyr'] ?? ''),
+    'DataFrame' => 'DataFrame',
+    'PolarsTable' => 'PolarsTable',
+    'SqlTable(SQLite)' => 'SQLite',
+    'dplyr' => 'dplyr',
 ];
-
 $rows = [];
-foreach ([...$php['results'], ...($dplyr['results'] ?? [])] as $r) {
+foreach ([...$php['results'], ...$dplyr['results']] as $r) {
     if ($r['matches_frame'] !== true) {
         continue;
     }
     $rows[] = [
         'case' => $titles[$r['pipeline']].' ('.number_format($r['rows_in']).' rows)',
-        'implementation' => trim($names[$r['backend']]),
+        'implementation' => $names[$r['backend']],
         'value' => $r['seconds'],
         'reps' => $r['seconds_all'],
+        'rows_out' => $r['rows_out'],
         '_order' => [$r['pipeline'], $r['rows_in'], array_search($r['backend'], array_keys($names), true)],
     ];
 }
 usort($rows, fn ($a, $b) => $a['_order'] <=> $b['_order']);
-$rows = array_map(function (array $r) {
-    unset($r['_order']);
-
-    return $r;
-}, $rows);
-
-$m = $php['method'];
-$out = [
+$code = [];
+foreach ($php['pipelines'] as $p) {
+    foreach ([100_000, 1_000_000] as $n) {
+        $code[$titles[$p['id']].' ('.number_format($n).' rows)'] = ['DataFrame' => $p['code']];
+    }
+}
+$write('backends', [
     'title' => 'phplyr backends and dplyr',
-    'description' => 'Three pipelines on a generated sales table of 100,000 and 1,000,000 rows, joined to a 100-row store table. phplyr runs each on phibble\'s in-memory DataFrame, on PolarsTable (Polars at '.$m['polars_threads'].' threads), and on SQLite through SqlTable. dplyr runs the first two pipelines on the same data. The pipeline with a PHP closure has no dplyr version. Every backend returned the same rows as DataFrame, and dplyr\'s row counts and column sums matched.',
-    'measure' => ($m['statistic'] === 'median' ? 'Median' : 'Best').' of '.$m['repeats'].' runs; '.$m['timing'],
-    'unit' => 's',
-    'environment' => [
-        'cpu' => $m['machine']['cpu'],
-        'cores' => $m['machine']['cores'] ?? null,
-        'memory_gb' => $m['machine']['memory_gb'] ?? null,
-        'os' => $m['machine']['os'] ?? null,
-        'repeats' => $m['repeats'],
-        'php' => $m['php'],
-        'date' => substr($php['generated_at'], 0, 10),
-        'commit' => $m['versions']['phplyr'],
-        'phibble' => $m['versions']['phibble'],
-        'polars' => $m['versions']['phpolars']['polars'] ?? null,
-        'r' => $dplyr['method']['r'] ?? null,
+    'label' => 'Backends and dplyr',
+    'description' => 'Three pipelines on a generated sales table of 100,000 and 1,000,000 rows, joined to a 100-row stores table. A filters, joins, summarises by two keys, and ranks within groups. B computes lag(), cumsum(), and a share of the group total over every row. C is A with a PHP closure in filter(), so it has no dplyr version. The PHP backends run the same phplyr code.',
+    'workload' => '100,000 and 1,000,000 sales rows, 100 stores',
+    'dataset' => ['rows' => [100_000, 1_000_000], 'generator' => 'bench/backends.php', 'seed' => $m['data']['seed'], 'columns' => $m['data']['tables']],
+    'check' => [
+        'php_backends' => 'Every backend returned the same rows as DataFrame, compared as sorted rows with floats to 9 significant digits.',
+        'dplyr' => 'dplyr\'s row counts and numeric column sums matched DataFrame\'s within 1e-9 relative.',
     ],
-    'source' => 'bench/backends.php and bench/backends.R',
+    'implementations' => [
+        'DataFrame' => 'phplyr on phibble\'s in-memory DataFrame',
+        'PolarsTable' => 'phplyr on phibble\'s PolarsTable, php_polars '.$m['versions']['phpolars']['extension'].' (Polars '.$m['versions']['phpolars']['polars'].')',
+        'SQLite' => 'phplyr on phibble\'s SqlTable, SQLite '.$m['versions']['sqlite'].' through PDO',
+        'dplyr' => 'dplyr '.$dplyr['method']['dplyr'].' on '.preg_replace('/ \(.*\)$/', '', $dplyr['method']['r']),
+    ],
+    'measure' => 'Elapsed time',
+    'unit' => 's',
+    'statistic' => $m['statistic'],
+    'method' => 'PHP: the pipeline through collect(), with the tables already loaded. dplyr: the pipeline on a tibble already in memory. Reading and generating the data are not timed.',
+    'time_spent_in' => 'the PHP process for DataFrame, PolarsTable, and SQLite, which run inside it; the R process for dplyr.',
+    'code' => $code,
+    'languages' => ['DataFrame' => 'php'],
+    'environment' => [
+        ...$machine($m['machine'], $php['generated_at'], $m['versions']['phplyr']),
+        'versions' => array_filter([
+            'phibble' => $phibble($m['versions']['phibble']),
+            'php_polars' => $m['versions']['phpolars']['extension'],
+            'Polars' => $m['versions']['phpolars']['polars'],
+            'SQLite' => $m['versions']['sqlite'],
+            'R' => preg_replace('/^R version (\S+).*/', '$1', $dplyr['method']['r']),
+            'dplyr' => $dplyr['method']['dplyr'],
+        ]),
+        'threads' => ['DataFrame' => 1, 'PolarsTable' => $m['polars_threads'], 'SQLite' => 1, 'dplyr' => 1],
+        'cache' => 'warm',
+        'repeats' => $m['repeats'],
+    ],
+    'rows' => array_map(function (array $r) {
+        unset($r['_order']);
+
+        return $r;
+    }, $rows),
+    'reproduce' => [
+        'php -d memory_limit=-1 -d extension=/path/to/libphp_polars.so bench/backends.php --csv-dir=bench/data',
+        'Rscript bench/backends.R',
+        'bin/site-benchmarks',
+    ],
+    'source' => 'bench/backends.php',
+]);
+
+// lm(), glm(), lmer(), and glmer() on the phit extension and phit-polyfill.
+$models = $read('models-results.json');
+$m = $models['method'];
+$rows = [];
+$worst = 0.0;
+foreach ($models['results'] as $r) {
+    $worst = max($worst, $r['max_coefficient_difference']);
+    $rows[] = [
+        'case' => $r['title'],
+        'implementation' => $r['implementation'],
+        'value' => round($r['median_s'] * 1000, 2),
+        'reps' => array_map(fn ($s) => round($s * 1000, 2), $r['runs_s']),
+        'peak_memory_mib' => $r['median_peak_memory_mib'],
+        'reps_peak_memory_mib' => $r['runs_peak_memory_mib'],
+    ];
+}
+$write('models', [
+    'title' => 'Models: phit extension and phit-polyfill',
+    'label' => 'Models',
+    'description' => 'lm() and glm() on 100,000 rows with 10 predictors, and lmer() and glmer() on 10,000 rows with 100 random intercepts and 2 predictors, called through phplyr. Each run generates its data with a fixed seed, then times one fit.',
+    'workload' => '100,000 rows for lm() and glm(); 10,000 rows for lmer() and glmer()',
+    'check' => ['max_rel_coefficient_difference' => $worst, 'rule' => 'phit-polyfill\'s coefficients must match the extension\'s within 1e-6, relative to max(|coefficient|, 1).'],
+    'implementations' => [
+        'phit extension' => 'phit, a Rust PHP extension, at '.$m['versions']['phit_extension'],
+        'phit-polyfill' => 'phit-polyfill, plain PHP with the JIT disabled, at '.$m['versions']['phit_polyfill'],
+    ],
+    'measure' => 'Elapsed time',
+    'unit' => 'ms',
+    'statistic' => $m['statistic'],
+    'method' => 'One fit per fresh PHP process: the clock starts after the data is generated and stops when the fit returns. Starting PHP and generating the data are not timed. One warm-up run per case and implementation is not recorded.',
+    'time_spent_in' => 'the PHP process',
+    'memory_measure' => 'peak anonymous memory',
+    'memory_method' => 'RssAnon from /proc/PID/status, sampled every millisecond by phpolars\' bench/csv-pipeline/peakmem.c, over the whole PHP process, including generating the data',
+    'environment' => [
+        ...$machine($m['machine'], $models['generated_at'], $m['versions']['phplyr']),
+        'versions' => array_filter(['phibble' => $phibble($m['versions']['phibble'] ?? null), 'phit' => $m['versions']['phit_extension'], 'phit-polyfill' => $m['versions']['phit_polyfill']]),
+        'threads' => 1,
+        'repeats' => $m['runs'],
+        'warmups' => 1,
+    ],
     'rows' => $rows,
-];
-@mkdir($root.'/site/benchmarks', 0777, true);
-file_put_contents($root.'/site/benchmarks/backends.json', json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION)."\n");
-echo 'site/benchmarks/backends.json: '.\count($rows)." rows\n";
+    'reproduce' => [
+        'PHIT_EXTENSION=/path/to/libphit.so PHIT_POLYFILL=/path/to/phit-polyfill php bench/models.php --out=docs/benchmarks/models-results.json',
+        'bin/site-benchmarks',
+    ],
+    'source' => 'bench/models.php',
+]);

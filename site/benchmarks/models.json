@@ -1,0 +1,237 @@
+{
+    "title": "Models: phit extension and phit-polyfill",
+    "label": "Models",
+    "description": "lm() and glm() on 100,000 rows with 10 predictors, and lmer() and glmer() on 10,000 rows with 100 random intercepts and 2 predictors, called through phplyr. Each run generates its data with a fixed seed, then times one fit.",
+    "workload": "100,000 rows for lm() and glm(); 10,000 rows for lmer() and glmer()",
+    "check": {
+        "max_rel_coefficient_difference": 0.0,
+        "rule": "phit-polyfill's coefficients must match the extension's within 1e-6, relative to max(|coefficient|, 1)."
+    },
+    "implementations": {
+        "phit extension": "phit, a Rust PHP extension, at b4d4904",
+        "phit-polyfill": "phit-polyfill, plain PHP with the JIT disabled, at 15f794d"
+    },
+    "measure": "Elapsed time",
+    "unit": "ms",
+    "statistic": "median",
+    "method": "One fit per fresh PHP process: the clock starts after the data is generated and stops when the fit returns. Starting PHP and generating the data are not timed. One warm-up run per case and implementation is not recorded.",
+    "time_spent_in": "the PHP process",
+    "memory_measure": "peak anonymous memory",
+    "memory_method": "RssAnon from /proc/PID/status, sampled every millisecond by phpolars' bench/csv-pipeline/peakmem.c, over the whole PHP process, including generating the data",
+    "environment": {
+        "cpu": "AMD Ryzen 9 9955HX 16-Core Processor",
+        "cores": 2,
+        "pinned_cpus": "0-1",
+        "memory_gb": 8,
+        "os": "Linux, Ubuntu 24.04.5 LTS",
+        "php": "8.5.12",
+        "date": "2026-11-01",
+        "commit": "42b2ae0",
+        "versions": {
+            "phit": "b4d4904",
+            "phit-polyfill": "15f794d"
+        },
+        "threads": 1,
+        "repeats": 7,
+        "warmups": 1
+    },
+    "rows": [
+        {
+            "case": "Linear regression, 100,000 rows, 10 predictors",
+            "implementation": "phit extension",
+            "value": 78.87,
+            "reps": [
+                78.46,
+                79.96,
+                79.78,
+                78.87,
+                78.87,
+                78.26,
+                79.73
+            ],
+            "peak_memory_mib": 92.4,
+            "reps_peak_memory_mib": [
+                92.4,
+                92.5,
+                92.6,
+                92.8,
+                91.9,
+                91.9,
+                92.1
+            ]
+        },
+        {
+            "case": "Linear regression, 100,000 rows, 10 predictors",
+            "implementation": "phit-polyfill",
+            "value": 510.89,
+            "reps": [
+                509.54,
+                510.89,
+                516.65,
+                537.55,
+                508.55,
+                510.66,
+                511.68
+            ],
+            "peak_memory_mib": 122.1,
+            "reps_peak_memory_mib": [
+                122.1,
+                122.1,
+                122.1,
+                122.1,
+                122.1,
+                122.1,
+                122.1
+            ]
+        },
+        {
+            "case": "Logistic regression, 100,000 rows, 10 predictors",
+            "implementation": "phit extension",
+            "value": 162.75,
+            "reps": [
+                163.2,
+                162.75,
+                162.96,
+                167.36,
+                162.72,
+                162.07,
+                162.42
+            ],
+            "peak_memory_mib": 92.6,
+            "reps_peak_memory_mib": [
+                92.5,
+                93.1,
+                92.6,
+                93,
+                93.1,
+                92.5,
+                92.5
+            ]
+        },
+        {
+            "case": "Logistic regression, 100,000 rows, 10 predictors",
+            "implementation": "phit-polyfill",
+            "value": 2327.45,
+            "reps": [
+                2427.5,
+                2328.51,
+                2327.45,
+                2328.74,
+                2316.77,
+                2321.73,
+                2314.48
+            ],
+            "peak_memory_mib": 159.5,
+            "reps_peak_memory_mib": [
+                159.5,
+                159.5,
+                159.5,
+                159.5,
+                159.5,
+                159.5,
+                159.5
+            ]
+        },
+        {
+            "case": "Linear mixed model, 10,000 rows, 100 random intercepts",
+            "implementation": "phit extension",
+            "value": 7.51,
+            "reps": [
+                7.51,
+                7.52,
+                7.54,
+                7.46,
+                7.42,
+                7.41,
+                7.59
+            ],
+            "peak_memory_mib": 19.6,
+            "reps_peak_memory_mib": [
+                19.8,
+                19.6,
+                20.1,
+                19.3,
+                19.3,
+                19.3,
+                20.1
+            ]
+        },
+        {
+            "case": "Linear mixed model, 10,000 rows, 100 random intercepts",
+            "implementation": "phit-polyfill",
+            "value": 44.77,
+            "reps": [
+                44.76,
+                44.77,
+                45.46,
+                44.82,
+                44.52,
+                44.46,
+                44.93
+            ],
+            "peak_memory_mib": 24.3,
+            "reps_peak_memory_mib": [
+                24.3,
+                24.3,
+                23.7,
+                24.3,
+                24.3,
+                24.1,
+                24.3
+            ]
+        },
+        {
+            "case": "Logistic mixed model, 10,000 rows, 100 random intercepts",
+            "implementation": "phit extension",
+            "value": 107.87,
+            "reps": [
+                108.11,
+                107.89,
+                108.39,
+                107.87,
+                107.59,
+                107.67,
+                107.83
+            ],
+            "peak_memory_mib": 20.4,
+            "reps_peak_memory_mib": [
+                20.2,
+                20.9,
+                20.9,
+                20.4,
+                20.2,
+                20.9,
+                20.4
+            ]
+        },
+        {
+            "case": "Logistic mixed model, 10,000 rows, 100 random intercepts",
+            "implementation": "phit-polyfill",
+            "value": 1068.21,
+            "reps": [
+                1065.25,
+                1076.93,
+                1063.64,
+                1072.5,
+                1072.32,
+                1067.1,
+                1068.21
+            ],
+            "peak_memory_mib": 30.5,
+            "reps_peak_memory_mib": [
+                30.5,
+                30.5,
+                30.5,
+                30.5,
+                30.5,
+                30.5,
+                30.5
+            ]
+        }
+    ],
+    "reproduce": [
+        "PHIT_EXTENSION=/path/to/libphit.so PHIT_POLYFILL=/path/to/phit-polyfill php bench/models.php --out=docs/benchmarks/models-results.json",
+        "bin/site-benchmarks"
+    ],
+    "source": "bench/models.php"
+}

@@ -1,26 +1,88 @@
 {
     "title": "phplyr backends and dplyr",
-    "description": "Three pipelines on a generated sales table of 100,000 and 1,000,000 rows, joined to a 100-row store table. phplyr runs each on phibble's in-memory DataFrame, on PolarsTable (Polars at 2 threads), and on SQLite through SqlTable. dplyr runs the first two pipelines on the same data. The pipeline with a PHP closure has no dplyr version. Every backend returned the same rows as DataFrame, and dplyr's row counts and column sums matched.",
-    "measure": "Median of 7 runs; pipeline through collect(); data preloaded and not timed",
+    "label": "Backends and dplyr",
+    "description": "Three pipelines on a generated sales table of 100,000 and 1,000,000 rows, joined to a 100-row stores table. A filters, joins, summarises by two keys, and ranks within groups. B computes lag(), cumsum(), and a share of the group total over every row. C is A with a PHP closure in filter(), so it has no dplyr version. The PHP backends run the same phplyr code.",
+    "workload": "100,000 and 1,000,000 sales rows, 100 stores",
+    "dataset": {
+        "rows": [
+            100000,
+            1000000
+        ],
+        "generator": "bench/backends.php",
+        "seed": 7,
+        "columns": {
+            "sales": "id, store (100 values), product (1,000), day (1-365), units (about 2% NA, 5% zero), price",
+            "stores": "store, region (5 values)"
+        }
+    },
+    "check": {
+        "php_backends": "Every backend returned the same rows as DataFrame, compared as sorted rows with floats to 9 significant digits.",
+        "dplyr": "dplyr's row counts and numeric column sums matched DataFrame's within 1e-9 relative."
+    },
+    "implementations": {
+        "DataFrame": "phplyr on phibble's in-memory DataFrame",
+        "PolarsTable": "phplyr on phibble's PolarsTable, php_polars 0.2.1 (Polars 0.55.2)",
+        "SQLite": "phplyr on phibble's SqlTable, SQLite 3.45.1 through PDO",
+        "dplyr": "dplyr 1.2.1 on R version 4.6.2"
+    },
+    "measure": "Elapsed time",
     "unit": "s",
+    "statistic": "median",
+    "method": "PHP: the pipeline through collect(), with the tables already loaded. dplyr: the pipeline on a tibble already in memory. Reading and generating the data are not timed.",
+    "time_spent_in": "the PHP process for DataFrame, PolarsTable, and SQLite, which run inside it; the R process for dplyr.",
+    "code": {
+        "A: filter, join, summarise, and rank (100,000 rows)": {
+            "DataFrame": "fn (Table $s, Table $st) => $s\n    |> filter(col('units')->gt(0))\n    |> left_join($st, by: 'store')\n    |> group_by('region', 'product')\n    |> summarise(n: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))\n    |> group_by('region')\n    |> mutate(rank: min_rank(desc('revenue')))\n    |> filter(col('rank')->le(10))\n    |> arrange('region', 'rank')"
+        },
+        "A: filter, join, summarise, and rank (1,000,000 rows)": {
+            "DataFrame": "fn (Table $s, Table $st) => $s\n    |> filter(col('units')->gt(0))\n    |> left_join($st, by: 'store')\n    |> group_by('region', 'product')\n    |> summarise(n: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))\n    |> group_by('region')\n    |> mutate(rank: min_rank(desc('revenue')))\n    |> filter(col('rank')->le(10))\n    |> arrange('region', 'rank')"
+        },
+        "B: grouped windows over every row (100,000 rows)": {
+            "DataFrame": "fn (Table $s, Table $st) => $s\n    |> group_by('store')\n    |> mutate(prev: lag('units', orderBy: 'day'), running: cumsum('units'), share: col('units')->div(sum('units', naRm: true)))"
+        },
+        "B: grouped windows over every row (1,000,000 rows)": {
+            "DataFrame": "fn (Table $s, Table $st) => $s\n    |> group_by('store')\n    |> mutate(prev: lag('units', orderBy: 'day'), running: cumsum('units'), share: col('units')->div(sum('units', naRm: true)))"
+        },
+        "C: A with a PHP closure in filter() (100,000 rows)": {
+            "DataFrame": "fn (Table $s, Table $st) => $s\n    |> filter(fn ($r) => $r->units > 0)\n    |> left_join($st, by: 'store')\n    |> group_by('region', 'product')\n    |> summarise(n: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))\n    |> group_by('region')\n    |> mutate(rank: min_rank(desc('revenue')))\n    |> filter(col('rank')->le(10))\n    |> arrange('region', 'rank')"
+        },
+        "C: A with a PHP closure in filter() (1,000,000 rows)": {
+            "DataFrame": "fn (Table $s, Table $st) => $s\n    |> filter(fn ($r) => $r->units > 0)\n    |> left_join($st, by: 'store')\n    |> group_by('region', 'product')\n    |> summarise(n: n(), revenue: sum(col('units')->mul(col('price'))), avg_price: mean('price'))\n    |> group_by('region')\n    |> mutate(rank: min_rank(desc('revenue')))\n    |> filter(col('rank')->le(10))\n    |> arrange('region', 'rank')"
+        }
+    },
+    "languages": {
+        "DataFrame": "php"
+    },
     "environment": {
         "cpu": "AMD Ryzen 9 9955HX 16-Core Processor",
         "cores": 2,
+        "pinned_cpus": "0-1",
         "memory_gb": 8,
-        "os": "Ubuntu 24.04.5 LTS, kernel 6.8.0-90-generic",
-        "repeats": 7,
+        "os": "Linux, Ubuntu 24.04.5 LTS",
         "php": "8.5.12",
         "date": "2026-11-01",
         "commit": "42b2ae0",
-        "phibble": "6b9f06a",
-        "polars": "0.55.2",
-        "r": "R version 4.6.2 (2026-10-29)"
+        "versions": {
+            "phibble": "commit 6b9f06a",
+            "php_polars": "0.2.1",
+            "Polars": "0.55.2",
+            "SQLite": "3.45.1",
+            "R": "4.6.2",
+            "dplyr": "1.2.1"
+        },
+        "threads": {
+            "DataFrame": 1,
+            "PolarsTable": 2,
+            "SQLite": 1,
+            "dplyr": 1
+        },
+        "cache": "warm",
+        "repeats": 7
     },
-    "source": "bench/backends.php and bench/backends.R",
     "rows": [
         {
-            "case": "Filter, join, summarise, and rank (100,000 rows)",
-            "implementation": "phplyr on DataFrame",
+            "case": "A: filter, join, summarise, and rank (100,000 rows)",
+            "implementation": "DataFrame",
             "value": 0.0935,
             "reps": [
                 0.0934,
@@ -30,11 +92,12 @@
                 0.0936,
                 0.0933,
                 0.0932
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter, join, summarise, and rank (100,000 rows)",
-            "implementation": "phplyr on PolarsTable",
+            "case": "A: filter, join, summarise, and rank (100,000 rows)",
+            "implementation": "PolarsTable",
             "value": 0.0109,
             "reps": [
                 0.0185,
@@ -44,11 +107,12 @@
                 0.0114,
                 0.0102,
                 0.0104
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter, join, summarise, and rank (100,000 rows)",
-            "implementation": "phplyr on SQLite",
+            "case": "A: filter, join, summarise, and rank (100,000 rows)",
+            "implementation": "SQLite",
             "value": 0.0578,
             "reps": [
                 0.0608,
@@ -58,11 +122,12 @@
                 0.0577,
                 0.0579,
                 0.0576
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter, join, summarise, and rank (100,000 rows)",
-            "implementation": "dplyr 1.2.1",
+            "case": "A: filter, join, summarise, and rank (100,000 rows)",
+            "implementation": "dplyr",
             "value": 0.062,
             "reps": [
                 0.077,
@@ -72,11 +137,12 @@
                 0.062,
                 0.059,
                 0.063
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter, join, summarise, and rank (1,000,000 rows)",
-            "implementation": "phplyr on DataFrame",
+            "case": "A: filter, join, summarise, and rank (1,000,000 rows)",
+            "implementation": "DataFrame",
             "value": 0.7136,
             "reps": [
                 0.7157,
@@ -86,11 +152,12 @@
                 0.7128,
                 0.7118,
                 0.7136
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter, join, summarise, and rank (1,000,000 rows)",
-            "implementation": "phplyr on PolarsTable",
+            "case": "A: filter, join, summarise, and rank (1,000,000 rows)",
+            "implementation": "PolarsTable",
             "value": 0.1026,
             "reps": [
                 0.1144,
@@ -100,11 +167,12 @@
                 0.1026,
                 0.0988,
                 0.0969
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter, join, summarise, and rank (1,000,000 rows)",
-            "implementation": "phplyr on SQLite",
+            "case": "A: filter, join, summarise, and rank (1,000,000 rows)",
+            "implementation": "SQLite",
             "value": 0.5856,
             "reps": [
                 0.586,
@@ -114,11 +182,12 @@
                 0.5866,
                 0.5855,
                 0.5862
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter, join, summarise, and rank (1,000,000 rows)",
-            "implementation": "dplyr 1.2.1",
+            "case": "A: filter, join, summarise, and rank (1,000,000 rows)",
+            "implementation": "dplyr",
             "value": 0.115,
             "reps": [
                 0.128,
@@ -128,11 +197,12 @@
                 0.115,
                 0.114,
                 0.113
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Grouped windows over every row (100,000 rows)",
-            "implementation": "phplyr on DataFrame",
+            "case": "B: grouped windows over every row (100,000 rows)",
+            "implementation": "DataFrame",
             "value": 0.1309,
             "reps": [
                 0.1335,
@@ -142,11 +212,12 @@
                 0.132,
                 0.1303,
                 0.13
-            ]
+            ],
+            "rows_out": 100000
         },
         {
-            "case": "Grouped windows over every row (100,000 rows)",
-            "implementation": "phplyr on PolarsTable",
+            "case": "B: grouped windows over every row (100,000 rows)",
+            "implementation": "PolarsTable",
             "value": 0.0547,
             "reps": [
                 0.0547,
@@ -156,11 +227,12 @@
                 0.0545,
                 0.0547,
                 0.055
-            ]
+            ],
+            "rows_out": 100000
         },
         {
-            "case": "Grouped windows over every row (100,000 rows)",
-            "implementation": "phplyr on SQLite",
+            "case": "B: grouped windows over every row (100,000 rows)",
+            "implementation": "SQLite",
             "value": 0.3828,
             "reps": [
                 0.3822,
@@ -170,11 +242,12 @@
                 0.3831,
                 0.3828,
                 0.383
-            ]
+            ],
+            "rows_out": 100000
         },
         {
-            "case": "Grouped windows over every row (100,000 rows)",
-            "implementation": "dplyr 1.2.1",
+            "case": "B: grouped windows over every row (100,000 rows)",
+            "implementation": "dplyr",
             "value": 0.008,
             "reps": [
                 0.008,
@@ -184,11 +257,12 @@
                 0.008,
                 0.008,
                 0.008
-            ]
+            ],
+            "rows_out": 100000
         },
         {
-            "case": "Grouped windows over every row (1,000,000 rows)",
-            "implementation": "phplyr on DataFrame",
+            "case": "B: grouped windows over every row (1,000,000 rows)",
+            "implementation": "DataFrame",
             "value": 1.8486,
             "reps": [
                 1.8486,
@@ -198,11 +272,12 @@
                 1.8663,
                 1.8977,
                 1.8497
-            ]
+            ],
+            "rows_out": 1000000
         },
         {
-            "case": "Grouped windows over every row (1,000,000 rows)",
-            "implementation": "phplyr on PolarsTable",
+            "case": "B: grouped windows over every row (1,000,000 rows)",
+            "implementation": "PolarsTable",
             "value": 0.5202,
             "reps": [
                 0.5177,
@@ -212,11 +287,12 @@
                 0.5219,
                 0.5197,
                 0.5202
-            ]
+            ],
+            "rows_out": 1000000
         },
         {
-            "case": "Grouped windows over every row (1,000,000 rows)",
-            "implementation": "phplyr on SQLite",
+            "case": "B: grouped windows over every row (1,000,000 rows)",
+            "implementation": "SQLite",
             "value": 4.0103,
             "reps": [
                 4.0012,
@@ -226,11 +302,12 @@
                 4.0191,
                 4.0128,
                 4.0251
-            ]
+            ],
+            "rows_out": 1000000
         },
         {
-            "case": "Grouped windows over every row (1,000,000 rows)",
-            "implementation": "dplyr 1.2.1",
+            "case": "B: grouped windows over every row (1,000,000 rows)",
+            "implementation": "dplyr",
             "value": 0.032,
             "reps": [
                 0.032,
@@ -240,11 +317,12 @@
                 0.032,
                 0.031,
                 0.033
-            ]
+            ],
+            "rows_out": 1000000
         },
         {
-            "case": "Filter with a PHP closure, join, summarise, and rank (100,000 rows)",
-            "implementation": "phplyr on DataFrame",
+            "case": "C: A with a PHP closure in filter() (100,000 rows)",
+            "implementation": "DataFrame",
             "value": 0.1394,
             "reps": [
                 0.1319,
@@ -254,11 +332,12 @@
                 0.1406,
                 0.1443,
                 0.1409
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter with a PHP closure, join, summarise, and rank (100,000 rows)",
-            "implementation": "phplyr on PolarsTable",
+            "case": "C: A with a PHP closure in filter() (100,000 rows)",
+            "implementation": "PolarsTable",
             "value": 0.1122,
             "reps": [
                 0.1126,
@@ -268,11 +347,12 @@
                 0.1122,
                 0.1139,
                 0.1138
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter with a PHP closure, join, summarise, and rank (100,000 rows)",
-            "implementation": "phplyr on SQLite",
+            "case": "C: A with a PHP closure in filter() (100,000 rows)",
+            "implementation": "SQLite",
             "value": 0.2344,
             "reps": [
                 0.235,
@@ -282,11 +362,12 @@
                 0.2344,
                 0.2326,
                 0.2345
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter with a PHP closure, join, summarise, and rank (1,000,000 rows)",
-            "implementation": "phplyr on DataFrame",
+            "case": "C: A with a PHP closure in filter() (1,000,000 rows)",
+            "implementation": "DataFrame",
             "value": 1.2805,
             "reps": [
                 1.3126,
@@ -296,11 +377,12 @@
                 1.2805,
                 1.2434,
                 1.2924
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter with a PHP closure, join, summarise, and rank (1,000,000 rows)",
-            "implementation": "phplyr on PolarsTable",
+            "case": "C: A with a PHP closure in filter() (1,000,000 rows)",
+            "implementation": "PolarsTable",
             "value": 1.1858,
             "reps": [
                 1.1991,
@@ -310,11 +392,12 @@
                 1.169,
                 1.1858,
                 1.1604
-            ]
+            ],
+            "rows_out": 50
         },
         {
-            "case": "Filter with a PHP closure, join, summarise, and rank (1,000,000 rows)",
-            "implementation": "phplyr on SQLite",
+            "case": "C: A with a PHP closure in filter() (1,000,000 rows)",
+            "implementation": "SQLite",
             "value": 2.2432,
             "reps": [
                 2.2432,
@@ -324,7 +407,14 @@
                 2.2689,
                 2.2393,
                 2.2714
-            ]
+            ],
+            "rows_out": 50
         }
-    ]
+    ],
+    "reproduce": [
+        "php -d memory_limit=-1 -d extension=/path/to/libphp_polars.so bench/backends.php --csv-dir=bench/data",
+        "Rscript bench/backends.R",
+        "bin/site-benchmarks"
+    ],
+    "source": "bench/backends.php"
 }
