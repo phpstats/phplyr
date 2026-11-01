@@ -1,0 +1,242 @@
+{
+    "schema": "phplyr-models/1",
+    "generated_at": "2026-11-01T19:40:25Z",
+    "method": {
+        "statistic": "median",
+        "runs": 7,
+        "timing": "one fit per fresh process, after the data is generated; one warm-up run per case and implementation is not recorded",
+        "memory": "peak anonymous memory (peakmem)",
+        "polyfill_settings": "opcache.jit=disable",
+        "machine": {
+            "os": "Ubuntu 24.04.5 LTS, kernel 6.8.0-90-generic",
+            "cpu": "AMD Ryzen 9 9955HX 16-Core Processor",
+            "cores": 2,
+            "pinned_cpus": "0-1",
+            "memory_gb": 8,
+            "php": "8.5.12"
+        },
+        "versions": {
+            "phplyr": "42b2ae0",
+            "phit_extension": "b4d4904",
+            "phit_polyfill": "15f794d"
+        }
+    },
+    "results": [
+        {
+            "case": "lm",
+            "title": "Linear regression, 100,000 rows, 10 predictors",
+            "rows": 100000,
+            "implementation": "phit extension",
+            "median_s": 0.07887,
+            "runs_s": [
+                0.07846,
+                0.07996,
+                0.07978,
+                0.07887,
+                0.07887,
+                0.07826,
+                0.07973
+            ],
+            "median_peak_memory_mib": 92.4,
+            "runs_peak_memory_mib": [
+                92.4,
+                92.5,
+                92.6,
+                92.8,
+                91.9,
+                91.9,
+                92.1
+            ],
+            "max_coefficient_difference": 0
+        },
+        {
+            "case": "lm",
+            "title": "Linear regression, 100,000 rows, 10 predictors",
+            "rows": 100000,
+            "implementation": "phit-polyfill",
+            "median_s": 0.51089,
+            "runs_s": [
+                0.50954,
+                0.51089,
+                0.51665,
+                0.53755,
+                0.50855,
+                0.51066,
+                0.51168
+            ],
+            "median_peak_memory_mib": 122.1,
+            "runs_peak_memory_mib": [
+                122.1,
+                122.1,
+                122.1,
+                122.1,
+                122.1,
+                122.1,
+                122.1
+            ],
+            "max_coefficient_difference": 0
+        },
+        {
+            "case": "glm",
+            "title": "Logistic regression, 100,000 rows, 10 predictors",
+            "rows": 100000,
+            "implementation": "phit extension",
+            "median_s": 0.16275,
+            "runs_s": [
+                0.1632,
+                0.16275,
+                0.16296,
+                0.16736,
+                0.16272,
+                0.16207,
+                0.16242
+            ],
+            "median_peak_memory_mib": 92.6,
+            "runs_peak_memory_mib": [
+                92.5,
+                93.1,
+                92.6,
+                93,
+                93.1,
+                92.5,
+                92.5
+            ],
+            "max_coefficient_difference": 0
+        },
+        {
+            "case": "glm",
+            "title": "Logistic regression, 100,000 rows, 10 predictors",
+            "rows": 100000,
+            "implementation": "phit-polyfill",
+            "median_s": 2.32745,
+            "runs_s": [
+                2.4275,
+                2.32851,
+                2.32745,
+                2.32874,
+                2.31677,
+                2.32173,
+                2.31448
+            ],
+            "median_peak_memory_mib": 159.5,
+            "runs_peak_memory_mib": [
+                159.5,
+                159.5,
+                159.5,
+                159.5,
+                159.5,
+                159.5,
+                159.5
+            ],
+            "max_coefficient_difference": 0
+        },
+        {
+            "case": "lmer",
+            "title": "Linear mixed model, 10,000 rows, 100 random intercepts",
+            "rows": 10000,
+            "implementation": "phit extension",
+            "median_s": 0.00751,
+            "runs_s": [
+                0.00751,
+                0.00752,
+                0.00754,
+                0.00746,
+                0.00742,
+                0.00741,
+                0.00759
+            ],
+            "median_peak_memory_mib": 19.6,
+            "runs_peak_memory_mib": [
+                19.8,
+                19.6,
+                20.1,
+                19.3,
+                19.3,
+                19.3,
+                20.1
+            ],
+            "max_coefficient_difference": 0
+        },
+        {
+            "case": "lmer",
+            "title": "Linear mixed model, 10,000 rows, 100 random intercepts",
+            "rows": 10000,
+            "implementation": "phit-polyfill",
+            "median_s": 0.04477,
+            "runs_s": [
+                0.04476,
+                0.04477,
+                0.04546,
+                0.04482,
+                0.04452,
+                0.04446,
+                0.04493
+            ],
+            "median_peak_memory_mib": 24.3,
+            "runs_peak_memory_mib": [
+                24.3,
+                24.3,
+                23.7,
+                24.3,
+                24.3,
+                24.1,
+                24.3
+            ],
+            "max_coefficient_difference": 0
+        },
+        {
+            "case": "glmer",
+            "title": "Logistic mixed model, 10,000 rows, 100 random intercepts",
+            "rows": 10000,
+            "implementation": "phit extension",
+            "median_s": 0.10787,
+            "runs_s": [
+                0.10811,
+                0.10789,
+                0.10839,
+                0.10787,
+                0.10759,
+                0.10767,
+                0.10783
+            ],
+            "median_peak_memory_mib": 20.4,
+            "runs_peak_memory_mib": [
+                20.2,
+                20.9,
+                20.9,
+                20.4,
+                20.2,
+                20.9,
+                20.4
+            ],
+            "max_coefficient_difference": 0
+        },
+        {
+            "case": "glmer",
+            "title": "Logistic mixed model, 10,000 rows, 100 random intercepts",
+            "rows": 10000,
+            "implementation": "phit-polyfill",
+            "median_s": 1.06821,
+            "runs_s": [
+                1.06525,
+                1.07693,
+                1.06364,
+                1.0725,
+                1.07232,
+                1.0671,
+                1.06821
+            ],
+            "median_peak_memory_mib": 30.5,
+            "runs_peak_memory_mib": [
+                30.5,
+                30.5,
+                30.5,
+                30.5,
+                30.5,
+                30.5,
+                30.5
+            ],
+            "max_coefficient_difference": 0
+        }
+    ]
+}

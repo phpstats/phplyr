@@ -1,0 +1,298 @@
+{
+    "schema": "phplyr-harness/1",
+    "generated_at": "2026-11-01T19:32:01Z",
+    "method": {
+        "statistic": "median",
+        "runs": 7,
+        "timing": "workload through collect(), in one process; loading the data is not timed",
+        "machine": {
+            "os": "Ubuntu 24.04.5 LTS, kernel 6.8.0-90-generic",
+            "cpu": "AMD Ryzen 9 9955HX 16-Core Processor",
+            "cores": 2,
+            "pinned_cpus": "0-1",
+            "memory_gb": 8,
+            "php": "8.5.12"
+        },
+        "versions": {
+            "phplyr": "42b2ae0",
+            "phibble": "v0.6.0",
+            "phpolars": null,
+            "polars_threads": null,
+            "sqlite": "3.45.1"
+        }
+    },
+    "results": [
+        {
+            "backend": "dataframe",
+            "form": "phplyr",
+            "workload": "group_summarise",
+            "rows_in": 1000000,
+            "rows_out": 10000,
+            "median_s": 0.1478,
+            "runs_s": [
+                0.1848,
+                0.1478,
+                0.1605,
+                0.1726,
+                0.1416,
+                0.1427,
+                0.1417
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "direct",
+            "workload": "group_summarise",
+            "rows_in": 1000000,
+            "rows_out": 10000,
+            "median_s": 0.1447,
+            "runs_s": [
+                0.1447,
+                0.1418,
+                0.1417,
+                0.1433,
+                0.1484,
+                0.1449,
+                0.1459
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "phplyr",
+            "workload": "group_summarise_closure",
+            "rows_in": 1000000,
+            "rows_out": 10000,
+            "median_s": 0.4581,
+            "runs_s": [
+                0.4581,
+                0.4578,
+                0.4541,
+                0.4565,
+                0.492,
+                0.4755,
+                0.4803
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "direct",
+            "workload": "group_summarise_closure",
+            "rows_in": 1000000,
+            "rows_out": 10000,
+            "median_s": 0.4664,
+            "runs_s": [
+                0.4734,
+                0.4664,
+                0.4718,
+                0.4695,
+                0.4664,
+                0.4617,
+                0.4565
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "phplyr",
+            "workload": "grouped_window",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 1.0333,
+            "runs_s": [
+                1.0628,
+                1.0394,
+                1.0549,
+                1.0147,
+                1.0211,
+                1.0333,
+                1.0292
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "direct",
+            "workload": "grouped_window",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 1.0259,
+            "runs_s": [
+                1.0274,
+                1.0258,
+                1.0362,
+                1.0131,
+                1.022,
+                1.0368,
+                1.0259
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "phplyr",
+            "workload": "filter_expr",
+            "rows_in": 1000000,
+            "rows_out": 184129,
+            "median_s": 0.1638,
+            "runs_s": [
+                0.1636,
+                0.1638,
+                0.1635,
+                0.164,
+                0.1648,
+                0.1638,
+                0.1648
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "direct",
+            "workload": "filter_expr",
+            "rows_in": 1000000,
+            "rows_out": 184129,
+            "median_s": 0.1642,
+            "runs_s": [
+                0.1639,
+                0.1646,
+                0.164,
+                0.1644,
+                0.1648,
+                0.1642,
+                0.1642
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "phplyr",
+            "workload": "filter_closure",
+            "rows_in": 1000000,
+            "rows_out": 184129,
+            "median_s": 1.1101,
+            "runs_s": [
+                1.2219,
+                1.0977,
+                1.0533,
+                1.0465,
+                1.1101,
+                1.4878,
+                1.3059
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "direct",
+            "workload": "filter_closure",
+            "rows_in": 1000000,
+            "rows_out": 184129,
+            "median_s": 1.4602,
+            "runs_s": [
+                1.4526,
+                1.3486,
+                1.4602,
+                1.359,
+                1.6072,
+                1.4718,
+                1.5445
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "phplyr",
+            "workload": "mutate_expr",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 0.2725,
+            "runs_s": [
+                0.2736,
+                0.2729,
+                0.2725,
+                0.2715,
+                0.2713,
+                0.2725,
+                0.2718
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "direct",
+            "workload": "mutate_expr",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 0.2722,
+            "runs_s": [
+                0.2713,
+                0.2712,
+                0.2738,
+                0.273,
+                0.2723,
+                0.2722,
+                0.2721
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "phplyr",
+            "workload": "join",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 0.3383,
+            "runs_s": [
+                0.3355,
+                0.3417,
+                0.3383,
+                0.3424,
+                0.3367,
+                0.3429,
+                0.3357
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "direct",
+            "workload": "join",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 0.339,
+            "runs_s": [
+                0.3415,
+                0.3359,
+                0.339,
+                0.3372,
+                0.3405,
+                0.3364,
+                0.3404
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "phplyr",
+            "workload": "arrange",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 0.8705,
+            "runs_s": [
+                0.8705,
+                0.8935,
+                0.87,
+                0.8739,
+                0.8685,
+                0.8651,
+                0.8775
+            ]
+        },
+        {
+            "backend": "dataframe",
+            "form": "direct",
+            "workload": "arrange",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 0.8775,
+            "runs_s": [
+                0.8775,
+                0.8737,
+                0.8715,
+                0.8784,
+                0.8753,
+                0.9079,
+                0.8812
+            ]
+        }
+    ]
+}

@@ -386,7 +386,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>phit 0.4 also has the older names, such as <code>fit_lm()</code>, as deprecated aliases. phplyr calls the current names.</p>
-<p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, its PHP port, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them.</p>
+<p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, its PHP port, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them. On the <a href="../performance.html#methods">benchmark machine</a>, with phit 0.4.3 and phit-polyfill 0.4.1, a fit took:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fit</th>
+<th style="text-align: right;">Extension</th>
+<th style="text-align: right;"><span class="text-muted">Polyfill</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>lm()</code>, 100,000 rows, 10 predictors</td>
+<td style="text-align: right;">79 ms</td>
+<td style="text-align: right;"><span class="text-muted">511 ms</span></td>
+</tr>
+<tr class="even">
+<td><code>glm()</code> logistic, 100,000 rows, 10 predictors</td>
+<td style="text-align: right;">163 ms</td>
+<td style="text-align: right;"><span class="text-muted">2.33 s</span></td>
+</tr>
+<tr class="odd">
+<td><code>lmer()</code>, 10,000 rows, 100 random intercepts</td>
+<td style="text-align: right;">7.5 ms</td>
+<td style="text-align: right;"><span class="text-muted">45 ms</span></td>
+</tr>
+<tr class="even">
+<td><code>glmer()</code>, 10,000 rows, 100 random intercepts</td>
+<td style="text-align: right;">108 ms</td>
+<td style="text-align: right;"><span class="text-muted">1.07 s</span></td>
+</tr>
+</tbody>
+</table>
+<p>Each time is the median of seven fits, each in a fresh process. The two implementations returned identical coefficients. <a href="../benchmarks/models-results.json"><code>models-results.json</code></a> lists every run and each process’s peak memory.</p>
 <ul>
 <li>Install the polyfill with <code>composer require phpstats/phit-polyfill</code>. When the extension is loaded, the polyfill defines nothing.</li>
 <li>The polyfill throws an exception while OPcache’s JIT is enabled. Set <code>opcache.jit=disable</code> where it runs.</li>

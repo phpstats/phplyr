@@ -3,13 +3,60 @@ title: "Performance"
 ---
 
 phplyr's functions call one or two methods of the table they are given, so
-the backend determines how fast a pipeline runs.
+the backend determines how fast a pipeline runs. These timings cover the
+workloads and machine below.
+
+## Methods
+
+Every record comes from one Linux machine: two pinned AMD Zen 5 cores
+(Ryzen 9 9955HX), 8 GB of memory, Ubuntu 24.04, and PHP 8.5.12, with phibble
+0.6.0 and phpolars 0.2.1 (Polars 0.55.2 at two threads). DataFrame and SQLite
+run single-threaded. Each timing is the median of seven runs, and each record
+lists every run.
+
+| Script | Measures | Timer |
+| --- | --- | --- |
+| `bench/harness.php` | phibble's shared workloads on DataFrame, SQLite, and PolarsTable, each as a phplyr pipeline and as direct table calls | Through `collect()`; loading the data is not timed |
+| `bench/backends.php` | Three pipelines on DataFrame, PolarsTable, and SQLite, checking that all return the same rows | Through `collect()`; loading the data is not timed |
+| `bench/backends.R` | Two of those pipelines with dplyr 1.2.1 on R 4.6.2, checking row counts and column sums against phplyr's | On a preloaded tibble |
+| `bench/models.php` | `lm()`, `glm()`, `lmer()`, and `glmer()` on the phit extension and phit-polyfill | One fit per fresh process, after the data is generated |
+
+The harness data comes from `bench/generate.php`, with phibble's generator
+and seed. `events.csv` has 1,000,000 rows of `id`, `key` (10,000 values), `g`
+(8 labels), `x` (float, about 2% NA), and `t` (datetime). `dims.csv` has
+100,000 rows of `key`, `label`, and `w`.
+
+## phplyr's overhead
+
+The median phplyr pipeline and the median direct table calls differed by at
+most 3%, with two exceptions. The 15 ms PolarsTable summary differed by
+1.2 ms. The closure filters varied by up to 40% from run to run in both
+forms.
+
+## phibble workloads at 1,000,000 rows
+
+| Workload | DataFrame (s) | SQLite (s) | PolarsTable (s) |
+| --- | --: | --: | --: |
+| Grouped `summarise()` of `n()`, `mean()`, and `sum()` by `key` | 0.15 | 0.50 | 0.015 |
+| The same with closures | 0.46 | 2.10 | 0.79 |
+| Grouped `arrange(t)`, then `mutate()` with `lag()`, `cumsum()`, and `row_number()` | 1.03 | 5.16 | 0.49 |
+| `filter(col('x')->gt(0)->and(...))` | 0.16 | 0.34 | 0.05 |
+| The same filter as a closure | 1.11 | 2.78 | 1.55 |
+| `mutate()` with two expressions | 0.27 | 2.47 | 0.53 |
+| `left_join()` of 1M × 100k rows on `key` | 0.34 | 3.31 | 0.61 |
+| `arrange(desc('x'), 'id')` | 0.87 | 2.56 | 0.56 |
+
+The records are
+[`harness-dataframe.json`](benchmarks/harness-dataframe.json),
+[`harness-sqlite.json`](benchmarks/harness-sqlite.json), and
+[`harness-polars.json`](benchmarks/harness-polars.json).
 
 ## Choosing a backend
 
-- **In-memory `DataFrame`** suits data that fits in memory. Expression
-  arguments such as `mean('x')` let phibble compute a grouped summary in one
-  pass, without building a table per group as a closure does.
+- **In-memory `DataFrame`** suits data that fits in memory. In the grouped
+  summary above, expression arguments took 0.15 s and closures 0.46 s,
+  because phibble computes expressions in one pass without building a table
+  per group.
 - **A database table (`Phibble\tbl()`)** avoids loading the data into PHP.
   With expressions, `filter()` and `summarise()` run in the database, and only
   the result reaches PHP.
@@ -21,19 +68,37 @@ the backend determines how fast a pipeline runs.
 - **SQLite columns need declared types.** PDO binds values as strings. In an
   untyped column, SQLite stores them as text and compares numbers as text.
 - **PolarsTable** (phibble's Polars backend, on the phpolars extension) runs
-  expressions in Polars. A closure step converts the data to a DataFrame and
-  back. `PolarsTable::fromPolars(Phpolars\read_csv($path))` skips phibble's
-  CSV parse.
+  expressions in Polars and converts the result to PHP values. Every
+  expression workload above was faster than on DataFrame except the
+  `mutate()` and the join, which return all 1M rows after little
+  computation.
+- **Closure steps on PolarsTable** convert the data to a DataFrame and back,
+  so both closure workloads above were slower on PolarsTable than on
+  DataFrame.
+- **Data that starts in Polars** can skip phibble's CSV parse with
+  `PolarsTable::fromPolars(Phpolars\read_csv($path))`.
 
-## Benchmarks
+## Backend pipelines
 
-| Script | Measures |
-| --- | --- |
-| `bench/harness.php` | phibble's shared workloads on DataFrame, SQLite, and PolarsTable, each as a phplyr pipeline and as direct table calls |
-| `bench/backends.php` | Three pipelines on DataFrame, PolarsTable, and SQLite, checking that all return the same rows |
-| `bench/backends.R` | Two of those pipelines with dplyr, checking row counts and column sums against phplyr's |
-| `bench/models.php` | `lm()`, `glm()`, `lmer()`, and `glmer()` on the phit extension and phit-polyfill, one fresh process per run |
+`bench/backends.php` checks that every backend returns the same rows, and
+`bench/backends.R` checks dplyr's row counts and column sums against
+phplyr's.
 
-Each reports the median of seven runs and lists every run.
-`bench/generate.php` writes the harness data with phibble's generator and
-seed.
+- **A:** filter, join a store lookup, two-key summarise, then a ranking window.
+- **B:** grouped `lag(orderBy:)`, `cumsum()`, and a share of the group total
+  over all rows.
+- **C:** pipeline A with a closure in `filter()`. It has no dplyr version,
+  because its closure is PHP code.
+
+The input is a generated `sales` table, with no date or datetime columns,
+joined to a 100-row `stores` table.
+
+| Pipeline, 1M rows | DataFrame (s) | PolarsTable (s) | SQLite (s) | dplyr (s) |
+| --- | --: | --: | --: | --: |
+| A: reduce to a ranked summary | 0.71 | 0.10 | 0.59 | 0.12 |
+| B: windows over every row | 1.85 | 0.52 | 4.01 | 0.03 |
+| C: A with a closure | 1.28 | 1.19 | 2.24 | |
+
+The records, with the 100,000-row results, are
+[`backends-results.json`](benchmarks/backends-results.json) and
+[`dplyr-results.json`](benchmarks/dplyr-results.json).

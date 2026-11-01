@@ -1,0 +1,298 @@
+{
+    "schema": "phplyr-harness/1",
+    "generated_at": "2026-11-01T19:36:40Z",
+    "method": {
+        "statistic": "median",
+        "runs": 7,
+        "timing": "workload through collect(), in one process; loading the data is not timed",
+        "machine": {
+            "os": "Ubuntu 24.04.5 LTS, kernel 6.8.0-90-generic",
+            "cpu": "AMD Ryzen 9 9955HX 16-Core Processor",
+            "cores": 2,
+            "pinned_cpus": "0-1",
+            "memory_gb": 8,
+            "php": "8.5.12"
+        },
+        "versions": {
+            "phplyr": "42b2ae0",
+            "phibble": "v0.6.0",
+            "phpolars": null,
+            "polars_threads": null,
+            "sqlite": "3.45.1"
+        }
+    },
+    "results": [
+        {
+            "backend": "sqlite",
+            "form": "phplyr",
+            "workload": "group_summarise",
+            "rows_in": 1000000,
+            "rows_out": 10000,
+            "median_s": 0.4965,
+            "runs_s": [
+                0.5009,
+                0.4796,
+                0.4759,
+                0.5075,
+                0.4931,
+                0.4965,
+                0.5021
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "direct",
+            "workload": "group_summarise",
+            "rows_in": 1000000,
+            "rows_out": 10000,
+            "median_s": 0.4983,
+            "runs_s": [
+                0.4893,
+                0.4948,
+                0.4989,
+                0.5031,
+                0.4972,
+                0.4983,
+                0.5089
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "phplyr",
+            "workload": "group_summarise_closure",
+            "rows_in": 1000000,
+            "rows_out": 10000,
+            "median_s": 2.1027,
+            "runs_s": [
+                2.0402,
+                2.0535,
+                2.091,
+                2.1404,
+                2.1044,
+                2.1027,
+                2.1082
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "direct",
+            "workload": "group_summarise_closure",
+            "rows_in": 1000000,
+            "rows_out": 10000,
+            "median_s": 2.0617,
+            "runs_s": [
+                2.0951,
+                2.067,
+                2.082,
+                2.0617,
+                2.0593,
+                2.0543,
+                2.051
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "phplyr",
+            "workload": "grouped_window",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 5.1603,
+            "runs_s": [
+                5.136,
+                5.1454,
+                5.1487,
+                5.19,
+                5.194,
+                5.1603,
+                5.191
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "direct",
+            "workload": "grouped_window",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 5.1586,
+            "runs_s": [
+                5.1609,
+                5.1556,
+                5.1586,
+                5.1832,
+                5.1558,
+                5.1597,
+                5.1149
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "phplyr",
+            "workload": "filter_expr",
+            "rows_in": 1000000,
+            "rows_out": 184129,
+            "median_s": 0.3425,
+            "runs_s": [
+                0.347,
+                0.3426,
+                0.343,
+                0.3425,
+                0.342,
+                0.3409,
+                0.3417
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "direct",
+            "workload": "filter_expr",
+            "rows_in": 1000000,
+            "rows_out": 184129,
+            "median_s": 0.3432,
+            "runs_s": [
+                0.3437,
+                0.3426,
+                0.3432,
+                0.3432,
+                0.3445,
+                0.3478,
+                0.3419
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "phplyr",
+            "workload": "filter_closure",
+            "rows_in": 1000000,
+            "rows_out": 184129,
+            "median_s": 2.7805,
+            "runs_s": [
+                2.6602,
+                2.6183,
+                2.6775,
+                2.7805,
+                3.1542,
+                3.4607,
+                3.5511
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "direct",
+            "workload": "filter_closure",
+            "rows_in": 1000000,
+            "rows_out": 184129,
+            "median_s": 3.5212,
+            "runs_s": [
+                3.4026,
+                3.4895,
+                3.4962,
+                3.5705,
+                3.6416,
+                3.5478,
+                3.5212
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "phplyr",
+            "workload": "mutate_expr",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 2.4651,
+            "runs_s": [
+                2.4482,
+                2.4642,
+                2.4651,
+                2.4778,
+                2.4539,
+                2.4728,
+                2.4916
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "direct",
+            "workload": "mutate_expr",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 2.4807,
+            "runs_s": [
+                2.4626,
+                2.4456,
+                2.449,
+                2.5077,
+                2.5876,
+                2.5468,
+                2.4807
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "phplyr",
+            "workload": "join",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 3.3149,
+            "runs_s": [
+                3.3112,
+                3.3149,
+                3.311,
+                3.2997,
+                3.3366,
+                3.3317,
+                3.3299
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "direct",
+            "workload": "join",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 3.3071,
+            "runs_s": [
+                3.3071,
+                3.2899,
+                3.3101,
+                3.3014,
+                3.3181,
+                3.376,
+                3.2998
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "phplyr",
+            "workload": "arrange",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 2.562,
+            "runs_s": [
+                2.5682,
+                2.5578,
+                2.5493,
+                2.562,
+                2.549,
+                2.5649,
+                2.5636
+            ]
+        },
+        {
+            "backend": "sqlite",
+            "form": "direct",
+            "workload": "arrange",
+            "rows_in": 1000000,
+            "rows_out": 1000000,
+            "median_s": 2.5567,
+            "runs_s": [
+                2.5543,
+                2.5567,
+                2.5639,
+                2.5618,
+                2.5613,
+                2.5453,
+                2.546
+            ]
+        }
+    ]
+}

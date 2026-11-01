@@ -1,0 +1,50 @@
+{
+  "schema": "phplyr-dplyr-backends/1",
+  "generated_at": "2026-11-01T19:39:42Z",
+  "method": {
+    "statistic": "median",
+    "repeats": 7,
+    "timing": "pipeline on a preloaded tibble; reading the CSV is not timed",
+    "verification": "row count and numeric column sums compared with phplyr's DataFrame result (relative 1e-9)",
+    "r": "R version 4.6.2 (2026-10-29)",
+    "dplyr": "1.2.1"
+  },
+  "results": [
+    {
+      "pipeline": "A",
+      "backend": "dplyr",
+      "rows_in": 100000,
+      "rows_out": 50,
+      "seconds": 0.062,
+      "seconds_all": [0.077, 0.064, 0.062, 0.059, 0.062, 0.059, 0.063],
+      "matches_frame": true
+    },
+    {
+      "pipeline": "B",
+      "backend": "dplyr",
+      "rows_in": 100000,
+      "rows_out": 100000,
+      "seconds": 0.008,
+      "seconds_all": [0.008, 0.009, 0.008, 0.008, 0.008, 0.008, 0.008],
+      "matches_frame": true
+    },
+    {
+      "pipeline": "A",
+      "backend": "dplyr",
+      "rows_in": 1000000,
+      "rows_out": 50,
+      "seconds": 0.115,
+      "seconds_all": [0.128, 0.121, 0.114, 0.123, 0.115, 0.114, 0.113],
+      "matches_frame": true
+    },
+    {
+      "pipeline": "B",
+      "backend": "dplyr",
+      "rows_in": 1000000,
+      "rows_out": 1000000,
+      "seconds": 0.032,
+      "seconds_all": [0.032, 0.032, 0.032, 0.033, 0.032, 0.031, 0.033],
+      "matches_frame": true
+    }
+  ]
+}
