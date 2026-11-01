@@ -272,42 +272,61 @@ function bind_cols(Table ...$tables): Closure
 }
 
 // ---------------------------------------------------------------------------
-// Models: thin adapters over phit's formula API (fit_lm, fit_glm).
-// The table itself is passed, so factor levels reach the model matrix.
+// Models: thin adapters over phit's formula API. Each calls phit 0.4's name
+// (fit_ols, fit_generalized_linear, fit_mixed_gaussian, fit_mixed_logistic)
+// when phit has it, and phit 0.3's (fit_lm, fit_glm, fit_lmer, fit_glmer)
+// otherwise. The table itself is passed, so factor levels reach the model
+// matrix.
 // ---------------------------------------------------------------------------
 
-/** Linear regression: $t |> lm('y ~ a + b'). Needs fit_lm from phit. */
+/** Linear regression: $t |> lm('y ~ a + b'). Calls phit's fit_ols (fit_lm before phit 0.4). */
 function lm(string $formula, mixed ...$options): Closure
 {
-    return fn (Table $t) => Internal::callStats('Phit\\fit_lm', $formula, $t, ...$options);
+    return fn (Table $t) => Internal::callModel('fit_ols', 'fit_lm', $formula, $t, ...$options);
 }
 
 /**
  * Generalised linear model: $t |> glm('y ~ x', family: 'binomial').
- * Needs fit_glm from phit.
+ * Calls phit's fit_generalized_linear (fit_glm before phit 0.4).
  */
 function glm(string $formula, string $family = 'gaussian', mixed ...$options): Closure
 {
-    return fn (Table $t) => Internal::callStats('Phit\\fit_glm', $formula, $t, $family, ...$options);
+    return fn (Table $t) => Internal::callModel('fit_generalized_linear', 'fit_glm', $formula, $t, $family, ...$options);
 }
 
 /**
  * Linear mixed model with lme4-style random effects:
  * $t |> lmer('score ~ study_hours + (1 | school)'). REML by default
- * (reml: false for maximum likelihood). Needs fit_lmer from phit.
+ * (reml: false for maximum likelihood). Calls phit's fit_mixed_gaussian
+ * (fit_lmer before phit 0.4).
  */
 function lmer(string $formula, mixed ...$options): Closure
 {
-    return fn (Table $t) => Internal::callStats('Phit\\fit_lmer', $formula, $t, ...$options);
+    return fn (Table $t) => Internal::callModel('fit_mixed_gaussian', 'fit_lmer', $formula, $t, ...$options);
 }
 
 /**
  * Generalised linear mixed model: $t |> glmer('y ~ x + (1 | g)', family: 'binomial').
- * Needs fit_glmer from phit.
+ * Calls phit's fit_mixed_logistic (fit_glmer before phit 0.4). Both fit the
+ * binomial family with the logit link only. fit_mixed_logistic takes no
+ * family or link, so they are checked here.
  */
 function glmer(string $formula, string $family = 'binomial', mixed ...$options): Closure
 {
-    return fn (Table $t) => Internal::callStats('Phit\\fit_glmer', $formula, $t, $family, ...$options);
+    return function (Table $t) use ($formula, $family, $options) {
+        $ns = Internal::$phitNamespace;
+        if (! \function_exists($ns.'fit_mixed_logistic')) {
+            return Internal::callModel('fit_mixed_logistic', 'fit_glmer', $formula, $t, $family, ...$options);
+        }
+        // fit_glmer's first positional option is the link.
+        $link = $options['link'] ?? (\array_key_exists(0, $options) ? array_shift($options) : '');
+        unset($options['link']);
+        if ($family !== 'binomial' || ! \in_array($link, ['', 'logit'], true)) {
+            throw new \InvalidArgumentException("glmer() fits family 'binomial' with link 'logit' only.");
+        }
+
+        return Internal::callModel('fit_mixed_logistic', 'fit_glmer', $formula, $t, ...$options);
+    };
 }
 
 /** The SQL a lazy table would run (database backends only). */

@@ -2,6 +2,15 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
+## 0.4.4 - 2026-11-01
+
+### Changed
+
+- `lm()`, `glm()`, `lmer()`, and `glmer()` call phit 0.4's `Phit\fit_ols()`, `Phit\fit_generalized_linear()`, `Phit\fit_mixed_gaussian()`, and `Phit\fit_mixed_logistic()` when phit has them, and phit 0.3's `fit_lm()`, `fit_glm()`, `fit_lmer()`, and `fit_glmer()` otherwise. phit 0.3's `fit_ols()` is the matrix fit, so `lm()` calls `fit_ols()` only when `fit_ols_matrix()` also exists. phplyr works with phit and phit-polyfill 0.3 and 0.4.
+- With phit 0.4, `glmer()` rejects a family other than binomial or a link other than logit itself, because `fit_mixed_logistic()` takes neither argument. phit 0.3 rejected them too.
+- When phit is missing, the error names the phit 0.4 function, such as `Phit\fit_ols()`, and mentions phit-polyfill.
+- The documentation names phit 0.4's functions. Getting started has the full installation guide, the first example is a complete script with its data download, and the Examples section has four example pages. `site/site.json` has the `installation` and `examples` keys and no `vignettes`.
+
 ## 0.4.3 - 2026-10-31
 
 ### Changed

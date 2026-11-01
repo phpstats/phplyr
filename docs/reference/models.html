@@ -358,7 +358,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code> pass the table to phit’s <code>Phit\fit_lm()</code>, <code>Phit\fit_glm()</code>, <code>Phit\fit_lmer()</code>, and <code>Phit\fit_glmer()</code>. phplyr adds no model code of its own. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model.</p>
+<p><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code> pass the table to phit’s <code>Phit\fit_ols()</code>, <code>Phit\fit_generalized_linear()</code>, <code>Phit\fit_mixed_gaussian()</code>, and <code>Phit\fit_mixed_logistic()</code>. phit 0.3 and earlier name these functions <code>fit_lm()</code>, <code>fit_glm()</code>, <code>fit_lmer()</code>, and <code>fit_glmer()</code>, and phplyr calls those names when the new ones are missing. phplyr adds no model code of its own. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model.</p>
 <p>Two implementations of these functions are supported, and phplyr calls both the same way:</p>
 <ul>
 <li>The <a href="https://github.com/phpstats/phit">phit</a> extension, written in Rust.</li>
@@ -420,9 +420,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>REML by default; <code>reml: false</code> fits by maximum likelihood</td>
 </tr>
 <tr class="even">
-<td><code>glmer($formula, family:)</code></td>
+<td><code>glmer($formula)</code></td>
 <td>Generalized linear mixed model</td>
-<td><code>family: 'binomial'</code> by default</td>
+<td>The binomial family with the logit link and one random intercept, such as <code>(1 \| school)</code>, which is what phit supports</td>
 </tr>
 </tbody>
 </table>

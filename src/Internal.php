@@ -688,14 +688,32 @@ final class Internal
             return $out;
         });
     }
-    public static function callStats(string $function, mixed ...$args): mixed
+    /**
+     * The namespace of phit's functions. Tests point it at stubs.
+     *
+     * @internal
+     */
+    public static string $phitNamespace = 'Phit\\';
+
+    /**
+     * Call one of phit's formula model functions: the phit 0.4 name when it
+     * exists, otherwise the phit 0.3 name. phit 0.3's fit_ols is the matrix
+     * fit, so the formula fit_ols counts as present only alongside
+     * fit_ols_matrix, which phit 0.4 adds.
+     */
+    public static function callModel(string $new, string $old, mixed ...$args): mixed
     {
-        if (! \function_exists($function)) {
-            throw new \RuntimeException(
-                "{$function}() is not available. Install or update the phit extension (phpstats/phit)."
-            );
+        $ns = self::$phitNamespace;
+        $hasNew = $new === 'fit_ols' ? \function_exists($ns.'fit_ols_matrix') : \function_exists($ns.$new);
+        if ($hasNew) {
+            return ($ns.$new)(...$args);
+        }
+        if (\function_exists($ns.$old)) {
+            return ($ns.$old)(...$args);
         }
 
-        return $function(...$args);
+        throw new \RuntimeException(
+            "{$ns}{$new}() is not available. Install the phit extension (phpstats/phit) or phit-polyfill (phpstats/phit-polyfill)."
+        );
     }
 }

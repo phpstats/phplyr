@@ -3,8 +3,11 @@ title: "Models"
 ---
 
 `lm()`, `glm()`, `lmer()`, and `glmer()` pass the table to phit's
-`Phit\fit_lm()`, `Phit\fit_glm()`, `Phit\fit_lmer()`, and `Phit\fit_glmer()`.
-phplyr adds no model code of its own. phit reads factor levels from the table,
+`Phit\fit_ols()`, `Phit\fit_generalized_linear()`, `Phit\fit_mixed_gaussian()`,
+and `Phit\fit_mixed_logistic()`. phit 0.3 and earlier name these functions
+`fit_lm()`, `fit_glm()`, `fit_lmer()`, and `fit_glmer()`, and phplyr calls
+those names when the new ones are missing. phplyr adds no model code of its
+own. phit reads factor levels from the table,
 builds the model matrix from an R formula, and fits the model.
 
 Two implementations of these functions are supported, and phplyr calls both
@@ -62,7 +65,7 @@ phplyr($table)->glmer('passed ~ hours + (1 | school)', family: 'binomial');
 | `lm($formula)` | Linear regression | |
 | `glm($formula, family:)` | Generalized linear model | `family: 'gaussian'` (the default), `'binomial'`, or `'poisson'`, and `link:` |
 | `lmer($formula)` | Linear mixed model with lme4's random-effect terms, such as `(1 \| school)` | REML by default; `reml: false` fits by maximum likelihood |
-| `glmer($formula, family:)` | Generalized linear mixed model | `family: 'binomial'` by default |
+| `glmer($formula)` | Generalized linear mixed model | The binomial family with the logit link and one random intercept, such as `(1 \| school)`, which is what phit supports |
 
 Other named arguments go to phit's function unchanged. phit's documentation
 lists them and the formula syntax it accepts.
