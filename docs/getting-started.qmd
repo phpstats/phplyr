@@ -8,78 +8,39 @@ title: "Getting started"
 composer require phpstats/phplyr
 ```
 
-### Requirements
+phplyr needs PHP 8.3, 8.4, or 8.5 with the mbstring and PDO extensions. CI
+tests all three versions on Linux. The pipe operator `|>` needs PHP 8.5, and
+method chains run on all three. Composer also installs phibble 0.3 or later,
+which provides the tables, and `symfony/polyfill-php84`.
 
-- PHP 8.3, 8.4, or 8.5. CI tests all three on Linux. Pipelines written with
-  the pipe operator `|>` need PHP 8.5, and method chains run on all three.
-- The mbstring extension, which phplyr requires.
-- The PDO extension, which phibble requires.
+| Optional | Enables |
+| --- | --- |
+| [phit](https://github.com/phpstats/phit) extension, 0.1 or later | `lm()`, `glm()`, `lmer()`, and `glmer()`, and native `mean()`, `sd()`, `var_()`, `median()`, and `quantile()` |
+| [phit-polyfill](https://github.com/phpstats/phit-polyfill) | The same model functions in PHP, where the extension can't be installed. See [Models](reference/models.qmd). |
+| [phpolars](https://github.com/phpstats/phpolars) extension | phibble's `PolarsTable` backend. See [Backends](compatibility.qmd#backends). |
+| intl extension | Transliteration in `clean_names()` that matches R's janitor. Without it, iconv is used, and some names differ. |
+| PDO driver for SQLite, PostgreSQL, or MySQL | Database tables through `Phibble\tbl()`. See [Databases and expressions](reference/databases.qmd). |
 
-Composer installs phibble (0.3, 0.4, 0.5, or 0.6), which provides the tables, and
-`symfony/polyfill-php84`, which provides PHP 8.4's functions on PHP 8.3.
-
-### Optional features
-
-**Statistical models.** `lm()`, `glm()`, `lmer()`, and `glmer()` call phit's
-model functions. Either of two implementations provides them, and phplyr
-calls both the same way:
-
-- The [phit](https://github.com/phpstats/phit) extension, written in Rust.
-  phplyr works with phit 0.1 and later. CI builds it from phit's main branch.
-- [phit-polyfill](https://github.com/phpstats/phit-polyfill), the same
-  functions in PHP, for systems where the extension cannot be installed. CI
-  tests phplyr with phit-polyfill 0.3. Install it with
-  `composer require phpstats/phit-polyfill`. [Models](reference/models.qmd)
-  describes what it leaves out.
-
-**Native descriptive statistics.** With the phit extension loaded, `mean()`,
-`sd()`, `var_()`, `median()`, and `quantile()` call phit's statistics
-functions. Without the extension, including with phit-polyfill, they run in
-PHP and give the same results.
-
-**Polars.** The [phpolars](https://github.com/phpstats/phpolars) extension
-provides phibble's `PolarsTable`, which runs a pipeline in Polars. See
-[Compatibility and limitations](compatibility.qmd#backends).
-
-**Transliteration of names.** With the intl extension, `make_clean_names()`
-and `clean_names()` transliterate non-ASCII names the way R's janitor does.
-Without it, they use iconv, and some names can differ from janitor's. See
-[janitor](reference/janitor.qmd).
-
-**Database tables.** `Phibble\tbl()` runs a pipeline as SQL through PDO. It
-needs the PDO driver for the database: SQLite, PostgreSQL, or MySQL. See
-[Databases and expressions](reference/databases.qmd).
+Without phit, the descriptive helpers run in PHP with the same results.
 
 ## A first script
 
-Create a Composer project in an empty directory and download the example data,
-test scores from 250 students in 12 schools:
-
-```bash
-composer require phpstats/phplyr
-curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv
-```
-
-Save one of the scripts below as `first.php` and run `php first.php`. Both
-print the five schools with the highest average score among students who
-studied at least five hours.
-
-{{< include examples/_first-pipeline.md >}}
-
-The other examples in this documentation leave out the `require` line and the
-`use` imports, which the next section describes. Their CSV files are in the
-repository's [docs/data](https://github.com/phpstats/phplyr/tree/main/docs/data)
-directory, and the snippets on this page use `$schools` from the first
-script.
+[A first pipeline](index.qmd#a-first-pipeline) on the overview page is a
+complete script, with the commands that install phplyr and download its data.
+The snippets on this page use its `$schools` table. The other examples'
+CSV files are in
+[docs/data](https://github.com/phpstats/phplyr/tree/main/docs/data).
 
 ## Imports
 
 phplyr's functions are namespaced functions in `Phplyr`. Import the ones a file
-uses with `use function`:
+uses with `use function`. The snippets in the reference pages leave the
+imports out.
 
 ```php
 use Phibble\DataFrame;
-use function Phplyr\{phplyr, filter, mutate, group_by, summarize, arrange, desc, n, mean};
+use function Phplyr\{phplyr, filter, mutate, group_by};
+use function Phplyr\{summarize, arrange, desc, n, mean};
 ```
 
 A method chain needs `phplyr()` and the helpers it calls, such as `n()`,

@@ -361,12 +361,120 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The tidyr functions use tidyr’s argument names. Arguments that start with a dot in tidyr keep the dot here as a leading underscore, camelCase after it: <code>.names_sep</code> on <code>pack()</code> is <code>_namesSep:</code>. See <a href="../coming-from-dplyr.html#underscored-arguments">Underscored arguments</a>.</p>
+<p>The tidyr functions use tidyr’s argument names in camelCase, and tidyr’s dot-arguments take a leading underscore. See <a href="../coming-from-dplyr.html#underscored-arguments">Underscored arguments</a>.</p>
 <section id="pivoting" class="level2">
 <h2 class="anchored" data-anchor-id="pivoting">Pivoting</h2>
-<p><code>pivot_longer()</code> turns columns into rows of names and values. <code>namesPrefix</code> strips a regular expression from the start of each name. <code>namesSep</code> or <code>namesPattern</code> split names into several <code>namesTo</code> columns, and the special name <code>'.value'</code> takes the value column’s name from that part. <code>valuesDropNa: true</code> drops rows whose values are all NA. <code>namesTransform</code> and <code>valuesTransform</code> take a closure, or an array of closures by column. <code>colsVary: 'slowest'</code> keeps each source column’s rows together.</p>
-<p><code>pivot_wider()</code> spreads names and values into columns. <code>idCols</code> identify the rows (by default every other column). <code>valuesFill</code> fills missing cells, <code>valuesFn</code> combines duplicate cells, and <code>namesPrefix</code>, <code>namesSep</code>, <code>namesGlue</code>, and <code>namesSort</code> control the new names. Without <code>valuesFn</code>, duplicate cells turn the value column into list-columns and raise tidyr’s warning. <code>namesVary: 'slowest'</code> groups each name’s value columns together. <code>namesExpand</code> and <code>idExpand</code> add every combination of the <code>namesFrom</code> and <code>idCols</code> values (sorted, factors by level). <code>unusedFn</code> summarizes the columns that are in none of <code>idCols</code>, <code>namesFrom</code>, and <code>valuesFrom</code>.</p>
-<p>Both functions build tidyr’s pivot spec in phplyr and pass it to the table’s <code>pivotLongerSpec()</code> or <code>pivotWiderSpec()</code>, so a backend can run the pivot natively. <code>build_longer_spec()</code> and <code>build_wider_spec()</code> return that spec as a table, and <code>pivot_longer_spec()</code> and <code>pivot_wider_spec()</code> run an edited one. The superseded <code>gather()</code> and <code>spread()</code> are also available.</p>
+<p><code>pivot_longer(cols)</code> turns the selected columns into rows of names and values.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Default</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>namesTo</code></td>
+<td><code>'name'</code></td>
+<td>Column, or columns, for the names. <code>'.value'</code> takes a value column’s name from that part.</td>
+</tr>
+<tr class="even">
+<td><code>valuesTo</code></td>
+<td><code>'value'</code></td>
+<td>Column for the values</td>
+</tr>
+<tr class="odd">
+<td><code>namesPrefix</code></td>
+<td>none</td>
+<td>Regular expression removed from the start of each name</td>
+</tr>
+<tr class="even">
+<td><code>namesSep</code>, <code>namesPattern</code></td>
+<td>none</td>
+<td>Split names into several <code>namesTo</code> columns, by separator or by regex groups</td>
+</tr>
+<tr class="odd">
+<td><code>valuesDropNa</code></td>
+<td><code>false</code></td>
+<td>Drop rows whose values are all NA</td>
+</tr>
+<tr class="even">
+<td><code>namesTransform</code>, <code>valuesTransform</code></td>
+<td>none</td>
+<td>A closure, or an array of closures by column</td>
+</tr>
+<tr class="odd">
+<td><code>colsVary</code></td>
+<td><code>'fastest'</code></td>
+<td><code>'slowest'</code> keeps each source column’s rows together</td>
+</tr>
+</tbody>
+</table>
+<p><code>pivot_wider()</code> spreads names and values into columns.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Default</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>namesFrom</code>, <code>valuesFrom</code></td>
+<td><code>'name'</code>, <code>'value'</code></td>
+<td>Columns that supply the new names and their values</td>
+</tr>
+<tr class="even">
+<td><code>idCols</code></td>
+<td>every other column</td>
+<td>Columns that identify the output rows</td>
+</tr>
+<tr class="odd">
+<td><code>valuesFill</code></td>
+<td>NA</td>
+<td>Value for missing cells</td>
+</tr>
+<tr class="even">
+<td><code>valuesFn</code></td>
+<td>none</td>
+<td>Combines duplicate cells</td>
+</tr>
+<tr class="odd">
+<td><code>namesPrefix</code>, <code>namesSep</code>, <code>namesGlue</code>, <code>namesSort</code></td>
+<td><code>''</code>, <code>'_'</code>, none, <code>false</code></td>
+<td>Control the new names</td>
+</tr>
+<tr class="even">
+<td><code>namesVary</code></td>
+<td><code>'fastest'</code></td>
+<td><code>'slowest'</code> groups each name’s value columns together</td>
+</tr>
+<tr class="odd">
+<td><code>namesExpand</code>, <code>idExpand</code></td>
+<td><code>false</code></td>
+<td>Add every combination of the <code>namesFrom</code> or <code>idCols</code> values, sorted, factors by level</td>
+</tr>
+<tr class="even">
+<td><code>unusedFn</code></td>
+<td>none</td>
+<td>Summarizes columns in none of <code>idCols</code>, <code>namesFrom</code>, and <code>valuesFrom</code></td>
+</tr>
+</tbody>
+</table>
+<p>Without <code>valuesFn</code>, duplicate cells turn the value columns into list-columns and trigger a PHP warning with tidyr’s message.</p>
+<p><code>build_longer_spec()</code> and <code>build_wider_spec()</code> return tidyr’s pivot spec as a table, and <code>pivot_longer_spec()</code> and <code>pivot_wider_spec()</code> run an edited one. The superseded <code>gather()</code> and <code>spread()</code> are also available.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">

@@ -38,9 +38,6 @@ with `|>`. On PHP 8.3 and 8.4, they are methods of a chain:
 
 ## Conventions
 
-- **Dot-arguments** keep the dot as a leading underscore, and a multi-word
-  name is camelCase after it: `.by` is `_by:` and `.keep_all` is `_keepAll:`.
-  See [Underscored arguments](#underscored-arguments).
 - **Positions are 1-based**, as in R: `pull(1)` is the first column, `pull(-1)`
   the last, and `slice(1, 3)` the first and third rows of each group.
 - **`var()` is `var_()`**, because `var` is a reserved word in PHP.
@@ -55,11 +52,10 @@ with `|>`. On PHP 8.3 and 8.4, they are methods of a chain:
 
 ## Underscored arguments
 
-phplyr's parameters are camelCase, like the rest of the phpstats family.
-Every argument that dplyr or tidyr writes with a dot keeps it here as a
-leading underscore, and a multi-word name is camelCase after the underscore.
-There are sixteen options. `recode()` also names its first parameter `$_x`,
-after dplyr's `.x`:
+An argument that dplyr or tidyr writes with a dot keeps it as a leading
+underscore, and a multi-word name is camelCase after it: `.by` is `_by:` and
+`.keep_all` is `_keepAll:`. There are sixteen options, and `recode()` also
+names its first parameter `$_x`, after dplyr's `.x`:
 
 | phplyr | dplyr / tidyr | On |
 | --- | --- | --- |
@@ -81,11 +77,9 @@ after dplyr's `.x`:
 | `_missing` | `.missing` | `recode()` |
 | `$_x` | `.x` | `recode()` |
 
-Most of the verbs that take one are variadic. A named argument to a variadic
-function lands in the same string-keyed array as the columns the call creates,
-so without the prefix the option would always win and a column of that name
-would be unreachable. dplyr and tidyr use the dot for the same reason. With
-the prefix, both work:
+Most of these verbs take the new columns as variadic named arguments, so
+the prefix keeps an option apart from a column of the same name, as the dot
+does in dplyr:
 
 ::: {.panel-tabset group="syntax"}
 
@@ -108,14 +102,11 @@ phplyr($t)->mutate(by: 1);
 The first call computes `m` within each group of `g`. The second makes a
 column called `by`.
 
-The prefix is the only spelling an option has. An unprefixed named argument is
-always data, so `mutate(before: 'id')` makes a column called `before` rather
-than placing the new columns. A prefixed name that is not an option for that
-verb is an error naming the ones that are.
-
-Every other argument is camelCase, as in the rest of the phpstats packages.
-dplyr and tidyr write these without a dot: `naRm:`, `orderBy:`, `namesFrom:`,
-`namesTo:`, `withTies:`, and the rest.
+- An unprefixed named argument is always a column.
+- A prefixed name that isn't an option for that verb is an error that names
+  the options.
+- Every other argument is camelCase: `naRm:`, `orderBy:`, `namesFrom:`, and
+  the rest.
 
 ## phplyr options and phibble methods
 
@@ -129,20 +120,12 @@ pipeline can use both. phibble's methods have their own conventions:
 - phibble methods have no underscored options. Grouping is a separate method
   call, and `summarise(array $aggregates, ?string $groups)` takes the `.groups`
   value as a second argument.
-- A phplyr helper such as `mean('x')` returns a `Phplyr\Vec` that holds a
-  `Phibble\Expr` tree, the kind phibble's expression functions build. phplyr
-  passes the tree to the table. A database table compiles it to SQL where a
-  translation exists and otherwise loads the rows and evaluates it in PHP, as
-  [Databases and expressions](reference/databases.qmd#database-tables)
-  describes.
+- A phplyr helper such as `mean('x')` builds a phibble expression, which a
+  database table can compile to SQL. See
+  [Databases and expressions](reference/databases.qmd#expressions).
 
 ## `across()` functions
 
-R passes a vector to every `across()` function. PHP closures have no such
-convention, so phplyr decides what a function receives:
-
-- A phplyr helper passed as a first-class callable, such as `mean(...)` or
-  `lag(...)`, is called with each column's name.
-- In `summarize()`, any other closure receives the column's values as a list.
-- In `mutate()`, a closure receives one value at a time. If its first parameter
-  is typed `array`, it receives the whole column instead.
+R passes a vector to every `across()` function. In phplyr, what a function
+receives depends on the function and the verb. See
+[across()](reference/tidyselect.qmd#across).

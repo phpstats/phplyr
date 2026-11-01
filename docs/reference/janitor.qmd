@@ -2,8 +2,8 @@
 title: "janitor"
 ---
 
-phplyr has the single-table functions from R's janitor package. The test
-suite compares each one with janitor 2.2 output from `tests/r/janitor.R`.
+phplyr has the single-table functions from R's janitor package, with
+janitor 2.2's rules.
 
 ## Clean names
 

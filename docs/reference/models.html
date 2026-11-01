@@ -332,7 +332,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#results" id="toc-results" class="nav-link active" data-scroll-target="#results">Results</a></li>
+  <li><a href="#phit-0.3-and-earlier" id="toc-phit-0.3-and-earlier" class="nav-link active" data-scroll-target="#phit-0.3-and-earlier">phit 0.3 and earlier</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   </ul>
 </nav>
     </div>
@@ -358,21 +359,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code> pass the table to phit’s <code>Phit\fit_ols()</code>, <code>Phit\fit_generalized_linear()</code>, <code>Phit\fit_mixed_gaussian()</code>, and <code>Phit\fit_mixed_logistic()</code>. phit 0.3 and earlier name these functions <code>fit_lm()</code>, <code>fit_glm()</code>, <code>fit_lmer()</code>, and <code>fit_glmer()</code>, and phplyr calls those names when the new ones are missing. phplyr adds no model code of its own. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model.</p>
-<p>Two implementations of these functions are supported, and phplyr calls both the same way:</p>
+<p><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code> fit models with phit. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model. phplyr adds no model code of its own.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>phplyr</th>
+<th>phit function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>lm()</code></td>
+<td><code>Phit\fit_ols()</code></td>
+</tr>
+<tr class="even">
+<td><code>glm()</code></td>
+<td><code>Phit\fit_generalized_linear()</code></td>
+</tr>
+<tr class="odd">
+<td><code>lmer()</code></td>
+<td><code>Phit\fit_mixed_gaussian()</code></td>
+</tr>
+<tr class="even">
+<td><code>glmer()</code></td>
+<td><code>Phit\fit_mixed_logistic()</code></td>
+</tr>
+</tbody>
+</table>
+<p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, its PHP port, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them.</p>
 <ul>
-<li>The <a href="https://github.com/phpstats/phit">phit</a> extension, written in Rust.</li>
-<li><a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, a PHP port of the extension’s code, for systems where the extension cannot be installed. Install it with <code>composer require phpstats/phit-polyfill</code>. When the extension is loaded, the polyfill defines nothing.</li>
+<li>Install the polyfill with <code>composer require phpstats/phit-polyfill</code>. When the extension is loaded, the polyfill defines nothing.</li>
+<li>The polyfill throws an exception while OPcache’s JIT is enabled. Set <code>opcache.jit=disable</code> where it runs.</li>
+<li><code>mean()</code>, <code>sd()</code>, <code>var_()</code>, <code>median()</code>, and <code>quantile()</code> call phit only when the extension is loaded. Otherwise, including with the polyfill, they run in PHP with the same results.</li>
+<li>With neither installed, the four functions throw a <code>RuntimeException</code> that names the missing phit function.</li>
 </ul>
-<p>CI runs phplyr’s test suite with each one. Both runs compare <code>lm()</code> and <code>glm()</code> coefficients with R’s and <code>lmer()</code> fixed effects with lme4’s.</p>
-<p>phit-polyfill has the same functions, arguments, and results for the models, with these differences:</p>
-<ul>
-<li>It is slower. In phit-polyfill’s benchmarks, linear models took about 9 times as long as with the extension, logistic models about 22 times, and mixed models 13 to 78 times.</li>
-<li>Its functions throw an exception while OPcache’s JIT is enabled. Set <code>opcache.jit=disable</code> where it runs.</li>
-<li>It does not speed up the descriptive helpers. <code>mean()</code>, <code>sd()</code>, <code>var_()</code>, <code>median()</code>, and <code>quantile()</code> call phit only when the extension is loaded, and otherwise run in PHP with the same results.</li>
-<li>It leaves out phit’s CSV reader, which phplyr does not use.</li>
-</ul>
-<p>With neither installed, the four functions throw a <code>RuntimeException</code> that names the missing phit function.</p>
+<p>CI runs phplyr’s tests with each implementation. Both runs compare <code>lm()</code> and <code>glm()</code> coefficients with R’s, and <code>lmer()</code> fixed effects with lme4’s.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
@@ -426,7 +447,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>Other named arguments go to phit’s function unchanged. phit’s documentation lists them and the formula syntax it accepts.</p>
+<p>Other named arguments go to phit’s function unchanged. <a href="https://phit.phpstats.org/docs">phit’s documentation</a> lists them and the formula syntax it accepts.</p>
+<section id="phit-0.3-and-earlier" class="level2">
+<h2 class="anchored" data-anchor-id="phit-0.3-and-earlier">phit 0.3 and earlier</h2>
+<p>phit 0.3 and earlier name the functions <code>fit_lm()</code>, <code>fit_glm()</code>, <code>fit_lmer()</code>, and <code>fit_glmer()</code>. phplyr calls those names when the current ones are missing, so it works with phit 0.1 and later. phit 0.4 keeps the old names as deprecated aliases, which phplyr doesn’t call.</p>
+</section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
 <p>Each function returns phit’s result array in place of a table, so it ends a method chain. <code>columns</code> holds R’s coefficient names, in R’s order, and <code>coefficients</code>, <code>std_errors</code>, <code>p_values</code>, and <code>conf_int</code> follow the same order. The array also has the fitted values, residuals, fit statistics such as <code>r_squared</code> and <code>sigma</code>, and <code>n_observations</code> and <code>n_dropped</code>, which count the rows used and the rows dropped for missing values.</p>

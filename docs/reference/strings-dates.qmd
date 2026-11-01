@@ -61,5 +61,4 @@ loads the rows and runs in PHP, as
 Month and year arithmetic that lands on a date that doesn't exist, such as
 January 31 plus one month, gives NA, as in lubridate. Subtracting dates gives
 days, and subtracting datetimes gives seconds. Date columns stay dates through
-these functions. `Phibble\Expr\Clock::freeze()` fixes `today()` and `now()`
-in tests.
+these functions.

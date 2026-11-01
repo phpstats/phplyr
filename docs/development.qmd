@@ -34,6 +34,13 @@ Rscript tests/r/models.R      # lm() and glm() coefficients
 Rscript tests/r/janitor.R     # janitor functions (needs the janitor package)
 ```
 
+`tests/PolarsTest.php` runs about 120 pipelines on both `DataFrame` and
+`PolarsTable` and requires the same columns, types, groups, and rows from
+each. The `polars` CI job runs it with the prebuilt php_polars extension.
+
+`Phibble\Expr\Clock::freeze()` fixes the time that `today()` and `now()`
+return, for tests.
+
 `composer lint` checks the naming conventions with PHP_CodeSniffer.
 
 ## Documentation
@@ -52,13 +59,12 @@ loads phit from `.ext/libphit.dylib` for the model examples.
 Most examples leave out the `require` line and the imports, and
 `bin/docs-examples` adds them before it runs the code. An example that
 requires `vendor/autoload.php` itself is a complete script. It runs as
-written, so a missing import fails the run, and the page shows the whole file.
-The first example and the pages in the Examples section
-(`docs/examples/<slug>.qmd`, with their code in `docs/examples/pages/`) are
-complete scripts. In a subdirectory, the page leaves out the opening tag
-and the `require` line. A subdirectory's `_prelude.php`, such as the
-Gallery's, replaces the generated prelude for its examples, and the page
-shows it once.
+written, so a missing import fails the run, and the page shows it without the
+opening tag and the `require` line. The first example, the porting script,
+and the pages in the Examples section (`docs/examples/<slug>.qmd`, with their
+code in `docs/examples/pages/`) are complete scripts. A subdirectory's
+`_prelude.php`, such as the Gallery's, replaces the generated prelude for its
+examples, and the page shows it once.
 
 ```bash
 PHP=/path/to/php85 bin/docs-examples   # refresh example output

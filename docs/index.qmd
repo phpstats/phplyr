@@ -3,56 +3,35 @@ title: "phplyr"
 subtitle: "A PHP port of the Tidyverse's dplyr and tidyr."
 ---
 
-phplyr is a library of functions for filtering, transforming, summarizing,
-joining, and reshaping tables of data in PHP. Each function takes a table and
-returns a new one, so a sequence of them reads as a pipeline from the raw data
-to the result. The functions and their arguments follow R's
-[dplyr](https://dplyr.tidyverse.org) and [tidyr](https://tidyr.tidyverse.org)
-packages, and the test suite compares their results with R's.
+Filter, transform, join, and reshape tables with dplyr- and tidyr-style
+functions. Use PHP 8.5 pipes, or method chains on PHP 8.3 and later.
 
 ## A first pipeline
 
-The script below reads a CSV file of test scores from 250 students in 12
-schools. It keeps the students who studied at least five hours, summarizes
-each school, and prints the five schools with the highest average score.
-
-To run it, create a Composer project in an empty directory and download the
-data:
+Keep the students who studied at least five hours, summarize each school, and
+print the five schools with the highest average score.
 
 ```bash
 composer require phpstats/phplyr
 curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv
 ```
 
-Save the script as `first.php` in the same directory and run `php first.php`.
-The "PHP 8.5+" version uses the pipe operator `|>`. The "PHP 8.3–8.4" version
-is the same pipeline as a method chain and runs on PHP 8.3 and later.
-
 {{< include examples/_first-pipeline.md >}}
 
 ## phplyr and phibble
 
 The tables come from [phibble](https://github.com/phpstats/phibble), which
-Composer installs with phplyr. phibble reads CSV files, database queries, and
-PHP arrays into a typed, immutable `DataFrame`. Its methods, such as
-`filter()`, `mutate()`, `groupBy()`, `summarize()`, `arrange()`, and `join()`,
-are the operations every phibble table implements. They take closures,
-arrays of column definitions, and phibble expressions.
+Composer installs with phplyr. phplyr adds dplyr's and tidyr's functions on
+top of phibble's table methods, so a pipeline runs on an in-memory
+`DataFrame`, on a database table as SQL, or on Polars.
 
-phplyr is built on those methods and adds:
+phplyr has:
 
-- dplyr's functions and arguments, including grouped window functions such as
-  `lag()` and `min_rank()`, `across()`, column selectors such as
-  `starts_with()`, `join_by()` conditions, and the `slice_*()` family.
+- dplyr's single-table and two-table functions, with grouped window
+  functions, `across()`, column selectors, and `join_by()` conditions.
 - tidyr's pivoting, completing, splitting, nesting, and list-column functions.
 - janitor's `clean_names()`, `remove_empty()`, `get_dupes()`, and `tabyl()`.
-- Adapters that pass a table to phit's `lm()`, `glm()`, `lmer()`, and
-  `glmer()`.
-
-A phplyr pipeline runs on any phibble table: the in-memory `DataFrame`, a
-database table from `Phibble\tbl()`, which runs the pipeline as SQL, and
-`Phibble\Polars\PolarsTable`, which runs it in Polars through the phpolars
-extension.
+- `lm()`, `glm()`, `lmer()`, and `glmer()`, which fit models with phit.
 
 ## Install
 
@@ -60,15 +39,7 @@ extension.
 composer require phpstats/phplyr
 ```
 
-phplyr supports PHP 8.3, 8.4, and 8.5, and requires the mbstring and PDO
-extensions. Pipelines written with the pipe operator `|>` need PHP 8.5.
-
-The optional features are statistical models (the phit extension or
-phit-polyfill), native descriptive statistics (phit), the Polars backend
-(phpolars), janitor's transliteration of names (intl), and database tables (a
-PDO driver).
-[Installation](getting-started.qmd#installation) in Getting started describes
-the requirements and each optional feature.
-
-[Compatibility and limitations](compatibility.qmd) lists the PHP and backend
-details and the dplyr features phplyr does not have.
+phplyr needs PHP 8.3 or later with the mbstring and PDO extensions.
+[Installation](getting-started.qmd#installation) lists the optional
+extensions, and [Compatibility and limitations](compatibility.qmd) lists the
+dplyr features phplyr doesn't have.

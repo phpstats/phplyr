@@ -2,8 +2,7 @@
 title: "Gallery"
 ---
 
-Short analyses of the small datasets from phit's documentation. The output
-under each example is what it printed when the documentation was built.
+Short analyses of the small datasets from phit's documentation.
 
 **Data:** [`schools.csv`](https://github.com/phpstats/phplyr/blob/main/docs/data/schools.csv) ·
 [`housing.csv`](https://github.com/phpstats/phplyr/blob/main/docs/data/housing.csv) ·
@@ -37,8 +36,6 @@ and a final score.
   toward zero. Either difference can separate them from the raw means.
 
 ## Rent per square meter
-
-`housing.csv` has eight flats.
 
 {{< include examples/gallery/_housing.md >}}
 

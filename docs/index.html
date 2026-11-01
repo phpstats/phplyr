@@ -361,48 +361,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>phplyr is a library of functions for filtering, transforming, summarizing, joining, and reshaping tables of data in PHP. Each function takes a table and returns a new one, so a sequence of them reads as a pipeline from the raw data to the result. The functions and their arguments follow R’s <a href="https://dplyr.tidyverse.org">dplyr</a> and <a href="https://tidyr.tidyverse.org">tidyr</a> packages, and the test suite compares their results with R’s.</p>
+<p>Filter, transform, join, and reshape tables with dplyr- and tidyr-style functions. Use PHP 8.5 pipes, or method chains on PHP 8.3 and later.</p>
 <section id="a-first-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="a-first-pipeline">A first pipeline</h2>
-<p>The script below reads a CSV file of test scores from 250 students in 12 schools. It keeps the students who studied at least five hours, summarizes each school, and prints the five schools with the highest average score.</p>
-<p>To run it, create a Composer project in an empty directory and download the data:</p>
+<p>Keep the students who studied at least five hours, summarize each school, and print the five schools with the highest average score.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require phpstats/phplyr</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-O</span> https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Save the script as <code>first.php</code> in the same directory and run <code>php first.php</code>. The “PHP 8.5+” version uses the pipe operator <code>|&gt;</code>. The “PHP 8.3–8.4” version is the same pipeline as a method chain and runs on PHP 8.3 and later.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="cn">__DIR__</span><span class="op">.</span><span class="st">'/vendor/autoload.php'</span><span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{filter<span class="ot">,</span> group_by<span class="ot">,</span> summarize}<span class="ot">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{arrange<span class="ot">,</span> head<span class="ot">,</span> desc<span class="ot">,</span> n<span class="ot">,</span> mean<span class="ot">,</span> sd}<span class="ot">;</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{filter<span class="ot">,</span> group_by<span class="ot">,</span> summarize<span class="ot">,</span> arrange<span class="ot">,</span> head<span class="ot">,</span> desc<span class="ot">,</span> n<span class="ot">,</span> mean<span class="ot">,</span> sd}<span class="ot">;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;study_hours <span class="op">&gt;=</span> <span class="dv">5</span>) <span class="op">|&gt;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'school'</span>) <span class="op">|&gt;</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    summarize(students<span class="ot">:</span> n()<span class="ot">,</span> avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>)<span class="ot">,</span> sd_score<span class="ot">:</span> sd(<span class="st">'score'</span>)) <span class="op">|&gt;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    arrange(desc(<span class="st">'avg_score'</span>)) <span class="op">|&gt;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">5</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;study_hours <span class="op">&gt;=</span> <span class="dv">5</span>) <span class="op">|&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'school'</span>) <span class="op">|&gt;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    summarize(</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        students<span class="ot">:</span> n()<span class="ot">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>)<span class="ot">,</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        sd_score<span class="ot">:</span> sd(<span class="st">'score'</span>)<span class="ot">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">|&gt;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    arrange(desc(<span class="st">'avg_score'</span>)) <span class="op">|&gt;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">5</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="cn">__DIR__</span><span class="op">.</span><span class="st">'/vendor/autoload.php'</span><span class="ot">;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> desc<span class="ot">,</span> n<span class="ot">,</span> mean<span class="ot">,</span> sd}<span class="ot">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;study_hours <span class="op">&gt;=</span> <span class="dv">5</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(students<span class="ot">:</span> n()<span class="ot">,</span> avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>)<span class="ot">,</span> sd_score<span class="ot">:</span> sd(<span class="st">'score'</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> desc<span class="ot">,</span> n<span class="ot">,</span> mean<span class="ot">,</span> sd}<span class="ot">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;study_hours <span class="op">&gt;=</span> <span class="dv">5</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        students<span class="ot">:</span> n()<span class="ot">,</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>)<span class="ot">,</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        sd_score<span class="ot">:</span> sd(<span class="st">'score'</span>)<span class="ot">,</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(desc(<span class="st">'avg_score'</span>))</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">5</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -419,22 +418,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="phplyr-and-phibble" class="level2">
 <h2 class="anchored" data-anchor-id="phplyr-and-phibble">phplyr and phibble</h2>
-<p>The tables come from <a href="https://github.com/phpstats/phibble">phibble</a>, which Composer installs with phplyr. phibble reads CSV files, database queries, and PHP arrays into a typed, immutable <code>DataFrame</code>. Its methods, such as <code>filter()</code>, <code>mutate()</code>, <code>groupBy()</code>, <code>summarize()</code>, <code>arrange()</code>, and <code>join()</code>, are the operations every phibble table implements. They take closures, arrays of column definitions, and phibble expressions.</p>
-<p>phplyr is built on those methods and adds:</p>
+<p>The tables come from <a href="https://github.com/phpstats/phibble">phibble</a>, which Composer installs with phplyr. phplyr adds dplyr’s and tidyr’s functions on top of phibble’s table methods, so a pipeline runs on an in-memory <code>DataFrame</code>, on a database table as SQL, or on Polars.</p>
+<p>phplyr has:</p>
 <ul>
-<li>dplyr’s functions and arguments, including grouped window functions such as <code>lag()</code> and <code>min_rank()</code>, <code>across()</code>, column selectors such as <code>starts_with()</code>, <code>join_by()</code> conditions, and the <code>slice_*()</code> family.</li>
+<li>dplyr’s single-table and two-table functions, with grouped window functions, <code>across()</code>, column selectors, and <code>join_by()</code> conditions.</li>
 <li>tidyr’s pivoting, completing, splitting, nesting, and list-column functions.</li>
 <li>janitor’s <code>clean_names()</code>, <code>remove_empty()</code>, <code>get_dupes()</code>, and <code>tabyl()</code>.</li>
-<li>Adapters that pass a table to phit’s <code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code>.</li>
+<li><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code>, which fit models with phit.</li>
 </ul>
-<p>A phplyr pipeline runs on any phibble table: the in-memory <code>DataFrame</code>, a database table from <code>Phibble\tbl()</code>, which runs the pipeline as SQL, and <code>Phibble\Polars\PolarsTable</code>, which runs it in Polars through the phpolars extension.</p>
 </section>
 <section id="install" class="level2">
 <h2 class="anchored" data-anchor-id="install">Install</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require phpstats/phplyr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>phplyr supports PHP 8.3, 8.4, and 8.5, and requires the mbstring and PDO extensions. Pipelines written with the pipe operator <code>|&gt;</code> need PHP 8.5.</p>
-<p>The optional features are statistical models (the phit extension or phit-polyfill), native descriptive statistics (phit), the Polars backend (phpolars), janitor’s transliteration of names (intl), and database tables (a PDO driver). <a href="./getting-started.html#installation">Installation</a> in Getting started describes the requirements and each optional feature.</p>
-<p><a href="./compatibility.html">Compatibility and limitations</a> lists the PHP and backend details and the dplyr features phplyr does not have.</p>
+<p>phplyr needs PHP 8.3 or later with the mbstring and PDO extensions. <a href="./getting-started.html#installation">Installation</a> lists the optional extensions, and <a href="./compatibility.html">Compatibility and limitations</a> lists the dplyr features phplyr doesn’t have.</p>
 
 
 </section>

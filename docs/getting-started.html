@@ -332,11 +332,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a>
-  <ul class="collapse">
-  <li><a href="#requirements" id="toc-requirements" class="nav-link" data-scroll-target="#requirements">Requirements</a></li>
-  <li><a href="#optional-features" id="toc-optional-features" class="nav-link" data-scroll-target="#optional-features">Optional features</a></li>
-  </ul></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a></li>
   <li><a href="#a-first-script" id="toc-a-first-script" class="nav-link" data-scroll-target="#a-first-script">A first script</a></li>
   <li><a href="#imports" id="toc-imports" class="nav-link" data-scroll-target="#imports">Imports</a></li>
   <li><a href="#loading-data" id="toc-loading-data" class="nav-link" data-scroll-target="#loading-data">Loading data</a></li>
@@ -372,88 +368,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="installation" class="level2">
 <h2 class="anchored" data-anchor-id="installation">Installation</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require phpstats/phplyr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="requirements" class="level3">
-<h3 class="anchored" data-anchor-id="requirements">Requirements</h3>
-<ul>
-<li>PHP 8.3, 8.4, or 8.5. CI tests all three on Linux. Pipelines written with the pipe operator <code>|&gt;</code> need PHP 8.5, and method chains run on all three.</li>
-<li>The mbstring extension, which phplyr requires.</li>
-<li>The PDO extension, which phibble requires.</li>
-</ul>
-<p>Composer installs phibble (0.3, 0.4, 0.5, or 0.6), which provides the tables, and <code>symfony/polyfill-php84</code>, which provides PHP 8.4’s functions on PHP 8.3.</p>
-</section>
-<section id="optional-features" class="level3">
-<h3 class="anchored" data-anchor-id="optional-features">Optional features</h3>
-<p><strong>Statistical models.</strong> <code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code> call phit’s model functions. Either of two implementations provides them, and phplyr calls both the same way:</p>
-<ul>
-<li>The <a href="https://github.com/phpstats/phit">phit</a> extension, written in Rust. phplyr works with phit 0.1 and later. CI builds it from phit’s main branch.</li>
-<li><a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, the same functions in PHP, for systems where the extension cannot be installed. CI tests phplyr with phit-polyfill 0.3. Install it with <code>composer require phpstats/phit-polyfill</code>. <a href="./reference/models.html">Models</a> describes what it leaves out.</li>
-</ul>
-<p><strong>Native descriptive statistics.</strong> With the phit extension loaded, <code>mean()</code>, <code>sd()</code>, <code>var_()</code>, <code>median()</code>, and <code>quantile()</code> call phit’s statistics functions. Without the extension, including with phit-polyfill, they run in PHP and give the same results.</p>
-<p><strong>Polars.</strong> The <a href="https://github.com/phpstats/phpolars">phpolars</a> extension provides phibble’s <code>PolarsTable</code>, which runs a pipeline in Polars. See <a href="./compatibility.html#backends">Compatibility and limitations</a>.</p>
-<p><strong>Transliteration of names.</strong> With the intl extension, <code>make_clean_names()</code> and <code>clean_names()</code> transliterate non-ASCII names the way R’s janitor does. Without it, they use iconv, and some names can differ from janitor’s. See <a href="./reference/janitor.html">janitor</a>.</p>
-<p><strong>Database tables.</strong> <code>Phibble\tbl()</code> runs a pipeline as SQL through PDO. It needs the PDO driver for the database: SQLite, PostgreSQL, or MySQL. See <a href="./reference/databases.html">Databases and expressions</a>.</p>
-</section>
+<p>phplyr needs PHP 8.3, 8.4, or 8.5 with the mbstring and PDO extensions. CI tests all three versions on Linux. The pipe operator <code>|&gt;</code> needs PHP 8.5, and method chains run on all three. Composer also installs phibble 0.3 or later, which provides the tables, and <code>symfony/polyfill-php84</code>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Optional</th>
+<th>Enables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://github.com/phpstats/phit">phit</a> extension, 0.1 or later</td>
+<td><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code>, and native <code>mean()</code>, <code>sd()</code>, <code>var_()</code>, <code>median()</code>, and <code>quantile()</code></td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a></td>
+<td>The same model functions in PHP, where the extension can’t be installed. See <a href="./reference/models.html">Models</a>.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/phpstats/phpolars">phpolars</a> extension</td>
+<td>phibble’s <code>PolarsTable</code> backend. See <a href="./compatibility.html#backends">Backends</a>.</td>
+</tr>
+<tr class="even">
+<td>intl extension</td>
+<td>Transliteration in <code>clean_names()</code> that matches R’s janitor. Without it, iconv is used, and some names differ.</td>
+</tr>
+<tr class="odd">
+<td>PDO driver for SQLite, PostgreSQL, or MySQL</td>
+<td>Database tables through <code>Phibble\tbl()</code>. See <a href="./reference/databases.html">Databases and expressions</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>Without phit, the descriptive helpers run in PHP with the same results.</p>
 </section>
 <section id="a-first-script" class="level2">
 <h2 class="anchored" data-anchor-id="a-first-script">A first script</h2>
-<p>Create a Composer project in an empty directory and download the example data, test scores from 250 students in 12 schools:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require phpstats/phplyr</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-O</span> https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Save one of the scripts below as <code>first.php</code> and run <code>php first.php</code>. Both print the five schools with the highest average score among students who studied at least five hours.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
-<div class="tab-content" data-group="syntax">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="cn">__DIR__</span><span class="op">.</span><span class="st">'/vendor/autoload.php'</span><span class="ot">;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{filter<span class="ot">,</span> group_by<span class="ot">,</span> summarize<span class="ot">,</span> arrange<span class="ot">,</span> head<span class="ot">,</span> desc<span class="ot">,</span> n<span class="ot">,</span> mean<span class="ot">,</span> sd}<span class="ot">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;study_hours <span class="op">&gt;=</span> <span class="dv">5</span>) <span class="op">|&gt;</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'school'</span>) <span class="op">|&gt;</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    summarize(students<span class="ot">:</span> n()<span class="ot">,</span> avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>)<span class="ot">,</span> sd_score<span class="ot">:</span> sd(<span class="st">'score'</span>)) <span class="op">|&gt;</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    arrange(desc(<span class="st">'avg_score'</span>)) <span class="op">|&gt;</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">5</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="cn">__DIR__</span><span class="op">.</span><span class="st">'/vendor/autoload.php'</span><span class="ot">;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> desc<span class="ot">,</span> n<span class="ot">,</span> mean<span class="ot">,</span> sd}<span class="ot">;</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;study_hours <span class="op">&gt;=</span> <span class="dv">5</span>)</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(students<span class="ot">:</span> n()<span class="ot">,</span> avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>)<span class="ot">,</span> sd_score<span class="ot">:</span> sd(<span class="st">'score'</span>))</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(desc(<span class="st">'avg_score'</span>))</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">5</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-<pre class="text output"><code># A tibble: 5 × 4
-  school    students avg_score sd_score
-  &lt;chr&gt;        &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 school-07       14      86.9     6.32
-2 school-06       20      80.9     8.90
-3 school-02       12      79.7     8.22
-4 school-09       11      79.3     6.67
-5 school-11       13      77.6     7.31</code></pre>
-<p>The other examples in this documentation leave out the <code>require</code> line and the <code>use</code> imports, which the next section describes. Their CSV files are in the repository’s <a href="https://github.com/phpstats/phplyr/tree/main/docs/data">docs/data</a> directory, and the snippets on this page use <code>$schools</code> from the first script.</p>
+<p><a href="./index.html#a-first-pipeline">A first pipeline</a> on the overview page is a complete script, with the commands that install phplyr and download its data. The snippets on this page use its <code>$schools</code> table. The other examples’ CSV files are in <a href="https://github.com/phpstats/phplyr/tree/main/docs/data">docs/data</a>.</p>
 </section>
 <section id="imports" class="level2">
 <h2 class="anchored" data-anchor-id="imports">Imports</h2>
-<p>phplyr’s functions are namespaced functions in <code>Phplyr</code>. Import the ones a file uses with <code>use function</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> filter<span class="ot">,</span> mutate<span class="ot">,</span> group_by<span class="ot">,</span> summarize<span class="ot">,</span> arrange<span class="ot">,</span> desc<span class="ot">,</span> n<span class="ot">,</span> mean}<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>phplyr’s functions are namespaced functions in <code>Phplyr</code>. Import the ones a file uses with <code>use function</code>. The snippets in the reference pages leave the imports out.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> filter<span class="ot">,</span> mutate<span class="ot">,</span> group_by}<span class="ot">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{summarize<span class="ot">,</span> arrange<span class="ot">,</span> desc<span class="ot">,</span> n<span class="ot">,</span> mean}<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A method chain needs <code>phplyr()</code> and the helpers it calls, such as <code>n()</code>, <code>mean()</code>, and <code>desc()</code>. The table functions are the chain’s methods, so they don’t need importing.</p>
 <p>Some phplyr functions have the same names as PHP built-in functions. In a file that imports one of them, the bare name calls phplyr’s function. Write a leading backslash to call the built-in, as in <code>\count($array)</code>.</p>
 <table class="caption-top table">
@@ -491,29 +448,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="loading-data" class="level2">
 <h2 class="anchored" data-anchor-id="loading-data">Loading data</h2>
 <p>phibble builds tables from CSV files, PDO queries, query builders, and PHP arrays:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="va">$rows</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'x'</span> =&gt; <span class="fl">2.5</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'x'</span> =&gt; <span class="kw">null</span>]])<span class="ot">;</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="va">$cols</span> <span class="op">=</span> DataFrame::fromColumns([<span class="st">'id'</span> =&gt; [<span class="dv">1</span><span class="ot">,</span> <span class="dv">2</span>]<span class="ot">,</span> <span class="st">'x'</span> =&gt; [<span class="fl">2.5</span><span class="ot">,</span> <span class="kw">null</span>]])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">$rows</span> <span class="op">=</span> DataFrame::fromRows([[<span class="st">'id'</span> =&gt; <span class="dv">1</span><span class="ot">,</span> <span class="st">'x'</span> =&gt; <span class="fl">2.5</span>]<span class="ot">,</span> [<span class="st">'id'</span> =&gt; <span class="dv">2</span><span class="ot">,</span> <span class="st">'x'</span> =&gt; <span class="kw">null</span>]])<span class="ot">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">$cols</span> <span class="op">=</span> DataFrame::fromColumns([<span class="st">'id'</span> =&gt; [<span class="dv">1</span><span class="ot">,</span> <span class="dv">2</span>]<span class="ot">,</span> <span class="st">'x'</span> =&gt; [<span class="fl">2.5</span><span class="ot">,</span> <span class="kw">null</span>]])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>null</code> is a missing value, R’s <code>NA</code>. A <code>DataFrame</code> is immutable, so every function returns a new table and leaves its input unchanged. <code>echo $table</code> prints the first rows in the format of R’s tibble package.</p>
 </section>
 <section id="pipelines" class="level2">
 <h2 class="anchored" data-anchor-id="pipelines">Pipelines</h2>
 <p>A table function such as <code>filter(...)</code> returns a closure that takes a table and returns a new one. A pipeline applies such closures in order.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p>The pipe operator <code>|&gt;</code> calls the closure on its right with the value on its left:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">$out</span> <span class="op">=</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">&gt;</span> <span class="dv">80</span>) <span class="op">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    arrange(desc(<span class="st">'score'</span>))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">$out</span> <span class="op">=</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">&gt;</span> <span class="dv">80</span>) <span class="op">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    arrange(desc(<span class="st">'score'</span>))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p><code>phplyr($table)</code> starts a method chain. Each method calls the phplyr function of the same name with the same arguments. A chained method is camelCase, so <code>group_by()</code> is <code>-&gt;groupBy()</code> and <code>n_groups()</code> is <code>-&gt;nGroups()</code>. <code>get()</code> returns the table:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">$out</span> <span class="op">=</span> phplyr(<span class="va">$schools</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">&gt;</span> <span class="dv">80</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(desc(<span class="st">'score'</span>))</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">$out</span> <span class="op">=</span> phplyr(<span class="va">$schools</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">&gt;</span> <span class="dv">80</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(desc(<span class="st">'score'</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -555,55 +512,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p><code>echo</code> prints a chain’s table without <code>get()</code>. <code>-&gt;pipe($closure)</code> applies a closure of your own and continues the chain with its result.</p>
 <p><code>pipe()</code> applies closures in order on every PHP version:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">$out</span> <span class="op">=</span> pipe(<span class="va">$schools</span><span class="ot">,</span> filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">&gt;</span> <span class="dv">80</span>)<span class="ot">,</span> arrange(desc(<span class="st">'score'</span>)))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">$out</span> <span class="op">=</span> pipe(<span class="va">$schools</span><span class="ot">,</span> filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">&gt;</span> <span class="dv">80</span>)<span class="ot">,</span> arrange(desc(<span class="st">'score'</span>)))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="columns-row-closures-and-vector-helpers" class="level2">
 <h2 class="anchored" data-anchor-id="columns-row-closures-and-vector-helpers">Columns, row closures, and vector helpers</h2>
 <p>Columns are named with strings: <code>'score'</code> where dplyr takes a bare <code>score</code>.</p>
 <p>A <strong>row closure</strong> is an ordinary PHP closure. It receives the row as a <code>Phibble\Row</code>, whose columns read as <code>$r-&gt;score</code> or <code>$r['score']</code>, and the table of the row’s group as a second argument:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mutate(gap<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">-</span> <span class="va">$r</span>-&gt;prior_score)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>filter(<span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$group</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">&gt;</span> mean(<span class="st">'score'</span>)(<span class="va">$group</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mutate(gap<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">-</span> <span class="va">$r</span>-&gt;prior_score)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>filter(<span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$group</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">&gt;</span> mean(<span class="st">'score'</span>)(<span class="va">$group</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A <strong>vector helper</strong> is one of phplyr’s functions for whole columns, such as <code>lag('x')</code>, <code>cumsum('x')</code>, <code>min_rank('x')</code>, or <code>mean('x')</code>. It is evaluated once per group. A summary helper in <code>mutate()</code> gives one value per group, and that value is repeated on every row of the group:</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
-<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span> group_by(<span class="st">'school'</span>)<span class="ot">;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">json_encode</span>([</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'groups'</span> =&gt; <span class="va">$schools</span> <span class="op">|&gt;</span> group_vars()<span class="ot">,</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'n_groups'</span> =&gt; <span class="va">$schools</span> <span class="op">|&gt;</span> n_groups()<span class="ot">,</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'sizes'</span> =&gt; \<span class="fu">array_slice</span>(<span class="va">$schools</span> <span class="op">|&gt;</span> group_size()<span class="ot">,</span> <span class="dv">0</span><span class="ot">,</span> <span class="dv">4</span>)<span class="ot">,</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>])<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Grouped mutate: helpers are evaluated within each group.</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    mutate(centered<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;score <span class="op">-</span> mean(<span class="st">'score'</span>)(<span class="va">$g</span>)<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span> rank_in_school<span class="ot">:</span> min_rank(desc(<span class="st">'score'</span>))) <span class="op">|&gt;</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    ungroup() <span class="op">|&gt;</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">4</span>)<span class="ot">;</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">// One table per group.</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="va">$parts</span> <span class="op">=</span> <span class="va">$schools</span> <span class="op">|&gt;</span> group_split()<span class="ot">;</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> \<span class="fu">count</span>(<span class="va">$parts</span>)<span class="ot">,</span> <span class="st">' tables; the first has '</span><span class="ot">,</span> <span class="va">$parts</span>[<span class="dv">0</span>]-&gt;nrow()<span class="ot">,</span> <span class="st">" rows</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span> group_by(<span class="st">'school'</span>)<span class="ot">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">json_encode</span>([</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'groups'</span> =&gt; <span class="va">$schools</span> <span class="op">|&gt;</span> group_vars()<span class="ot">,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'n_groups'</span> =&gt; <span class="va">$schools</span> <span class="op">|&gt;</span> n_groups()<span class="ot">,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'sizes'</span> =&gt; \<span class="fu">array_slice</span>(<span class="va">$schools</span> <span class="op">|&gt;</span> group_size()<span class="ot">,</span> <span class="dv">0</span><span class="ot">,</span> <span class="dv">4</span>)<span class="ot">,</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>])<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Grouped mutate: helpers are evaluated within each group.</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    mutate(centered<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;score <span class="op">-</span> mean(<span class="st">'score'</span>)(<span class="va">$g</span>)<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span> rank_in_school<span class="ot">:</span> min_rank(desc(<span class="st">'score'</span>))) <span class="op">|&gt;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    ungroup() <span class="op">|&gt;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">4</span>)<span class="ot">;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">// One table per group.</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="va">$parts</span> <span class="op">=</span> <span class="va">$schools</span> <span class="op">|&gt;</span> group_split()<span class="ot">;</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> \<span class="fu">count</span>(<span class="va">$parts</span>)<span class="ot">,</span> <span class="st">' tables; the first has '</span><span class="ot">,</span> <span class="va">$parts</span>[<span class="dv">0</span>]-&gt;nrow()<span class="ot">,</span> <span class="st">" rows</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))-&gt;groupBy(<span class="st">'school'</span>)-&gt;get()<span class="ot">;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">json_encode</span>([</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'groups'</span> =&gt; phplyr(<span class="va">$schools</span>)-&gt;groupVars()<span class="ot">,</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'n_groups'</span> =&gt; phplyr(<span class="va">$schools</span>)-&gt;nGroups()<span class="ot">,</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'sizes'</span> =&gt; \<span class="fu">array_slice</span>(phplyr(<span class="va">$schools</span>)-&gt;groupSize()<span class="ot">,</span> <span class="dv">0</span><span class="ot">,</span> <span class="dv">4</span>)<span class="ot">,</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>])<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Grouped mutate: helpers are evaluated within each group.</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(centered<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;score <span class="op">-</span> mean(<span class="st">'score'</span>)(<span class="va">$g</span>)<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span> rank_in_school<span class="ot">:</span> min_rank(desc(<span class="st">'score'</span>)))</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    -&gt;ungroup()</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">4</span>)<span class="ot">;</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">// One table per group.</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="va">$parts</span> <span class="op">=</span> phplyr(<span class="va">$schools</span>)-&gt;groupSplit()<span class="ot">;</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> \<span class="fu">count</span>(<span class="va">$parts</span>)<span class="ot">,</span> <span class="st">' tables; the first has '</span><span class="ot">,</span> <span class="va">$parts</span>[<span class="dv">0</span>]-&gt;nrow()<span class="ot">,</span> <span class="st">" rows</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))-&gt;groupBy(<span class="st">'school'</span>)-&gt;get()<span class="ot">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">json_encode</span>([</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'groups'</span> =&gt; phplyr(<span class="va">$schools</span>)-&gt;groupVars()<span class="ot">,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'n_groups'</span> =&gt; phplyr(<span class="va">$schools</span>)-&gt;nGroups()<span class="ot">,</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'sizes'</span> =&gt; \<span class="fu">array_slice</span>(phplyr(<span class="va">$schools</span>)-&gt;groupSize()<span class="ot">,</span> <span class="dv">0</span><span class="ot">,</span> <span class="dv">4</span>)<span class="ot">,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>])<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Grouped mutate: helpers are evaluated within each group.</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(centered<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;score <span class="op">-</span> mean(<span class="st">'score'</span>)(<span class="va">$g</span>)<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span> rank_in_school<span class="ot">:</span> min_rank(desc(<span class="st">'score'</span>)))</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    -&gt;ungroup()</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">4</span>)<span class="ot">;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">// One table per group.</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="va">$parts</span> <span class="op">=</span> phplyr(<span class="va">$schools</span>)-&gt;groupSplit()<span class="ot">;</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> \<span class="fu">count</span>(<span class="va">$parts</span>)<span class="ot">,</span> <span class="st">' tables; the first has '</span><span class="ot">,</span> <span class="va">$parts</span>[<span class="dv">0</span>]-&gt;nrow()<span class="ot">,</span> <span class="st">" rows</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>

@@ -14,7 +14,12 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__);
 
-$code = fn (string $file) => trim((string) preg_replace('/^<\?php\s*/', '', file_get_contents($root.'/docs/examples/'.$file)));
+// The example without the opening tag and the require line, as the docs show it.
+$code = fn (string $file) => trim((string) preg_replace(
+    ['/^<\?php\s*/', '/^require .*autoload\.php\';\n+/m'],
+    '',
+    file_get_contents($root.'/docs/examples/'.$file),
+));
 preg_match('/```\{\.text \.output\}\n(.*?)\n```/s', file_get_contents($root.'/docs/examples/_first-pipeline.md'), $m);
 
 $nav = [
@@ -73,7 +78,7 @@ $manifest = [
     'package' => 'phplyr',
     'title' => 'phplyr',
     'tagline' => 'A PHP port of the Tidyverse\'s dplyr and tidyr.',
-    'summary' => 'phplyr brings R\'s dplyr and tidyr to PHP: filtering, grouped summaries, window functions, joins, pivots, and the rest, with dplyr\'s function names and arguments. Pipelines use PHP 8.5\'s pipe operator, or method chains on PHP 8.3 and 8.4. They run on phibble\'s in-memory DataFrame, on databases through SQL, and on Polars.',
+    'summary' => 'Filter, transform, join, and reshape tables with dplyr- and tidyr-style functions. Use PHP 8.5 pipes or method chains on PHP 8.3 and later. Pipelines run on phibble\'s in-memory DataFrame, on databases through SQL, and on Polars.',
     'install' => ['composer require phpstats/phplyr'],
     'php' => ['8.3', '8.4', '8.5'],
     'requires' => ['phibble (installed by Composer)', 'PDO extension', 'mbstring extension'],

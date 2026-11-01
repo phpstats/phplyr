@@ -466,7 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>naMatches: 'never'</code> stops NA keys from matching. By default NA matches NA.</li>
 <li><code>multiple:</code> is <code>'all'</code>, <code>'any'</code>, <code>'first'</code>, or <code>'last'</code>.</li>
 <li><code>unmatched: 'error'</code> throws when rows would be dropped.</li>
-<li><code>relationship:</code> checks <code>'one-to-one'</code>, <code>'one-to-many'</code>, <code>'many-to-one'</code>, or <code>'many-to-many'</code>. An unexpected many-to-many join raises dplyr’s warning.</li>
+<li><code>relationship:</code> checks <code>'one-to-one'</code>, <code>'one-to-many'</code>, <code>'many-to-one'</code>, or <code>'many-to-many'</code>, and throws an <code>InvalidArgumentException</code> when the check fails. Without it, an equality join in which keys repeat on both sides triggers an <code>E_USER_WARNING</code> with dplyr’s message and still returns every match. <code>relationship: 'many-to-many'</code> silences it.</li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>

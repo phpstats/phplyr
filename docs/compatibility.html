@@ -297,9 +297,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#php-versions" id="toc-php-versions" class="nav-link active" data-scroll-target="#php-versions">PHP versions</a></li>
-  <li><a href="#requirements" id="toc-requirements" class="nav-link" data-scroll-target="#requirements">Requirements</a></li>
-  <li><a href="#optional-extensions" id="toc-optional-extensions" class="nav-link" data-scroll-target="#optional-extensions">Optional extensions</a></li>
+  <li><a href="#php-versions-and-extensions" id="toc-php-versions-and-extensions" class="nav-link active" data-scroll-target="#php-versions-and-extensions">PHP versions and extensions</a></li>
   <li><a href="#backends" id="toc-backends" class="nav-link" data-scroll-target="#backends">Backends</a></li>
   <li><a href="#not-supported" id="toc-not-supported" class="nav-link" data-scroll-target="#not-supported">Not supported</a></li>
   <li><a href="#differences-in-behavior" id="toc-differences-in-behavior" class="nav-link" data-scroll-target="#differences-in-behavior">Differences in behavior</a></li>
@@ -328,48 +326,13 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="php-versions" class="level2">
-<h2 class="anchored" data-anchor-id="php-versions">PHP versions</h2>
-<p>phplyr supports PHP 8.3, 8.4, and 8.5. CI tests all three on Linux.</p>
-<p>The pipe operator <code>|&gt;</code> is PHP 8.5 syntax. On PHP 8.3 and 8.4, the same pipelines are method chains, or calls to <code>pipe()</code>. Every function works on all three versions.</p>
-</section>
-<section id="requirements" class="level2">
-<h2 class="anchored" data-anchor-id="requirements">Requirements</h2>
-<p>phplyr requires the mbstring extension. Composer installs these with phplyr:</p>
+<section id="php-versions-and-extensions" class="level2">
+<h2 class="anchored" data-anchor-id="php-versions-and-extensions">PHP versions and extensions</h2>
+<p>phplyr supports PHP 8.3, 8.4, and 8.5. The pipe operator <code>|&gt;</code> is PHP 8.5 syntax. On PHP 8.3 and 8.4, the same pipelines are method chains, or calls to <code>pipe()</code>. <a href="./getting-started.html#installation">Installation</a> lists the required and optional extensions.</p>
 <ul>
-<li>phibble (<code>phpstats/phibble</code> 0.3, 0.4, 0.5, or 0.6), which provides the tables. phibble requires PHP’s PDO extension.</li>
-<li><code>symfony/polyfill-php84</code>, which provides PHP 8.4 functions on PHP 8.3.</li>
+<li>Without phit or phit-polyfill, the model functions throw a <code>RuntimeException</code> that names the missing function. See <a href="./reference/models.html">Models</a>.</li>
+<li>Without intl, <code>make_clean_names()</code> transliterates with iconv, and some names can differ from janitor’s.</li>
 </ul>
-</section>
-<section id="optional-extensions" class="level2">
-<h2 class="anchored" data-anchor-id="optional-extensions">Optional extensions</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Extension</th>
-<th>Enables</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="https://github.com/phpstats/phit">phit</a></td>
-<td><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code>, and native <code>mean()</code>, <code>sd()</code>, <code>var_()</code>, <code>median()</code>, and <code>quantile()</code></td>
-</tr>
-<tr class="even">
-<td><a href="https://github.com/phpstats/phpolars">phpolars</a></td>
-<td>phibble’s <code>PolarsTable</code> backend</td>
-</tr>
-<tr class="odd">
-<td>intl</td>
-<td>Transliteration in <code>make_clean_names()</code> and <code>clean_names()</code> that matches R’s janitor</td>
-</tr>
-<tr class="even">
-<td>A PDO driver (SQLite, PostgreSQL, or MySQL)</td>
-<td>Database tables through <code>Phibble\tbl()</code></td>
-</tr>
-</tbody>
-</table>
-<p>Without phit, the descriptive helpers run in PHP, and the model functions throw a <code>RuntimeException</code> that names the missing function. phit-polyfill defines the model functions in PHP. See <a href="./reference/models.html">Models</a>. Without intl, <code>make_clean_names()</code> transliterates with iconv, and some names can differ from janitor’s.</p>
 </section>
 <section id="backends" class="level2">
 <h2 class="anchored" data-anchor-id="backends">Backends</h2>
@@ -379,7 +342,6 @@ ul.task-list li input[type="checkbox"] {
 <li><code>Phibble\tbl($pdo, 'table')</code> builds SQL for SQLite, PostgreSQL, or MySQL. A function given a PHP closure, and an expression without a SQL translation, runs the query so far, loads the rows, and continues in memory. <a href="./reference/databases.html">Databases and expressions</a> lists those expressions.</li>
 <li><code>Phibble\Polars\PolarsTable</code> belongs to phibble and runs pipelines in Polars through the phpolars extension. A closure step converts the data to a <code>DataFrame</code> and back.</li>
 </ul>
-<p>The test suite runs about 120 pipelines on both <code>DataFrame</code> and <code>PolarsTable</code> and requires the same columns, types, groups, and rows from each.</p>
 </section>
 <section id="not-supported" class="level2">
 <h2 class="anchored" data-anchor-id="not-supported">Not supported</h2>

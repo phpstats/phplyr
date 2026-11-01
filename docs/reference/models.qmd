@@ -2,41 +2,35 @@
 title: "Models"
 ---
 
-`lm()`, `glm()`, `lmer()`, and `glmer()` pass the table to phit's
-`Phit\fit_ols()`, `Phit\fit_generalized_linear()`, `Phit\fit_mixed_gaussian()`,
-and `Phit\fit_mixed_logistic()`. phit 0.3 and earlier name these functions
-`fit_lm()`, `fit_glm()`, `fit_lmer()`, and `fit_glmer()`, and phplyr calls
-those names when the new ones are missing. phplyr adds no model code of its
-own. phit reads factor levels from the table,
-builds the model matrix from an R formula, and fits the model.
+`lm()`, `glm()`, `lmer()`, and `glmer()` fit models with phit. phit reads
+factor levels from the table, builds the model matrix from an R formula, and
+fits the model. phplyr adds no model code of its own.
 
-Two implementations of these functions are supported, and phplyr calls both
-the same way:
+| phplyr | phit function |
+| --- | --- |
+| `lm()` | `Phit\fit_ols()` |
+| `glm()` | `Phit\fit_generalized_linear()` |
+| `lmer()` | `Phit\fit_mixed_gaussian()` |
+| `glmer()` | `Phit\fit_mixed_logistic()` |
 
-- The [phit](https://github.com/phpstats/phit) extension, written in Rust.
-- [phit-polyfill](https://github.com/phpstats/phit-polyfill), a PHP port of
-  the extension's code, for systems where the extension cannot be installed.
-  Install it with `composer require phpstats/phit-polyfill`. When the
-  extension is loaded, the polyfill defines nothing.
+The functions come from the [phit](https://github.com/phpstats/phit)
+extension or from [phit-polyfill](https://github.com/phpstats/phit-polyfill),
+its PHP port, and phplyr calls both the same way. phit's
+[Extension or polyfill](https://phit.phpstats.org/docs/extension-or-polyfill)
+page compares them.
 
-CI runs phplyr's test suite with each one. Both runs compare `lm()` and
-`glm()` coefficients with R's and `lmer()` fixed effects with lme4's.
-
-phit-polyfill has the same functions, arguments, and results for the models,
-with these differences:
-
-- It is slower. In phit-polyfill's benchmarks, linear models took about 9
-  times as long as with the extension, logistic models about 22 times, and
-  mixed models 13 to 78 times.
-- Its functions throw an exception while OPcache's JIT is enabled. Set
+- Install the polyfill with `composer require phpstats/phit-polyfill`. When
+  the extension is loaded, the polyfill defines nothing.
+- The polyfill throws an exception while OPcache's JIT is enabled. Set
   `opcache.jit=disable` where it runs.
-- It does not speed up the descriptive helpers. `mean()`, `sd()`, `var_()`,
-  `median()`, and `quantile()` call phit only when the extension is loaded,
-  and otherwise run in PHP with the same results.
-- It leaves out phit's CSV reader, which phplyr does not use.
+- `mean()`, `sd()`, `var_()`, `median()`, and `quantile()` call phit only when
+  the extension is loaded. Otherwise, including with the polyfill, they run in
+  PHP with the same results.
+- With neither installed, the four functions throw a `RuntimeException` that
+  names the missing phit function.
 
-With neither installed, the four functions throw a `RuntimeException` that
-names the missing phit function.
+CI runs phplyr's tests with each implementation. Both runs compare `lm()` and
+`glm()` coefficients with R's, and `lmer()` fixed effects with lme4's.
 
 ::: {.panel-tabset group="syntax"}
 
@@ -67,8 +61,16 @@ phplyr($table)->glmer('passed ~ hours + (1 | school)', family: 'binomial');
 | `lmer($formula)` | Linear mixed model with lme4's random-effect terms, such as `(1 \| school)` | REML by default; `reml: false` fits by maximum likelihood |
 | `glmer($formula)` | Generalized linear mixed model | The binomial family with the logit link and one random intercept, such as `(1 \| school)`, which is what phit supports |
 
-Other named arguments go to phit's function unchanged. phit's documentation
-lists them and the formula syntax it accepts.
+Other named arguments go to phit's function unchanged.
+[phit's documentation](https://phit.phpstats.org/docs) lists them and the
+formula syntax it accepts.
+
+## phit 0.3 and earlier
+
+phit 0.3 and earlier name the functions `fit_lm()`, `fit_glm()`, `fit_lmer()`,
+and `fit_glmer()`. phplyr calls those names when the current ones are
+missing, so it works with phit 0.1 and later. phit 0.4 keeps the old names as
+deprecated aliases, which phplyr doesn't call.
 
 ## Results
 

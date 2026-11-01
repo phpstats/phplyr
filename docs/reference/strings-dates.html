@@ -553,7 +553,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p>The parsing functions return UTC date-times unless <code>tz:</code> names a zone, as in lubridate. PHP’s default time zone does not change the result. <code>with_tz()</code> keeps the instant and changes the zone it is shown in, and <code>force_tz()</code> keeps the clock time and changes the zone.</p>
 <p>On a database table, a function without a SQL translation for that database loads the rows and runs in PHP, as <a href="../reference/databases.html#database-tables">Databases and expressions</a> describes.</p>
-<p>Month and year arithmetic that lands on a date that doesn’t exist, such as January 31 plus one month, gives NA, as in lubridate. Subtracting dates gives days, and subtracting datetimes gives seconds. Date columns stay dates through these functions. <code>Phibble\Expr\Clock::freeze()</code> fixes <code>today()</code> and <code>now()</code> in tests.</p>
+<p>Month and year arithmetic that lands on a date that doesn’t exist, such as January 31 plus one month, gives NA, as in lubridate. Subtracting dates gives days, and subtracting datetimes gives seconds. Date columns stay dates through these functions.</p>
 
 
 </section>

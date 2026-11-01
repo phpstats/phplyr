@@ -33,7 +33,10 @@ The options follow dplyr 1.1:
 - `multiple:` is `'all'`, `'any'`, `'first'`, or `'last'`.
 - `unmatched: 'error'` throws when rows would be dropped.
 - `relationship:` checks `'one-to-one'`, `'one-to-many'`, `'many-to-one'`, or
-  `'many-to-many'`. An unexpected many-to-many join raises dplyr's warning.
+  `'many-to-many'`, and throws an `InvalidArgumentException` when the check
+  fails. Without it, an equality join in which keys repeat on both sides
+  triggers an `E_USER_WARNING` with dplyr's message and still returns every
+  match. `relationship: 'many-to-many'` silences it.
 
 {{< include ../examples/_join-options.md >}}
 

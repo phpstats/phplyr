@@ -2,7 +2,7 @@
     "package": "phplyr",
     "title": "phplyr",
     "tagline": "A PHP port of the Tidyverse's dplyr and tidyr.",
-    "summary": "phplyr brings R's dplyr and tidyr to PHP: filtering, grouped summaries, window functions, joins, pivots, and the rest, with dplyr's function names and arguments. Pipelines use PHP 8.5's pipe operator, or method chains on PHP 8.3 and 8.4. They run on phibble's in-memory DataFrame, on databases through SQL, and on Polars.",
+    "summary": "Filter, transform, join, and reshape tables with dplyr- and tidyr-style functions. Use PHP 8.5 pipes or method chains on PHP 8.3 and later. Pipelines run on phibble's in-memory DataFrame, on databases through SQL, and on Polars.",
     "install": [
         "composer require phpstats/phplyr"
     ],
@@ -47,8 +47,8 @@
             "composer require phpstats/phplyr",
             "curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.3/docs/data/schools.csv"
         ],
-        "chain": "require __DIR__.'/vendor/autoload.php';\n\nuse Phibble\\DataFrame;\nuse function Phplyr\\{phplyr, desc, n, mean, sd};\n\n$schools = DataFrame::fromCsv('schools.csv');\n\necho phplyr($schools)\n    ->filter(fn ($r) => $r->study_hours >= 5)\n    ->groupBy('school')\n    ->summarize(students: n(), avg_score: mean('score'), sd_score: sd('score'))\n    ->arrange(desc('avg_score'))\n    ->head(5);",
-        "pipe": "require __DIR__.'/vendor/autoload.php';\n\nuse Phibble\\DataFrame;\nuse function Phplyr\\{filter, group_by, summarize, arrange, head, desc, n, mean, sd};\n\n$schools = DataFrame::fromCsv('schools.csv');\n\necho $schools |>\n    filter(fn ($r) => $r->study_hours >= 5) |>\n    group_by('school') |>\n    summarize(students: n(), avg_score: mean('score'), sd_score: sd('score')) |>\n    arrange(desc('avg_score')) |>\n    head(5);",
+        "chain": "use Phibble\\DataFrame;\nuse function Phplyr\\{phplyr, desc, n, mean, sd};\n\n$schools = DataFrame::fromCsv('schools.csv');\n\necho phplyr($schools)\n    ->filter(fn ($r) => $r->study_hours >= 5)\n    ->groupBy('school')\n    ->summarize(\n        students: n(),\n        avg_score: mean('score'),\n        sd_score: sd('score'),\n    )\n    ->arrange(desc('avg_score'))\n    ->head(5);",
+        "pipe": "use Phibble\\DataFrame;\nuse function Phplyr\\{filter, group_by, summarize};\nuse function Phplyr\\{arrange, head, desc, n, mean, sd};\n\n$schools = DataFrame::fromCsv('schools.csv');\n\necho $schools |>\n    filter(fn ($r) => $r->study_hours >= 5) |>\n    group_by('school') |>\n    summarize(\n        students: n(),\n        avg_score: mean('score'),\n        sd_score: sd('score'),\n    ) |>\n    arrange(desc('avg_score')) |>\n    head(5);",
         "output": "# A tibble: 5 × 4\n  school    students avg_score sd_score\n  <chr>        <int>     <dbl>    <dbl>\n1 school-07       14      86.9     6.32\n2 school-06       20      80.9     8.90\n3 school-02       12      79.7     8.22\n4 school-09       11      79.3     6.67\n5 school-11       13      77.6     7.31"
     },
     "docs": {

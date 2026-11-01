@@ -2,22 +2,21 @@
 title: "Performance"
 ---
 
-phplyr is a thin layer. Each function calls one or two methods of the table it is
-given, so the backend determines how fast a pipeline runs. This page reports
-timings for phibble's shared benchmark workloads on DataFrame and SQLite, and for
-three phplyr pipelines on DataFrame, PolarsTable, and SQLite, and gives guidance
-on choosing a backend.
+phplyr's functions call one or two methods of the table they are given, so
+the backend determines how fast a pipeline runs. These timings cover the
+workloads and machines below.
 
-## Method
+## Methods
 
-`bench/harness.php` runs each workload twice: as a phplyr pipeline, and as the
-same calls made directly on the table. `bench/generate.php` writes the data. It
-is the same generator and seed as phibble's `bin/bench`, so the two harnesses
-time identical data:
-
-- `events.csv`: 1,000,000 rows of `id`, `key` (10,000 distinct values), `g`
-  (8 labels), `x` (float, about 2% NA), and `t` (datetime).
-- `dims.csv`: 100,000 rows of `key`, `label`, and `w`.
+| | phibble workloads | Backend pipelines |
+| --- | --- | --- |
+| Script | `bench/harness.php` | `bench/backends.php`, and `bench/backends.R` for dplyr |
+| Data | `bench/generate.php`, with phibble's generator and seed | The same generator |
+| Size | `events.csv`: 1,000,000 rows of `id`, `key` (10,000 values), `g` (8 labels), `x` (float, about 2% NA), and `t` (datetime). `dims.csv`: 100,000 rows of `key`, `label`, and `w`. | 1,000,000 rows |
+| Backends | DataFrame and SQLite, each as a phplyr pipeline and as direct table calls | DataFrame, PolarsTable, SQLite, and dplyr 1.2 |
+| Statistic | Median of three runs | Best of three runs |
+| Timer | Includes `collect()`; excludes loading the data | Includes `collect()` |
+| Machine | Apple Silicon Mac, PHP 8.5, phibble fa978f6 | Apple M5 Ultra, Homebrew PHP 8.5, phibble 0.3.0, Polars 0.55.2 at two threads |
 
 ```bash
 php bench/generate.php 1000000
@@ -25,16 +24,11 @@ php bench/harness.php --backend=dataframe --runs=3
 php bench/harness.php --backend=sqlite --runs=3
 ```
 
-Each timing includes `collect()`, so lazy backends do their work inside the
-timer. The numbers below are medians of three runs on an Apple Silicon Mac with
-PHP 8.5 and phibble fa978f6.
-
 ## phplyr's overhead
 
 At 100,000 rows, the phplyr pipeline and the direct calls differed by at most
 5% on every workload and backend, which is within run-to-run noise. Grouped
-slices, `pivot_*()`, and `complete()` build on the same table methods and carry
-the same small overhead.
+slices, `pivot_*()`, and `complete()` build on the same table methods.
 
 ## Timings at 1,000,000 rows
 
@@ -48,52 +42,42 @@ the same small overhead.
 | `mutate()` with two expressions | 0.26 | 2.29 |
 | `left_join()` of 1M × 100k rows on `key` | 0.33 | 2.44 |
 | `arrange(desc('x'), 'id')` | 0.67 | 2.33 |
+
 DataFrame peaked at about 1.5 GB of memory for the 1M-row table and its results.
 
 ## Choosing a backend
 
-- **In-memory `DataFrame`** suits data that fits in memory, up to a few million
-  rows. Expression arguments are the fastest form: a grouped summary with
-  `mean('x')` runs about four times faster than the same summary written as
-  closures, because phibble computes it in one pass without building a table
+- **In-memory `DataFrame`** suits data that fits in memory. In the grouped
+  summary above, expression arguments took 0.13 s and closures 0.58 s,
+  because phibble computes expressions in one pass without building a table
   per group.
 - **A database table (`Phibble\tbl()`)** avoids loading the data into PHP.
   With expressions, `filter()` and `summarise()` run in the database, and only
-  the result reaches PHP, so memory stays small. This is the right choice when
-  the data lives in a database or doesn't fit in memory. For data already in
-  memory, a data frame is faster: these timings exclude loading, and reading the
-  1M-row CSV into a data frame takes about 1.4 seconds. Pipelines that return every row
-  (`mutate()`, `arrange()`, unfiltered joins) spend most of their database time
-  transferring rows to PHP.
-- **Closures on a database table** load all rows first and then run in memory.
-  Use `col()` expressions and phplyr's helpers to keep the work in SQL.
+  the result reaches PHP. These timings exclude loading. Reading the 1M-row
+  CSV into a DataFrame takes about 1.4 seconds.
+- **Pipelines that return every row** (`mutate()`, `arrange()`, unfiltered
+  joins) spend most of their database time transferring rows to PHP.
+- **Closures on a database table** load all rows first and then run in
+  memory. Use `col()` expressions and phplyr's helpers to keep the work in
+  SQL.
 - **SQLite columns need declared types.** PDO binds values as strings. In an
   untyped column, SQLite stores them as text and compares numbers as text.
-
-- **PolarsTable** (phibble's Polars backend, on the phpolars extension) runs the pipeline in Polars, 10 to 100 times faster
-  than DataFrame, and pays mainly for bringing rows back into PHP. See below.
+- **PolarsTable** (phibble's Polars backend, on the phpolars extension) runs
+  the pipeline in Polars and pays mainly for converting rows back to PHP. See
+  below.
 
 ## PolarsTable
 
-`bench/backends.php` times three phplyr pipelines on DataFrame, PolarsTable, and
-SQLite, and checks that all three backends return the same rows. It is adapted
-from phpolars' benchmark script. The pipelines are:
+`bench/backends.php` times three phplyr pipelines and checks that DataFrame,
+PolarsTable, and SQLite return the same rows. It is adapted from phpolars'
+benchmark script. `bench/backends.R` runs pipelines A and B with dplyr and
+checks that its row counts and column sums match phplyr's.
 
 - **A:** filter, join a store lookup, two-key summarise, then a ranking window.
 - **B:** grouped `lag(orderBy:)`, `cumsum()`, and a share of the group total
   over all rows.
-- **C:** pipeline A with a closure in `filter()`.
-
-Times are the best of three runs through `collect()`, on an Apple M5 Ultra with
-Homebrew PHP 8.5, phibble 0.3.0, and Polars 0.55.2 at two threads. In every case the
-three backends returned the same rows. The full results, with all repeat
-timings and version details, are in
-[`benchmarks/backends-results.json`](benchmarks/backends-results.json).
-
-`bench/backends.R` runs pipelines A and B with dplyr 1.2 on the same data,
-and checks that dplyr's row counts and column sums match phplyr's. Its
-results are in [`benchmarks/dplyr-results.json`](benchmarks/dplyr-results.json).
-Pipeline C has no dplyr version, because its closure is PHP code.
+- **C:** pipeline A with a closure in `filter()`. It has no dplyr version,
+  because its closure is PHP code.
 
 | Pipeline, 1M rows | DataFrame (s) | PolarsTable (s) | SQLite (s) | dplyr (s) |
 | --- | --: | --: | --: | --: |
@@ -101,25 +85,25 @@ Pipeline C has no dplyr version, because its closure is PHP code.
 | B: windows over every row | 1.25 | 0.42 | 3.33 | 0.02 |
 | C: A with a closure | 1.13 | 0.87 | 2.01 | |
 
-dplyr runs these pipelines in compiled code. On A, which reduces the data
-before collecting, PolarsTable (0.05 s) and dplyr (0.07 s) take about the
-same time. On B, which returns every row, dplyr is the fastest by a wide
-margin.
+The full results, with every repeat and version, are in
+[`benchmarks/backends-results.json`](benchmarks/backends-results.json) and
+[`benchmarks/dplyr-results.json`](benchmarks/dplyr-results.json).
 
-The operations themselves are fast in Polars. Most of PolarsTable's time goes to
-converting results back to PHP values: about 0.2 seconds per million rows of
-plain columns, plus about 0.5 seconds per million values of a datetime column,
-because each value becomes a PHP `DateTimeImmutable`. A pipeline that returns
-every row of a table with a datetime column can therefore be slower on
-PolarsTable than on DataFrame. In phibble's harness, `mutate()` and `left_join()`
-returning 1M rows took 1.3 seconds on PolarsTable against 0.3 seconds on
-DataFrame.
+Most of PolarsTable's time goes to converting results to PHP values:
 
-A closure makes PolarsTable convert the data to a DataFrame and back, which costs
-about a second per million rows. Pipeline C runs its closure step that way.
+- About 0.2 seconds per million rows of plain columns.
+- About 0.5 seconds more per million values of a datetime column, because
+  each value becomes a PHP `DateTimeImmutable`.
+- About a second per million rows for a closure step, which converts the
+  data to a DataFrame and back. Pipeline C runs its closure that way.
 
-Use PolarsTable when a pipeline reduces the data before collecting
-(summaries, filters, `distinct()`, or a join followed by a summary), when it
-chains several steps, or when the data starts in Polars:
-`PolarsTable::fromPolars(Phpolars\read_csv($path))` skips phibble's CSV parse.
-Keep the pipeline in expressions so every step stays in Polars.
+A pipeline that returns every row of a table with a datetime column can
+therefore be slower on PolarsTable than on DataFrame. In phibble's harness,
+`mutate()` and `left_join()` returning 1M rows took 1.3 seconds on
+PolarsTable and 0.3 seconds on DataFrame.
+
+PolarsTable suits pipelines that reduce the data before collecting
+(summaries, filters, `distinct()`, or a join followed by a summary), that
+chain several steps, or whose data starts in Polars:
+`PolarsTable::fromPolars(Phpolars\read_csv($path))` skips phibble's CSV
+parse. Expressions keep every step in Polars.

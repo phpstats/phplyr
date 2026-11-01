@@ -2,35 +2,41 @@
 title: "tidyr"
 ---
 
-The tidyr functions use tidyr's argument names. Arguments that start with a dot
-in tidyr keep the dot here as a leading underscore, camelCase after it:
-`.names_sep` on `pack()` is `_namesSep:`. See
+The tidyr functions use tidyr's argument names in camelCase, and tidyr's
+dot-arguments take a leading underscore. See
 [Underscored arguments](../coming-from-dplyr.qmd#underscored-arguments).
 
 ## Pivoting
 
-`pivot_longer()` turns columns into rows of names and values. `namesPrefix`
-strips a regular expression from the start of each name. `namesSep` or
-`namesPattern` split names into several `namesTo` columns, and the special
-name `'.value'` takes the value column's name from that part.
-`valuesDropNa: true` drops rows whose values are all NA.
-`namesTransform` and `valuesTransform` take a closure, or an array of
-closures by column. `colsVary: 'slowest'` keeps each source column's rows
-together.
+`pivot_longer(cols)` turns the selected columns into rows of names and values.
 
-`pivot_wider()` spreads names and values into columns. `idCols` identify the
-rows (by default every other column). `valuesFill` fills missing cells,
-`valuesFn` combines duplicate cells, and `namesPrefix`, `namesSep`,
-`namesGlue`, and `namesSort` control the new names. Without `valuesFn`,
-duplicate cells turn the value column into list-columns and raise tidyr's
-warning. `namesVary: 'slowest'` groups each name's value columns together.
-`namesExpand` and `idExpand` add every combination of the `namesFrom` and
-`idCols` values (sorted, factors by level). `unusedFn` summarizes the
-columns that are in none of `idCols`, `namesFrom`, and `valuesFrom`.
+| Option | Default | Effect |
+| --- | --- | --- |
+| `namesTo` | `'name'` | Column, or columns, for the names. `'.value'` takes a value column's name from that part. |
+| `valuesTo` | `'value'` | Column for the values |
+| `namesPrefix` | none | Regular expression removed from the start of each name |
+| `namesSep`, `namesPattern` | none | Split names into several `namesTo` columns, by separator or by regex groups |
+| `valuesDropNa` | `false` | Drop rows whose values are all NA |
+| `namesTransform`, `valuesTransform` | none | A closure, or an array of closures by column |
+| `colsVary` | `'fastest'` | `'slowest'` keeps each source column's rows together |
 
-Both functions build tidyr's pivot spec in phplyr and pass it to the table's
-`pivotLongerSpec()` or `pivotWiderSpec()`, so a backend can run the pivot
-natively. `build_longer_spec()` and `build_wider_spec()` return that spec as a
+`pivot_wider()` spreads names and values into columns.
+
+| Option | Default | Effect |
+| --- | --- | --- |
+| `namesFrom`, `valuesFrom` | `'name'`, `'value'` | Columns that supply the new names and their values |
+| `idCols` | every other column | Columns that identify the output rows |
+| `valuesFill` | NA | Value for missing cells |
+| `valuesFn` | none | Combines duplicate cells |
+| `namesPrefix`, `namesSep`, `namesGlue`, `namesSort` | `''`, `'_'`, none, `false` | Control the new names |
+| `namesVary` | `'fastest'` | `'slowest'` groups each name's value columns together |
+| `namesExpand`, `idExpand` | `false` | Add every combination of the `namesFrom` or `idCols` values, sorted, factors by level |
+| `unusedFn` | none | Summarizes columns in none of `idCols`, `namesFrom`, and `valuesFrom` |
+
+Without `valuesFn`, duplicate cells turn the value columns into list-columns
+and trigger a PHP warning with tidyr's message.
+
+`build_longer_spec()` and `build_wider_spec()` return tidyr's pivot spec as a
 table, and `pivot_longer_spec()` and `pivot_wider_spec()` run an edited one.
 The superseded `gather()` and `spread()` are also available.
 

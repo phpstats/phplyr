@@ -2,36 +2,18 @@
 title: "Compatibility and limitations"
 ---
 
-## PHP versions
+## PHP versions and extensions
 
-phplyr supports PHP 8.3, 8.4, and 8.5. CI tests all three on Linux.
+phplyr supports PHP 8.3, 8.4, and 8.5. The pipe operator `|>` is PHP 8.5
+syntax. On PHP 8.3 and 8.4, the same pipelines are method chains, or calls to
+`pipe()`. [Installation](getting-started.qmd#installation) lists the required
+and optional extensions.
 
-The pipe operator `|>` is PHP 8.5 syntax. On PHP 8.3 and 8.4, the same
-pipelines are method chains, or calls to `pipe()`. Every function works on all
-three versions.
-
-## Requirements
-
-phplyr requires the mbstring extension. Composer installs these with phplyr:
-
-- phibble (`phpstats/phibble` 0.3, 0.4, 0.5, or 0.6), which provides the tables.
-  phibble requires PHP's PDO extension.
-- `symfony/polyfill-php84`, which provides PHP 8.4 functions on PHP 8.3.
-
-## Optional extensions
-
-| Extension | Enables |
-| --- | --- |
-| [phit](https://github.com/phpstats/phit) | `lm()`, `glm()`, `lmer()`, and `glmer()`, and native `mean()`, `sd()`, `var_()`, `median()`, and `quantile()` |
-| [phpolars](https://github.com/phpstats/phpolars) | phibble's `PolarsTable` backend |
-| intl | Transliteration in `make_clean_names()` and `clean_names()` that matches R's janitor |
-| A PDO driver (SQLite, PostgreSQL, or MySQL) | Database tables through `Phibble\tbl()` |
-
-Without phit, the descriptive helpers run in PHP, and the model functions throw
-a `RuntimeException` that names the missing function.
-phit-polyfill defines the model functions in PHP. See
-[Models](reference/models.qmd). Without intl, `make_clean_names()` transliterates with
-iconv, and some names can differ from janitor's.
+- Without phit or phit-polyfill, the model functions throw a
+  `RuntimeException` that names the missing function. See
+  [Models](reference/models.qmd).
+- Without intl, `make_clean_names()` transliterates with iconv, and some names
+  can differ from janitor's.
 
 ## Backends
 
@@ -47,9 +29,6 @@ pipeline runs on any table that implements it:
 - `Phibble\Polars\PolarsTable` belongs to phibble and runs pipelines in Polars
   through the phpolars extension. A closure step converts the data to a
   `DataFrame` and back.
-
-The test suite runs about 120 pipelines on both `DataFrame` and `PolarsTable`
-and requires the same columns, types, groups, and rows from each.
 
 ## Not supported
 

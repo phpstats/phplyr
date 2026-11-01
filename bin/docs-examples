@@ -14,8 +14,7 @@
  *
  * An example that requires 'vendor/autoload.php' is a complete
  * starter script. It runs as written, without the prelude. The page shows
- * the whole file at the top level of docs/examples, and leaves out the
- * opening tag and the require line in a subdirectory.
+ * it without the opening tag and the require line.
  *
  * A subdirectory's _prelude.php, if present, replaces the generated prelude
  * for its examples, so its imports are checked, and is written to
@@ -85,12 +84,9 @@ $run = function (string $file, string $name) use ($root, $php, $args, $preludeFo
     $starter = preg_match('/^require (__DIR__\.)?\'\/?vendor\/autoload\.php\';$/m', $source, $r) === 1 ? $r[0] : null;
     if ($starter !== null) {
         // A complete starter script runs as written, without the prelude, so
-        // its own imports are checked. The page shows the whole file.
-        $code = trim($source);
-        $body = str_replace($starter, $autoload, $code);
-        if (dirname($file) !== $root.'/docs/examples') {
-            $code = trim(str_replace(["<?php\n", $starter."\n"], '', $code));
-        }
+        // its own imports are checked. The page leaves out the bootstrap.
+        $body = str_replace($starter, $autoload, trim($source));
+        $code = trim(str_replace(["<?php\n", $starter."\n"], '', trim($source)));
     } else {
         $code = trim((string) preg_replace('/^<\?php\s*(declare\(strict_types=1\);\s*)?/', '', $source));
         $shared = dirname($file).'/_prelude.php';

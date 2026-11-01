@@ -358,7 +358,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>A typical R analysis of the schools data, translated to PHP. It reads a CSV file, cleans and reshapes it, summarizes it, and fits a linear, a logistic, and a random-intercept model. The output under each script is what it printed when the documentation was built.</p>
+<p>A typical R analysis of the schools data, translated to PHP. It reads a CSV file, cleans and reshapes it, summarizes it, and fits a linear, a logistic, and a random-intercept model.</p>
 <p><strong>Data:</strong> <a href="https://github.com/phpstats/phplyr/blob/main/docs/data/schools.csv"><code>schools.csv</code></a>. The R script needs dplyr, tidyr, and lme4. The PHP script needs phplyr and, for the models, phit; see <a href="./reference/models.html">Models</a>.</p>
 <div class="columns">
 <div class="column" style="width:49%;">
@@ -650,7 +650,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Models.</strong> <code>lm()</code>, <code>glm()</code>, and <code>lmer()</code> take the same formulas. They return arrays, so <code>coef()</code> and <code>fixef()</code> become reads of <code>coefficients</code>.</li>
 <li><strong>Printing.</strong> DataFrames print in tibble’s format.</li>
 </ul>
-<p>The PHP pipeline uses <code>col()</code> expressions, so it also runs on a database table. See <a href="./reference/databases.html">Databases and expressions</a>.</p>
+<p>On a database table from <code>Phibble\tbl()</code>, the cleaning, counting, and grouped-summary steps run as SQL, because they use <code>col()</code> expressions and phplyr’s helpers. The reshaping step loads the rows into PHP. See <a href="./reference/databases.html">Databases and expressions</a>.</p>
 
 
 </section>
