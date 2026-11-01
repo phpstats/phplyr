@@ -15,7 +15,7 @@ composer require phpstats/phplyr
 - The mbstring extension, which phplyr requires.
 - The PDO extension, which phibble requires.
 
-Composer installs phibble (0.3, 0.4, or 0.5), which provides the tables, and
+Composer installs phibble (0.3, 0.4, 0.5, or 0.6), which provides the tables, and
 `symfony/polyfill-php84`, which provides PHP 8.4's functions on PHP 8.3.
 
 ### Optional features

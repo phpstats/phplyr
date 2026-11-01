@@ -93,7 +93,7 @@ function any_of(array $names): Selector
  * Columns for which a predicate holds. The predicate receives
  * (list $values, Type $type, string $name). Shortcuts: a Phibble\Type, or
  * one of 'numeric', 'integer', 'double', 'character', 'logical', 'factor', 'date',
- * 'datetime', 'list'.
+ * 'datetime', 'time' (phibble 0.6 and later), 'list'.
  */
 function where(Closure|Type|string $predicate): Selector
 {
@@ -108,6 +108,10 @@ function where(Closure|Type|string $predicate): Selector
             $predicate === 'factor' => [Type::Factor],
             $predicate === 'date' => [Type::Date],
             $predicate === 'datetime' => [Type::DateTime],
+            // Type::Time arrived in phibble 0.6.
+            $predicate === 'time' => \defined(Type::class.'::Time')
+                ? [\constant(Type::class.'::Time')]
+                : throw new \InvalidArgumentException("where('time') needs phibble 0.6 or later."),
             $predicate === 'list' => [Type::List],
             default => throw new \InvalidArgumentException("where(): unknown type '{$predicate}'."),
         };

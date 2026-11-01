@@ -22,8 +22,9 @@ Selectors pick columns by name, pattern, or type. They work in `select()`,
 | `any_selected(...)`, `all_selected(...)` | Union and intersection |
 
 `where()` accepts `'numeric'`, `'integer'`, `'double'`, `'character'`,
-`'logical'`, `'factor'`, `'date'`, `'datetime'`, and `'list'`, or a
-`Phibble\Type`. `'numeric'` selects integer and double columns.
+`'logical'`, `'factor'`, `'date'`, `'datetime'`, `'time'`, and `'list'`, or a
+`Phibble\Type`. `'numeric'` selects integer and double columns. `'time'`
+selects phibble's time columns, R's hms, and needs phibble 0.6 or later.
 
 ## across()
 

@@ -4,25 +4,26 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8d5a33f50428607c6e317a7efdcfe84",
+    "content-hash": "ae3b418f98ec39d8d6f3d5148e354b12",
     "packages": [
         {
             "name": "phpstats/phibble",
-            "version": "v0.5.0",
+            "version": "v0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstats/phibble.git",
-                "reference": "856e73919edbdfec4c85aad089f70bf461be11a4"
+                "reference": "6b9f06aa0b35d6625611f8d9817053d6dd765c83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstats/phibble/zipball/856e73919edbdfec4c85aad089f70bf461be11a4",
-                "reference": "856e73919edbdfec4c85aad089f70bf461be11a4",
+                "url": "https://api.github.com/repos/phpstats/phibble/zipball/6b9f06aa0b35d6625611f8d9817053d6dd765c83",
+                "reference": "6b9f06aa0b35d6625611f8d9817053d6dd765c83",
                 "shasum": ""
             },
             "require": {
+                "ext-mbstring": "*",
                 "ext-pdo": "*",
-                "php": "^8.3",
+                "php": ">=8.3 <8.6",
                 "symfony/polyfill-php84": "^1.31"
             },
             "require-dev": {
@@ -33,7 +34,7 @@
             },
             "suggest": {
                 "ext-pdo_sqlite": "Used by the test suite for the PDO source",
-                "ext-phit": "Native CSV reading (Phit\\read_csv) and model fitting, from phpstats/phit",
+                "ext-phit": "Native CSV reading with Phit\\read_csv (phit 0.1.1 or later) and Phit\\CsvReader for chunks (phit 0.2.0 or later), from phpstats/phit",
                 "ext-php_polars": "The Polars backend (Phibble\\Polars\\PolarsTable), from phpstats/phpolars",
                 "illuminate/database": "Laravel integration: Collection::toDataFrame() and query builder ->phibble() / ->toDataFrame() macros (auto-discovered)"
             },
@@ -46,38 +47,24 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Phibble\\": "src/"
-                },
                 "files": [
                     "src/functions.php",
                     "src/Expr/helpers.php"
-                ]
-            },
-            "autoload-dev": {
+                ],
                 "psr-4": {
-                    "Tests\\": "tests/",
-                    "Phibble\\Bench\\": "bench/src/"
+                    "Phibble\\": "src/"
                 }
             },
-            "scripts": {
-                "lint": [
-                    "phpcs",
-                    "@test:sniffs"
-                ],
-                "test:sniffs": [
-                    "php tools/phpcs/selftest/run.php"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "A typed, immutable in-memory data frame for PHP.",
             "support": {
-                "source": "https://github.com/phpstats/phibble/tree/v0.5.0",
-                "issues": "https://github.com/phpstats/phibble/issues"
+                "issues": "https://github.com/phpstats/phibble/issues",
+                "source": "https://github.com/phpstats/phibble/tree/v0.6.0"
             },
-            "time": "2026-10-31T01:35:05+00:00"
+            "time": "2026-11-01T14:15:56+00:00"
         },
         {
             "name": "symfony/polyfill-php84",

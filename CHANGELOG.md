@@ -2,6 +2,17 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
+## 0.4.5 - 2026-11-01
+
+### Added
+
+- `where('time')` selects phibble 0.6's time columns (`Type::Time`, R's hms). With an earlier phibble it throws an exception that says so.
+
+### Changed
+
+- phplyr allows phibble ^0.3, ^0.4, ^0.5, or ^0.6, and the lock file installs phibble 0.6.0.
+- Tests run time columns through the verbs (sorting, counting, grouped summaries, ranks, `lag()`, `between()`, `coalesce()`, joins including inequality joins, and `complete()`), in memory and from SQLite, and compare the rows with dplyr's on hms.
+
 ## 0.4.4 - 2026-11-01
 
 ### Changed
