@@ -88,21 +88,30 @@ reads it at a pinned commit.
 | Path | Contents | Made by |
 | --- | --- | --- |
 | `site/site.json` | Manifest: summary, install, example, docs pages, examples, and file lists | `bin/site-manifest` |
-| `site/benchmarks/backends.json` | Backend and dplyr timings | `bin/site-benchmarks`, from `docs/benchmarks/` |
-| `site/verifications/*.json` | Every test that checks phplyr against R, with its assertion count and largest floating-point error | `bin/site-verifications` |
+| `site/benchmarks/*.json` | The Benchmarks pages: phibble's workloads, the backend pipelines with dplyr, and the models | `bin/site-benchmarks`, from `docs/benchmarks/` |
+| `site/verifications/*.json` | The Verification pages: every test that checks phplyr against R or against DataFrame, with its status, assertion count, and largest floating-point errors | `bin/site-verifications` |
+
+The records follow phpstats.org's evidence record format, and
+`tests/SiteTest.php` checks their shape.
 
 `bin/site-verifications` runs the test suite with `PHPLYR_VERIFY_LOG` set.
-Each test that reads an R fixture through `rReference()` then logs its
-assertions and the differences recorded by `expectClose()`. The script writes
-nothing unless every test passes. Set `POLARS_PHP` to a PHP command that loads
-php_polars to add the PolarsTable parity file.
+Every test then logs its status, the fixtures it read through `rReference()`,
+its assertions, and the differences recorded by `expectClose()`. A test that
+can be skipped before it reads its fixture names its record with
+`->group('verify:<record>')`. Failed and skipped tests are written with their
+reason, and the script exits with an error after writing when a test failed.
+Set `PHIT_EXTENSION` to the phit extension to load, and `POLARS_PHP` to a PHP
+command that loads php_polars to write the PolarsTable parity file.
+
+The R scripts in `tests/r/` write the fixtures and record the R and package
+versions in `tests/Fixtures/r-versions.json`. Run them from the repository
+root, for example `Rscript tests/r/reference.R`.
 
 Published benchmark records come from the Linux benchmark machine. The
 scripts in `bench/` write them to `docs/benchmarks/`: `harness-<backend>.json`,
 `backends-results.json`, `dplyr-results.json` (run `bench/backends.php
 --csv-dir=bench/data` first), and `models-results.json`. Then
-`bin/site-benchmarks` writes `site/benchmarks/backends.json`. `tests/SiteTest.php`
-checks that the files and pages site.json names exist.
+`bin/site-benchmarks` writes `site/benchmarks/`.
 
 ## Layout
 

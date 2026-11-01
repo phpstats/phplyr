@@ -58,9 +58,14 @@ foreach ($nav as $entry) {
 }
 
 $files = fn (string $dir) => array_map(fn ($f) => 'site/'.$dir.'/'.basename($f), glob($root.'/site/'.$dir.'/*.json'));
-$order = ['dplyr', 'tidyr', 'additions', 'lubridate-stringr', 'janitor', 'models', 'polars'];
-$verifications = $files('verifications');
-usort($verifications, fn ($a, $b) => array_search(basename($a, '.json'), $order, true) <=> array_search(basename($b, '.json'), $order, true));
+$ordered = function (string $dir, array $order) use ($files): array {
+    $paths = $files($dir);
+    usort($paths, fn ($a, $b) => array_search(basename($a, '.json'), $order, true) <=> array_search(basename($b, '.json'), $order, true));
+
+    return $paths;
+};
+$verifications = $ordered('verifications', ['dplyr', 'tidyr', 'additions', 'lubridate-stringr', 'janitor', 'descriptives', 'models', 'polars', 'sqlite']);
+$benchmarks = $ordered('benchmarks', ['backends', 'workloads', 'models']);
 
 // The curated examples, in nav order. Each path is a page in the docs'
 // Examples section.
@@ -106,8 +111,12 @@ $manifest = [
         'output' => $m[1] ?? null,
     ],
     'docs' => ['root' => 'docs', 'format' => 'quarto', 'nav' => $nav],
-    'benchmarks' => $files('benchmarks'),
+    'benchmarks' => $benchmarks,
     'verifications' => $verifications,
+    'evidence_gaps' => [
+        'benchmarks' => 'Memory is measured for the models benchmark only; the workloads and backend pipelines record elapsed time.',
+        'verification' => 'glmer() is not compared with lme4, phit-polyfill is not compared with R, and PostgreSQL and MySQL tables are not checked.',
+    ],
     'examples' => $examples,
 ];
 file_put_contents($root.'/site/site.json', json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n");

@@ -416,19 +416,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>bin/site-manifest</code></td>
 </tr>
 <tr class="even">
-<td><code>site/benchmarks/backends.json</code></td>
-<td>Backend and dplyr timings</td>
+<td><code>site/benchmarks/*.json</code></td>
+<td>The Benchmarks pages: phibble’s workloads, the backend pipelines with dplyr, and the models</td>
 <td><code>bin/site-benchmarks</code>, from <code>docs/benchmarks/</code></td>
 </tr>
 <tr class="odd">
 <td><code>site/verifications/*.json</code></td>
-<td>Every test that checks phplyr against R, with its assertion count and largest floating-point error</td>
+<td>The Verification pages: every test that checks phplyr against R or against DataFrame, with its status, assertion count, and largest floating-point errors</td>
 <td><code>bin/site-verifications</code></td>
 </tr>
 </tbody>
 </table>
-<p><code>bin/site-verifications</code> runs the test suite with <code>PHPLYR_VERIFY_LOG</code> set. Each test that reads an R fixture through <code>rReference()</code> then logs its assertions and the differences recorded by <code>expectClose()</code>. The script writes nothing unless every test passes. Set <code>POLARS_PHP</code> to a PHP command that loads php_polars to add the PolarsTable parity file.</p>
-<p>Published benchmark records come from the Linux benchmark machine. The scripts in <code>bench/</code> write them to <code>docs/benchmarks/</code>: <code>harness-&lt;backend&gt;.json</code>, <code>backends-results.json</code>, <code>dplyr-results.json</code> (run <code>bench/backends.php --csv-dir=bench/data</code> first), and <code>models-results.json</code>. Then <code>bin/site-benchmarks</code> writes <code>site/benchmarks/backends.json</code>. <code>tests/SiteTest.php</code> checks that the files and pages site.json names exist.</p>
+<p>The records follow phpstats.org’s evidence record format, and <code>tests/SiteTest.php</code> checks their shape.</p>
+<p><code>bin/site-verifications</code> runs the test suite with <code>PHPLYR_VERIFY_LOG</code> set. Every test then logs its status, the fixtures it read through <code>rReference()</code>, its assertions, and the differences recorded by <code>expectClose()</code>. A test that can be skipped before it reads its fixture names its record with <code>-&gt;group('verify:&lt;record&gt;')</code>. Failed and skipped tests are written with their reason, and the script exits with an error after writing when a test failed. Set <code>PHIT_EXTENSION</code> to the phit extension to load, and <code>POLARS_PHP</code> to a PHP command that loads php_polars to write the PolarsTable parity file.</p>
+<p>The R scripts in <code>tests/r/</code> write the fixtures and record the R and package versions in <code>tests/Fixtures/r-versions.json</code>. Run them from the repository root, for example <code>Rscript tests/r/reference.R</code>.</p>
+<p>Published benchmark records come from the Linux benchmark machine. The scripts in <code>bench/</code> write them to <code>docs/benchmarks/</code>: <code>harness-&lt;backend&gt;.json</code>, <code>backends-results.json</code>, <code>dplyr-results.json</code> (run <code>bench/backends.php --csv-dir=bench/data</code> first), and <code>models-results.json</code>. Then <code>bin/site-benchmarks</code> writes <code>site/benchmarks/</code>.</p>
 </section>
 <section id="layout" class="level2">
 <h2 class="anchored" data-anchor-id="layout">Layout</h2>

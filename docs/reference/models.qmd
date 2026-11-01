@@ -20,20 +20,9 @@ The functions come from the [phit](https://github.com/phpstats/phit)
 extension or from [phit-polyfill](https://github.com/phpstats/phit-polyfill),
 its PHP port, and phplyr calls both the same way. phit's
 [Extension or polyfill](https://phit.phpstats.org/docs/extension-or-polyfill)
-page compares them. On the [benchmark machine](../performance.qmd#methods),
-with phit 0.4.3 and phit-polyfill 0.4.1, a fit took:
-
-| Fit | Extension | [Polyfill]{.text-muted} |
-| --- | --: | --: |
-| `lm()`, 100,000 rows, 10 predictors | 79 ms | [511 ms]{.text-muted} |
-| `glm()` logistic, 100,000 rows, 10 predictors | 163 ms | [2.33 s]{.text-muted} |
-| `lmer()`, 10,000 rows, 100 random intercepts | 7.5 ms | [45 ms]{.text-muted} |
-| `glmer()`, 10,000 rows, 100 random intercepts | 108 ms | [1.07 s]{.text-muted} |
-
-Each time is the median of seven fits, each in a fresh process. The two
-implementations returned identical coefficients.
-[`models-results.json`](../benchmarks/models-results.json) lists every run
-and each process's peak memory.
+page compares them, and
+[Models: phit extension and phit-polyfill](https://phplyr.phpstats.org/benchmarks/models)
+times both through phplyr.
 
 - Install the polyfill with `composer require phpstats/phit-polyfill`. When
   the extension is loaded, the polyfill defines nothing.
@@ -47,6 +36,8 @@ and each process's peak memory.
 
 CI runs phplyr's tests with each implementation. Both runs compare `lm()` and
 `glm()` coefficients with R's, and `lmer()` fixed effects with lme4's.
+[Models: agreement with R](https://phplyr.phpstats.org/verification/models)
+lists the comparisons.
 
 ::: {.panel-tabset group="syntax"}
 

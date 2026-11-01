@@ -146,7 +146,9 @@
         ]
     },
     "benchmarks": [
-        "site/benchmarks/backends.json"
+        "site/benchmarks/backends.json",
+        "site/benchmarks/workloads.json",
+        "site/benchmarks/models.json"
     ],
     "verifications": [
         "site/verifications/dplyr.json",
@@ -154,9 +156,15 @@
         "site/verifications/additions.json",
         "site/verifications/lubridate-stringr.json",
         "site/verifications/janitor.json",
+        "site/verifications/descriptives.json",
         "site/verifications/models.json",
-        "site/verifications/polars.json"
+        "site/verifications/polars.json",
+        "site/verifications/sqlite.json"
     ],
+    "evidence_gaps": {
+        "benchmarks": "Memory is measured for the models benchmark only; the workloads and backend pipelines record elapsed time.",
+        "verification": "glmer() is not compared with lme4, phit-polyfill is not compared with R, and PostgreSQL and MySQL tables are not checked."
+    },
     "examples": [
         {
             "path": "examples/filter-and-mutate",
