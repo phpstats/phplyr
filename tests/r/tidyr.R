@@ -49,3 +49,5 @@ out <- list(
 )
 
 write_json(out, "tests/Fixtures/tidyr-reference.json", digits = NA, auto_unbox = TRUE, pretty = TRUE, na = "null")
+source("tests/r/versions.R")
+record_versions("tidyr-reference.json", c("dplyr", "tidyr"))

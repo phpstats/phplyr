@@ -37,7 +37,7 @@ it('keeps expression pipelines lazy and matches the in-memory result', function 
     expect($lazy)->toBeInstanceOf(SqlTable::class);
     expect(pipe($lazy, show_query()))->toContain('SELECT');
     expectRowsClose((pipe($lazy, collect()))->toRows(), $pipeline(panel())->toRows());
-});
+})->group('verify:sqlite');
 
 it('runs grouped windows, counts and joins in SQL', function () {
     $pdo = sqlitePanel();
@@ -61,13 +61,13 @@ it('runs grouped windows, counts and joins in SQL', function () {
     $joined = pipe(tbl($pdo, 'panel'), inner_join(tbl($pdo, 'groups'), by: 'g'), count('region'));
     expect($joined)->toBeInstanceOf(SqlTable::class);
     expect((pipe($joined, collect()))->toRows())->toBe([['region' => 'north', 'n' => 4], ['region' => 'south', 'n' => 4]]);
-});
+})->group('verify:sqlite');
 
 it('falls back to memory for closures', function () {
     $out = pipe(tbl(sqlitePanel(), 'panel'), filter(fn ($r) => $r->score > 8));
     expect($out)->toBeInstanceOf(DataFrame::class);
     expect(pipe($out, Phplyr\pull('id')))->toBe([5, 7]);
-});
+})->group('verify:sqlite');
 
 it('accepts Phibble\Expr nodes directly and stays lazy', function () {
     $t = tbl(sqlitePanel(), 'panel');
@@ -76,4 +76,4 @@ it('accepts Phibble\Expr nodes directly and stays lazy', function () {
     $summary = pipe($t, group_by('g'), summarise(rows: Phibble\Expr\n(), m: Phibble\Expr\mean(Phibble\Expr\col('score'))));
     expect($summary)->toBeInstanceOf(SqlTable::class);
     expect((pipe($summary, collect()))->column('m'))->toBe([4.5, 5.25, 5.5]);
-});
+})->group('verify:sqlite');

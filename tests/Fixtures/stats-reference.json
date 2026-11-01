@@ -1,0 +1,16 @@
+{
+  "mean(x)": 5.16666666666667,
+  "var(x)": 6.16666666666667,
+  "sd(x)": 2.48327740429189,
+  "median(x)": 4.5,
+  "quantile(x, 0.9)": 8,
+  "quantile(x, 0)": 2,
+  "quantile(x, 1)": 9,
+  "sum(x)": 31,
+  "min(x)": 2,
+  "max(x)": 9,
+  "mean(c(1, NA, 3))": null,
+  "mean(c(1, NA, 3), na.rm = TRUE)": 2,
+  "sd(c(1, NaN, 3), na.rm = TRUE)": 1.4142135623731,
+  "var(1)": null
+}

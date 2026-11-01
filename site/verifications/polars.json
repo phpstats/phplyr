@@ -1,950 +1,1040 @@
 {
     "title": "PolarsTable parity",
-    "description": "About 120 pipelines run on phibble's in-memory DataFrame and on its Polars backend, PolarsTable, which must give the same columns, types, groups, and rows.",
-    "reference": "phplyr on DataFrame",
-    "tolerance": "Floating-point values within 1e-9 relative; all other values equal.",
-    "environment": {
-        "php": "8.5.10",
-        "commit": "a741c88",
-        "date": "2026-10-18"
+    "label": "PolarsTable",
+    "kind": "reference",
+    "checked": "About 120 pipelines give the same columns, types, groups, and rows on phibble's Polars backend, PolarsTable, as on its in-memory DataFrame.",
+    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "reference": "phplyr on phibble's DataFrame",
+    "versions": {
+        "PHP": "8.5.10",
+        "phibble": "v0.6.0 (6b9f06a)",
+        "php_polars": "0.2.1"
     },
-    "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
+    "inputs": [
+        {
+            "name": "panel.csv",
+            "detail": "12 rows: id, g, year, value, score, label.",
+            "url": "tests/Fixtures/panel.csv"
+        },
+        {
+            "name": "schools.csv",
+            "detail": "250 rows: school, study_hours, prior_score, score.",
+            "url": "tests/Fixtures/schools.csv"
+        },
+        {
+            "name": "events.csv",
+            "detail": "5 rows: id, t, amount.",
+            "url": "tests/Fixtures/events.csv"
+        },
+        {
+            "name": "periods.csv",
+            "detail": "5 rows: id, start, end, label.",
+            "url": "tests/Fixtures/periods.csv"
+        },
+        {
+            "name": "join_x.csv",
+            "detail": "5 rows: id, k, v.",
+            "url": "tests/Fixtures/join_x.csv"
+        },
+        {
+            "name": "join_y.csv",
+            "detail": "5 rows: key, k, w.",
+            "url": "tests/Fixtures/join_y.csv"
+        },
+        {
+            "name": "wide.csv",
+            "detail": "3 rows: id, name, wk1, wk2, wk3.",
+            "url": "tests/Fixtures/wide.csv"
+        },
+        {
+            "name": "long.csv",
+            "detail": "6 rows: id, key, val, w.",
+            "url": "tests/Fixtures/long.csv"
+        },
+        {
+            "name": "who.csv",
+            "detail": "2 rows: country, new_sp_m014, new_sp_f014, new_ep_m65.",
+            "url": "tests/Fixtures/who.csv"
+        },
+        {
+            "name": "strings.csv",
+            "detail": "4 rows: id, s, tags, code, n.",
+            "url": "tests/Fixtures/strings.csv"
+        }
+    ],
+    "comparison": [
+        {
+            "id": "values",
+            "kind": "tolerance",
+            "applies_to": "floating-point values; in the same case, column names, row counts and order, strings, integers, booleans, and missing values must be identical",
+            "atol": 1.0e-9,
+            "rtol": 1.0e-9,
+            "rel_floor": 1
+        },
+        {
+            "id": "exact",
+            "kind": "exact",
+            "applies_to": "column names, row counts and order, strings, integers, booleans, dates, and missing values"
+        }
+    ],
     "cases": [
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"filter expr\"  with data set \"dataset \"filter expr\"\"",
+            "name": "filter expr",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 33,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"filter closure\"  with data set \"dataset \"filter closure\"\"",
+            "name": "filter closure",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 61,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"filter grouped\"  with data set \"dataset \"filter grouped\"\"",
+            "name": "filter grouped",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 47,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"filter_out\"  with data set \"dataset \"filter_out\"\"",
+            "name": "filter_out",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 54,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"filter if_any\"  with data set \"dataset \"filter if_any\"\"",
+            "name": "filter if_any",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 61,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"filter if_all\"  with data set \"dataset \"filter if_all\"\"",
+            "name": "filter if_all",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 47,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"arrange\"  with data set \"dataset \"arrange\"\"",
+            "name": "arrange",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 89,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"arrange by group\"  with data set \"dataset \"arrange by group\"\"",
+            "name": "arrange by group",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 89,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"distinct\"  with data set \"dataset \"distinct\"\"",
+            "name": "distinct",
             "quantity": "values",
-            "n_compared": 32,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 32
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"distinct keep all\"  with data set \"dataset \"distinct keep all\"\"",
+            "name": "distinct keep all",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"slice\"  with data set \"dataset \"slice\"\"",
+            "name": "slice",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"slice_head grouped\"  with data set \"dataset \"slice_head grouped\"\"",
+            "name": "slice_head grouped",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 47,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"slice_tail\"  with data set \"dataset \"slice_tail\"\"",
+            "name": "slice_tail",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"slice_min ties\"  with data set \"dataset \"slice_min ties\"\"",
+            "name": "slice_min ties",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 40,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"slice_max prop\"  with data set \"dataset \"slice_max prop\"\"",
+            "name": "slice_max prop",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"top_n\"  with data set \"dataset \"top_n\"\"",
+            "name": "top_n",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 47,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"head\"  with data set \"dataset \"head\"\"",
+            "name": "head",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"drop_na\"  with data set \"dataset \"drop_na\"\"",
+            "name": "drop_na",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 75,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"select helpers\"  with data set \"dataset \"select helpers\"\"",
+            "name": "select helpers",
             "quantity": "values",
-            "n_compared": 53,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 53
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"select where\"  with data set \"dataset \"select where\"\"",
+            "name": "select where",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 65,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"select rename\"  with data set \"dataset \"select rename\"\"",
+            "name": "select rename",
             "quantity": "values",
-            "n_compared": 41,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 41
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"rename\"  with data set \"dataset \"rename\"\"",
+            "name": "rename",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 89,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"rename_with\"  with data set \"dataset \"rename_with\"\"",
+            "name": "rename_with",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 89,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"relocate\"  with data set \"dataset \"relocate\"\"",
+            "name": "relocate",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 89,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"mutate expr\"  with data set \"dataset \"mutate expr\"\"",
+            "name": "mutate expr",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 113,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"mutate closure\"  with data set \"dataset \"mutate closure\"\"",
+            "name": "mutate closure",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"mutate grouped\"  with data set \"dataset \"mutate grouped\"\"",
+            "name": "mutate grouped",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 125,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"mutate keep used\"  with data set \"dataset \"mutate keep used\"\"",
+            "name": "mutate keep used",
             "quantity": "values",
-            "n_compared": 41,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 41
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"mutate before\"  with data set \"dataset \"mutate before\"\"",
+            "name": "mutate before",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"mutate by\"  with data set \"dataset \"mutate by\"\"",
+            "name": "mutate by",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"transmute\"  with data set \"dataset \"transmute\"\"",
+            "name": "transmute",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 41,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"if_else and case_when\"  with data set \"dataset \"if_else and case_when\"\"",
+            "name": "if_else and case_when",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 113,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"coalesce na_if between\"  with data set \"dataset \"coalesce na_if between\"\"",
+            "name": "coalesce na_if between",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 125,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"recode_values\"  with data set \"dataset \"recode_values\"\"",
+            "name": "recode_values",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"windows\"  with data set \"dataset \"windows\"\"",
+            "name": "windows",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 221,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"lag order_by\"  with data set \"dataset \"lag order_by\"\"",
+            "name": "lag order_by",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"consecutive_id\"  with data set \"dataset \"consecutive_id\"\"",
+            "name": "consecutive_id",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"across mutate\"  with data set \"dataset \"across mutate\"\"",
+            "name": "across mutate",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 89,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"across helpers\"  with data set \"dataset \"across helpers\"\"",
+            "name": "across helpers",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 137,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"str helpers\"  with data set \"dataset \"str helpers\"\"",
+            "name": "str helpers",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 113,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"cur_group_id\"  with data set \"dataset \"cur_group_id\"\"",
+            "name": "cur_group_id",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"summarise\"  with data set \"dataset \"summarise\"\"",
+            "name": "summarise",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 29,
             "max_abs_error": 4.440892098500626e-16,
-            "max_rel_error": 1.211152390500171e-16,
-            "passed": true
+            "max_rel_error": 1.211152390500171e-16
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"summarise first last nth\"  with data set \"dataset \"summarise first last nth\"\"",
+            "name": "summarise first last nth",
             "quantity": "values",
-            "n_compared": 23,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 23
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"summarise closure\"  with data set \"dataset \"summarise closure\"\"",
+            "name": "summarise closure",
             "quantity": "values",
-            "n_compared": 14,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 14
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"summarise groups keep\"  with data set \"dataset \"summarise groups keep\"\"",
+            "name": "summarise groups keep",
             "quantity": "values",
-            "n_compared": 41,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 41
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"summarise by\"  with data set \"dataset \"summarise by\"\"",
+            "name": "summarise by",
             "quantity": "values",
-            "n_compared": 41,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 41
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"summarise across\"  with data set \"dataset \"summarise across\"\"",
+            "name": "summarise across",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 77,
             "max_abs_error": 2.842170943040401e-14,
-            "max_rel_error": 3.898489382385932e-16,
-            "passed": true
+            "max_rel_error": 3.898489382385932e-16
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"summarise pick\"  with data set \"dataset \"summarise pick\"\"",
+            "name": "summarise pick",
             "quantity": "values",
-            "n_compared": 14,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 14
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"reframe\"  with data set \"dataset \"reframe\"\"",
+            "name": "reframe",
             "quantity": "values",
-            "n_compared": 32,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 32
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"count\"  with data set \"dataset \"count\"\"",
+            "name": "count",
             "quantity": "values",
-            "n_compared": 41,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 41
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"count wt\"  with data set \"dataset \"count wt\"\"",
+            "name": "count wt",
             "quantity": "values",
-            "n_compared": 14,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 14
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"tally\"  with data set \"dataset \"tally\"\"",
+            "name": "tally",
             "quantity": "values",
-            "n_compared": 14,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 14
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"add_count\"  with data set \"dataset \"add_count\"\"",
+            "name": "add_count",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"add_tally\"  with data set \"dataset \"add_tally\"\"",
+            "name": "add_tally",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"rowwise\"  with data set \"dataset \"rowwise\"\"",
+            "name": "rowwise",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"ungroup\"  with data set \"dataset \"ungroup\"\"",
+            "name": "ungroup",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"group_modify\"  with data set \"dataset \"group_modify\"\"",
+            "name": "group_modify",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pull\"  with data set \"dataset \"pull\"\"",
+            "name": "pull",
             "quantity": "values",
-            "n_compared": 1,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 1
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"add_row\"  with data set \"dataset \"add_row\"\"",
+            "name": "add_row",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 4.5,
+            "expected": 4.5
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"big pipeline\"  with data set \"dataset \"big pipeline\"\"",
+            "name": "big pipeline",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 77,
             "max_abs_error": 5.329070518200751e-15,
-            "max_rel_error": 4.546870422515264e-16,
-            "passed": true
+            "max_rel_error": 4.546870422515264e-16
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pivot_longer\"  with data set \"dataset \"pivot_longer\"\"",
+            "name": "pivot_longer",
             "quantity": "values",
-            "n_compared": 35,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 35
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pivot_longer sep\"  with data set \"dataset \"pivot_longer sep\"\"",
+            "name": "pivot_longer sep",
             "quantity": "values",
-            "n_compared": 35,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 35
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pivot_longer slowest\"  with data set \"dataset \"pivot_longer slowest\"\"",
+            "name": "pivot_longer slowest",
             "quantity": "values",
-            "n_compared": 50,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 50
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pivot_wider\"  with data set \"dataset \"pivot_wider\"\"",
+            "name": "pivot_wider",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 17,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pivot_wider multi\"  with data set \"dataset \"pivot_wider multi\"\"",
+            "name": "pivot_wider multi",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 23,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pivot_wider values_fn\"  with data set \"dataset \"pivot_wider values_fn\"\"",
+            "name": "pivot_wider values_fn",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 20,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"complete\"  with data set \"dataset \"complete\"\"",
+            "name": "complete",
             "quantity": "values",
-            "n_compared": 45,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 45
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"expand nesting\"  with data set \"dataset \"expand nesting\"\"",
+            "name": "expand nesting",
             "quantity": "values",
-            "n_compared": 149,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 149
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"fill\"  with data set \"dataset \"fill\"\"",
+            "name": "fill",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 89,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"replace_na\"  with data set \"dataset \"replace_na\"\"",
+            "name": "replace_na",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 89,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"uncount\"  with data set \"dataset \"uncount\"\"",
+            "name": "uncount",
             "quantity": "values",
-            "n_compared": 23,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 23
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"unite\"  with data set \"dataset \"unite\"\"",
+            "name": "unite",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 77,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"separate\"  with data set \"dataset \"separate\"\"",
+            "name": "separate",
             "quantity": "values",
-            "n_compared": 21,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 21
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"separate_wider_delim\"  with data set \"dataset \"separate_wider_delim\"\"",
+            "name": "separate_wider_delim",
             "quantity": "values",
-            "n_compared": 25,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 25
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"separate_longer_delim\"  with data set \"dataset \"separate_longer_delim\"\"",
+            "name": "separate_longer_delim",
             "quantity": "values",
-            "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 26
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"separate_rows\"  with data set \"dataset \"separate_rows\"\"",
+            "name": "separate_rows",
             "quantity": "values",
-            "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 26
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"extract\"  with data set \"dataset \"extract\"\"",
+            "name": "extract",
             "quantity": "values",
-            "n_compared": 21,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 21
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"nest\"  with data set \"dataset \"nest\"\"",
+            "name": "nest",
             "quantity": "values",
-            "n_compared": 41,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 41
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"group_nest sizes\"  with data set \"dataset \"group_nest sizes\"\"",
+            "name": "group_nest sizes",
             "quantity": "values",
-            "n_compared": 14,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 14
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"unnest\"  with data set \"dataset \"unnest\"\"",
+            "name": "unnest",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 89,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"cur_group\"  with data set \"dataset \"cur_group\"\"",
+            "name": "cur_group",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"c_across\"  with data set \"dataset \"c_across\"\"",
+            "name": "c_across",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"order_by\"  with data set \"dataset \"order_by\"\"",
+            "name": "order_by",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"with_groups\"  with data set \"dataset \"with_groups\"\"",
+            "name": "with_groups",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"recode\"  with data set \"dataset \"recode\"\"",
+            "name": "recode",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 101,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"group_data\"  with data set \"dataset \"group_data\"\"",
+            "name": "group_data",
             "quantity": "values",
-            "n_compared": 14,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 14
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"top_frac\"  with data set \"dataset \"top_frac\"\"",
+            "name": "top_frac",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pivot names_transform\"  with data set \"dataset \"pivot names_transform\"\"",
+            "name": "pivot names_transform",
             "quantity": "values",
-            "n_compared": 50,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 50
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pivot unused_fn\"  with data set \"dataset \"pivot unused_fn\"\"",
+            "name": "pivot unused_fn",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 20,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pivot id_expand\"  with data set \"dataset \"pivot id_expand\"\"",
+            "name": "pivot id_expand",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 17,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pivot specs\"  with data set \"dataset \"pivot specs\"\"",
+            "name": "pivot specs",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 17,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"gather\"  with data set \"dataset \"gather\"\"",
+            "name": "gather",
             "quantity": "values",
-            "n_compared": 35,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 35
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"spread\"  with data set \"dataset \"spread\"\"",
+            "name": "spread",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 17,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"chop unchop\"  with data set \"dataset \"chop unchop\"\"",
+            "name": "chop unchop",
             "quantity": "values",
-            "n_compared": 53,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 53
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"chop\"  with data set \"dataset \"chop\"\"",
+            "name": "chop",
             "quantity": "values",
-            "n_compared": 14,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 14
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"pack unpack\"  with data set \"dataset \"pack unpack\"\"",
+            "name": "pack unpack",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 89,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"unnest_wider\"  with data set \"dataset \"unnest_wider\"\"",
+            "name": "unnest_wider",
             "quantity": "values",
-            "n_compared": 77,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 77
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"unnest_longer\"  with data set \"dataset \"unnest_longer\"\"",
+            "name": "unnest_longer",
             "quantity": "values",
-            "n_compared": 115,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 115
         },
         {
-            "name": "Gives the same result on PolarsTable for with dataset \"hoist\"  with data set \"dataset \"hoist\"\"",
+            "name": "hoist",
             "quantity": "values",
-            "n_compared": 77,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 77
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"inner_join\"  with data set \"dataset \"inner_join\"\"",
+            "name": "Joins and binds: inner_join",
             "quantity": "values",
-            "n_compared": 41,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 41
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"left_join suffix\"  with data set \"dataset \"left_join suffix\"\"",
+            "name": "Joins and binds: left_join suffix",
             "quantity": "values",
-            "n_compared": 47,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 47
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"right_join\"  with data set \"dataset \"right_join\"\"",
+            "name": "Joins and binds: right_join",
             "quantity": "values",
-            "n_compared": 35,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 35
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"full_join\"  with data set \"dataset \"full_join\"\"",
+            "name": "Joins and binds: full_join",
             "quantity": "values",
-            "n_compared": 40,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 40
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"semi_join\"  with data set \"dataset \"semi_join\"\"",
+            "name": "Joins and binds: semi_join",
             "quantity": "values",
-            "n_compared": 21,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 21
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"anti_join\"  with data set \"dataset \"anti_join\"\"",
+            "name": "Joins and binds: anti_join",
             "quantity": "values",
-            "n_compared": 9,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 9
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"cross_join\"  with data set \"dataset \"cross_join\"\"",
+            "name": "Joins and binds: cross_join",
             "quantity": "values",
-            "n_compared": 33,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 33
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"join_by inequality\"  with data set \"dataset \"join_by inequality\"\"",
+            "name": "Joins and binds: join_by inequality",
             "quantity": "values",
-            "n_compared": 47,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 47
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"bind_rows\"  with data set \"dataset \"bind_rows\"\"",
+            "name": "Joins and binds: bind_rows",
             "quantity": "values",
-            "n_compared": 75,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 75
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"bind_cols\"  with data set \"dataset \"bind_cols\"\"",
+            "name": "Joins and binds: bind_cols",
             "quantity": "values",
-            "n_compared": 20,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 20
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"union\"  with data set \"dataset \"union\"\"",
+            "name": "Joins and binds: union",
             "quantity": "values",
-            "n_compared": 17,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 17
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"union_all\"  with data set \"dataset \"union_all\"\"",
+            "name": "Joins and binds: union_all",
             "quantity": "values",
-            "n_compared": 25,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 25
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"intersect\"  with data set \"dataset \"intersect\"\"",
+            "name": "Joins and binds: intersect",
             "quantity": "values",
-            "n_compared": 13,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 13
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"setdiff\"  with data set \"dataset \"setdiff\"\"",
+            "name": "Joins and binds: setdiff",
             "quantity": "values",
-            "n_compared": 7,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 7
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"symdiff\"  with data set \"dataset \"symdiff\"\"",
+            "name": "Joins and binds: symdiff",
             "quantity": "values",
-            "n_compared": 9,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 9
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"rows_update\"  with data set \"dataset \"rows_update\"\"",
+            "name": "Joins and binds: rows_update",
             "quantity": "values",
-            "n_compared": 25,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 25
         },
         {
-            "name": "Joins and binds the same on PolarsTable with with dataset \"rows_upsert\"  with data set \"dataset \"rows_upsert\"\"",
+            "name": "Joins and binds: rows_upsert",
             "quantity": "values",
-            "n_compared": 23,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 23
         },
         {
             "name": "Runs rolling and overlap joins the same on PolarsTable",
             "quantity": "values",
-            "n_compared": 66,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 66
         }
-    ]
+    ],
+    "reproduce": [
+        "POLARS_PHP=\"php -d extension=/path/to/libphp_polars.so\" bin/site-verifications"
+    ],
+    "environment": {
+        "date": "2026-11-01",
+        "commit": "8056422",
+        "php": "8.5.10",
+        "os": "Darwin 27.0.0 (arm64)"
+    }
 }

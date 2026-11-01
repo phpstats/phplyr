@@ -15,7 +15,7 @@ use Phibble\Polars\PolarsTable;
 use function Phplyr\{across, add_count, add_row, add_tally, anti_join, any_of, arrange, between, bind_cols, bind_rows, build_wider_spec, c_across, case_when, chop, closest, coalesce, col, complete, consecutive_id, count, cross_join, cume_dist, cummax, cummean, cumsum, cur_group, cur_group_id, dense_rank, desc, distinct, drop_na, ends_with, everything, expand, extract, fill, filter, filter_out, first, full_join, gather, group_by, group_data, group_modify, group_nest, head, hoist, if_all, if_any, if_else, inner_join, intersect, join_by, lag, last, lead, left_join, max, mean, median, min, min_rank, mutate, n, n_distinct, na_if, nest, nesting, nth, ntile, order_by, pack, percent_rank, pick, pipe, pivot_longer, pivot_wider, pivot_wider_spec, pull, recode, recode_values, reframe, relocate, rename, rename_with, replace_na, right_join, row_number, rows_update, rows_upsert, rowwise, sd, select, semi_join, separate, separate_longer_delim, separate_rows, separate_wider_delim, setdiff, slice, slice_head, slice_max, slice_min, slice_tail, spread, starts_with, str_detect, str_to_upper, sum, summarise, symdiff, tally, top_frac, top_n, transmute, unchop, uncount, ungroup, union, union_all, unite, unnest, unnest_longer, unnest_wider, unpack, variance, where, with_groups};
 
 if (! extension_loaded('php_polars') || ! class_exists(PolarsTable::class)) {
-    test('PolarsTable parity')->skip('php_polars is not loaded');
+    test('PolarsTable parity')->group('verify:polars')->skip('php_polars is not loaded');
 
     return;
 }

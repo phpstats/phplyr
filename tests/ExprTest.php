@@ -59,5 +59,9 @@ it('matches R for scalar expression helpers', function () {
 it('fits mixed models like lme4', function () {
     $fit = pipe(DataFrame::fromCsv(fixturePath('schools.csv')), lmer('score ~ study_hours + prior_score + (1 | school)'));
     expectCoefficients($fit['coefficients'], exprReference('lmer_fixef'));
-    expectClose($fit['sigma'], exprReference('lmer_sigma'), 1e-5, 'coefficients');
-})->skip(fn () => ! function_exists('Phit\\fit_lmer'), 'needs phit with fit_lmer');
+})->group('verify:models')->skip(fn () => ! function_exists('Phit\\fit_lmer'), 'needs phit with fit_lmer');
+
+it('estimates the residual SD of a mixed model like lme4', function () {
+    $fit = pipe(DataFrame::fromCsv(fixturePath('schools.csv')), lmer('score ~ study_hours + prior_score + (1 | school)'));
+    expectClose($fit['sigma'], exprReference('lmer_sigma'), 1e-5, 0.0, 'sigma');
+})->group('verify:models')->skip(fn () => ! function_exists('Phit\\fit_lmer'), 'needs phit with fit_lmer');

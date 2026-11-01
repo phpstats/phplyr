@@ -19,3 +19,5 @@ out <- list(
   lmer_sigma = sigma(m)
 )
 write_json(out, "tests/Fixtures/expr-reference.json", digits = NA, auto_unbox = TRUE, pretty = TRUE, na = "null")
+source("tests/r/versions.R")
+record_versions("expr-reference.json", c("dplyr", "lme4"))

@@ -1,0 +1,75 @@
+{
+    "title": "SQLite backend",
+    "label": "SQLite",
+    "kind": "integration",
+    "checked": "Expression pipelines on a SQLite table through Phibble\\tbl() stay in SQL and give the same rows as on DataFrame. Grouped windows, counts, and joins run in SQL, and closures fall back to memory.",
+    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "reference": "phplyr on phibble's DataFrame, and expected values written in the tests",
+    "versions": {
+        "PHP": "8.5.10",
+        "phibble": "v0.6.0 (6b9f06a)"
+    },
+    "inputs": [
+        {
+            "name": "panel.csv",
+            "detail": "12 rows: id, g, year, value, score, label. Loaded into an in-memory SQLite database with declared column types.",
+            "url": "tests/Fixtures/panel.csv"
+        }
+    ],
+    "comparison": [
+        {
+            "id": "values",
+            "kind": "tolerance",
+            "applies_to": "floating-point values; in the same case, column names, row counts and order, strings, integers, booleans, and missing values must be identical",
+            "atol": 1.0e-9,
+            "rtol": 1.0e-9,
+            "rel_floor": 1
+        },
+        {
+            "id": "exact",
+            "kind": "exact",
+            "applies_to": "column names, row counts and order, strings, integers, booleans, dates, and missing values"
+        }
+    ],
+    "cases": [
+        {
+            "name": "Keeps expression pipelines lazy and matches the in-memory result",
+            "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 18,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
+        },
+        {
+            "name": "Runs grouped windows, counts and joins in SQL",
+            "quantity": "values",
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 66
+        },
+        {
+            "name": "Falls back to memory for closures",
+            "quantity": "values",
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 2
+        },
+        {
+            "name": "Accepts Phibble\\Expr nodes directly and stays lazy",
+            "quantity": "values",
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 3
+        }
+    ],
+    "reproduce": [
+        "bin/site-verifications"
+    ],
+    "environment": {
+        "date": "2026-11-01",
+        "commit": "8056422",
+        "php": "8.5.10",
+        "os": "Darwin 27.0.0 (arm64)"
+    }
+}

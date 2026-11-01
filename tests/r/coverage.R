@@ -74,3 +74,5 @@ out <- list(
 )
 
 write_json(out, "tests/Fixtures/coverage-reference.json", digits = NA, auto_unbox = TRUE, pretty = TRUE, na = "null")
+source("tests/r/versions.R")
+record_versions("coverage-reference.json", c("dplyr", "tidyr"))

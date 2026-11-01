@@ -2,17 +2,23 @@
 <?php
 
 /*
- * Write site/verifications/*.json for the phpstats site from a test run.
- * Runs bin/test with PHPLYR_VERIFY_LOG set, so every test that checks phplyr
- * against an R reference fixture records its assertions and floating-point
- * differences (see tests/Pest.php), and groups the tests by fixture. Writes
- * nothing unless every test passes.
+ * Write site/verifications/*.json for the phpstats site from a test run, in
+ * the format of phpstats.org's docs/evidence-records.md.
  *
- * With POLARS_PHP set to a PHP binary that loads php_polars (for example
- * "php -d extension=.../libphp_polars.dylib"), it also runs the PolarsTable
+ * Runs bin/test with PHPLYR_VERIFY_LOG set, so every test logs its status,
+ * the reference fixtures it read, its assertion count, and its largest
+ * floating-point errors (see tests/Pest.php). A test belongs to a record
+ * through its ->group('verify:<record>') or the fixtures it read. Failed and
+ * skipped tests are written with their reason. The R and package versions
+ * come from tests/Fixtures/r-versions.json, which the scripts in tests/r/
+ * write when they regenerate the fixtures.
+ *
+ * With POLARS_PHP set to a PHP command that loads php_polars (for example
+ * "php -d extension=.../libphp_polars.so"), it also runs the PolarsTable
  * parity suite and writes site/verifications/polars.json.
  *
- * Usage: bin/site-verifications   (PHP and NO_EXT env vars as in bin/test)
+ * Usage: bin/site-verifications   (PHP, PHIT_EXTENSION, and NO_EXT env vars as in bin/test)
+ * Exits 1 after writing the records when any test failed.
  */
 
 declare(strict_types=1);
@@ -20,98 +26,223 @@ declare(strict_types=1);
 $root = dirname(__DIR__);
 chdir($root);
 
-$r = 'R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2, lubridate 1.9.5, and stringr 1.6.0';
-$families = [
+$csv = function (string $name, string $detail = ''): array {
+    $lines = file("tests/Fixtures/{$name}", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $columns = str_replace('"', '', $lines[0]);
+
+    return ['name' => $name, 'detail' => trim(number_format(\count($lines) - 1).' rows: '.str_replace(',', ', ', $columns).'. '.$detail), 'url' => "tests/Fixtures/{$name}"];
+};
+$inline = fn (string $where) => ['name' => 'Small tables in the tests', 'detail' => "Built in {$where}."];
+
+$floats = fn (float $tol) => ['id' => 'values', 'kind' => 'tolerance', 'applies_to' => 'floating-point values; in the same case, column names, row counts and order, strings, integers, booleans, and missing values must be identical', 'atol' => $tol, 'rtol' => $tol, 'rel_floor' => 1];
+$exact = ['id' => 'exact', 'kind' => 'exact', 'applies_to' => 'column names, row counts and order, strings, integers, booleans, dates, and missing values'];
+
+$records = [
     'dplyr' => [
         'title' => 'dplyr functions and helpers',
-        'description' => 'Single-table functions, window and summary helpers, expressions, grouping, joins, join_by() conditions, set operations, and rows_*(), compared with the same pipelines run in R by the scripts in tests/r/.',
-        'reference' => $r,
-        'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
+        'label' => 'dplyr',
+        'kind' => 'reference',
+        'checked' => 'Single-table functions, window and summary helpers, expressions, grouping, joins, join_by() conditions, set operations, and rows_*() give the same tables as the same pipelines in dplyr.',
         'fixtures' => ['dplyr-reference.json', 'expr-reference.json', 'cur-group-reference.json', 'drop-reference.json', 'joins-reference.json', 'join-by-reference.json', 'rows-reference.json'],
+        'packages' => ['dplyr'],
+        'scripts' => ['reference.R', 'expr.R', 'groups.R', 'joins.R', 'join_by.R', 'rows.R'],
+        'inputs' => [$csv('panel.csv'), $csv('schools.csv'), $csv('housing.csv'), $csv('join_x.csv'), $csv('join_y.csv'), $csv('events.csv'), $csv('periods.csv'), $inline('tests/r/groups.R and tests/r/rows.R, and the same tables in the PHP tests')],
+        'comparison' => [$floats(1e-9), $exact],
     ],
     'tidyr' => [
         'title' => 'tidyr functions',
-        'description' => 'Pivoting, completing, filling, separating, nesting, and unnesting, compared with tidyr in R.',
-        'reference' => $r,
-        'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
+        'label' => 'tidyr',
+        'kind' => 'reference',
+        'checked' => 'Pivoting, completing, filling, separating, nesting, and unnesting give the same tables as tidyr.',
         'fixtures' => ['tidyr-reference.json'],
+        'packages' => ['dplyr', 'tidyr'],
+        'scripts' => ['tidyr.R'],
+        'inputs' => [$csv('wide.csv'), $csv('long.csv'), $csv('who.csv'), $csv('family.csv'), $csv('strings.csv'), $csv('panel.csv')],
+        'comparison' => [$floats(1e-9), $exact],
     ],
     'additions' => [
         'title' => 'Later dplyr 1.1 and tidyr 1.3 functions',
-        'description' => 'across() edge cases, group helpers, superseded functions, pivot options and specs, rectangling, and other functions added in phplyr 0.2, compared with R.',
-        'reference' => $r,
-        'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
+        'label' => 'dplyr 1.1 and tidyr 1.3',
+        'kind' => 'reference',
+        'checked' => 'across() edge cases, group helpers, superseded functions, pivot options and specs, rectangling, and other dplyr 1.1 and tidyr 1.3 functions give the same results as R.',
         'fixtures' => ['coverage-reference.json'],
+        'packages' => ['dplyr', 'tidyr'],
+        'scripts' => ['coverage.R'],
+        'inputs' => [$csv('panel.csv'), $csv('wide.csv'), $csv('long.csv'), $inline('tests/r/coverage.R and tests/CoverageTest.php')],
+        'comparison' => [$floats(1e-9), $exact],
     ],
     'lubridate-stringr' => [
         'title' => 'lubridate and stringr helpers',
-        'description' => 'Date parsing, date parts, rounding, periods, time zones, and string functions, compared with lubridate and stringr in R.',
-        'reference' => $r,
-        'tolerance' => 'All values equal.',
+        'label' => 'lubridate and stringr',
+        'kind' => 'reference',
+        'checked' => 'Date parsing, date parts, rounding, periods, time zones, and string functions give the same values as lubridate and stringr.',
         'fixtures' => ['lubridate-stringr.json'],
+        'packages' => ['lubridate', 'stringr'],
+        'scripts' => ['lubridate_stringr.R'],
+        'inputs' => [['name' => 'Five dates, datetimes, and strings', 'detail' => 'Including a missing value, a leap day, and a daylight-saving gap. Built in tests/r/lubridate_stringr.R and tests/LubridateStringrTest.php.']],
+        'comparison' => [['id' => 'exact', 'kind' => 'exact', 'applies_to' => 'every value: dates as YYYY-MM-DD, datetimes as YYYY-MM-DD HH:MM:SS +hhmm, numbers, strings, and missing values']],
     ],
     'janitor' => [
         'title' => 'janitor functions',
-        'description' => 'make_clean_names(), clean_names(), remove_empty(), get_dupes(), and one- and two-way tabyl(), compared with janitor in R.',
-        'reference' => 'R 4.6.1 with janitor 2.2.1 and dplyr 1.2.1',
-        'tolerance' => 'Floating-point table values within 1e-9 relative; all other values equal.',
+        'label' => 'janitor',
+        'kind' => 'reference',
+        'checked' => 'make_clean_names(), clean_names(), remove_empty(), get_dupes(), and one- and two-way tabyl() give the same results as janitor.',
         'fixtures' => ['janitor-reference.json'],
+        'packages' => ['janitor', 'dplyr'],
+        'scripts' => ['janitor.R'],
+        'inputs' => [$inline('tests/r/janitor.R and tests/JanitorTest.php')],
+        'comparison' => [$floats(1e-9), $exact],
+        'known_differences' => ['Without the intl extension, clean_names() transliterates with iconv, and some names differ from janitor\'s. The name check is skipped then.'],
     ],
     'models' => [
-        'title' => 'Models',
-        'description' => 'lm(), glm(), and lmer() through the phit extension, compared with the coefficients and residual standard deviation from R\'s lm(), glm(), and lme4\'s lmer().',
-        'reference' => 'R 4.6.1 lm() and glm(), and lme4 2.0.6 lmer()',
-        'tolerance' => 'lm() and glm() coefficients within 1e-6 relative; lmer() fixed effects within 1e-6 relative and sigma within 1e-5.',
-        'fixtures' => ['models-reference.json'],
+        'title' => 'Models: agreement with R',
+        'label' => 'Models',
+        'kind' => 'reference',
+        'checked' => 'lm(), glm(), and lmer() through the phit extension give the same coefficients as R\'s lm() and glm() and the same fixed effects and residual SD as lme4\'s lmer().',
+        'fixtures' => ['models-reference.json', 'expr-reference.json'],
+        'grouped_only' => true,
+        'packages' => ['lme4'],
+        'scripts' => ['models.R', 'expr.R'],
+        'inputs' => [$csv('schools.csv'), $csv('learning.csv')],
+        'comparison' => [
+            ['id' => 'coefficients', 'kind' => 'tolerance', 'applies_to' => 'coefficients and fixed effects', 'atol' => 1e-6, 'rtol' => 1e-6, 'rel_floor' => 1],
+            ['id' => 'sigma', 'kind' => 'tolerance', 'applies_to' => 'the residual standard deviation of lmer()', 'atol' => 1e-5, 'rel_floor' => 1],
+        ],
+        'exclusions' => ['glmer() is not compared with lme4.', 'phit-polyfill is not compared with R here. The models benchmark checks its coefficients against the extension\'s.'],
+    ],
+    'descriptives' => [
+        'title' => 'Descriptive statistics',
+        'label' => 'Descriptives',
+        'kind' => 'reference',
+        'checked' => 'mean(), var(), sd(), median(), quantile(), sum(), min(), and max(), and their handling of missing values, give the same values as R, once with the phit extension and once in PHP.',
+        'fixtures' => ['stats-reference.json'],
+        'packages' => [],
+        'scripts' => ['stats.R'],
+        'inputs' => [['name' => 'x', 'detail' => 'c(2, 4, 4, 5, 7, 9), and c(1, NA, 3) and c(1, NaN, 3) for missing values.']],
+        'comparison' => [
+            ['id' => 'values', 'kind' => 'tolerance', 'applies_to' => 'numeric results', 'atol' => 1e-12, 'rtol' => 1e-12, 'rel_floor' => 1],
+            ['id' => 'exact', 'kind' => 'exact', 'applies_to' => 'missing results (R\'s NA, phplyr\'s null)'],
+        ],
     ],
     'polars' => [
         'title' => 'PolarsTable parity',
-        'description' => 'About 120 pipelines run on phibble\'s in-memory DataFrame and on its Polars backend, PolarsTable, which must give the same columns, types, groups, and rows.',
-        'reference' => 'phplyr on DataFrame',
-        'tolerance' => 'Floating-point values within 1e-9 relative; all other values equal.',
+        'label' => 'PolarsTable',
+        'kind' => 'reference',
+        'checked' => 'About 120 pipelines give the same columns, types, groups, and rows on phibble\'s Polars backend, PolarsTable, as on its in-memory DataFrame.',
         'fixtures' => ['DataFrame'],
+        'reference' => 'phplyr on phibble\'s DataFrame',
+        'inputs' => [$csv('panel.csv'), $csv('schools.csv'), $csv('events.csv'), $csv('periods.csv'), $csv('join_x.csv'), $csv('join_y.csv'), $csv('wide.csv'), $csv('long.csv'), $csv('who.csv'), $csv('strings.csv')],
+        'comparison' => [$floats(1e-9), $exact],
+    ],
+    'sqlite' => [
+        'title' => 'SQLite backend',
+        'label' => 'SQLite',
+        'kind' => 'integration',
+        'checked' => 'Expression pipelines on a SQLite table through Phibble\tbl() stay in SQL and give the same rows as on DataFrame. Grouped windows, counts, and joins run in SQL, and closures fall back to memory.',
+        'reference' => 'phplyr on phibble\'s DataFrame, and expected values written in the tests',
+        'inputs' => [$csv('panel.csv', 'Loaded into an in-memory SQLite database with declared column types.')],
+        'comparison' => [$floats(1e-9), $exact],
     ],
 ];
 
-$run = function (string $command, string $log): void {
+$command = function (string $command, string $log): bool {
     @unlink($log);
     passthru('PHPLYR_VERIFY_LOG='.escapeshellarg($log).' '.$command, $status);
-    if ($status !== 0) {
-        fwrite(STDERR, "Tests failed; no verification files written.\n");
-        exit(1);
-    }
+
+    return $status === 0;
 };
 $log = sys_get_temp_dir().'/phplyr-verify-'.getmypid().'.log';
-$run('bin/test --compact', $log);
-$records = file($log, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+$passed = $command('bin/test --compact', $log);
+$lines = file($log, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+$polarsVersion = null;
 if (getenv('POLARS_PHP')) {
-    $run(getenv('POLARS_PHP').' vendor/bin/pest --compact tests/PolarsTest.php', $log.'.polars');
-    $records = [...$records, ...file($log.'.polars', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)];
+    $lines = array_filter($lines, fn ($l) => json_decode($l, true)['file'] !== 'PolarsTest.php');
+    $passed = $command(getenv('POLARS_PHP').' vendor/bin/pest --compact tests/PolarsTest.php', $log.'.polars') && $passed;
+    $lines = [...$lines, ...file($log.'.polars', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)];
     unlink($log.'.polars');
+    $polarsVersion = trim((string) shell_exec(getenv('POLARS_PHP').' -r "echo phpversion(\'php_polars\');"')) ?: null;
 }
 unlink($log);
-$records = array_map(fn ($l) => json_decode($l, true), $records);
+$tests = array_map(fn ($l) => json_decode($l, true, flags: JSON_THROW_ON_ERROR), $lines);
 
-$php = trim((string) shell_exec(escapeshellarg(getenv('PHP') ?: 'php').' -r "echo PHP_VERSION;"'));
-$commit = trim((string) shell_exec('git rev-parse --short HEAD'));
+$php = getenv('PHP') ?: 'php';
+$phpVersion = trim((string) shell_exec(escapeshellarg($php).' -r "echo PHP_VERSION;"'));
+// phit as bin/test loads it, with the commit when it was built in a checkout.
+$phitVersion = null;
+$ext = getenv('PHIT_EXTENSION') ?: (is_file('.ext/libphit.dylib') ? $root.'/.ext/libphit.dylib' : null);
+if ($ext !== null && ! getenv('NO_EXT')) {
+    $phitVersion = trim((string) shell_exec(escapeshellarg($php).' -d extension='.escapeshellarg($ext).' -r "echo phpversion(\'phit\');"')) ?: null;
+    $described = trim((string) shell_exec('git -C '.escapeshellarg(dirname($ext)).' describe --tags 2>/dev/null'));
+    if ($phitVersion !== null && $described !== '') {
+        $phitVersion .= " ({$described})";
+    }
+}
+$installed = json_decode(file_get_contents('vendor/composer/installed.json'), true)['packages'];
+$phibble = current(array_filter($installed, fn ($p) => $p['name'] === 'phpstats/phibble'));
+$phibbleVersion = $phibble['version'].' ('.substr($phibble['source']['reference'] ?? $phibble['dist']['reference'] ?? '', 0, 7).')';
+$os = PHP_OS_FAMILY === 'Linux' && is_readable('/etc/os-release')
+    ? 'Linux, '.(parse_ini_file('/etc/os-release')['PRETTY_NAME'] ?? 'unknown').' ('.php_uname('m').')'
+    : PHP_OS_FAMILY.' '.php_uname('r').' ('.php_uname('m').')';
+$environment = ['date' => gmdate('Y-m-d'), 'commit' => trim((string) shell_exec('git rev-parse --short HEAD')), 'php' => $phpVersion, 'os' => $os];
+$rVersions = json_decode(file_get_contents('tests/Fixtures/r-versions.json'), true);
+
+// A case is named by its first dataset, such as "windows", or by the test's
+// description; further datasets, such as the backend, go into its quantity.
+$generic = '/^(Matches (dplyr|tidyr|janitor|lubridate and stringr through phplyr)|Gives the same result on PolarsTable for|Computes descriptives like R|Fits models like R)$/';
+$caseName = function (array $test) use ($generic): array {
+    $description = ucfirst((string) preg_replace(['/^`[^`]+` → /u', '/^it /', '/ with dataset .*$/s'], '', $test['test']));
+    preg_match_all('/dataset "(.*?)"(?= \/ |$)/', $test['data'], $m);
+    $datasets = $m[1];
+    if ($datasets === []) {
+        return [$description, []];
+    }
+    $first = array_shift($datasets);
+    if (preg_match($generic, $description)) {
+        return [$first, $datasets];
+    }
+
+    return [ucfirst((string) preg_replace(['/^Matches dplyr /', '/ the same on PolarsTable with$/'], '', $description)).': '.$first, $datasets];
+};
+
 @mkdir($root.'/site/verifications', 0777, true);
-foreach ($families as $slug => $family) {
+$written = [];
+foreach ($records as $slug => $record) {
+    if ($slug === 'polars' && ! getenv('POLARS_PHP')) {
+        echo "site/verifications/polars.json: POLARS_PHP is not set (kept)\n";
+
+        continue;
+    }
     $cases = [];
-    foreach ($records as $rec) {
-        // Model fits (coefficients) go to the models file, whichever fixture they read.
-        $isModel = \in_array('coefficients', $rec['kinds'], true);
-        if ($isModel !== ($slug === 'models') || (! $isModel && array_intersect($rec['references'], $family['fixtures']) === [])) {
+    foreach ($tests as $test) {
+        $groups = array_values(array_filter($test['groups'], fn ($g) => str_starts_with($g, 'verify:')));
+        $belongs = $groups !== []
+            ? \in_array("verify:{$slug}", $groups, true)
+            : ! isset($record['grouped_only']) && array_intersect($test['references'], $record['fixtures'] ?? []) !== [];
+        if (! $belongs) {
             continue;
         }
-        $name = ucfirst((string) preg_replace(['/^`[^`]+` → it /u', '/^it /'], '', $rec['test'])).($rec['data'] !== '' ? ' '.$rec['data'] : '');
-        $cases[] = [
+        $numeric = $test['numeric'] > 0;
+        [$name, $more] = $caseName($test);
+        $case = [
             'name' => $name,
-            'quantity' => $rec['kinds'] === [] ? 'values' : implode(', ', $rec['kinds']),
-            'n_compared' => $rec['assertions'],
-            'max_abs_error' => $rec['max_abs_error'],
-            'max_rel_error' => $rec['max_rel_error'],
-            'passed' => true,
+            'quantity' => implode(', ', [$test['kinds'] === [] ? 'values' : implode(', ', $test['kinds']), ...$more]),
+            'status' => $test['status'],
         ];
+        if ($test['status'] !== 'pass') {
+            $case['reason'] = (string) preg_replace('/\s+/', ' ', trim((string) $test['reason'])) ?: 'No message.';
+        }
+        $case['rule'] = $numeric ? ($test['kinds'] === ['sigma'] ? 'sigma' : ($slug === 'models' ? 'coefficients' : 'values')) : 'exact';
+        if ($test['status'] !== 'skipped') {
+            $case['n_compared'] = $test['assertions'];
+        }
+        if ($numeric) {
+            $case['max_abs_error'] = $test['max_abs_error'];
+            $case['max_rel_error'] = $test['max_rel_error'];
+        }
+        if ($test['last'] !== null) {
+            [$case['actual'], $case['expected']] = $test['last'];
+        }
+        $cases[] = $case;
     }
     $path = "site/verifications/{$slug}.json";
     if ($cases === []) {
@@ -119,14 +250,51 @@ foreach ($families as $slug => $family) {
 
         continue;
     }
-    file_put_contents($root.'/'.$path, json_encode([
-        'title' => $family['title'],
-        'description' => $family['description'],
-        'reference' => $family['reference'],
-        'tolerance' => $family['tolerance'],
-        'environment' => ['php' => $php, 'commit' => $commit, 'date' => gmdate('Y-m-d')],
-        'note' => 'n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.',
+
+    // R and the record's packages, as the scripts that wrote its fixtures recorded them.
+    $versions = [];
+    foreach ($record['fixtures'] ?? [] as $fixture) {
+        $versions += array_intersect_key($rVersions[$fixture] ?? [], array_flip(['R', ...$record['packages'] ?? []]));
+    }
+    $reference = $record['reference'] ?? 'R '.$versions['R'].(\count($versions) > 1
+        ? ' with '.implode(', ', array_map(fn ($p, $v) => "{$p} {$v}", array_keys(array_slice($versions, 1)), array_slice($versions, 1)))
+        : '');
+    $versions += array_filter([
+        'PHP' => $phpVersion,
+        'phibble' => $phibbleVersion,
+        'phit' => \in_array($slug, ['models', 'descriptives'], true) ? $phitVersion : null,
+        'php_polars' => $slug === 'polars' ? $polarsVersion : null,
+    ]);
+    $reproduce = [];
+    foreach ($record['scripts'] ?? [] as $script) {
+        $reproduce[] = "Rscript tests/r/{$script}";
+    }
+    $reproduce[] = $slug === 'polars'
+        ? 'POLARS_PHP="php -d extension=/path/to/libphp_polars.so" bin/site-verifications'
+        : 'bin/site-verifications';
+
+    file_put_contents($root.'/'.$path, json_encode(array_filter([
+        'title' => $record['title'],
+        'label' => $record['label'],
+        'kind' => $record['kind'],
+        'checked' => $record['checked'],
+        'description' => 'n_compared counts the assertions in each test. A case fails if any of its assertions fails.',
+        'reference' => $reference,
+        'versions' => $versions,
+        'inputs' => $record['inputs'],
+        'comparison' => $record['comparison'],
         'cases' => $cases,
-    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)."\n");
-    echo "{$path}: ".\count($cases)." cases\n";
+        'exclusions' => $record['exclusions'] ?? null,
+        'known_differences' => $record['known_differences'] ?? null,
+        'reproduce' => $reproduce,
+        'data' => isset($record['scripts']) ? 'tests/Fixtures' : null,
+        'environment' => $environment,
+    ], fn ($v) => $v !== null), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)."\n");
+    $counts = array_count_values(array_column($cases, 'status'));
+    echo "{$path}: ".\count($cases).' cases ('.implode(', ', array_map(fn ($s, $n) => "{$n} {$s}", array_keys($counts), $counts)).")\n";
+}
+
+if (! $passed) {
+    fwrite(STDERR, "Some tests failed; their cases are written with status fail.\n");
+    exit(1);
 }

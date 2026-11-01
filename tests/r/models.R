@@ -8,3 +8,5 @@ out <- list(
   glm = unname(coef(glm(passed ~ study_hours + practice_score, binomial, learning)))
 )
 write_json(out, "tests/Fixtures/models-reference.json", digits = NA, pretty = TRUE)
+source("tests/r/versions.R")
+record_versions("models-reference.json", character())

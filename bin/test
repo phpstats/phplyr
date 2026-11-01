@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
-# Run the test suite, loading phit from .ext/ when present. Before PHP
-# 8.5, only the phplyr suite runs: tests/Pipe uses the |> operator.
+# Run the test suite, loading phit from PHIT_EXTENSION, or from .ext/ when
+# present. Before PHP 8.5, only the phplyr suite runs: tests/Pipe uses the |>
+# operator.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PHP="${PHP:-php}"
 args=()
-if [[ -f .ext/libphit.dylib && "${NO_EXT:-}" == "" ]]; then
-    args+=(-d "extension=$PWD/.ext/libphit.dylib")
+if [[ "${NO_EXT:-}" == "" ]]; then
+    if [[ -n "${PHIT_EXTENSION:-}" ]]; then
+        args+=(-d "extension=$PHIT_EXTENSION")
+    elif [[ -f .ext/libphit.dylib ]]; then
+        args+=(-d "extension=$PWD/.ext/libphit.dylib")
+    fi
 fi
 suite=()
 if [[ "$("$PHP" -r 'echo PHP_VERSION_ID < 80500 ? 1 : 0;')" == 1 ]]; then

@@ -143,3 +143,5 @@ out <- list(
 )
 
 write_json(out, "tests/Fixtures/dplyr-reference.json", digits = NA, auto_unbox = TRUE, pretty = TRUE, na = "null")
+source("tests/r/versions.R")
+record_versions("dplyr-reference.json", c("dplyr"))

@@ -61,4 +61,4 @@ dataset('join_by', function () {
 
 it('matches dplyr inequality, rolling and overlap joins', function (string $key, Closure $pipeline) {
     expectRowsClose($pipeline()->toRows(), joinByReference($key));
-})->with('join_by')->skip(fn () => ! phibbleSupportsInequalityJoins(), 'phibble join() lacks inequality support');
+})->with('join_by')->group('verify:dplyr')->skip(fn () => ! phibbleSupportsInequalityJoins(), 'phibble join() lacks inequality support');

@@ -1,302 +1,347 @@
 {
     "title": "tidyr functions",
-    "description": "Pivoting, completing, filling, separating, nesting, and unnesting, compared with tidyr in R.",
-    "reference": "R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2, lubridate 1.9.5, and stringr 1.6.0",
-    "tolerance": "Floating-point table values within 1e-9 relative; all other values equal.",
-    "environment": {
-        "php": "8.5.10",
-        "commit": "f7edd6e",
-        "date": "2026-10-31"
+    "label": "tidyr",
+    "kind": "reference",
+    "checked": "Pivoting, completing, filling, separating, nesting, and unnesting give the same tables as tidyr.",
+    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "reference": "R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2",
+    "versions": {
+        "R": "4.6.1",
+        "dplyr": "1.2.1",
+        "tidyr": "1.3.2",
+        "PHP": "8.5.10",
+        "phibble": "v0.6.0 (6b9f06a)"
     },
-    "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
+    "inputs": [
+        {
+            "name": "wide.csv",
+            "detail": "3 rows: id, name, wk1, wk2, wk3.",
+            "url": "tests/Fixtures/wide.csv"
+        },
+        {
+            "name": "long.csv",
+            "detail": "6 rows: id, key, val, w.",
+            "url": "tests/Fixtures/long.csv"
+        },
+        {
+            "name": "who.csv",
+            "detail": "2 rows: country, new_sp_m014, new_sp_f014, new_ep_m65.",
+            "url": "tests/Fixtures/who.csv"
+        },
+        {
+            "name": "family.csv",
+            "detail": "3 rows: family, dob_child1, dob_child2, name_child1, name_child2.",
+            "url": "tests/Fixtures/family.csv"
+        },
+        {
+            "name": "strings.csv",
+            "detail": "4 rows: id, s, tags, code, n.",
+            "url": "tests/Fixtures/strings.csv"
+        },
+        {
+            "name": "panel.csv",
+            "detail": "12 rows: id, g, year, value, score, label.",
+            "url": "tests/Fixtures/panel.csv"
+        }
+    ],
+    "comparison": [
+        {
+            "id": "values",
+            "kind": "tolerance",
+            "applies_to": "floating-point values; in the same case, column names, row counts and order, strings, integers, booleans, and missing values must be identical",
+            "atol": 1.0e-9,
+            "rtol": 1.0e-9,
+            "rel_floor": 1
+        },
+        {
+            "id": "exact",
+            "kind": "exact",
+            "applies_to": "column names, row counts and order, strings, integers, booleans, dates, and missing values"
+        }
+    ],
     "cases": [
         {
-            "name": "Matches tidyr with dataset \"longer\"  with data set \"dataset \"longer\"\"",
+            "name": "longer",
             "quantity": "values",
-            "n_compared": 46,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 46
         },
         {
-            "name": "Matches tidyr with dataset \"longer_drop\"  with data set \"dataset \"longer_drop\"\"",
+            "name": "longer_drop",
             "quantity": "values",
-            "n_compared": 31,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 31
         },
         {
-            "name": "Matches tidyr with dataset \"longer_sep\"  with data set \"dataset \"longer_sep\"\"",
+            "name": "longer_sep",
             "quantity": "values",
-            "n_compared": 31,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 31
         },
         {
-            "name": "Matches tidyr with dataset \"longer_pattern\"  with data set \"dataset \"longer_pattern\"\"",
+            "name": "longer_pattern",
             "quantity": "values",
-            "n_compared": 37,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 37
         },
         {
-            "name": "Matches tidyr with dataset \"longer_value\"  with data set \"dataset \"longer_value\"\"",
+            "name": "longer_value",
             "quantity": "values",
-            "n_compared": 26,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 26
         },
         {
-            "name": "Matches tidyr with dataset \"wider\"  with data set \"dataset \"wider\"\"",
+            "name": "wider",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 13,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Matches tidyr with dataset \"wider_fill\"  with data set \"dataset \"wider_fill\"\"",
+            "name": "wider_fill",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 13,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Matches tidyr with dataset \"wider_fn\"  with data set \"dataset \"wider_fn\"\"",
+            "name": "wider_fn",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 16,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Matches tidyr with dataset \"wider_multi\"  with data set \"dataset \"wider_multi\"\"",
+            "name": "wider_multi",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 19,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Matches tidyr with dataset \"wider_sort\"  with data set \"dataset \"wider_sort\"\"",
+            "name": "wider_sort",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 13,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Matches tidyr with dataset \"wider_glue\"  with data set \"dataset \"wider_glue\"\"",
+            "name": "wider_glue",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 13,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Matches tidyr with dataset \"complete\"  with data set \"dataset \"complete\"\"",
+            "name": "complete",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 37,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Matches tidyr with dataset \"complete_fill\"  with data set \"dataset \"complete_fill\"\"",
+            "name": "complete_fill",
             "quantity": "values",
-            "n_compared": 37,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 37
         },
         {
-            "name": "Matches tidyr with dataset \"complete_nesting\"  with data set \"dataset \"complete_nesting\"\"",
+            "name": "complete_nesting",
             "quantity": "values",
-            "n_compared": 33,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 33
         },
         {
-            "name": "Matches tidyr with dataset \"complete_grouped\"  with data set \"dataset \"complete_grouped\"\"",
+            "name": "complete_grouped",
             "quantity": "values",
-            "n_compared": 29,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 29
         },
         {
-            "name": "Matches tidyr with dataset \"expand\"  with data set \"dataset \"expand\"\"",
+            "name": "expand",
             "quantity": "values",
-            "n_compared": 28,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 28
         },
         {
-            "name": "Matches tidyr with dataset \"expand_nesting\"  with data set \"dataset \"expand_nesting\"\"",
+            "name": "expand_nesting",
             "quantity": "values",
-            "n_compared": 16,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 16
         },
         {
-            "name": "Matches tidyr with dataset \"crossing\"  with data set \"dataset \"crossing\"\"",
+            "name": "crossing",
             "quantity": "values",
-            "n_compared": 13,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 13
         },
         {
-            "name": "Matches tidyr with dataset \"fill_down\"  with data set \"dataset \"fill_down\"\"",
+            "name": "fill_down",
             "quantity": "values",
-            "n_compared": 19,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 19
         },
         {
-            "name": "Matches tidyr with dataset \"fill_up\"  with data set \"dataset \"fill_up\"\"",
+            "name": "fill_up",
             "quantity": "values",
-            "n_compared": 19,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 19
         },
         {
-            "name": "Matches tidyr with dataset \"fill_grouped\"  with data set \"dataset \"fill_grouped\"\"",
+            "name": "fill_grouped",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 49,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Matches tidyr with dataset \"drop_na_all\"  with data set \"dataset \"drop_na_all\"\"",
+            "name": "drop_na_all",
             "quantity": "values",
-            "n_compared": 7,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 7
         },
         {
-            "name": "Matches tidyr with dataset \"drop_na_col\"  with data set \"dataset \"drop_na_col\"\"",
+            "name": "drop_na_col",
             "quantity": "values",
-            "n_compared": 13,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 13
         },
         {
-            "name": "Matches tidyr with dataset \"replace_na\"  with data set \"dataset \"replace_na\"\"",
+            "name": "replace_na",
             "quantity": "values",
-            "n_compared": 19,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 19
         },
         {
-            "name": "Matches tidyr with dataset \"uncount\"  with data set \"dataset \"uncount\"\"",
+            "name": "uncount",
             "quantity": "values",
-            "n_compared": 19,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 19
         },
         {
-            "name": "Matches tidyr with dataset \"unite\"  with data set \"dataset \"unite\"\"",
+            "name": "unite",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 19,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Matches tidyr with dataset \"unite_keep\"  with data set \"dataset \"unite_keep\"\"",
+            "name": "unite_keep",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 25,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
-            "name": "Matches tidyr with dataset \"separate\"  with data set \"dataset \"separate\"\"",
+            "name": "separate",
             "quantity": "values",
-            "n_compared": 17,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 17
         },
         {
-            "name": "Matches tidyr with dataset \"separate_merge\"  with data set \"dataset \"separate_merge\"\"",
+            "name": "separate_merge",
             "quantity": "values",
-            "n_compared": 17,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 17
         },
         {
-            "name": "Matches tidyr with dataset \"separate_pos\"  with data set \"dataset \"separate_pos\"\"",
+            "name": "separate_pos",
             "quantity": "values",
-            "n_compared": 17,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 17
         },
         {
-            "name": "Matches tidyr with dataset \"wider_delim\"  with data set \"dataset \"wider_delim\"\"",
+            "name": "wider_delim",
             "quantity": "values",
-            "n_compared": 21,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 21
         },
         {
-            "name": "Matches tidyr with dataset \"wider_delim_sep\"  with data set \"dataset \"wider_delim_sep\"\"",
+            "name": "wider_delim_sep",
             "quantity": "values",
-            "n_compared": 21,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 21
         },
         {
-            "name": "Matches tidyr with dataset \"wider_position\"  with data set \"dataset \"wider_position\"\"",
+            "name": "wider_position",
             "quantity": "values",
-            "n_compared": 17,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 17
         },
         {
-            "name": "Matches tidyr with dataset \"wider_regex\"  with data set \"dataset \"wider_regex\"\"",
+            "name": "wider_regex",
             "quantity": "values",
-            "n_compared": 17,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 17
         },
         {
-            "name": "Matches tidyr with dataset \"longer_delim\"  with data set \"dataset \"longer_delim\"\"",
+            "name": "longer_delim",
             "quantity": "values",
-            "n_compared": 22,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 22
         },
         {
-            "name": "Matches tidyr with dataset \"longer_position\"  with data set \"dataset \"longer_position\"\"",
+            "name": "longer_position",
             "quantity": "values",
-            "n_compared": 34,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 34
         }
-    ]
+    ],
+    "reproduce": [
+        "Rscript tests/r/tidyr.R",
+        "bin/site-verifications"
+    ],
+    "data": "tests/Fixtures",
+    "environment": {
+        "date": "2026-11-01",
+        "commit": "8056422",
+        "php": "8.5.10",
+        "os": "Darwin 27.0.0 (arm64)"
+    }
 }

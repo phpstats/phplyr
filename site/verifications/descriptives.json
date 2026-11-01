@@ -1,0 +1,340 @@
+{
+    "title": "Descriptive statistics",
+    "label": "Descriptives",
+    "kind": "reference",
+    "checked": "mean(), var(), sd(), median(), quantile(), sum(), min(), and max(), and their handling of missing values, give the same values as R, once with the phit extension and once in PHP.",
+    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "reference": "R 4.6.1",
+    "versions": {
+        "R": "4.6.1",
+        "PHP": "8.5.10",
+        "phibble": "v0.6.0 (6b9f06a)",
+        "phit": "0.4.4 (v0.4.3-20-g066e2e1)"
+    },
+    "inputs": [
+        {
+            "name": "x",
+            "detail": "c(2, 4, 4, 5, 7, 9), and c(1, NA, 3) and c(1, NaN, 3) for missing values."
+        }
+    ],
+    "comparison": [
+        {
+            "id": "values",
+            "kind": "tolerance",
+            "applies_to": "numeric results",
+            "atol": 1.0e-12,
+            "rtol": 1.0e-12,
+            "rel_floor": 1
+        },
+        {
+            "id": "exact",
+            "kind": "exact",
+            "applies_to": "missing results (R's NA, phplyr's null)"
+        }
+    ],
+    "cases": [
+        {
+            "name": "mean(x)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 2.6645352591003757e-15,
+            "max_rel_error": 5.157165017613628e-16,
+            "actual": 5.166666666666667,
+            "expected": 5.16666666666667
+        },
+        {
+            "name": "mean(x)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 2.6645352591003757e-15,
+            "max_rel_error": 5.157165017613628e-16,
+            "actual": 5.166666666666667,
+            "expected": 5.16666666666667
+        },
+        {
+            "name": "var(x)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 2.6645352591003757e-15,
+            "max_rel_error": 4.3208679877303367e-16,
+            "actual": 6.166666666666667,
+            "expected": 6.16666666666667
+        },
+        {
+            "name": "var(x)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 2.6645352591003757e-15,
+            "max_rel_error": 4.3208679877303367e-16,
+            "actual": 6.166666666666667,
+            "expected": 6.16666666666667
+        },
+        {
+            "name": "sd(x)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 2.48327740429189,
+            "expected": 2.48327740429189
+        },
+        {
+            "name": "sd(x)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 2.48327740429189,
+            "expected": 2.48327740429189
+        },
+        {
+            "name": "median(x)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 4.5,
+            "expected": 4.5
+        },
+        {
+            "name": "median(x)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 4.5,
+            "expected": 4.5
+        },
+        {
+            "name": "quantile(x, 0.9)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 8.0,
+            "expected": 8
+        },
+        {
+            "name": "quantile(x, 0.9)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 8.0,
+            "expected": 8
+        },
+        {
+            "name": "quantile(x, 0)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 2.0,
+            "expected": 2
+        },
+        {
+            "name": "quantile(x, 0)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 2.0,
+            "expected": 2
+        },
+        {
+            "name": "quantile(x, 1)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 9.0,
+            "expected": 9
+        },
+        {
+            "name": "quantile(x, 1)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 9.0,
+            "expected": 9
+        },
+        {
+            "name": "sum(x)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 31.0,
+            "expected": 31
+        },
+        {
+            "name": "sum(x)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 31.0,
+            "expected": 31
+        },
+        {
+            "name": "min(x)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 2.0,
+            "expected": 2
+        },
+        {
+            "name": "min(x)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 2.0,
+            "expected": 2
+        },
+        {
+            "name": "max(x)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 9.0,
+            "expected": 9
+        },
+        {
+            "name": "max(x)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 9.0,
+            "expected": 9
+        },
+        {
+            "name": "mean(c(1, NA, 3))",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 1
+        },
+        {
+            "name": "mean(c(1, NA, 3))",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 1
+        },
+        {
+            "name": "mean(c(1, NA, 3), na.rm = TRUE)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 2.0,
+            "expected": 2
+        },
+        {
+            "name": "mean(c(1, NA, 3), na.rm = TRUE)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0,
+            "actual": 2.0,
+            "expected": 2
+        },
+        {
+            "name": "sd(c(1, NaN, 3), na.rm = TRUE)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 4.884981308350689e-15,
+            "max_rel_error": 3.4542034091042928e-15,
+            "actual": 1.4142135623730951,
+            "expected": 1.4142135623731
+        },
+        {
+            "name": "sd(c(1, NaN, 3), na.rm = TRUE)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "values",
+            "n_compared": 1,
+            "max_abs_error": 4.884981308350689e-15,
+            "max_rel_error": 3.4542034091042928e-15,
+            "actual": 1.4142135623730951,
+            "expected": 1.4142135623731
+        },
+        {
+            "name": "var(1)",
+            "quantity": "values, phit extension",
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 1
+        },
+        {
+            "name": "var(1)",
+            "quantity": "values, PHP",
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 1
+        }
+    ],
+    "reproduce": [
+        "Rscript tests/r/stats.R",
+        "bin/site-verifications"
+    ],
+    "data": "tests/Fixtures",
+    "environment": {
+        "date": "2026-11-01",
+        "commit": "8056422",
+        "php": "8.5.10",
+        "os": "Darwin 27.0.0 (arm64)"
+    }
+}

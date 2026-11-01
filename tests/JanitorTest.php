@@ -48,7 +48,7 @@ describe('make_clean_names() and clean_names()', function () {
         $expected = janitorRef('clean');
 
         expect(make_clean_names($in))->toBe($expected);
-    })->skip(! class_exists(Transliterator::class), 'needs ext-intl for janitor-equal transliteration');
+    })->group('verify:janitor')->skip(! class_exists(Transliterator::class), 'needs ext-intl for janitor-equal transliteration');
 
     it('renames a table\'s columns', function () {
         $t = DataFrame::fromColumns(['First Name' => ['a'], 'first_name' => ['b'], '% Done' => [1], '2020' => [2]]);

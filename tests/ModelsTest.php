@@ -17,7 +17,7 @@ function expectCoefficients(array $actual, array $expected): void
 {
     expect(\count($actual))->toBe(\count($expected));
     foreach ($expected as $i => $value) {
-        expectClose($actual[$i], $value, 1e-6 * \max(1.0, abs($value)), 'coefficients');
+        expectClose($actual[$i], $value, 1e-6, 1e-6, 'coefficients');
     }
 }
 
@@ -65,16 +65,10 @@ describe('phit function names', function () {
     });
 });
 
-it('fits models like R', function () {
-    $schools = DataFrame::fromCsv(fixturePath('schools.csv'));
-    expectCoefficients((pipe($schools, lm('score ~ study_hours + prior_score + school')))['coefficients'], modelsReference('lm'));
-    expectCoefficients(
-        (pipe($schools, filter(fn ($r) => $r->prior_score > 60), lm('score ~ study_hours')))['coefficients'],
-        modelsReference('lm_filtered'),
-    );
-    $learning = DataFrame::fromCsv(fixturePath('learning.csv'));
-    expectCoefficients(
-        (pipe($learning, glm('passed ~ study_hours + practice_score', family: 'binomial')))['coefficients'],
-        modelsReference('glm'),
-    );
-})->skip(fn () => ! function_exists('Phit\\fit_lm'), 'needs phit with fit_lm');
+it('fits models like R', function (string $key, Closure $fit) {
+    expectCoefficients($fit()['coefficients'], modelsReference($key));
+})->with([
+    'lm(score ~ study_hours + prior_score + school) on schools' => ['lm', fn () => pipe(DataFrame::fromCsv(fixturePath('schools.csv')), lm('score ~ study_hours + prior_score + school'))],
+    'lm(score ~ study_hours) on schools with prior_score > 60' => ['lm_filtered', fn () => pipe(DataFrame::fromCsv(fixturePath('schools.csv')), filter(fn ($r) => $r->prior_score > 60), lm('score ~ study_hours'))],
+    'glm(passed ~ study_hours + practice_score, binomial) on learning' => ['glm', fn () => pipe(DataFrame::fromCsv(fixturePath('learning.csv')), glm('passed ~ study_hours + practice_score', family: 'binomial'))],
+])->group('verify:models')->skip(fn () => ! function_exists('Phit\\fit_lm'), 'needs phit with fit_lm');

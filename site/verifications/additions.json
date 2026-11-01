@@ -1,222 +1,268 @@
 {
     "title": "Later dplyr 1.1 and tidyr 1.3 functions",
-    "description": "across() edge cases, group helpers, superseded functions, pivot options and specs, rectangling, and other functions added in phplyr 0.2, compared with R.",
-    "reference": "R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2, lubridate 1.9.5, and stringr 1.6.0",
-    "tolerance": "Floating-point table values within 1e-9 relative; all other values equal.",
-    "environment": {
-        "php": "8.5.10",
-        "commit": "f7edd6e",
-        "date": "2026-10-31"
+    "label": "dplyr 1.1 and tidyr 1.3",
+    "kind": "reference",
+    "checked": "across() edge cases, group helpers, superseded functions, pivot options and specs, rectangling, and other dplyr 1.1 and tidyr 1.3 functions give the same results as R.",
+    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "reference": "R 4.6.1 with dplyr 1.2.1, tidyr 1.3.2",
+    "versions": {
+        "R": "4.6.1",
+        "dplyr": "1.2.1",
+        "tidyr": "1.3.2",
+        "PHP": "8.5.10",
+        "phibble": "v0.6.0 (6b9f06a)"
     },
-    "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
+    "inputs": [
+        {
+            "name": "panel.csv",
+            "detail": "12 rows: id, g, year, value, score, label.",
+            "url": "tests/Fixtures/panel.csv"
+        },
+        {
+            "name": "wide.csv",
+            "detail": "3 rows: id, name, wk1, wk2, wk3.",
+            "url": "tests/Fixtures/wide.csv"
+        },
+        {
+            "name": "long.csv",
+            "detail": "6 rows: id, key, val, w.",
+            "url": "tests/Fixtures/long.csv"
+        },
+        {
+            "name": "Small tables in the tests",
+            "detail": "Built in tests/r/coverage.R and tests/CoverageTest.php."
+        }
+    ],
+    "comparison": [
+        {
+            "id": "values",
+            "kind": "tolerance",
+            "applies_to": "floating-point values; in the same case, column names, row counts and order, strings, integers, booleans, and missing values must be identical",
+            "atol": 1.0e-9,
+            "rtol": 1.0e-9,
+            "rel_floor": 1
+        },
+        {
+            "id": "exact",
+            "kind": "exact",
+            "applies_to": "column names, row counts and order, strings, integers, booleans, dates, and missing values"
+        }
+    ],
     "cases": [
         {
             "name": "Names several functions with {.fn} and {.col}, and resolves helpers called on the values",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 7,
             "max_abs_error": 2.6645352591003757e-15,
-            "max_rel_error": 5.419393747322794e-16,
-            "passed": true
+            "max_rel_error": 5.419393747322794e-16
         },
         {
             "name": "Gives cur_column() inside across()",
             "quantity": "values",
-            "n_compared": 30,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 30
         },
         {
             "name": "Filters and mutates with if_any() and if_all(), with R NA logic",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 81,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
             "name": "Treats an empty selection as FALSE for if_any() and TRUE for if_all()",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 40,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
             "name": "Lists group rows and group data",
             "quantity": "values",
-            "n_compared": 3,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 3
         },
         {
             "name": "Gives each row its group key with cur_group()",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 49,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
             "name": "Sums across columns in a rowwise table with c_across()",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 49,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
             "name": "Nests groups with group_nest() and nest_by()",
             "quantity": "values",
-            "n_compared": 12,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 12
         },
         {
             "name": "Runs a function under other groups with with_groups()",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 26,
             "max_abs_error": 2.6645352591003757e-15,
-            "max_rel_error": 6.148927521000871e-16,
-            "passed": true
+            "max_rel_error": 6.148927521000871e-16
         },
         {
             "name": "Keeps the top rows in table order with top_n() and top_frac()",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 45,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
             "name": "Recodes values by name",
             "quantity": "values",
-            "n_compared": 3,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 3
         },
         {
             "name": "Evaluates a window function in another order with order_by()",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 82,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
             "name": "Adds rows with add_row()",
             "quantity": "values",
-            "n_compared": 24,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 24
         },
         {
             "name": "Nests matching rows with nest_join()",
             "quantity": "values",
-            "n_compared": 19,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 19
         },
         {
             "name": "Transforms names and values, and varies columns slowest",
             "quantity": "values",
-            "n_compared": 78,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 78
         },
         {
             "name": "Varies names slowest, summarises unused columns, and expands names and ids",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 72,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
             "name": "Builds specs and pivots with them",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 61,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
             "name": "Gathers and spreads",
             "quantity": "table values",
+            "status": "pass",
+            "rule": "values",
             "n_compared": 103,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "max_abs_error": 0.0,
+            "max_rel_error": 0.0
         },
         {
             "name": "Widens named and unnamed elements",
             "quantity": "values",
-            "n_compared": 34,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 34
         },
         {
             "name": "Lengthens elements with indices",
             "quantity": "values",
-            "n_compared": 43,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 43
         },
         {
             "name": "Hoists components by name, position, and path",
             "quantity": "values",
-            "n_compared": 14,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 14
         },
         {
             "name": "Chops and unchops",
             "quantity": "values",
-            "n_compared": 27,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 27
         },
         {
             "name": "Packs and unpacks",
             "quantity": "values",
-            "n_compared": 16,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 16
         },
         {
             "name": "Extracts regex groups",
             "quantity": "values",
-            "n_compared": 19,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 19
         },
         {
             "name": "Separates rows on a regex",
             "quantity": "values",
-            "n_compared": 13,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 13
         },
         {
             "name": "Fills a sequence with full_seq()",
             "quantity": "values",
-            "n_compared": 3,
-            "max_abs_error": 0,
-            "max_rel_error": 0,
-            "passed": true
+            "status": "pass",
+            "rule": "exact",
+            "n_compared": 3
         }
-    ]
+    ],
+    "reproduce": [
+        "Rscript tests/r/coverage.R",
+        "bin/site-verifications"
+    ],
+    "data": "tests/Fixtures",
+    "environment": {
+        "date": "2026-11-01",
+        "commit": "8056422",
+        "php": "8.5.10",
+        "os": "Darwin 27.0.0 (arm64)"
+    }
 }

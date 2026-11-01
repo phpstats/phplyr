@@ -118,7 +118,7 @@ it('matches dplyr on output that depends on sorted group keys', function () {
     expectRowsClose((pipe(panel(), group_by('g', early: fn ($r) => $r->year < 2003), summarise(n: n(), _groups: 'drop')))->toRows(), reference('group_computed'));
     expectRowsClose((pipe(panel(), group_by('g', 'label'), group_keys()))->toRows(), reference('group_keys'));
     expectRowsClose((pipe(panel(), count('g', 'label')))->toRows(), reference('count_multi'));
-})->skip(fn () => ! phibbleSortsGroups(), 'phibble orders groups by first appearance (contract v0)');
+})->group('verify:dplyr')->skip(fn () => ! phibbleSortsGroups(), 'phibble orders groups by first appearance (contract v0)');
 
 it('selects columns like tidyselect', function () {
     $p = panel();

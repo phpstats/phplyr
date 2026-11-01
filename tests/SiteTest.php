@@ -35,9 +35,35 @@ it('lists files that exist in the site manifest', function () {
     foreach ($m['examples'] as $example) {
         expect(is_file("{$root}/docs/{$example['path']}.html"))->toBeTrue($example['path']);
     }
-    foreach ($m['verifications'] as $path) {
+});
+
+it('writes verification records in the site\'s evidence format', function () {
+    $root = dirname(__DIR__);
+    foreach (siteManifest()['verifications'] as $path) {
         $v = json_decode(file_get_contents("{$root}/{$path}"), true);
-        expect($v)->toHaveKeys(['title', 'description', 'reference', 'tolerance', 'cases']);
-        expect(array_column($v['cases'], 'passed'))->each->toBeTrue();
+        expect($v)->toHaveKeys(['title', 'kind', 'checked', 'reference', 'comparison', 'cases', 'reproduce', 'environment']);
+        $rules = array_column($v['comparison'], 'id');
+        foreach ($v['cases'] as $case) {
+            expect($case['status'])->toBeIn(['pass', 'fail', 'skipped']);
+            expect($case['rule'])->toBeIn($rules);
+            if ($case['status'] !== 'pass') {
+                expect($case['reason'] ?? '')->not->toBe('', "{$path}: {$case['name']}");
+            }
+        }
+    }
+});
+
+it('writes benchmark records in the site\'s evidence format', function () {
+    $root = dirname(__DIR__);
+    foreach (siteManifest()['benchmarks'] as $path) {
+        $b = json_decode(file_get_contents("{$root}/{$path}"), true);
+        expect($b)->toHaveKeys(['title', 'unit', 'statistic', 'implementations', 'time_spent_in', 'environment', 'rows', 'reproduce', 'source']);
+        $measured = array_filter($b['rows'], fn ($r) => isset($r['peak_memory_mib']));
+        expect($measured === [] || isset($b['memory_measure']))->toBeTrue($path);
+        foreach ($b['rows'] as $row) {
+            expect($row)->toHaveKeys(['case', 'implementation', 'value']);
+            expect(array_keys($b['implementations']))->toContain($row['implementation']);
+            expect($row['peak_memory_mib'] ?? null)->not->toBe(0);
+        }
     }
 });

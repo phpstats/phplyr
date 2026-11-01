@@ -147,7 +147,7 @@ it('keeps empty factor-level groups with _drop: false', function () {
     expectRowsClose((pipe($d, group_by('f', _drop: false), Phplyr\count()))->ungroup()->toRows(), $ref['count']);
     expectRowsClose((pipe($d, group_by('f', 's', _drop: false), summarise(n: n(), _groups: 'drop')))->toRows(), $ref['two']);
     expect((pipe($d, group_by('f', _drop: false)))->dropsEmptyGroups())->toBeFalse();
-})->skip(fn () => ! method_exists(DataFrame::class, 'dropsEmptyGroups'), 'phibble lacks groupBy drop: false');
+})->group('verify:dplyr')->skip(fn () => ! method_exists(DataFrame::class, 'dropsEmptyGroups'), 'phibble lacks groupBy drop: false');
 
 it('selects datetime and list columns with where()', function () {
     $t = DataFrame::fromColumns([

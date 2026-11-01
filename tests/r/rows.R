@@ -37,3 +37,5 @@ out2 <- list(
   replace = panel |> mutate(rv = replace_values(label, "z" ~ "zed"), rw = replace_when(score, score > 7 ~ 7)) |> select(id, rv, rw)
 )
 write_json(c(out, out2), "tests/Fixtures/rows-reference.json", digits = NA, auto_unbox = TRUE, pretty = TRUE, na = "null")
+source("tests/r/versions.R")
+record_versions("rows-reference.json", c("dplyr"))

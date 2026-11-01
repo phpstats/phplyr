@@ -1,30 +1,109 @@
 {
-    "title": "Models",
-    "description": "lm(), glm(), and lmer() through the phit extension, compared with the coefficients and residual standard deviation from R's lm(), glm(), and lme4's lmer().",
-    "reference": "R 4.6.1 lm() and glm(), and lme4 2.0.6 lmer()",
-    "tolerance": "lm() and glm() coefficients within 1e-6 relative; lmer() fixed effects within 1e-6 relative and sigma within 1e-5.",
-    "environment": {
-        "php": "8.5.10",
-        "commit": "f7edd6e",
-        "date": "2026-10-31"
+    "title": "Models: agreement with R",
+    "label": "Models",
+    "kind": "reference",
+    "checked": "lm(), glm(), and lmer() through the phit extension give the same coefficients as R's lm() and glm() and the same fixed effects and residual SD as lme4's lmer().",
+    "description": "n_compared counts the assertions in each test. A case fails if any of its assertions fails.",
+    "reference": "R 4.6.1 with lme4 2.0.6",
+    "versions": {
+        "R": "4.6.1",
+        "lme4": "2.0.6",
+        "PHP": "8.5.10",
+        "phibble": "v0.6.0 (6b9f06a)",
+        "phit": "0.4.4 (v0.4.3-20-g066e2e1)"
     },
-    "note": "n_compared counts the assertions in each test. Errors are over floating-point comparisons; other values must be equal.",
+    "inputs": [
+        {
+            "name": "schools.csv",
+            "detail": "250 rows: school, study_hours, prior_score, score.",
+            "url": "tests/Fixtures/schools.csv"
+        },
+        {
+            "name": "learning.csv",
+            "detail": "80 rows: study_hours, practice_score, passed.",
+            "url": "tests/Fixtures/learning.csv"
+        }
+    ],
+    "comparison": [
+        {
+            "id": "coefficients",
+            "kind": "tolerance",
+            "applies_to": "coefficients and fixed effects",
+            "atol": 1.0e-6,
+            "rtol": 1.0e-6,
+            "rel_floor": 1
+        },
+        {
+            "id": "sigma",
+            "kind": "tolerance",
+            "applies_to": "the residual standard deviation of lmer()",
+            "atol": 1.0e-5,
+            "rel_floor": 1
+        }
+    ],
     "cases": [
         {
             "name": "Fits mixed models like lme4",
             "quantity": "coefficients",
-            "n_compared": 5,
-            "max_abs_error": 1.9980699761390497e-8,
-            "max_rel_error": 3.951405576674164e-9,
-            "passed": true
+            "status": "pass",
+            "rule": "coefficients",
+            "n_compared": 4,
+            "max_abs_error": 1.6034448435675586e-8,
+            "max_rel_error": 3.436248848963374e-10
         },
         {
-            "name": "Fits models like R",
+            "name": "Estimates the residual SD of a mixed model like lme4",
+            "quantity": "sigma",
+            "status": "pass",
+            "rule": "sigma",
+            "n_compared": 1,
+            "max_abs_error": 1.9980699761390497e-8,
+            "max_rel_error": 3.951405576674164e-9,
+            "actual": 5.05660566920589,
+            "expected": 5.05660564922519
+        },
+        {
+            "name": "lm(score ~ study_hours + prior_score + school) on schools",
             "quantity": "coefficients",
-            "n_compared": 22,
+            "status": "pass",
+            "rule": "coefficients",
+            "n_compared": 15,
+            "max_abs_error": 2.842170943040401e-14,
+            "max_rel_error": 4.579669976578771e-15
+        },
+        {
+            "name": "lm(score ~ study_hours) on schools with prior_score > 60",
+            "quantity": "coefficients",
+            "status": "pass",
+            "rule": "coefficients",
+            "n_compared": 3,
+            "max_abs_error": 7.105427357601002e-15,
+            "max_rel_error": 4.510644656336134e-16
+        },
+        {
+            "name": "glm(passed ~ study_hours + practice_score, binomial) on learning",
+            "quantity": "coefficients",
+            "status": "pass",
+            "rule": "coefficients",
+            "n_compared": 4,
             "max_abs_error": 3.276490190273762e-12,
-            "max_rel_error": 1.2320493022958951e-12,
-            "passed": true
+            "max_rel_error": 1.0332735144910259e-12
         }
-    ]
+    ],
+    "exclusions": [
+        "glmer() is not compared with lme4.",
+        "phit-polyfill is not compared with R here. The models benchmark checks its coefficients against the extension's."
+    ],
+    "reproduce": [
+        "Rscript tests/r/models.R",
+        "Rscript tests/r/expr.R",
+        "bin/site-verifications"
+    ],
+    "data": "tests/Fixtures",
+    "environment": {
+        "date": "2026-11-01",
+        "commit": "8056422",
+        "php": "8.5.10",
+        "os": "Darwin 27.0.0 (arm64)"
+    }
 }

@@ -20,3 +20,5 @@ out <- list(
   keep_true = left_join(ev, pe, by = join_by(id, closest(t >= start)), keep = TRUE)
 )
 write_json(out, "tests/Fixtures/join-by-reference.json", digits = NA, auto_unbox = TRUE, pretty = TRUE, na = "null")
+source("tests/r/versions.R")
+record_versions("join-by-reference.json", c("dplyr"))

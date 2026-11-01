@@ -26,8 +26,10 @@ function bothBackends(Closure $body): void
 /**
  * Records which tests check phplyr against a reference (R's output, or
  * DataFrame for other backends), and the floating-point differences they
- * allow. With PHPLYR_VERIFY_LOG set, each such test appends one JSON line to
- * that file; bin/site-verifications turns the log into site/verifications/.
+ * allow. With PHPLYR_VERIFY_LOG set, every test appends one JSON line with
+ * its status to that file; bin/site-verifications turns the log into
+ * site/verifications/. A test that can be skipped before it reads its
+ * reference names its record with ->group('verify:<record>').
  */
 final class Verification
 {
@@ -43,6 +45,9 @@ final class Verification
     /** @var array<string, true> */
     public static array $kinds = [];
 
+    /** @var array{0: int|float, 1: int|float}|null the last compared pair */
+    public static ?array $last = null;
+
     public static function reset(): void
     {
         self::$references = [];
@@ -50,6 +55,7 @@ final class Verification
         self::$maxAbs = 0.0;
         self::$maxRel = 0.0;
         self::$kinds = [];
+        self::$last = null;
     }
 }
 
@@ -59,14 +65,18 @@ function verifyAgainst(string $reference): void
     Verification::$references[$reference] = true;
 }
 
-/** Record a floating-point comparison of the running test. */
+/**
+ * Record a floating-point comparison of the running test. The relative error
+ * is |x - r| / max(|r|, 1).
+ */
 function recordDifference(int|float $actual, int|float $expected, string $kind): void
 {
     $abs = abs($actual - $expected);
     Verification::$numeric++;
     Verification::$maxAbs = \max(Verification::$maxAbs, $abs);
-    Verification::$maxRel = \max(Verification::$maxRel, $expected == 0 ? $abs : $abs / abs($expected));
+    Verification::$maxRel = \max(Verification::$maxRel, $abs / \max(abs($expected), 1.0));
     Verification::$kinds[$kind] = true;
+    Verification::$last = [$actual, $expected];
 }
 
 /** An R reference fixture from tests/Fixtures; marks the test as checked against R. */
@@ -78,27 +88,35 @@ function rReference(string $file): mixed
     return $cache[$file] ??= json_decode(file_get_contents(fixturePath($file)), true);
 }
 
-/** expect($actual) within $delta of $expected, recorded for the verification report. */
-function expectClose(int|float $actual, int|float $expected, float $delta, string $kind = 'values'): void
+/**
+ * expect |$actual - $expected| <= $atol + $rtol * |$expected|, recorded for
+ * the verification report.
+ */
+function expectClose(int|float $actual, int|float $expected, float $atol, float $rtol = 0.0, string $kind = 'values'): void
 {
     recordDifference($actual, $expected, $kind);
-    expect($actual)->toEqualWithDelta($expected, $delta);
+    expect($actual)->toEqualWithDelta($expected, $atol + $rtol * abs($expected));
 }
 
 uses()->afterEach(function () {
     $log = getenv('PHPLYR_VERIFY_LOG');
-    if ($log !== false && $log !== '' && Verification::$references !== []) {
+    if ($log !== false && $log !== '') {
+        $status = $this->status();
         file_put_contents($log, json_encode([
             'file' => basename(Pest\TestSuite::getInstance()->getFilename()),
             'test' => $this->getPrintableTestCaseMethodName(),
-            'data' => $this->dataSetAsString(),
+            'data' => (string) $this->dataName(),
+            'groups' => $this->groups(),
+            'status' => $status->isSuccess() ? 'pass' : ($status->isSkipped() ? 'skipped' : 'fail'),
+            'reason' => $status->isSuccess() ? null : $status->message(),
             'references' => array_keys(Verification::$references),
             'assertions' => PHPUnit\Framework\Assert::getCount(),
             'numeric' => Verification::$numeric,
-            'max_abs_error' => Verification::$maxAbs,
-            'max_rel_error' => Verification::$maxRel,
+            'max_abs_error' => Verification::$numeric > 0 ? Verification::$maxAbs : null,
+            'max_rel_error' => Verification::$numeric > 0 ? Verification::$maxRel : null,
             'kinds' => array_keys(Verification::$kinds),
-        ])."\n", FILE_APPEND);
+            'last' => Verification::$numeric === 1 ? Verification::$last : null,
+        ], JSON_PRESERVE_ZERO_FRACTION)."\n", FILE_APPEND);
     }
     Verification::reset();
 })->in(__DIR__);
@@ -117,7 +135,7 @@ function expectRowsClose(array $actual, array $expected): void
         expect(array_keys($actual[$i]))->toBe(array_keys($row));
         foreach ($row as $col => $value) {
             if ($value !== null && $actual[$i][$col] !== null && (is_float($value) || is_float($actual[$i][$col]))) {
-                expectClose($actual[$i][$col], $value, 1e-9 * \max(1.0, abs($value)), 'table values');
+                expectClose($actual[$i][$col], $value, 1e-9, 1e-9, 'table values');
             } else {
                 expect($actual[$i][$col])->toBe($value);
             }

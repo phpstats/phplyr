@@ -1,0 +1,57 @@
+{
+  "coverage-reference.json": {
+    "R": "4.6.1",
+    "dplyr": "1.2.1",
+    "tidyr": "1.3.2"
+  },
+  "cur-group-reference.json": {
+    "R": "4.6.1",
+    "dplyr": "1.2.1"
+  },
+  "dplyr-reference.json": {
+    "R": "4.6.1",
+    "dplyr": "1.2.1"
+  },
+  "drop-reference.json": {
+    "R": "4.6.1",
+    "dplyr": "1.2.1"
+  },
+  "expr-reference.json": {
+    "R": "4.6.1",
+    "dplyr": "1.2.1",
+    "lme4": "2.0.6"
+  },
+  "janitor-reference.json": {
+    "R": "4.6.1",
+    "janitor": "2.2.1",
+    "dplyr": "1.2.1"
+  },
+  "join-by-reference.json": {
+    "R": "4.6.1",
+    "dplyr": "1.2.1"
+  },
+  "joins-reference.json": {
+    "R": "4.6.1",
+    "dplyr": "1.2.1"
+  },
+  "lubridate-stringr.json": {
+    "R": "4.6.1",
+    "lubridate": "1.9.5",
+    "stringr": "1.6.0"
+  },
+  "models-reference.json": {
+    "R": "4.6.1"
+  },
+  "rows-reference.json": {
+    "R": "4.6.1",
+    "dplyr": "1.2.1"
+  },
+  "stats-reference.json": {
+    "R": "4.6.1"
+  },
+  "tidyr-reference.json": {
+    "R": "4.6.1",
+    "dplyr": "1.2.1",
+    "tidyr": "1.3.2"
+  }
+}
