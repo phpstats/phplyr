@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * tidyselect helpers and across(). Selectors work anywhere a verb takes
+ * tidyselect helpers and across(). Selectors work anywhere a function takes
  * columns: select, relocate, rename_with, arrange, distinct, group_by,
  * count, across, pick.
  */

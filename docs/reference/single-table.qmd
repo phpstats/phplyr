@@ -44,6 +44,8 @@ Each takes `prop:` in place of `n:`, and `_by:`.
 
 {{< include ../examples/_slice.md >}}
 
+{{< include _api/single-table-rows.md >}}
+
 ## Columns
 
 `select()` keeps columns by name or with [tidyselect helpers](tidyselect.qmd).
@@ -72,6 +74,8 @@ new columns. `transmute()` is `mutate()` that keeps only the new columns.
 
 {{< include ../examples/_distinct-pull.md >}}
 
+{{< include _api/single-table-columns.md >}}
+
 ## Summaries
 
 `summarize()` returns one row per group. `summarise()` is the same function. Each named argument is a summary
@@ -96,3 +100,5 @@ current groups, and `add_count()` and `add_tally()` add the count as a column.
 
 `glimpse()` prints a compact summary of each column and returns the table
 unchanged.
+
+{{< include _api/single-table-summaries.md >}}

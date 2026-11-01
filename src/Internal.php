@@ -9,7 +9,7 @@ use Phibble\Contracts\Table;
 use Phibble\Expr;
 use Phibble\DataFrame;
 
-/** @internal Helpers shared by the verb functions. */
+/** @internal Helpers shared by the table functions. */
 final class Internal
 {
     /**
@@ -102,7 +102,7 @@ final class Internal
         return $out;
     }
 
-    /** Verbs that name their outputs need named arguments (across() may be positional). */
+    /** Functions that name their outputs need named arguments (across() may be positional). */
     public static function assertNamed(array $args, string $verb): void
     {
         foreach ($args as $key => $arg) {
@@ -118,7 +118,7 @@ final class Internal
      * Split dplyr's dot-arguments, written here with a leading underscore
      * (_by, _keep...), from the rest. The prefix is what keeps an option
      * apart from a column of the same name: a named argument to one of
-     * these variadic verbs lands in the same string-keyed array as the
+     * these variadic functions lands in the same string-keyed array as the
      * columns the call creates. docs/coming-from-dplyr.qmd records the
      * exception to the family's camelCase rule.
      *

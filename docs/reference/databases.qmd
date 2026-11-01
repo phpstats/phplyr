@@ -35,6 +35,8 @@ evaluated in PHP.
 `mutate(_keep: 'used')` and `_keep: 'unused'` need expression arguments,
 because phplyr reads the columns an expression uses from the tree.
 
+{{< include _api/databases-expressions.md >}}
+
 ## Database tables
 
 `Phibble\tbl($pdo, 'table')` returns a lazy table for a PDO connection. phplyr functions
@@ -53,3 +55,5 @@ in memory, returning a `DataFrame`. Expressions with no faithful SQL translation
 the same. They include `round()` (R rounds halves to even), `first()`, `last()`,
 `nth()`, `iqr()`, `cumprod()`, `consecutive_id()`, and `median()` or
 `quantile()` outside PostgreSQL.
+
+{{< include _api/databases-database-tables.md >}}

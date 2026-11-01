@@ -42,6 +42,8 @@ The superseded `gather()` and `spread()` are also available.
 
 {{< include ../examples/_pivot.md >}}
 
+{{< include _api/tidyr-pivoting.md >}}
+
 ## Missing combinations and values
 
 `complete()` adds missing combinations of the given columns and fills other
@@ -58,6 +60,8 @@ build a new table from lists.
 with NA in the given columns, and `replace_na()` replaces NA per column.
 
 {{< include ../examples/_fill.md >}}
+
+{{< include _api/tidyr-missing-combinations-and-values.md >}}
 
 ## Splitting and combining
 
@@ -80,6 +84,8 @@ with NA in the given columns, and `replace_na()` replaces NA per column.
 
 {{< include ../examples/_separate.md >}}
 
+{{< include _api/tidyr-splitting-and-combining.md >}}
+
 ## List-columns
 
 A list element is a PHP array. A list is R's unnamed list or vector, and an
@@ -97,3 +103,5 @@ array with string keys is a named list.
 import them with `use function Phplyr\{chop, pack, unpack, extract};`.
 
 {{< include ../examples/_rectangling.md >}}
+
+{{< include _api/tidyr-list-columns.md >}}

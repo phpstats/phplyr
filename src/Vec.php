@@ -19,7 +19,7 @@ use Phibble\DataFrame;
  * one value per row of the group, or a single value that is recycled.
  *
  * When every input can be inspected (column names, literals, other
- * expressions), a Vec also carries a Phibble\Expr. Verbs then pass that
+ * expressions), a Vec also carries a Phibble\Expr. Table functions then pass that
  * expression to the table, so database backends can compile it. Vecs built
  * from PHP closures carry no expression and are evaluated in PHP.
  *
@@ -73,25 +73,45 @@ final readonly class Vec
 
     // Operators. A non-Vec operand is a literal; wrap columns in col().
 
+    /** x + y. */
     public function add(mixed $y): self { return self::op('+', $this, $y); }
+    /** x - y. */
     public function sub(mixed $y): self { return self::op('-', $this, $y); }
+    /** x * y. */
     public function mul(mixed $y): self { return self::op('*', $this, $y); }
+    /** x / y. */
     public function div(mixed $y): self { return self::op('/', $this, $y); }
+    /** x modulo y, R's %%: the result takes the sign of y. */
     public function mod(mixed $y): self { return self::op('%%', $this, $y); }
+    /** x to the power y. */
     public function pow(mixed $y): self { return self::op('^', $this, $y); }
+    /** x == y; NA when either side is NA. */
     public function eq(mixed $y): self { return self::op('==', $this, $y); }
+    /** x != y; NA when either side is NA. */
     public function ne(mixed $y): self { return self::op('!=', $this, $y); }
+    /** x < y; NA when either side is NA. */
     public function lt(mixed $y): self { return self::op('<', $this, $y); }
+    /** x <= y; NA when either side is NA. */
     public function le(mixed $y): self { return self::op('<=', $this, $y); }
+    /** x > y; NA when either side is NA. */
     public function gt(mixed $y): self { return self::op('>', $this, $y); }
+    /** x >= y; NA when either side is NA. */
     public function ge(mixed $y): self { return self::op('>=', $this, $y); }
+    /** Logical and, with R's NA rules: false and NA is false. */
     public function and(mixed $y): self { return self::op('&', $this, $y); }
+    /** Logical or, with R's NA rules: true or NA is true. */
     public function or(mixed $y): self { return self::op('|', $this, $y); }
+    /** Negation, -x. */
     public function neg(): self { return self::op('neg', $this); }
+    /** Logical not; NA stays NA. */
     public function not(): self { return self::op('!', $this); }
+    /** True where x is NA. */
     public function isNa(): self { return self::op('is_na', $this); }
+    /** True where x is one of the values, R's %in%; never NA. */
     public function isIn(array $values): self { return self::op('in', $this, new Lit(array_values($values))); }
+    /** low <= x <= high, inclusive. */
     public function between(mixed $low, mixed $high): self { return self::op('between', $this, $low, $high); }
+    /** Sort in descending order, for arrange() and order_by. */
     public function desc(): Desc { return new Desc($this); }
 
     private static function op(string $fn, mixed ...$args): self

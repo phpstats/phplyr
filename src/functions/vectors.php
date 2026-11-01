@@ -59,16 +59,19 @@ function n_distinct(mixed ...$columns): Vec
     return Internal::call('n_distinct', $columns, Internal::naRm($naRm), columns: array_keys($columns));
 }
 
+/** Sum of x; NA unless naRm is true. */
 function sum(mixed $x, bool $naRm = false): Vec
 {
     return Internal::call('sum', [$x], Internal::naRm($naRm));
 }
 
+/** Arithmetic mean of x; NA unless naRm is true. */
 function mean(mixed $x, bool $naRm = false): Vec
 {
     return Internal::call('mean', [$x], Internal::naRm($naRm));
 }
 
+/** Median of x; NA unless naRm is true. */
 function median(mixed $x, bool $naRm = false): Vec
 {
     return Internal::call('median', [$x], Internal::naRm($naRm));
@@ -86,7 +89,7 @@ function var_(mixed $x, bool $naRm = false): Vec
     return Internal::call('var', [$x], Internal::naRm($naRm));
 }
 
-/** Alias of var_(), kept from phplyr 0.3. */
+/** Alias of var_(). */
 function variance(mixed $x, bool $naRm = false): Vec
 {
     return var_($x, $naRm);
@@ -108,11 +111,13 @@ function iqr(mixed $x, bool $naRm = false): Vec
     return Internal::call('iqr', [$x], Internal::naRm($naRm));
 }
 
+/** Smallest value of x; NA unless naRm is true. */
 function min(mixed $x, bool $naRm = false): Vec
 {
     return Internal::call('min', [$x], Internal::naRm($naRm));
 }
 
+/** Largest value of x; NA unless naRm is true. */
 function max(mixed $x, bool $naRm = false): Vec
 {
     return Internal::call('max', [$x], Internal::naRm($naRm));
@@ -282,21 +287,25 @@ function consecutive_id(mixed ...$xs): Vec
     return Internal::call('consecutive_id', $xs, columns: array_keys($xs));
 }
 
+/** Running sum; NA from the first NA onward. */
 function cumsum(mixed $x): Vec
 {
     return Internal::call('cumsum', [$x]);
 }
 
+/** Running product; NA from the first NA onward. */
 function cumprod(mixed $x): Vec
 {
     return Internal::call('cumprod', [$x]);
 }
 
+/** Running minimum; NA from the first NA onward. */
 function cummin(mixed $x): Vec
 {
     return Internal::call('cummin', [$x]);
 }
 
+/** Running maximum; NA from the first NA onward. */
 function cummax(mixed $x): Vec
 {
     return Internal::call('cummax', [$x]);

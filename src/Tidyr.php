@@ -9,7 +9,7 @@ use Phibble\Contracts\Table;
 use Phibble\DataFrame;
 use Phibble\Type;
 
-/** @internal The tidyr verbs' implementations, built on the Table contract. */
+/** @internal The tidyr functions' implementations, built on the Table contract. */
 final class Tidyr
 {
     private const string PRESENT = '.phplyr_present';

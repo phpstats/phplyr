@@ -8,7 +8,7 @@ use Closure;
 use Phibble\Contracts\Table;
 
 /**
- * @internal The slice_*() verbs: pick row indexes per group, then take them.
+ * @internal The slice_*() functions: pick row indexes per group, then take them.
  * Groups are handled as row-index lists; a group's table is built only when
  * an expression has to be evaluated on it.
  */

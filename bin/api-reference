@@ -1,0 +1,416 @@
+#!/usr/bin/env php
+<?php
+
+/*
+ * Write the API reference from the public API: one entry per function in the
+ * Phplyr namespace and per expression method on Phplyr\Vec, with its
+ * signature, docblock, return value, exceptions, chain method, and an example
+ * link, into docs/reference/_api/<page>-<section>.md, which the reference
+ * pages include at the end of each section. Also writes the index,
+ * docs/reference/index.qmd.
+ *
+ * Every public function must appear in $sections exactly once, and every
+ * name there must exist; otherwise the script exits 1 and writes nothing.
+ * Functions marked @internal are left out. Run it after adding or changing a
+ * function, then bin/render-docs.
+ *
+ * Usage: bin/api-reference [--check]
+ */
+
+declare(strict_types=1);
+
+$root = dirname(__DIR__);
+require $root.'/vendor/autoload.php';
+
+// Page => section heading => functions, in reference order. The heading is the
+// section's title on the page; its include file is named from its anchor.
+$sections = [
+    'chains' => [
+        'Pipelines' => ['phplyr', 'pipe'],
+    ],
+    'single-table' => [
+        'Rows' => ['filter', 'filter_out', 'arrange', 'desc', 'distinct', 'slice', 'slice_head', 'slice_tail', 'slice_min', 'slice_max', 'slice_sample', 'head', 'top_n', 'top_frac', 'sample_n', 'sample_frac', 'add_row'],
+        'Columns' => ['select', 'rename', 'rename_with', 'relocate', 'mutate', 'transmute', 'pull'],
+        'Summaries' => ['summarise', 'summarize', 'reframe', 'count', 'tally', 'add_count', 'add_tally', 'glimpse'],
+    ],
+    'two-table' => [
+        'Joins' => ['inner_join', 'left_join', 'right_join', 'full_join', 'semi_join', 'anti_join', 'cross_join', 'nest_join'],
+        'join_by()' => ['join_by', 'closest', 'within', 'overlaps'],
+        'Binding' => ['bind_rows', 'bind_cols'],
+        'Set operations and row updates' => ['union', 'union_all', 'intersect', 'setdiff', 'symdiff', 'setequal', 'rows_insert', 'rows_append', 'rows_update', 'rows_patch', 'rows_upsert', 'rows_delete'],
+    ],
+    'grouping' => [
+        'Grouping and ungrouping' => ['group_by', 'ungroup', 'with_groups'],
+        'Group utilities' => ['group_vars', 'n_groups', 'group_size', 'group_indices', 'group_keys', 'group_rows', 'group_data', 'group_trim', 'group_split', 'group_map', 'group_modify', 'group_walk', 'group_nest', 'nest_by', 'cur_group_id', 'cur_group_rows', 'cur_group'],
+        'Row-wise operations' => ['rowwise'],
+    ],
+    'vectors' => [
+        'Summaries' => ['n', 'n_distinct', 'sum', 'mean', 'median', 'sd', 'var_', 'variance', 'quantile', 'iqr', 'min', 'max', 'first', 'last', 'nth', 'any', 'all'],
+        'Window functions' => ['lag', 'lead', 'row_number', 'min_rank', 'dense_rank', 'percent_rank', 'cume_dist', 'ntile', 'consecutive_id', 'cumsum', 'cumprod', 'cummin', 'cummax', 'cummean', 'cumall', 'cumany', 'order_by'],
+        'Conditionals and NA' => ['if_else', 'case_when', 'case_match', 'replace_when', 'recode', 'recode_values', 'replace_values', 'coalesce', 'na_if', 'between', 'near', 'when_any', 'when_all'],
+    ],
+    'strings-dates' => [
+        'Strings' => ['str_detect', 'str_starts', 'str_ends', 'str_count', 'str_extract', 'str_extract_all', 'str_replace', 'str_replace_all', 'str_split', 'str_split_i', 'str_pad', 'str_trunc', 'str_trim', 'str_squish', 'str_sub', 'str_length', 'str_to_title', 'str_to_upper', 'str_to_lower', 'str_upper', 'str_lower', 'paste', 'paste0', 'fixed', 'regex'],
+        'Dates and times' => ['ymd', 'dmy', 'mdy', 'ymd_hms', 'dmy_hms', 'mdy_hms', 'parse_date_time', 'year', 'month', 'day', 'wday', 'yday', 'quarter', 'hour', 'minute', 'second', 'floor_date', 'ceiling_date', 'round_date', 'seconds', 'minutes', 'hours', 'days', 'weeks', 'months', 'years', 'difftime', 'with_tz', 'force_tz', 'today', 'now'],
+    ],
+    'tidyselect' => [
+        'Selectors' => ['starts_with', 'ends_with', 'contains', 'matches', 'num_range', 'everything', 'last_col', 'all_of', 'any_of', 'where', 'except', 'any_selected', 'all_selected', 'group_cols'],
+        'across()' => ['across', 'if_any', 'if_all', 'c_across', 'pick', 'cur_column'],
+    ],
+    'tidyr' => [
+        'Pivoting' => ['pivot_longer', 'pivot_wider', 'build_longer_spec', 'pivot_longer_spec', 'build_wider_spec', 'pivot_wider_spec', 'gather', 'spread'],
+        'Missing combinations and values' => ['complete', 'expand', 'nesting', 'crossing', 'expand_grid', 'full_seq', 'fill', 'drop_na', 'replace_na', 'uncount'],
+        'Splitting and combining' => ['separate_wider_delim', 'separate_wider_position', 'separate_wider_regex', 'separate_longer_delim', 'separate_longer_position', 'separate', 'separate_rows', 'extract', 'unite'],
+        'List-columns' => ['nest', 'unnest', 'unnest_longer', 'unnest_wider', 'hoist', 'chop', 'unchop', 'pack', 'unpack'],
+    ],
+    'janitor' => [
+        'Clean names' => ['make_clean_names', 'clean_names'],
+        'Remove empty rows and columns' => ['remove_empty'],
+        'Duplicates' => ['get_dupes'],
+        'Frequency tables' => ['tabyl'],
+    ],
+    'models' => [
+        'Model functions' => ['lm', 'glm', 'lmer', 'glmer'],
+    ],
+    'databases' => [
+        'Expressions' => ['col', 'lit', 'vec', 'is_na', 'abs', 'sqrt', 'exp', 'log', 'log10', 'round', 'floor', 'ceiling', 'as_int', 'as_float', 'as_string', 'as_bool', 'Vec::add', 'Vec::sub', 'Vec::mul', 'Vec::div', 'Vec::mod', 'Vec::pow', 'Vec::neg', 'Vec::eq', 'Vec::ne', 'Vec::lt', 'Vec::le', 'Vec::gt', 'Vec::ge', 'Vec::between', 'Vec::isIn', 'Vec::isNa', 'Vec::and', 'Vec::or', 'Vec::not', 'Vec::desc'],
+        'Database tables' => ['show_query', 'collect'],
+    ],
+];
+$titles = [
+    'chains' => 'Pipes and method chains',
+    'single-table' => 'Single-table functions',
+    'two-table' => 'Joins, binding, and set operations',
+    'grouping' => 'Grouping',
+    'vectors' => 'Vector helpers',
+    'strings-dates' => 'Strings and dates',
+    'tidyselect' => 'Selecting columns',
+    'tidyr' => 'Reshaping with tidyr',
+    'janitor' => 'Cleaning with janitor',
+    'models' => 'Models',
+    'databases' => 'Databases and expressions',
+];
+// What a table function's closure returns, when it isn't a table.
+$results = [
+    'pull' => 'a PHP list of the column\'s values',
+    'group_vars' => 'the grouping column names',
+    'group_size' => 'the number of rows in each group',
+    'group_indices' => 'each row\'s group number, from 1',
+    'group_rows' => 'the 1-based row numbers of each group',
+    'group_split' => 'one table per group',
+    'group_map' => 'one result per group',
+    'n_groups' => 'the number of groups',
+    'setequal' => 'true when the tables have the same rows',
+    'show_query' => 'the SQL string',
+    'lm' => 'phit\'s result array',
+    'glm' => 'phit\'s result array',
+    'lmer' => 'phit\'s result array',
+    'glmer' => 'phit\'s result array',
+    'group_walk' => 'the table unchanged, after calling the function on each group',
+    'glimpse' => 'the table unchanged, after printing it',
+];
+
+$anchor = fn (string $heading) => trim((string) preg_replace('/[^a-z0-9_]+/', '-', strtolower(str_replace(['(', ')'], '', $heading))), '-');
+$id = fn (string $name) => str_starts_with($name, 'Vec::') ? 'method-'.strtolower(substr($name, 5)) : $name;
+$label = fn (string $name) => str_starts_with($name, 'Vec::') ? '->'.substr($name, 5).'()' : $name.'()';
+$camel = fn (string $name) => lcfirst(str_replace('_', '', ucwords($name, '_')));
+$reflect = fn (string $name) => str_starts_with($name, 'Vec::') ? new ReflectionMethod(Phplyr\Vec::class, substr($name, 5)) : new ReflectionFunction('Phplyr\\'.$name);
+
+// The public API: every function in the namespace that isn't @internal.
+$public = [];
+foreach (get_defined_functions()['user'] as $f) {
+    $r = new ReflectionFunction($f);
+    if ($r->getNamespaceName() === 'Phplyr' && ! str_contains((string) $r->getDocComment(), '@internal')) {
+        $public[] = $r->getShortName();
+    }
+}
+$listed = [];
+foreach ($sections as $page => $groups) {
+    foreach ($groups as $names) {
+        foreach ($names as $name) {
+            $listed[] = $name;
+        }
+    }
+}
+$problems = [];
+foreach (array_diff($public, $listed) as $name) {
+    $problems[] = "{$name}() is not in a section";
+}
+foreach (array_count_values($listed) as $name => $n) {
+    if ($n > 1) {
+        $problems[] = "{$name} is listed {$n} times";
+    }
+    if (! str_starts_with($name, 'Vec::') && ! in_array($name, $public, true)) {
+        $problems[] = "{$name}() is not a public function";
+    }
+    if (str_starts_with($name, 'Vec::') && ! method_exists(Phplyr\Vec::class, substr($name, 5))) {
+        $problems[] = "{$name}() does not exist";
+    }
+}
+if ($problems !== []) {
+    fwrite(STDERR, implode("\n", $problems)."\n");
+    exit(1);
+}
+
+// Docblock text as Markdown: calls and options become code.
+$prose = function (string $doc): string {
+    $text = (string) preg_replace(['#^/\*\*\s*#', '#\s*\*/$#', '#^\s*\* ?#m'], '', $doc);
+    $text = trim((string) preg_replace('/^@\w+.*$/m', '', $text));
+    $paragraphs = preg_split('/\n\s*\n/', $text) ?: [];
+    $out = [];
+    foreach ($paragraphs as $p) {
+        $p = trim((string) preg_replace('/\s*\n\s*/', ' ', $p));
+        if ($p === '') {
+            continue;
+        }
+        // Existing code spans stay; elsewhere, calls, $variables, and _options become code.
+        $parts = preg_split('/(`[^`]*`)/', $p, -1, PREG_SPLIT_DELIM_CAPTURE) ?: [];
+        foreach ($parts as $i => $part) {
+            if ($i % 2 === 1) {
+                continue;
+            }
+            $part = (string) preg_replace_callback(
+                '/(?:fn\s*\([^()]*\)(?:\s*=>\s*[^,;]+?(?=[,;]|\.\s|\s+(?:or|and)\s|$))?|(?:\$|->)?[A-Za-z_\\\\][\w\\\\]*(?:::\w+|->\w+)*\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)(?:->\w+\((?:[^()]|\([^()]*\))*\))*|\$\w+|(?<![\w])_[a-z]\w*(?::)?)/',
+                fn ($m) => '`'.$m[0].'`',
+                $part,
+            );
+            $parts[$i] = str_replace(['*', '<', '>'], ['\*', '&lt;', '&gt;'], (string) preg_replace_callback('/`[^`]*`/', fn ($m) => str_replace(['*', '<', '>'], ["\x01", "\x02", "\x03"], $m[0]), $part));
+            $parts[$i] = str_replace(["\x01", "\x02", "\x03"], ['*', '<', '>'], $parts[$i]);
+        }
+        $out[] = implode('', $parts);
+    }
+
+    return implode("\n\n", $out);
+};
+$firstSentence = function (string $markdown): string {
+    $first = explode("\n\n", $markdown)[0];
+    // Split at a period that ends a sentence outside code.
+    $parts = preg_split('/(`[^`]*`)/', $first, -1, PREG_SPLIT_DELIM_CAPTURE) ?: [];
+    $out = '';
+    foreach ($parts as $i => $part) {
+        if ($i % 2 === 0 && preg_match('/^(.*?[.;:])(\s|$)/s', $part, $m)) {
+            return rtrim($out.$m[1], ';:').(str_ends_with($m[1], '.') ? '' : '.');
+        }
+        $out .= $part;
+    }
+
+    return rtrim($out, '.').'.';
+};
+$type = function (?ReflectionType $t): string {
+    $s = (string) $t === 'self' ? 'Vec' : (string) $t;
+
+    return str_replace(['Phibble\\Contracts\\', 'Phplyr\\'], '', $s);
+};
+$export = function (mixed $v) use (&$export): string {
+    return match (true) {
+        $v === null => 'null',
+        is_array($v) => '['.implode(', ', array_is_list($v)
+            ? array_map($export, $v)
+            : array_map(fn ($k, $x) => var_export($k, true).' => '.$export($x), array_keys($v), $v)).']',
+        default => var_export($v, true),
+    };
+};
+$signature = function (ReflectionFunctionAbstract $r, string $name) use ($type, $export): string {
+    $params = [];
+    foreach ($r->getParameters() as $p) {
+        $s = trim($type($p->getType()).' '.($p->isVariadic() ? '...' : '').'$'.$p->getName());
+        if ($p->isDefaultValueAvailable()) {
+            $s .= ' = '.$export($p->getDefaultValue());
+        }
+        $params[] = $s;
+    }
+    $head = str_starts_with($name, 'Vec::') ? '$vec->'.substr($name, 5) : $name;
+
+    return $head.'('.implode(', ', $params).'): '.$type($r->getReturnType());
+};
+// Exceptions thrown directly in the body, and the option check.
+$throws = function (ReflectionFunctionAbstract $r): array {
+    $body = implode('', array_slice(file($r->getFileName()), $r->getStartLine() - 1, $r->getEndLine() - $r->getStartLine() + 1));
+    preg_match_all('/throw new \\\\?([\w\\\\]+)/', $body, $m);
+
+    return [array_values(array_unique(array_map(fn ($c) => ltrim($c, '\\'), $m[1]))), str_contains($body, 'Internal::options(')];
+};
+
+// Example includes and the example pages, to link an entry to code that calls it.
+$examples = [];
+foreach (array_keys($sections) as $page) {
+    $qmd = "{$root}/docs/reference/{$page}.qmd";
+    if (! is_file($qmd)) {
+        continue;
+    }
+    $current = null;
+    foreach (file($qmd) as $line) {
+        if (preg_match('/^## (.+?)\s*(\{#([\w-]+)\})?$/', trim($line), $m)) {
+            $current = $m[3] ?? $anchor($m[1]);
+        } elseif (preg_match('/include \.\.\/examples\/(_[\w-]+\.md)/', $line, $m) && $current !== null) {
+            $examples[] = ['code' => file_get_contents("{$root}/docs/examples/{$m[1]}"), 'page' => $page, 'link' => "#{$current}"];
+        }
+    }
+}
+foreach (glob("{$root}/docs/examples/*.qmd") as $qmd) {
+    $examples[] = ['code' => file_get_contents($qmd), 'page' => null, 'link' => '../examples/'.basename($qmd), 'title' => preg_match('/^title: "(.+)"$/m', file_get_contents($qmd), $m) ? $m[1] : basename($qmd, '.qmd')];
+}
+$sectionIds = [];
+foreach (array_keys($sections) as $page) {
+    $qmd = "{$root}/docs/reference/{$page}.qmd";
+    foreach (is_file($qmd) ? file($qmd) : [] as $line) {
+        if (preg_match('/^## (.+?)\s*(\{#([\w-]+)\})?$/', trim($line), $m)) {
+            $sectionIds[$page][$m[1]] = $m[3] ?? $anchor($m[1]);
+        }
+    }
+}
+$exampleFor = function (string $name, string $page, string $section) use ($examples, $camel): ?string {
+    $method = str_starts_with($name, 'Vec::');
+    $call = $method ? '->'.substr($name, 5).'(' : $name.'(';
+    $pattern = $method ? '/'.preg_quote($call, '/').'/' : '/(?<![\w>$\\\\])('.preg_quote($call, '/').'|->'.preg_quote($camel($name), '/').'\()/';
+    // The entry's own section first, then the rest of its page.
+    foreach ([true, false] as $own) {
+        foreach ($examples as $e) {
+            if ($e['page'] === $page && ($e['link'] === "#{$section}") === $own && preg_match($pattern, $e['code'])) {
+                return "[Example]({$e['link']})";
+            }
+        }
+    }
+    foreach ($examples as $e) {
+        if ($e['page'] === null && preg_match($pattern, $e['code'])) {
+            return "[{$e['title']}]({$e['link']})";
+        }
+    }
+
+    return null;
+};
+
+$entry = function (string $name, string $page, string $section) use ($reflect, $prose, $signature, $throws, $results, $camel, $exampleFor, $id, $label, $type): array {
+    $r = $reflect($name);
+    $doc = $prose((string) $r->getDocComment());
+    $returns = $type($r->getReturnType());
+    $lines = ["### `{$label($name)}` {#{$id($name)}}", '', '```php', $signature($r, $name), '```', ''];
+    if ($doc !== '') {
+        $lines[] = $doc;
+        $lines[] = '';
+    }
+    $facts = [];
+    if ($returns === 'Closure') {
+        $facts[] = 'Returns a function of a table, which returns '.($results[$name] ?? 'a table').'.';
+        $facts[] = 'Chain method: `->'.$camel($name).'()`.';
+    } elseif ($returns === 'Vec' || $returns === 'self') {
+        $facts[] = 'Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers.';
+    } elseif ($returns !== '') {
+        $facts[] = "Returns `{$returns}`.";
+    }
+    [$errors, $options] = $throws($r);
+    if ($errors !== []) {
+        $facts[] = 'Throws '.implode(', ', array_map(fn ($e) => "`{$e}`", $errors)).' on invalid arguments.';
+    }
+    if ($options) {
+        $facts[] = 'An unknown underscored option throws `InvalidArgumentException`.';
+    }
+    $example = $exampleFor($name, $page, $section);
+    if ($example !== null) {
+        $facts[] = "{$example}.";
+    }
+    $lines[] = implode(' ', $facts);
+
+    return [implode("\n", $lines), $doc];
+};
+
+// Write the section includes and collect the index rows.
+$files = [];
+$index = [];
+foreach ($sections as $page => $groups) {
+    foreach ($groups as $heading => $names) {
+        $blocks = [];
+        foreach ($names as $name) {
+            [$block, $doc] = $entry($name, $page, $sectionIds[$page][$heading] ?? $anchor($heading));
+            $blocks[] = $block;
+            $index[$page][$heading][] = [$name, $doc];
+        }
+        $files["docs/reference/_api/{$page}-{$anchor($heading)}.md"] = implode("\n\n", $blocks)."\n";
+    }
+}
+
+// The index: functions by page and section, then chain and expression methods.
+$cell = fn (string $s) => str_replace('|', '\|', $s);
+$out = [
+    '---',
+    'title: "Functions and methods"',
+    '---',
+    '',
+    'phplyr\'s functions are namespaced functions in `Phplyr`. A function marked with a chain method also runs as that method on `phplyr($table)`. Expression methods are called on the vector helpers that `col()` and other functions return.',
+    '',
+];
+$methods = [];
+$count = ['functions' => 0, 'chain' => 2, 'expression' => 0];
+foreach ($index as $page => $groups) {
+    $out[] = "## {$titles[$page]}";
+    $out[] = '';
+    foreach ($groups as $heading => $rows) {
+        $fnRows = array_filter($rows, fn ($row) => ! str_starts_with($row[0], 'Vec::'));
+        if ($fnRows !== []) {
+            if (count($groups) > 1) {
+                $out[] = '### '.$heading.($heading === 'Expressions' ? ' {#expressions-functions}' : '');
+                $out[] = '';
+            }
+            $out[] = '| Function | Chain method | Purpose |';
+            $out[] = '| --- | --- | --- |';
+            foreach ($fnRows as [$name, $doc]) {
+                $closure = (string) $reflect($name)->getReturnType() === 'Closure';
+                $count['functions']++;
+                $count['chain'] += $closure ? 1 : 0;
+                $out[] = "| [`{$label($name)}`]({$page}.qmd#{$id($name)}) | ".($closure ? '`->'.$camel($name).'()`' : '').' | '.$cell($firstSentence($doc)).' |';
+            }
+            $out[] = '';
+        }
+        foreach ($rows as [$name, $doc]) {
+            if (str_starts_with($name, 'Vec::')) {
+                $methods[] = "| [`{$label($name)}`]({$page}.qmd#{$id($name)}) | ".$cell($firstSentence($doc)).' |';
+                $count['expression']++;
+            }
+        }
+    }
+}
+$out = [
+    ...$out,
+    '## Chain methods',
+    '',
+    '`phplyr($table)` starts a chain. Each function above with a chain method runs as that method. These methods belong to the chain itself:',
+    '',
+    '| Method | Purpose |',
+    '| --- | --- |',
+    '| [`->get()`](chains.qmd#chain-get) | Return the table. |',
+    '| [`->pipe()`](chains.qmd#chain-pipe) | Apply your own functions to the table and continue the chain with the result. |',
+    '',
+    '## Expression methods',
+    '',
+    'Called on a vector helper, such as `col(\'price\')->mul(1.1)`.',
+    '',
+    '| Method | Purpose |',
+    '| --- | --- |',
+    ...$methods,
+    '',
+];
+$files['docs/reference/index.qmd'] = implode("\n", $out);
+
+$stale = [];
+foreach ($files as $path => $content) {
+    if (! is_file("{$root}/{$path}") || file_get_contents("{$root}/{$path}") !== $content) {
+        $stale[] = $path;
+    }
+}
+if (in_array('--check', $argv, true)) {
+    if ($stale !== []) {
+        fwrite(STDERR, "Out of date; run bin/api-reference:\n".implode("\n", $stale)."\n");
+        exit(1);
+    }
+    exit(0);
+}
+@mkdir("{$root}/docs/reference/_api", 0777, true);
+foreach (glob("{$root}/docs/reference/_api/*.md") as $old) {
+    if (! isset($files['docs/reference/_api/'.basename($old)])) {
+        unlink($old);
+    }
+}
+foreach ($files as $path => $content) {
+    file_put_contents("{$root}/{$path}", $content);
+}
+printf("%d functions, %d chain methods, %d expression methods: %d callables\n", $count['functions'], $count['chain'], $count['expression'], array_sum($count));

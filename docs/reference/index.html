@@ -1,0 +1,2700 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Functions and methods – phplyr</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-f3d0b6f838474b91d97a23e0a7eb39d8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html">Functions and methods</a></li><li class="breadcrumb-item"><a href="../reference/index.html">Functions and methods</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">phplyr</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">phplyr</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../getting-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting started</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../compatibility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Compatibility and limitations</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Guides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../coming-from-dplyr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Coming from dplyr</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../port-r-script.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Porting an R script</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../performance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Performance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Functions and methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Functions and methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/chains.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pipes and method chains</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/single-table.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Single-table functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/two-table.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Joins, binding, and set operations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/grouping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Grouping</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vector helpers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/strings-dates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Strings and dates</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/tidyselect.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">tidyselect and across()</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/tidyr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">tidyr</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/janitor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">janitor</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Databases and expressions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/filter-and-mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Filter rows and add columns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/group-and-summarize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Summarize groups</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/join.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Join two tables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/pivot.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pivot between wide and long</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gallery</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../development.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Development</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#pipes-and-method-chains" id="toc-pipes-and-method-chains" class="nav-link active" data-scroll-target="#pipes-and-method-chains">Pipes and method chains</a></li>
+  <li><a href="#single-table-functions" id="toc-single-table-functions" class="nav-link" data-scroll-target="#single-table-functions">Single-table functions</a>
+  <ul class="collapse">
+  <li><a href="#rows" id="toc-rows" class="nav-link" data-scroll-target="#rows">Rows</a></li>
+  <li><a href="#columns" id="toc-columns" class="nav-link" data-scroll-target="#columns">Columns</a></li>
+  <li><a href="#summaries" id="toc-summaries" class="nav-link" data-scroll-target="#summaries">Summaries</a></li>
+  </ul></li>
+  <li><a href="#joins-binding-and-set-operations" id="toc-joins-binding-and-set-operations" class="nav-link" data-scroll-target="#joins-binding-and-set-operations">Joins, binding, and set operations</a>
+  <ul class="collapse">
+  <li><a href="#joins" id="toc-joins" class="nav-link" data-scroll-target="#joins">Joins</a></li>
+  <li><a href="#join_by" id="toc-join_by" class="nav-link" data-scroll-target="#join_by">join_by()</a></li>
+  <li><a href="#binding" id="toc-binding" class="nav-link" data-scroll-target="#binding">Binding</a></li>
+  <li><a href="#set-operations-and-row-updates" id="toc-set-operations-and-row-updates" class="nav-link" data-scroll-target="#set-operations-and-row-updates">Set operations and row updates</a></li>
+  </ul></li>
+  <li><a href="#grouping" id="toc-grouping" class="nav-link" data-scroll-target="#grouping">Grouping</a>
+  <ul class="collapse">
+  <li><a href="#grouping-and-ungrouping" id="toc-grouping-and-ungrouping" class="nav-link" data-scroll-target="#grouping-and-ungrouping">Grouping and ungrouping</a></li>
+  <li><a href="#group-utilities" id="toc-group-utilities" class="nav-link" data-scroll-target="#group-utilities">Group utilities</a></li>
+  <li><a href="#row-wise-operations" id="toc-row-wise-operations" class="nav-link" data-scroll-target="#row-wise-operations">Row-wise operations</a></li>
+  </ul></li>
+  <li><a href="#vector-helpers" id="toc-vector-helpers" class="nav-link" data-scroll-target="#vector-helpers">Vector helpers</a>
+  <ul class="collapse">
+  <li><a href="#summaries-1" id="toc-summaries-1" class="nav-link" data-scroll-target="#summaries-1">Summaries</a></li>
+  <li><a href="#window-functions" id="toc-window-functions" class="nav-link" data-scroll-target="#window-functions">Window functions</a></li>
+  <li><a href="#conditionals-and-na" id="toc-conditionals-and-na" class="nav-link" data-scroll-target="#conditionals-and-na">Conditionals and NA</a></li>
+  </ul></li>
+  <li><a href="#strings-and-dates" id="toc-strings-and-dates" class="nav-link" data-scroll-target="#strings-and-dates">Strings and dates</a>
+  <ul class="collapse">
+  <li><a href="#strings" id="toc-strings" class="nav-link" data-scroll-target="#strings">Strings</a></li>
+  <li><a href="#dates-and-times" id="toc-dates-and-times" class="nav-link" data-scroll-target="#dates-and-times">Dates and times</a></li>
+  </ul></li>
+  <li><a href="#selecting-columns" id="toc-selecting-columns" class="nav-link" data-scroll-target="#selecting-columns">Selecting columns</a>
+  <ul class="collapse">
+  <li><a href="#selectors" id="toc-selectors" class="nav-link" data-scroll-target="#selectors">Selectors</a></li>
+  <li><a href="#across" id="toc-across" class="nav-link" data-scroll-target="#across">across()</a></li>
+  </ul></li>
+  <li><a href="#reshaping-with-tidyr" id="toc-reshaping-with-tidyr" class="nav-link" data-scroll-target="#reshaping-with-tidyr">Reshaping with tidyr</a>
+  <ul class="collapse">
+  <li><a href="#pivoting" id="toc-pivoting" class="nav-link" data-scroll-target="#pivoting">Pivoting</a></li>
+  <li><a href="#missing-combinations-and-values" id="toc-missing-combinations-and-values" class="nav-link" data-scroll-target="#missing-combinations-and-values">Missing combinations and values</a></li>
+  <li><a href="#splitting-and-combining" id="toc-splitting-and-combining" class="nav-link" data-scroll-target="#splitting-and-combining">Splitting and combining</a></li>
+  <li><a href="#list-columns" id="toc-list-columns" class="nav-link" data-scroll-target="#list-columns">List-columns</a></li>
+  </ul></li>
+  <li><a href="#cleaning-with-janitor" id="toc-cleaning-with-janitor" class="nav-link" data-scroll-target="#cleaning-with-janitor">Cleaning with janitor</a>
+  <ul class="collapse">
+  <li><a href="#clean-names" id="toc-clean-names" class="nav-link" data-scroll-target="#clean-names">Clean names</a></li>
+  <li><a href="#remove-empty-rows-and-columns" id="toc-remove-empty-rows-and-columns" class="nav-link" data-scroll-target="#remove-empty-rows-and-columns">Remove empty rows and columns</a></li>
+  <li><a href="#duplicates" id="toc-duplicates" class="nav-link" data-scroll-target="#duplicates">Duplicates</a></li>
+  <li><a href="#frequency-tables" id="toc-frequency-tables" class="nav-link" data-scroll-target="#frequency-tables">Frequency tables</a></li>
+  </ul></li>
+  <li><a href="#models" id="toc-models" class="nav-link" data-scroll-target="#models">Models</a></li>
+  <li><a href="#databases-and-expressions" id="toc-databases-and-expressions" class="nav-link" data-scroll-target="#databases-and-expressions">Databases and expressions</a>
+  <ul class="collapse">
+  <li><a href="#expressions-functions" id="toc-expressions-functions" class="nav-link" data-scroll-target="#expressions-functions">Expressions</a></li>
+  <li><a href="#database-tables" id="toc-database-tables" class="nav-link" data-scroll-target="#database-tables">Database tables</a></li>
+  </ul></li>
+  <li><a href="#chain-methods" id="toc-chain-methods" class="nav-link" data-scroll-target="#chain-methods">Chain methods</a></li>
+  <li><a href="#expression-methods" id="toc-expression-methods" class="nav-link" data-scroll-target="#expression-methods">Expression methods</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html">Functions and methods</a></li><li class="breadcrumb-item"><a href="../reference/index.html">Functions and methods</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Functions and methods</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>phplyr’s functions are namespaced functions in <code>Phplyr</code>. A function marked with a chain method also runs as that method on <code>phplyr($table)</code>. Expression methods are called on the vector helpers that <code>col()</code> and other functions return.</p>
+<section id="pipes-and-method-chains" class="level2">
+<h2 class="anchored" data-anchor-id="pipes-and-method-chains">Pipes and method chains</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/chains.html#phplyr"><code>phplyr()</code></a></td>
+<td></td>
+<td>Start a method chain on a table.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/chains.html#pipe"><code>pipe()</code></a></td>
+<td></td>
+<td>Apply steps to a value in order.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="single-table-functions" class="level2">
+<h2 class="anchored" data-anchor-id="single-table-functions">Single-table functions</h2>
+<section id="rows" class="level3">
+<h3 class="anchored" data-anchor-id="rows">Rows</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/single-table.html#filter"><code>filter()</code></a></td>
+<td><code>-&gt;filter()</code></td>
+<td>Keep rows where every condition is true.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#filter_out"><code>filter_out()</code></a></td>
+<td><code>-&gt;filterOut()</code></td>
+<td>Drop rows where every condition is true (dplyr 1.2).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#arrange"><code>arrange()</code></a></td>
+<td><code>-&gt;arrange()</code></td>
+<td>Sort rows by columns or expressions.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#desc"><code>desc()</code></a></td>
+<td></td>
+<td>Descending sort key for <code>arrange()</code>, and for rank helpers.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#distinct"><code>distinct()</code></a></td>
+<td><code>-&gt;distinct()</code></td>
+<td>Unique rows over the given columns (all columns when none are given).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#slice"><code>slice()</code></a></td>
+<td><code>-&gt;slice()</code></td>
+<td>Rows by 1-based position within each group, like dplyr’s <code>slice()</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#slice_head"><code>slice_head()</code></a></td>
+<td><code>-&gt;sliceHead()</code></td>
+<td>First rows of each group.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#slice_tail"><code>slice_tail()</code></a></td>
+<td><code>-&gt;sliceTail()</code></td>
+<td>Last rows of each group.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#slice_min"><code>slice_min()</code></a></td>
+<td><code>-&gt;sliceMin()</code></td>
+<td>Rows with the smallest values of <code>$orderBy</code> in each group, ordered by it.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#slice_max"><code>slice_max()</code></a></td>
+<td><code>-&gt;sliceMax()</code></td>
+<td>Rows with the largest values of <code>$orderBy</code> in each group, ordered by it.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#slice_sample"><code>slice_sample()</code></a></td>
+<td><code>-&gt;sliceSample()</code></td>
+<td>Random rows from each group.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#head"><code>head()</code></a></td>
+<td><code>-&gt;head()</code></td>
+<td>First <code>$n</code> rows of the whole table, ignoring groups (like utils::head).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#top_n"><code>top_n()</code></a></td>
+<td><code>-&gt;topN()</code></td>
+<td>The n rows with the largest wt in each group, ties included, in their original order (superseded by <code>slice_max()</code>).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#top_frac"><code>top_frac()</code></a></td>
+<td><code>-&gt;topFrac()</code></td>
+<td><code>top_n()</code> with a proportion of each group’s rows (superseded by <code>slice_max(prop:)</code>).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#sample_n"><code>sample_n()</code></a></td>
+<td><code>-&gt;sampleN()</code></td>
+<td>n random rows from each group (superseded by <code>slice_sample()</code>).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#sample_frac"><code>sample_frac()</code></a></td>
+<td><code>-&gt;sampleFrac()</code></td>
+<td>A proportion of random rows from each group (superseded by <code>slice_sample(prop:)</code>).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#add_row"><code>add_row()</code></a></td>
+<td><code>-&gt;addRow()</code></td>
+<td>Add rows of values.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="columns" class="level3">
+<h3 class="anchored" data-anchor-id="columns">Columns</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/single-table.html#select"><code>select()</code></a></td>
+<td><code>-&gt;select()</code></td>
+<td>Keep or drop columns.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#rename"><code>rename()</code></a></td>
+<td><code>-&gt;rename()</code></td>
+<td>Rename columns, new name as the argument name.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#rename_with"><code>rename_with()</code></a></td>
+<td><code>-&gt;renameWith()</code></td>
+<td>Rename selected columns (all by default) with a function of the old name.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#relocate"><code>relocate()</code></a></td>
+<td><code>-&gt;relocate()</code></td>
+<td>Move columns.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#mutate"><code>mutate()</code></a></td>
+<td><code>-&gt;mutate()</code></td>
+<td>Add, replace, or drop (with null) columns, named by argument.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#transmute"><code>transmute()</code></a></td>
+<td><code>-&gt;transmute()</code></td>
+<td>Like <code>mutate()</code>, keeping only the grouping columns and the new columns.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#pull"><code>pull()</code></a></td>
+<td><code>-&gt;pull()</code></td>
+<td>Extract one column as a PHP list.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="summaries" class="level3">
+<h3 class="anchored" data-anchor-id="summaries">Summaries</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/single-table.html#summarise"><code>summarise()</code></a></td>
+<td><code>-&gt;summarise()</code></td>
+<td>One row per group.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#summarize"><code>summarize()</code></a></td>
+<td><code>-&gt;summarize()</code></td>
+<td>Alias of <code>summarise()</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#reframe"><code>reframe()</code></a></td>
+<td><code>-&gt;reframe()</code></td>
+<td>Like <code>summarise()</code>, but each summary may return any number of values (a list).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#count"><code>count()</code></a></td>
+<td><code>-&gt;count()</code></td>
+<td>Count rows per combination of columns, within any existing groups.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#tally"><code>tally()</code></a></td>
+<td><code>-&gt;tally()</code></td>
+<td>Count rows in each group (<code>summarise(n = n())</code>).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#add_count"><code>add_count()</code></a></td>
+<td><code>-&gt;addCount()</code></td>
+<td>Like <code>count()</code>, but adds the count as a column instead of summarising.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/single-table.html#add_tally"><code>add_tally()</code></a></td>
+<td><code>-&gt;addTally()</code></td>
+<td>Like <code>tally()</code>, but adds the count as a column.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/single-table.html#glimpse"><code>glimpse()</code></a></td>
+<td><code>-&gt;glimpse()</code></td>
+<td>Print a compact column-by-column summary and return the table unchanged, so it can sit in the middle of a pipeline.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="joins-binding-and-set-operations" class="level2">
+<h2 class="anchored" data-anchor-id="joins-binding-and-set-operations">Joins, binding, and set operations</h2>
+<section id="joins" class="level3">
+<h3 class="anchored" data-anchor-id="joins">Joins</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/two-table.html#inner_join"><code>inner_join()</code></a></td>
+<td><code>-&gt;innerJoin()</code></td>
+<td>Rows of x with a match in y, with y’s columns.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#left_join"><code>left_join()</code></a></td>
+<td><code>-&gt;leftJoin()</code></td>
+<td>All rows of x, with y’s columns where they match (NA otherwise).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/two-table.html#right_join"><code>right_join()</code></a></td>
+<td><code>-&gt;rightJoin()</code></td>
+<td>All rows of y, with x’s columns where they match.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#full_join"><code>full_join()</code></a></td>
+<td><code>-&gt;fullJoin()</code></td>
+<td>All rows of both tables.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/two-table.html#semi_join"><code>semi_join()</code></a></td>
+<td><code>-&gt;semiJoin()</code></td>
+<td>Rows of x that have a match in y (x’s columns only).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#anti_join"><code>anti_join()</code></a></td>
+<td><code>-&gt;antiJoin()</code></td>
+<td>Rows of x that have no match in y.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/two-table.html#cross_join"><code>cross_join()</code></a></td>
+<td><code>-&gt;crossJoin()</code></td>
+<td>Every combination of rows of x and y.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#nest_join"><code>nest_join()</code></a></td>
+<td><code>-&gt;nestJoin()</code></td>
+<td>All rows of x, with a list-column (name) holding each row’s matching rows of y as a table.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="join_by" class="level3">
+<h3 class="anchored" data-anchor-id="join_by">join_by()</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/two-table.html#join_by"><code>join_by()</code></a></td>
+<td></td>
+<td>A join specification, as dplyr’s <code>join_by()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#closest"><code>closest()</code></a></td>
+<td></td>
+<td>A rolling join.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/two-table.html#within"><code>within()</code></a></td>
+<td></td>
+<td>x’s interval [xLower, xUpper] lies within y’s [yLower, yUpper].</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#overlaps"><code>overlaps()</code></a></td>
+<td></td>
+<td>x’s interval [xLower, xUpper] overlaps y’s [yLower, yUpper].</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="binding" class="level3">
+<h3 class="anchored" data-anchor-id="binding">Binding</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/two-table.html#bind_rows"><code>bind_rows()</code></a></td>
+<td><code>-&gt;bindRows()</code></td>
+<td>Stack tables under the piped one, matching columns by name.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#bind_cols"><code>bind_cols()</code></a></td>
+<td><code>-&gt;bindCols()</code></td>
+<td>Put tables side by side with the piped one.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="set-operations-and-row-updates" class="level3">
+<h3 class="anchored" data-anchor-id="set-operations-and-row-updates">Set operations and row updates</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/two-table.html#union"><code>union()</code></a></td>
+<td><code>-&gt;union()</code></td>
+<td>Distinct rows of both tables.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#union_all"><code>union_all()</code></a></td>
+<td><code>-&gt;unionAll()</code></td>
+<td>All rows of both tables.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/two-table.html#intersect"><code>intersect()</code></a></td>
+<td><code>-&gt;intersect()</code></td>
+<td>Distinct rows of x that also appear in y.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#setdiff"><code>setdiff()</code></a></td>
+<td><code>-&gt;setdiff()</code></td>
+<td>Distinct rows of x that don’t appear in y.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/two-table.html#symdiff"><code>symdiff()</code></a></td>
+<td><code>-&gt;symdiff()</code></td>
+<td>Rows in exactly one of the tables.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#setequal"><code>setequal()</code></a></td>
+<td><code>-&gt;setequal()</code></td>
+<td>True when both tables hold the same distinct rows, in any order.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/two-table.html#rows_insert"><code>rows_insert()</code></a></td>
+<td><code>-&gt;rowsInsert()</code></td>
+<td>Append rows of y whose keys are new.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#rows_append"><code>rows_append()</code></a></td>
+<td><code>-&gt;rowsAppend()</code></td>
+<td>Append all rows of y.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/two-table.html#rows_update"><code>rows_update()</code></a></td>
+<td><code>-&gt;rowsUpdate()</code></td>
+<td>Overwrite x’s values with y’s for matching keys.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#rows_patch"><code>rows_patch()</code></a></td>
+<td><code>-&gt;rowsPatch()</code></td>
+<td>Like <code>rows_update()</code>, but only fills x’s NA values.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/two-table.html#rows_upsert"><code>rows_upsert()</code></a></td>
+<td><code>-&gt;rowsUpsert()</code></td>
+<td>Update matching keys and insert new ones.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/two-table.html#rows_delete"><code>rows_delete()</code></a></td>
+<td><code>-&gt;rowsDelete()</code></td>
+<td>Delete rows of x whose keys appear in y.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="grouping" class="level2">
+<h2 class="anchored" data-anchor-id="grouping">Grouping</h2>
+<section id="grouping-and-ungrouping" class="level3">
+<h3 class="anchored" data-anchor-id="grouping-and-ungrouping">Grouping and ungrouping</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/grouping.html#group_by"><code>group_by()</code></a></td>
+<td><code>-&gt;groupBy()</code></td>
+<td>Group by columns (names or selectors).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/grouping.html#ungroup"><code>ungroup()</code></a></td>
+<td><code>-&gt;ungroup()</code></td>
+<td>Remove grouping, or only the named grouping columns.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/grouping.html#with_groups"><code>with_groups()</code></a></td>
+<td><code>-&gt;withGroups()</code></td>
+<td>Run a table function on the table grouped by <code>_groups</code>, then restore the original grouping (superseded in dplyr by <code>_by</code>).</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="group-utilities" class="level3">
+<h3 class="anchored" data-anchor-id="group-utilities">Group utilities</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/grouping.html#group_vars"><code>group_vars()</code></a></td>
+<td><code>-&gt;groupVars()</code></td>
+<td>The grouping column names.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/grouping.html#n_groups"><code>n_groups()</code></a></td>
+<td><code>-&gt;nGroups()</code></td>
+<td>The number of groups (1 for an ungrouped table).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/grouping.html#group_size"><code>group_size()</code></a></td>
+<td><code>-&gt;groupSize()</code></td>
+<td>Rows in each group, in group order.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/grouping.html#group_indices"><code>group_indices()</code></a></td>
+<td><code>-&gt;groupIndices()</code></td>
+<td>Each row’s 1-based group number.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/grouping.html#group_keys"><code>group_keys()</code></a></td>
+<td><code>-&gt;groupKeys()</code></td>
+<td>One row per group with the key columns.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/grouping.html#group_rows"><code>group_rows()</code></a></td>
+<td><code>-&gt;groupRows()</code></td>
+<td>Each group’s 1-based row numbers, in group order.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/grouping.html#group_data"><code>group_data()</code></a></td>
+<td><code>-&gt;groupData()</code></td>
+<td><code>group_keys()</code> with a .rows list-column of each group’s 1-based row numbers.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/grouping.html#group_trim"><code>group_trim()</code></a></td>
+<td><code>-&gt;groupTrim()</code></td>
+<td>Drop unused factor levels from the grouping columns, and with them the empty groups that drop.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/grouping.html#group_split"><code>group_split()</code></a></td>
+<td><code>-&gt;groupSplit()</code></td>
+<td>Split into a list of ungrouped tables, one per group.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/grouping.html#group_map"><code>group_map()</code></a></td>
+<td><code>-&gt;groupMap()</code></td>
+<td>Call <code>fn (Table $group, array $key)</code> for each group and return the list of results.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/grouping.html#group_modify"><code>group_modify()</code></a></td>
+<td><code>-&gt;groupModify()</code></td>
+<td>Replace each group with the table <code>fn (Table $group, array $key)</code> returns, then put the key columns back in front.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/grouping.html#group_walk"><code>group_walk()</code></a></td>
+<td><code>-&gt;groupWalk()</code></td>
+<td>Call <code>fn (Table $group, array $key)</code> for each group.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/grouping.html#group_nest"><code>group_nest()</code></a></td>
+<td><code>-&gt;groupNest()</code></td>
+<td>One row per group.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/grouping.html#nest_by"><code>nest_by()</code></a></td>
+<td><code>-&gt;nestBy()</code></td>
+<td>Nest by the given columns into a rowwise table.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/grouping.html#cur_group_id"><code>cur_group_id()</code></a></td>
+<td></td>
+<td>The current group’s 1-based number, inside <code>mutate()</code>, <code>summarise()</code>, or <code>reframe()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/grouping.html#cur_group_rows"><code>cur_group_rows()</code></a></td>
+<td></td>
+<td>The current group’s 1-based row numbers in the table.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/grouping.html#cur_group"><code>cur_group()</code></a></td>
+<td></td>
+<td>The current group’s key, as an array of grouping column =&amp;gt.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="row-wise-operations" class="level3">
+<h3 class="anchored" data-anchor-id="row-wise-operations">Row-wise operations</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/grouping.html#rowwise"><code>rowwise()</code></a></td>
+<td><code>-&gt;rowwise()</code></td>
+<td>Treat each row as its own group, for row-wise summaries.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="vector-helpers" class="level2">
+<h2 class="anchored" data-anchor-id="vector-helpers">Vector helpers</h2>
+<section id="summaries-1" class="level3">
+<h3 class="anchored" data-anchor-id="summaries-1">Summaries</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/vectors.html#n"><code>n()</code></a></td>
+<td></td>
+<td>Number of rows in the group.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#n_distinct"><code>n_distinct()</code></a></td>
+<td></td>
+<td>Number of distinct values (or combinations).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#sum"><code>sum()</code></a></td>
+<td></td>
+<td>Sum of x.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#mean"><code>mean()</code></a></td>
+<td></td>
+<td>Arithmetic mean of x.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#median"><code>median()</code></a></td>
+<td></td>
+<td>Median of x.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#sd"><code>sd()</code></a></td>
+<td></td>
+<td>Sample standard deviation (n - 1).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#var_"><code>var_()</code></a></td>
+<td></td>
+<td>Sample variance (n - 1).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#variance"><code>variance()</code></a></td>
+<td></td>
+<td>Alias of <code>var_()</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#quantile"><code>quantile()</code></a></td>
+<td></td>
+<td>Type 7 quantile, R’s default.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#iqr"><code>iqr()</code></a></td>
+<td></td>
+<td>Interquartile range (type 7).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#min"><code>min()</code></a></td>
+<td></td>
+<td>Smallest value of x.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#max"><code>max()</code></a></td>
+<td></td>
+<td>Largest value of x.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#first"><code>first()</code></a></td>
+<td></td>
+<td>First value.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#last"><code>last()</code></a></td>
+<td></td>
+<td>Last value.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#nth"><code>nth()</code></a></td>
+<td></td>
+<td>The <code>$n</code>-th value, 1-based.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#any"><code>any()</code></a></td>
+<td></td>
+<td>True when any value is true (R’s <code>any()</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#all"><code>all()</code></a></td>
+<td></td>
+<td>True when all values are true (R’s <code>all()</code>.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="window-functions" class="level3">
+<h3 class="anchored" data-anchor-id="window-functions">Window functions</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/vectors.html#lag"><code>lag()</code></a></td>
+<td></td>
+<td>Previous values.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#lead"><code>lead()</code></a></td>
+<td></td>
+<td>Next values.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#row_number"><code>row_number()</code></a></td>
+<td></td>
+<td>Row numbers.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#min_rank"><code>min_rank()</code></a></td>
+<td></td>
+<td>Ranks with ties sharing the lowest rank (1, 2, 2, 4).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#dense_rank"><code>dense_rank()</code></a></td>
+<td></td>
+<td>Ranks with no gaps after ties (1, 2, 2, 3).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#percent_rank"><code>percent_rank()</code></a></td>
+<td></td>
+<td>min_rank rescaled to [0, 1].</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#cume_dist"><code>cume_dist()</code></a></td>
+<td></td>
+<td>Proportion of values less than or equal to each value.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#ntile"><code>ntile()</code></a></td>
+<td></td>
+<td>Split into <code>$n</code> buckets of near-equal size.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#consecutive_id"><code>consecutive_id()</code></a></td>
+<td></td>
+<td>A new id each time the value (or combination) changes.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#cumsum"><code>cumsum()</code></a></td>
+<td></td>
+<td>Running sum.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#cumprod"><code>cumprod()</code></a></td>
+<td></td>
+<td>Running product.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#cummin"><code>cummin()</code></a></td>
+<td></td>
+<td>Running minimum.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#cummax"><code>cummax()</code></a></td>
+<td></td>
+<td>Running maximum.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#cummean"><code>cummean()</code></a></td>
+<td></td>
+<td>Running mean.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#cumall"><code>cumall()</code></a></td>
+<td></td>
+<td>Running <code>all()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#cumany"><code>cumany()</code></a></td>
+<td></td>
+<td>Running <code>any()</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#order_by"><code>order_by()</code></a></td>
+<td></td>
+<td>Evaluate a window function with the rows in another order, then put the results back.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="conditionals-and-na" class="level3">
+<h3 class="anchored" data-anchor-id="conditionals-and-na">Conditionals and NA</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/vectors.html#if_else"><code>if_else()</code></a></td>
+<td></td>
+<td>Vectorised if/else.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#case_when"><code>case_when()</code></a></td>
+<td></td>
+<td>The value of the first case whose condition is true, else <code>$default</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#case_match"><code>case_match()</code></a></td>
+<td></td>
+<td>Match values like a switch (deprecated in dplyr 1.2 in favor of <code>recode_values()</code>).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#replace_when"><code>replace_when()</code></a></td>
+<td></td>
+<td>Like <code>case_when()</code>, but rows matching no case keep x’s value.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#recode"><code>recode()</code></a></td>
+<td></td>
+<td>Replace values by name (superseded in dplyr by <code>recode_values()</code>).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#recode_values"><code>recode_values()</code></a></td>
+<td></td>
+<td>Map values to new values (dplyr 1.2).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#replace_values"><code>replace_values()</code></a></td>
+<td></td>
+<td>Like <code>recode_values()</code>, but unmatched values keep their original value.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#coalesce"><code>coalesce()</code></a></td>
+<td></td>
+<td>First non-NA value across the arguments, row by row.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#na_if"><code>na_if()</code></a></td>
+<td></td>
+<td>NA where <code>$x</code> equals <code>$y</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#between"><code>between()</code></a></td>
+<td></td>
+<td><code>$left</code> &lt;= <code>$x</code> &lt;= <code>$right</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#near"><code>near()</code></a></td>
+<td></td>
+<td>Equality with tolerance, for floating point.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/vectors.html#when_any"><code>when_any()</code></a></td>
+<td></td>
+<td>Elementwise <code>any()</code> across conditions (x | y | z).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/vectors.html#when_all"><code>when_all()</code></a></td>
+<td></td>
+<td>Elementwise <code>all()</code> across conditions (x &amp; y &amp; z).</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="strings-and-dates" class="level2">
+<h2 class="anchored" data-anchor-id="strings-and-dates">Strings and dates</h2>
+<section id="strings" class="level3">
+<h3 class="anchored" data-anchor-id="strings">Strings</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_detect"><code>str_detect()</code></a></td>
+<td></td>
+<td>Does the pattern occur?.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#str_starts"><code>str_starts()</code></a></td>
+<td></td>
+<td>Does the string start with the pattern?.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_ends"><code>str_ends()</code></a></td>
+<td></td>
+<td>Does the string end with the pattern?.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#str_count"><code>str_count()</code></a></td>
+<td></td>
+<td>Number of matches.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_extract"><code>str_extract()</code></a></td>
+<td></td>
+<td>The first match, or NA.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#str_extract_all"><code>str_extract_all()</code></a></td>
+<td></td>
+<td>Every match, as a list per row (a list-column).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_replace"><code>str_replace()</code></a></td>
+<td></td>
+<td>Replace the first match.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#str_replace_all"><code>str_replace_all()</code></a></td>
+<td></td>
+<td>Replace every match.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_split"><code>str_split()</code></a></td>
+<td></td>
+<td>Split into pieces, as a list per row (a list-column).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#str_split_i"><code>str_split_i()</code></a></td>
+<td></td>
+<td>The i-th piece of a split (1-based.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_pad"><code>str_pad()</code></a></td>
+<td></td>
+<td>Pad to a width.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#str_trunc"><code>str_trunc()</code></a></td>
+<td></td>
+<td>Truncate to a width, marking the cut with an ellipsis.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_trim"><code>str_trim()</code></a></td>
+<td></td>
+<td>Trim whitespace.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#str_squish"><code>str_squish()</code></a></td>
+<td></td>
+<td>Trim and collapse internal whitespace.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_sub"><code>str_sub()</code></a></td>
+<td></td>
+<td>Substring by 1-based positions, as stringr’s <code>str_sub()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#str_length"><code>str_length()</code></a></td>
+<td></td>
+<td>Number of characters.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_to_title"><code>str_to_title()</code></a></td>
+<td></td>
+<td>Title case.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#str_to_upper"><code>str_to_upper()</code></a></td>
+<td></td>
+<td>Uppercase, as stringr’s <code>str_to_upper()</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_to_lower"><code>str_to_lower()</code></a></td>
+<td></td>
+<td>Lowercase, as stringr’s <code>str_to_lower()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#str_upper"><code>str_upper()</code></a></td>
+<td></td>
+<td>Uppercase.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#str_lower"><code>str_lower()</code></a></td>
+<td></td>
+<td>Lowercase.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#paste"><code>paste()</code></a></td>
+<td></td>
+<td>Paste values together, separated by sep (default a space).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#paste0"><code>paste0()</code></a></td>
+<td></td>
+<td>Paste values together.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#fixed"><code>fixed()</code></a></td>
+<td></td>
+<td>A literal pattern.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#regex"><code>regex()</code></a></td>
+<td></td>
+<td>A regular expression with options.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dates-and-times" class="level3">
+<h3 class="anchored" data-anchor-id="dates-and-times">Dates and times</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#ymd"><code>ymd()</code></a></td>
+<td></td>
+<td>Parse year-month-day strings to dates, with any separator.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#dmy"><code>dmy()</code></a></td>
+<td></td>
+<td>Parse day-month-year strings to dates, with any separator.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#mdy"><code>mdy()</code></a></td>
+<td></td>
+<td>Parse month-day-year strings to dates, with any separator.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#ymd_hms"><code>ymd_hms()</code></a></td>
+<td></td>
+<td>Parse year-month-day hour:minute:second strings to datetimes, in UTC or tz.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#dmy_hms"><code>dmy_hms()</code></a></td>
+<td></td>
+<td>Parse day-month-year hour:minute:second strings to datetimes, in UTC or tz.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#mdy_hms"><code>mdy_hms()</code></a></td>
+<td></td>
+<td>Parse month-day-year hour:minute:second strings to datetimes, in UTC or tz.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#parse_date_time"><code>parse_date_time()</code></a></td>
+<td></td>
+<td>Parse with lubridate orders.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#year"><code>year()</code></a></td>
+<td></td>
+<td>The year of a date or datetime.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#month"><code>month()</code></a></td>
+<td></td>
+<td>The month, 1-12.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#day"><code>day()</code></a></td>
+<td></td>
+<td>The day of the month.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#wday"><code>wday()</code></a></td>
+<td></td>
+<td>Day of the week, 1-7.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#yday"><code>yday()</code></a></td>
+<td></td>
+<td>The day of the year, 1-366.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#quarter"><code>quarter()</code></a></td>
+<td></td>
+<td>The quarter, 1-4.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#hour"><code>hour()</code></a></td>
+<td></td>
+<td>The hour of a datetime, 0-23.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#minute"><code>minute()</code></a></td>
+<td></td>
+<td>The minute of a datetime, 0-59.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#second"><code>second()</code></a></td>
+<td></td>
+<td>The second of a datetime, 0-59.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#floor_date"><code>floor_date()</code></a></td>
+<td></td>
+<td>Round down to a unit.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#ceiling_date"><code>ceiling_date()</code></a></td>
+<td></td>
+<td>Round up to a unit, as <code>floor_date()</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#round_date"><code>round_date()</code></a></td>
+<td></td>
+<td>Round to the nearest unit, as <code>floor_date()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#seconds"><code>seconds()</code></a></td>
+<td></td>
+<td>A period of n seconds, for date arithmetic.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#minutes"><code>minutes()</code></a></td>
+<td></td>
+<td>A period of n minutes.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#hours"><code>hours()</code></a></td>
+<td></td>
+<td>A period of n hours.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#days"><code>days()</code></a></td>
+<td></td>
+<td>A period of n days.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#weeks"><code>weeks()</code></a></td>
+<td></td>
+<td>A period of n weeks.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#months"><code>months()</code></a></td>
+<td></td>
+<td>A period of n months.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#years"><code>years()</code></a></td>
+<td></td>
+<td>A period of n years.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#difftime"><code>difftime()</code></a></td>
+<td></td>
+<td>The difference x - y in units ‘secs’, ‘mins’, ‘hours’, ‘days’, or ‘weeks’, as a double.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#with_tz"><code>with_tz()</code></a></td>
+<td></td>
+<td>The same instant in another time zone.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#force_tz"><code>force_tz()</code></a></td>
+<td></td>
+<td>The same clock time in another time zone.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/strings-dates.html#today"><code>today()</code></a></td>
+<td></td>
+<td>The current date, in the system time zone or tz.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/strings-dates.html#now"><code>now()</code></a></td>
+<td></td>
+<td>The current datetime, in the system time zone or tz.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="selecting-columns" class="level2">
+<h2 class="anchored" data-anchor-id="selecting-columns">Selecting columns</h2>
+<section id="selectors" class="level3">
+<h3 class="anchored" data-anchor-id="selectors">Selectors</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/tidyselect.html#starts_with"><code>starts_with()</code></a></td>
+<td></td>
+<td>Columns whose names start with a prefix (case-insensitive by default).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyselect.html#ends_with"><code>ends_with()</code></a></td>
+<td></td>
+<td>Columns whose names end with a suffix (case-insensitive by default).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyselect.html#contains"><code>contains()</code></a></td>
+<td></td>
+<td>Columns whose names contain a string (case-insensitive by default).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyselect.html#matches"><code>matches()</code></a></td>
+<td></td>
+<td>Columns whose names match a regular expression.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyselect.html#num_range"><code>num_range()</code></a></td>
+<td></td>
+<td>Columns named prefix + number for each number.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyselect.html#everything"><code>everything()</code></a></td>
+<td></td>
+<td>Every column.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyselect.html#last_col"><code>last_col()</code></a></td>
+<td></td>
+<td>The last column, or the one <code>$offset</code> before it.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyselect.html#all_of"><code>all_of()</code></a></td>
+<td></td>
+<td>Exactly these columns.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyselect.html#any_of"><code>any_of()</code></a></td>
+<td></td>
+<td>These columns, skipping any that don’t exist.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyselect.html#where"><code>where()</code></a></td>
+<td></td>
+<td>Columns for which a predicate holds.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyselect.html#except"><code>except()</code></a></td>
+<td></td>
+<td>Everything except these columns.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyselect.html#any_selected"><code>any_selected()</code></a></td>
+<td></td>
+<td>Columns matched by any of the selections (union).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyselect.html#all_selected"><code>all_selected()</code></a></td>
+<td></td>
+<td>Columns matched by every selection (intersection, like a &amp; b in tidyselect).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyselect.html#group_cols"><code>group_cols()</code></a></td>
+<td></td>
+<td>The grouping columns.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="across" class="level3">
+<h3 class="anchored" data-anchor-id="across">across()</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/tidyselect.html#across"><code>across()</code></a></td>
+<td></td>
+<td>Apply functions to columns inside <code>mutate()</code> or <code>summarise()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyselect.html#if_any"><code>if_any()</code></a></td>
+<td></td>
+<td>Per-row test that a predicate holds for any of the columns, for <code>filter()</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyselect.html#if_all"><code>if_all()</code></a></td>
+<td></td>
+<td>Per-row test that a predicate holds for all of the columns.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyselect.html#c_across"><code>c_across()</code></a></td>
+<td></td>
+<td>The values of the selected columns in the current row, for <code>rowwise()</code> tables.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyselect.html#pick"><code>pick()</code></a></td>
+<td><code>-&gt;pick()</code></td>
+<td>The selected columns of the current group as a table, for use in <code>summarise()</code> closures or with <code>vec()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyselect.html#cur_column"><code>cur_column()</code></a></td>
+<td></td>
+<td>The name of the column <code>across()</code> is working on, inside one of its functions.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="reshaping-with-tidyr" class="level2">
+<h2 class="anchored" data-anchor-id="reshaping-with-tidyr">Reshaping with tidyr</h2>
+<section id="pivoting" class="level3">
+<h3 class="anchored" data-anchor-id="pivoting">Pivoting</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#pivot_longer"><code>pivot_longer()</code></a></td>
+<td><code>-&gt;pivotLonger()</code></td>
+<td>Lengthen.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#pivot_wider"><code>pivot_wider()</code></a></td>
+<td><code>-&gt;pivotWider()</code></td>
+<td>Widen.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#build_longer_spec"><code>build_longer_spec()</code></a></td>
+<td><code>-&gt;buildLongerSpec()</code></td>
+<td>The spec <code>pivot_longer()</code> would use, as a table with .name, .value and the namesTo columns.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#pivot_longer_spec"><code>pivot_longer_spec()</code></a></td>
+<td><code>-&gt;pivotLongerSpec()</code></td>
+<td>Lengthen with a spec from <code>build_longer_spec()</code> (a table or a list of rows).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#build_wider_spec"><code>build_wider_spec()</code></a></td>
+<td><code>-&gt;buildWiderSpec()</code></td>
+<td>The spec <code>pivot_wider()</code> would use, as a table with .name, .value and the namesFrom columns.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#pivot_wider_spec"><code>pivot_wider_spec()</code></a></td>
+<td><code>-&gt;pivotWiderSpec()</code></td>
+<td>Widen with a spec from <code>build_wider_spec()</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#gather"><code>gather()</code></a></td>
+<td><code>-&gt;gather()</code></td>
+<td>Gather columns into key-value pairs (superseded by <code>pivot_longer()</code>).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#spread"><code>spread()</code></a></td>
+<td><code>-&gt;spread()</code></td>
+<td>Spread a key-value pair across columns (superseded by <code>pivot_wider()</code>).</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="missing-combinations-and-values" class="level3">
+<h3 class="anchored" data-anchor-id="missing-combinations-and-values">Missing combinations and values</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#complete"><code>complete()</code></a></td>
+<td><code>-&gt;complete()</code></td>
+<td>Add missing combinations, filling other columns with NA (or with fill).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#expand"><code>expand()</code></a></td>
+<td><code>-&gt;expand()</code></td>
+<td>Every combination of the given columns, per group.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#nesting"><code>nesting()</code></a></td>
+<td></td>
+<td>Only the combinations that occur in the data, for <code>complete()</code> and <code>expand()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#crossing"><code>crossing()</code></a></td>
+<td></td>
+<td>Every combination of unique values (sorted), as a new table.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#expand_grid"><code>expand_grid()</code></a></td>
+<td></td>
+<td>Every combination of the values as given, first column varying slowest.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#full_seq"><code>full_seq()</code></a></td>
+<td></td>
+<td>Every value from the smallest to the largest of x in steps of period.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#fill"><code>fill()</code></a></td>
+<td><code>-&gt;fill()</code></td>
+<td>Fill NA with the previous (or next) value, within groups.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#drop_na"><code>drop_na()</code></a></td>
+<td><code>-&gt;dropNa()</code></td>
+<td>Drop rows with NA in any of the columns (any column when none are given).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#replace_na"><code>replace_na()</code></a></td>
+<td><code>-&gt;replaceNa()</code></td>
+<td>Replace NA per column.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#uncount"><code>uncount()</code></a></td>
+<td><code>-&gt;uncount()</code></td>
+<td>Repeat each row by a weight column.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="splitting-and-combining" class="level3">
+<h3 class="anchored" data-anchor-id="splitting-and-combining">Splitting and combining</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#separate_wider_delim"><code>separate_wider_delim()</code></a></td>
+<td><code>-&gt;separateWiderDelim()</code></td>
+<td>Split columns on a fixed delimiter into new columns.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#separate_wider_position"><code>separate_wider_position()</code></a></td>
+<td><code>-&gt;separateWiderPosition()</code></td>
+<td>Split columns by character widths.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#separate_wider_regex"><code>separate_wider_regex()</code></a></td>
+<td><code>-&gt;separateWiderRegex()</code></td>
+<td>Split columns with regular expressions.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#separate_longer_delim"><code>separate_longer_delim()</code></a></td>
+<td><code>-&gt;separateLongerDelim()</code></td>
+<td>Split columns on a fixed delimiter into rows.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#separate_longer_position"><code>separate_longer_position()</code></a></td>
+<td><code>-&gt;separateLongerPosition()</code></td>
+<td>Split columns into rows of <code>$width</code> characters.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#separate"><code>separate()</code></a></td>
+<td><code>-&gt;separate()</code></td>
+<td>Split a string column into several (superseded in tidyr, still common).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#separate_rows"><code>separate_rows()</code></a></td>
+<td><code>-&gt;separateRows()</code></td>
+<td>Split columns on a regular expression into rows (superseded by <code>separate_longer_delim()</code>).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#extract"><code>extract()</code></a></td>
+<td><code>-&gt;extract()</code></td>
+<td>Pull regular-expression groups into new columns (superseded by <code>separate_wider_regex()</code>).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#unite"><code>unite()</code></a></td>
+<td><code>-&gt;unite()</code></td>
+<td>Paste columns together into one.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="list-columns" class="level3">
+<h3 class="anchored" data-anchor-id="list-columns">List-columns</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#nest"><code>nest()</code></a></td>
+<td><code>-&gt;nest()</code></td>
+<td>Nest columns into a list-column of tables.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#unnest"><code>unnest()</code></a></td>
+<td><code>-&gt;unnest()</code></td>
+<td>Unnest list-columns of tables back into rows.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#unnest_longer"><code>unnest_longer()</code></a></td>
+<td><code>-&gt;unnestLonger()</code></td>
+<td>Turn each element of list-columns into rows.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#unnest_wider"><code>unnest_wider()</code></a></td>
+<td><code>-&gt;unnestWider()</code></td>
+<td>Turn each element of list-columns into columns.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#hoist"><code>hoist()</code></a></td>
+<td><code>-&gt;hoist()</code></td>
+<td>Pull components out of a list-column into new columns, before it.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#chop"><code>chop()</code></a></td>
+<td><code>-&gt;chop()</code></td>
+<td>Collapse rows into list-columns.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#unchop"><code>unchop()</code></a></td>
+<td><code>-&gt;unchop()</code></td>
+<td>Expand list-columns into rows, the reverse of <code>chop()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/tidyr.html#pack"><code>pack()</code></a></td>
+<td><code>-&gt;pack()</code></td>
+<td>Pack columns into a column of named arrays (tidyr’s data frame columns).</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/tidyr.html#unpack"><code>unpack()</code></a></td>
+<td><code>-&gt;unpack()</code></td>
+<td>Spread columns of named arrays into columns, the reverse of <code>pack()</code>.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="cleaning-with-janitor" class="level2">
+<h2 class="anchored" data-anchor-id="cleaning-with-janitor">Cleaning with janitor</h2>
+<section id="clean-names" class="level3">
+<h3 class="anchored" data-anchor-id="clean-names">Clean names</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/janitor.html#make_clean_names"><code>make_clean_names()</code></a></td>
+<td></td>
+<td>janitor’s <code>make_clean_names()</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/janitor.html#clean_names"><code>clean_names()</code></a></td>
+<td><code>-&gt;cleanNames()</code></td>
+<td>Rename every column with <code>make_clean_names()</code>, as janitor’s <code>clean_names()</code>.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="remove-empty-rows-and-columns" class="level3">
+<h3 class="anchored" data-anchor-id="remove-empty-rows-and-columns">Remove empty rows and columns</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/janitor.html#remove_empty"><code>remove_empty()</code></a></td>
+<td><code>-&gt;removeEmpty()</code></td>
+<td>Drop rows and/or columns that are entirely NA, as janitor’s <code>remove_empty()</code>.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="duplicates" class="level3">
+<h3 class="anchored" data-anchor-id="duplicates">Duplicates</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/janitor.html#get_dupes"><code>get_dupes()</code></a></td>
+<td><code>-&gt;getDupes()</code></td>
+<td>Rows whose values in these columns (all columns when none are given) appear more than once, as janitor’s <code>get_dupes()</code>.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="frequency-tables" class="level3">
+<h3 class="anchored" data-anchor-id="frequency-tables">Frequency tables</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/janitor.html#tabyl"><code>tabyl()</code></a></td>
+<td><code>-&gt;tabyl()</code></td>
+<td>janitor’s <code>tabyl()</code> for one or two columns.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="models" class="level2">
+<h2 class="anchored" data-anchor-id="models">Models</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/models.html#lm"><code>lm()</code></a></td>
+<td><code>-&gt;lm()</code></td>
+<td>Linear regression.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/models.html#glm"><code>glm()</code></a></td>
+<td><code>-&gt;glm()</code></td>
+<td>Generalised linear model.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/models.html#lmer"><code>lmer()</code></a></td>
+<td><code>-&gt;lmer()</code></td>
+<td>Linear mixed model with lme4-style random effects.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/models.html#glmer"><code>glmer()</code></a></td>
+<td><code>-&gt;glmer()</code></td>
+<td>Generalised linear mixed model.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="databases-and-expressions" class="level2">
+<h2 class="anchored" data-anchor-id="databases-and-expressions">Databases and expressions</h2>
+<section id="expressions-functions" class="level3">
+<h3 class="anchored" data-anchor-id="expressions-functions">Expressions</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/databases.html#col"><code>col()</code></a></td>
+<td></td>
+<td>A column as a vector.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#lit"><code>lit()</code></a></td>
+<td></td>
+<td>A literal value as a vector.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#vec"><code>vec()</code></a></td>
+<td></td>
+<td>A row closure as a vector, for use where a Vec is expected.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#is_na"><code>is_na()</code></a></td>
+<td></td>
+<td>True where x is NA.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#abs"><code>abs()</code></a></td>
+<td></td>
+<td>Absolute value.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#sqrt"><code>sqrt()</code></a></td>
+<td></td>
+<td>Square root.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#exp"><code>exp()</code></a></td>
+<td></td>
+<td>Exponential, e to the power x.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#log"><code>log()</code></a></td>
+<td></td>
+<td>Natural logarithm, or base <code>$base</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#log10"><code>log10()</code></a></td>
+<td></td>
+<td>Base-10 logarithm.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#round"><code>round()</code></a></td>
+<td></td>
+<td>R’s <code>round()</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#floor"><code>floor()</code></a></td>
+<td></td>
+<td>Largest integer not greater than x.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#ceiling"><code>ceiling()</code></a></td>
+<td></td>
+<td>Smallest integer not less than x.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#as_int"><code>as_int()</code></a></td>
+<td></td>
+<td>Convert to integer.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#as_float"><code>as_float()</code></a></td>
+<td></td>
+<td>Convert to double.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#as_string"><code>as_string()</code></a></td>
+<td></td>
+<td>Convert to string.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#as_bool"><code>as_bool()</code></a></td>
+<td></td>
+<td>Convert to boolean.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="database-tables" class="level3">
+<h3 class="anchored" data-anchor-id="database-tables">Database tables</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Chain method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/databases.html#show_query"><code>show_query()</code></a></td>
+<td><code>-&gt;showQuery()</code></td>
+<td>The SQL a lazy table would run (database backends only).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#collect"><code>collect()</code></a></td>
+<td><code>-&gt;collect()</code></td>
+<td>Run a lazy table’s query and return an in-memory Phibble.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="chain-methods" class="level2">
+<h2 class="anchored" data-anchor-id="chain-methods">Chain methods</h2>
+<p><code>phplyr($table)</code> starts a chain. Each function above with a chain method runs as that method. These methods belong to the chain itself:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/chains.html#chain-get"><code>-&gt;get()</code></a></td>
+<td>Return the table.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/chains.html#chain-pipe"><code>-&gt;pipe()</code></a></td>
+<td>Apply your own functions to the table and continue the chain with the result.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="expression-methods" class="level2">
+<h2 class="anchored" data-anchor-id="expression-methods">Expression methods</h2>
+<p>Called on a vector helper, such as <code>col('price')-&gt;mul(1.1)</code>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/databases.html#method-add"><code>-&gt;add()</code></a></td>
+<td>x + y.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#method-sub"><code>-&gt;sub()</code></a></td>
+<td>x - y.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#method-mul"><code>-&gt;mul()</code></a></td>
+<td>x * y.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#method-div"><code>-&gt;div()</code></a></td>
+<td>x / y.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#method-mod"><code>-&gt;mod()</code></a></td>
+<td>x modulo y, R’s %%.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#method-pow"><code>-&gt;pow()</code></a></td>
+<td>x to the power y.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#method-neg"><code>-&gt;neg()</code></a></td>
+<td>Negation, -x.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#method-eq"><code>-&gt;eq()</code></a></td>
+<td>x == y.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#method-ne"><code>-&gt;ne()</code></a></td>
+<td>x != y.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#method-lt"><code>-&gt;lt()</code></a></td>
+<td>x &amp;lt.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#method-le"><code>-&gt;le()</code></a></td>
+<td>x &lt;= y.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#method-gt"><code>-&gt;gt()</code></a></td>
+<td>x &amp;gt.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#method-ge"><code>-&gt;ge()</code></a></td>
+<td>x &gt;= y.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#method-between"><code>-&gt;between()</code></a></td>
+<td>low &lt;= x &lt;= high, inclusive.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#method-isin"><code>-&gt;isIn()</code></a></td>
+<td>True where x is one of the values, R’s %in%.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#method-isna"><code>-&gt;isNa()</code></a></td>
+<td>True where x is NA.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#method-and"><code>-&gt;and()</code></a></td>
+<td>Logical and, with R’s NA rules.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#method-or"><code>-&gt;or()</code></a></td>
+<td>Logical or, with R’s NA rules.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/databases.html#method-not"><code>-&gt;not()</code></a></td>
+<td>Logical not.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/databases.html#method-desc"><code>-&gt;desc()</code></a></td>
+<td>Sort in descending order, for <code>arrange()</code> and order_by.</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/phplyr\.phpstats\.org\/docs");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

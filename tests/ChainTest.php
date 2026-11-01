@@ -139,7 +139,7 @@ it('runs joins with a table argument', function () {
 });
 
 it('rejects names that are not verbs', function (string $name) {
-    expect(fn () => phplyr(panel())->{$name}('score'))->toThrow(BadMethodCallException::class, "{$name}() is not a phplyr verb");
+    expect(fn () => phplyr(panel())->{$name}('score'))->toThrow(BadMethodCallException::class, "{$name}() is not a phplyr chain method");
 })->with(['mean', 'startsWith', 'nonexistent', 'phplyr', 'pipeX']);
 
 it('takes a verb in camelCase and runs the snake_case function', function () {
@@ -157,7 +157,7 @@ it('still has the function under its own snake_case name', function () {
 
 it('rejects the function spelling on a chain and names the camelCase one', function (string $snake, string $camel) {
     expect(fn () => phplyr(panel())->{$snake}('g'))
-        ->toThrow(BadMethodCallException::class, "{$snake}() is not a phplyr verb; a chained verb is camelCase, so write {$camel}()");
+        ->toThrow(BadMethodCallException::class, "{$snake}() is not a phplyr chain method; a chain method is camelCase, so write {$camel}()");
 })->with([
     ['group_by', 'groupBy'],
     ['slice_max', 'sliceMax'],

@@ -54,7 +54,7 @@ function str_split(mixed $x, mixed $pattern): Vec { return Internal::call('str_s
 /** The i-th piece of a split (1-based; negative counts from the end). */
 function str_split_i(mixed $x, mixed $pattern, int $i): Vec { return Internal::call('str_split_i', [$x, $pattern, $i]); }
 
-/** Pad to a width: side 'left' (default), 'right' or 'both'. */
+/** Pad to a width: side 'left' (default), 'right', or 'both'. */
 function str_pad(mixed $x, int $width, string $side = 'left', string $pad = ' '): Vec
 {
     return Internal::call('str_pad', [$x, $width], array_filter(['side' => $side === 'left' ? null : $side, 'pad' => $pad === ' ' ? null : $pad], fn ($v) => $v !== null));
@@ -66,8 +66,11 @@ function str_trunc(mixed $x, int $width, string $side = 'right', string $ellipsi
     return Internal::call('str_trunc', [$x, $width], array_filter(['side' => $side === 'right' ? null : $side, 'ellipsis' => $ellipsis === '...' ? null : $ellipsis], fn ($v) => $v !== null));
 }
 
+/** Title case: the first letter of each word uppercase. */
 function str_to_title(mixed $x): Vec { return Internal::call('str_to_title', [$x]); }
+/** Uppercase, as stringr's str_to_upper(). */
 function str_to_upper(mixed $x): Vec { return Internal::call('str_to_upper', [$x]); }
+/** Lowercase, as stringr's str_to_lower(). */
 function str_to_lower(mixed $x): Vec { return Internal::call('str_to_lower', [$x]); }
 
 /** Trim and collapse internal whitespace. */

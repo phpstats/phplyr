@@ -7,7 +7,7 @@ namespace Phplyr;
 use Closure;
 use Phibble\Contracts\Table;
 
-/** @internal Argument handling for the join verbs. */
+/** @internal Argument handling for the join functions. */
 final class Join
 {
     public static function verb(string $type, Table $y, string|array|JoinBy|null $by, array $suffix, ?bool $keep, string $naMatches, string $multiple, string $unmatched, ?string $relationship): Closure

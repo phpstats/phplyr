@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * tidyr's list-column verbs: rectangling (unnest_longer, unnest_wider,
+ * tidyr's list-column functions: rectangling (unnest_longer, unnest_wider,
  * hoist), chopping (chop, unchop), and packing (pack, unpack). A list
  * element is a PHP array: a list is R's unnamed list or vector, and an
  * array with string keys is a named list. A scalar counts as a list of one.

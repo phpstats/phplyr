@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * tidyr verbs, pipe-able like the dplyr verbs. Arguments follow tidyr's
+ * tidyr functions, pipe-able like the dplyr functions. Arguments follow tidyr's
  * names; tidyr's dot-arguments drop the dot and read as camelCase, except
  * _remove and _id, which keep it as an underscore (see
  * docs/coming-from-dplyr.qmd).
@@ -35,7 +35,7 @@ function pivot_longer(mixed $cols, string|array $namesTo = 'name', string $value
  * namesVary: 'slowest' groups each name's value columns together;
  * namesExpand and idExpand add every combination of the namesFrom and
  * idCols values (sorted, factors by level); unusedFn summarises the
- * columns that are in none of idCols, namesFrom and valuesFrom.
+ * columns that are in none of idCols, namesFrom, and valuesFrom.
  */
 function pivot_wider(mixed $namesFrom = 'name', mixed $valuesFrom = 'value', mixed $idCols = null, string $namesPrefix = '', string $namesSep = '_', ?string $namesGlue = null, bool $namesSort = false, mixed $valuesFill = null, Closure|array|null $valuesFn = null, string $namesVary = 'fastest', bool $namesExpand = false, bool $idExpand = false, Closure|array|null $unusedFn = null): Closure
 {

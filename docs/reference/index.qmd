@@ -1,0 +1,471 @@
+---
+title: "Functions and methods"
+---
+
+phplyr's functions are namespaced functions in `Phplyr`. A function marked with a chain method also runs as that method on `phplyr($table)`. Expression methods are called on the vector helpers that `col()` and other functions return.
+
+## Pipes and method chains
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`phplyr()`](chains.qmd#phplyr) |  | Start a method chain on a table. |
+| [`pipe()`](chains.qmd#pipe) |  | Apply steps to a value in order. |
+
+## Single-table functions
+
+### Rows
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`filter()`](single-table.qmd#filter) | `->filter()` | Keep rows where every condition is true. |
+| [`filter_out()`](single-table.qmd#filter_out) | `->filterOut()` | Drop rows where every condition is true (dplyr 1.2). |
+| [`arrange()`](single-table.qmd#arrange) | `->arrange()` | Sort rows by columns or expressions. |
+| [`desc()`](single-table.qmd#desc) |  | Descending sort key for `arrange()`, and for rank helpers. |
+| [`distinct()`](single-table.qmd#distinct) | `->distinct()` | Unique rows over the given columns (all columns when none are given). |
+| [`slice()`](single-table.qmd#slice) | `->slice()` | Rows by 1-based position within each group, like dplyr's `slice()`. |
+| [`slice_head()`](single-table.qmd#slice_head) | `->sliceHead()` | First rows of each group. |
+| [`slice_tail()`](single-table.qmd#slice_tail) | `->sliceTail()` | Last rows of each group. |
+| [`slice_min()`](single-table.qmd#slice_min) | `->sliceMin()` | Rows with the smallest values of `$orderBy` in each group, ordered by it. |
+| [`slice_max()`](single-table.qmd#slice_max) | `->sliceMax()` | Rows with the largest values of `$orderBy` in each group, ordered by it. |
+| [`slice_sample()`](single-table.qmd#slice_sample) | `->sliceSample()` | Random rows from each group. |
+| [`head()`](single-table.qmd#head) | `->head()` | First `$n` rows of the whole table, ignoring groups (like utils::head). |
+| [`top_n()`](single-table.qmd#top_n) | `->topN()` | The n rows with the largest wt in each group, ties included, in their original order (superseded by `slice_max()`). |
+| [`top_frac()`](single-table.qmd#top_frac) | `->topFrac()` | `top_n()` with a proportion of each group's rows (superseded by `slice_max(prop:)`). |
+| [`sample_n()`](single-table.qmd#sample_n) | `->sampleN()` | n random rows from each group (superseded by `slice_sample()`). |
+| [`sample_frac()`](single-table.qmd#sample_frac) | `->sampleFrac()` | A proportion of random rows from each group (superseded by `slice_sample(prop:)`). |
+| [`add_row()`](single-table.qmd#add_row) | `->addRow()` | Add rows of values. |
+
+### Columns
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`select()`](single-table.qmd#select) | `->select()` | Keep or drop columns. |
+| [`rename()`](single-table.qmd#rename) | `->rename()` | Rename columns, new name as the argument name. |
+| [`rename_with()`](single-table.qmd#rename_with) | `->renameWith()` | Rename selected columns (all by default) with a function of the old name. |
+| [`relocate()`](single-table.qmd#relocate) | `->relocate()` | Move columns. |
+| [`mutate()`](single-table.qmd#mutate) | `->mutate()` | Add, replace, or drop (with null) columns, named by argument. |
+| [`transmute()`](single-table.qmd#transmute) | `->transmute()` | Like `mutate()`, keeping only the grouping columns and the new columns. |
+| [`pull()`](single-table.qmd#pull) | `->pull()` | Extract one column as a PHP list. |
+
+### Summaries
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`summarise()`](single-table.qmd#summarise) | `->summarise()` | One row per group. |
+| [`summarize()`](single-table.qmd#summarize) | `->summarize()` | Alias of `summarise()`. |
+| [`reframe()`](single-table.qmd#reframe) | `->reframe()` | Like `summarise()`, but each summary may return any number of values (a list). |
+| [`count()`](single-table.qmd#count) | `->count()` | Count rows per combination of columns, within any existing groups. |
+| [`tally()`](single-table.qmd#tally) | `->tally()` | Count rows in each group (`summarise(n = n())`). |
+| [`add_count()`](single-table.qmd#add_count) | `->addCount()` | Like `count()`, but adds the count as a column instead of summarising. |
+| [`add_tally()`](single-table.qmd#add_tally) | `->addTally()` | Like `tally()`, but adds the count as a column. |
+| [`glimpse()`](single-table.qmd#glimpse) | `->glimpse()` | Print a compact column-by-column summary and return the table unchanged, so it can sit in the middle of a pipeline. |
+
+## Joins, binding, and set operations
+
+### Joins
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`inner_join()`](two-table.qmd#inner_join) | `->innerJoin()` | Rows of x with a match in y, with y's columns. |
+| [`left_join()`](two-table.qmd#left_join) | `->leftJoin()` | All rows of x, with y's columns where they match (NA otherwise). |
+| [`right_join()`](two-table.qmd#right_join) | `->rightJoin()` | All rows of y, with x's columns where they match. |
+| [`full_join()`](two-table.qmd#full_join) | `->fullJoin()` | All rows of both tables. |
+| [`semi_join()`](two-table.qmd#semi_join) | `->semiJoin()` | Rows of x that have a match in y (x's columns only). |
+| [`anti_join()`](two-table.qmd#anti_join) | `->antiJoin()` | Rows of x that have no match in y. |
+| [`cross_join()`](two-table.qmd#cross_join) | `->crossJoin()` | Every combination of rows of x and y. |
+| [`nest_join()`](two-table.qmd#nest_join) | `->nestJoin()` | All rows of x, with a list-column (name) holding each row's matching rows of y as a table. |
+
+### join_by()
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`join_by()`](two-table.qmd#join_by) |  | A join specification, as dplyr's `join_by()`. |
+| [`closest()`](two-table.qmd#closest) |  | A rolling join. |
+| [`within()`](two-table.qmd#within) |  | x's interval [xLower, xUpper] lies within y's [yLower, yUpper]. |
+| [`overlaps()`](two-table.qmd#overlaps) |  | x's interval [xLower, xUpper] overlaps y's [yLower, yUpper]. |
+
+### Binding
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`bind_rows()`](two-table.qmd#bind_rows) | `->bindRows()` | Stack tables under the piped one, matching columns by name. |
+| [`bind_cols()`](two-table.qmd#bind_cols) | `->bindCols()` | Put tables side by side with the piped one. |
+
+### Set operations and row updates
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`union()`](two-table.qmd#union) | `->union()` | Distinct rows of both tables. |
+| [`union_all()`](two-table.qmd#union_all) | `->unionAll()` | All rows of both tables. |
+| [`intersect()`](two-table.qmd#intersect) | `->intersect()` | Distinct rows of x that also appear in y. |
+| [`setdiff()`](two-table.qmd#setdiff) | `->setdiff()` | Distinct rows of x that don't appear in y. |
+| [`symdiff()`](two-table.qmd#symdiff) | `->symdiff()` | Rows in exactly one of the tables. |
+| [`setequal()`](two-table.qmd#setequal) | `->setequal()` | True when both tables hold the same distinct rows, in any order. |
+| [`rows_insert()`](two-table.qmd#rows_insert) | `->rowsInsert()` | Append rows of y whose keys are new. |
+| [`rows_append()`](two-table.qmd#rows_append) | `->rowsAppend()` | Append all rows of y. |
+| [`rows_update()`](two-table.qmd#rows_update) | `->rowsUpdate()` | Overwrite x's values with y's for matching keys. |
+| [`rows_patch()`](two-table.qmd#rows_patch) | `->rowsPatch()` | Like `rows_update()`, but only fills x's NA values. |
+| [`rows_upsert()`](two-table.qmd#rows_upsert) | `->rowsUpsert()` | Update matching keys and insert new ones. |
+| [`rows_delete()`](two-table.qmd#rows_delete) | `->rowsDelete()` | Delete rows of x whose keys appear in y. |
+
+## Grouping
+
+### Grouping and ungrouping
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`group_by()`](grouping.qmd#group_by) | `->groupBy()` | Group by columns (names or selectors). |
+| [`ungroup()`](grouping.qmd#ungroup) | `->ungroup()` | Remove grouping, or only the named grouping columns. |
+| [`with_groups()`](grouping.qmd#with_groups) | `->withGroups()` | Run a table function on the table grouped by `_groups`, then restore the original grouping (superseded in dplyr by `_by`). |
+
+### Group utilities
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`group_vars()`](grouping.qmd#group_vars) | `->groupVars()` | The grouping column names. |
+| [`n_groups()`](grouping.qmd#n_groups) | `->nGroups()` | The number of groups (1 for an ungrouped table). |
+| [`group_size()`](grouping.qmd#group_size) | `->groupSize()` | Rows in each group, in group order. |
+| [`group_indices()`](grouping.qmd#group_indices) | `->groupIndices()` | Each row's 1-based group number. |
+| [`group_keys()`](grouping.qmd#group_keys) | `->groupKeys()` | One row per group with the key columns. |
+| [`group_rows()`](grouping.qmd#group_rows) | `->groupRows()` | Each group's 1-based row numbers, in group order. |
+| [`group_data()`](grouping.qmd#group_data) | `->groupData()` | `group_keys()` with a .rows list-column of each group's 1-based row numbers. |
+| [`group_trim()`](grouping.qmd#group_trim) | `->groupTrim()` | Drop unused factor levels from the grouping columns, and with them the empty groups that drop. |
+| [`group_split()`](grouping.qmd#group_split) | `->groupSplit()` | Split into a list of ungrouped tables, one per group. |
+| [`group_map()`](grouping.qmd#group_map) | `->groupMap()` | Call `fn (Table $group, array $key)` for each group and return the list of results. |
+| [`group_modify()`](grouping.qmd#group_modify) | `->groupModify()` | Replace each group with the table `fn (Table $group, array $key)` returns, then put the key columns back in front. |
+| [`group_walk()`](grouping.qmd#group_walk) | `->groupWalk()` | Call `fn (Table $group, array $key)` for each group. |
+| [`group_nest()`](grouping.qmd#group_nest) | `->groupNest()` | One row per group. |
+| [`nest_by()`](grouping.qmd#nest_by) | `->nestBy()` | Nest by the given columns into a rowwise table. |
+| [`cur_group_id()`](grouping.qmd#cur_group_id) |  | The current group's 1-based number, inside `mutate()`, `summarise()`, or `reframe()`. |
+| [`cur_group_rows()`](grouping.qmd#cur_group_rows) |  | The current group's 1-based row numbers in the table. |
+| [`cur_group()`](grouping.qmd#cur_group) |  | The current group's key, as an array of grouping column =&gt. |
+
+### Row-wise operations
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`rowwise()`](grouping.qmd#rowwise) | `->rowwise()` | Treat each row as its own group, for row-wise summaries. |
+
+## Vector helpers
+
+### Summaries
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`n()`](vectors.qmd#n) |  | Number of rows in the group. |
+| [`n_distinct()`](vectors.qmd#n_distinct) |  | Number of distinct values (or combinations). |
+| [`sum()`](vectors.qmd#sum) |  | Sum of x. |
+| [`mean()`](vectors.qmd#mean) |  | Arithmetic mean of x. |
+| [`median()`](vectors.qmd#median) |  | Median of x. |
+| [`sd()`](vectors.qmd#sd) |  | Sample standard deviation (n - 1). |
+| [`var_()`](vectors.qmd#var_) |  | Sample variance (n - 1). |
+| [`variance()`](vectors.qmd#variance) |  | Alias of `var_()`. |
+| [`quantile()`](vectors.qmd#quantile) |  | Type 7 quantile, R's default. |
+| [`iqr()`](vectors.qmd#iqr) |  | Interquartile range (type 7). |
+| [`min()`](vectors.qmd#min) |  | Smallest value of x. |
+| [`max()`](vectors.qmd#max) |  | Largest value of x. |
+| [`first()`](vectors.qmd#first) |  | First value. |
+| [`last()`](vectors.qmd#last) |  | Last value. |
+| [`nth()`](vectors.qmd#nth) |  | The `$n`-th value, 1-based. |
+| [`any()`](vectors.qmd#any) |  | True when any value is true (R's `any()`. |
+| [`all()`](vectors.qmd#all) |  | True when all values are true (R's `all()`. |
+
+### Window functions
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`lag()`](vectors.qmd#lag) |  | Previous values. |
+| [`lead()`](vectors.qmd#lead) |  | Next values. |
+| [`row_number()`](vectors.qmd#row_number) |  | Row numbers. |
+| [`min_rank()`](vectors.qmd#min_rank) |  | Ranks with ties sharing the lowest rank (1, 2, 2, 4). |
+| [`dense_rank()`](vectors.qmd#dense_rank) |  | Ranks with no gaps after ties (1, 2, 2, 3). |
+| [`percent_rank()`](vectors.qmd#percent_rank) |  | min_rank rescaled to [0, 1]. |
+| [`cume_dist()`](vectors.qmd#cume_dist) |  | Proportion of values less than or equal to each value. |
+| [`ntile()`](vectors.qmd#ntile) |  | Split into `$n` buckets of near-equal size. |
+| [`consecutive_id()`](vectors.qmd#consecutive_id) |  | A new id each time the value (or combination) changes. |
+| [`cumsum()`](vectors.qmd#cumsum) |  | Running sum. |
+| [`cumprod()`](vectors.qmd#cumprod) |  | Running product. |
+| [`cummin()`](vectors.qmd#cummin) |  | Running minimum. |
+| [`cummax()`](vectors.qmd#cummax) |  | Running maximum. |
+| [`cummean()`](vectors.qmd#cummean) |  | Running mean. |
+| [`cumall()`](vectors.qmd#cumall) |  | Running `all()`. |
+| [`cumany()`](vectors.qmd#cumany) |  | Running `any()`. |
+| [`order_by()`](vectors.qmd#order_by) |  | Evaluate a window function with the rows in another order, then put the results back. |
+
+### Conditionals and NA
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`if_else()`](vectors.qmd#if_else) |  | Vectorised if/else. |
+| [`case_when()`](vectors.qmd#case_when) |  | The value of the first case whose condition is true, else `$default`. |
+| [`case_match()`](vectors.qmd#case_match) |  | Match values like a switch (deprecated in dplyr 1.2 in favor of `recode_values()`). |
+| [`replace_when()`](vectors.qmd#replace_when) |  | Like `case_when()`, but rows matching no case keep x's value. |
+| [`recode()`](vectors.qmd#recode) |  | Replace values by name (superseded in dplyr by `recode_values()`). |
+| [`recode_values()`](vectors.qmd#recode_values) |  | Map values to new values (dplyr 1.2). |
+| [`replace_values()`](vectors.qmd#replace_values) |  | Like `recode_values()`, but unmatched values keep their original value. |
+| [`coalesce()`](vectors.qmd#coalesce) |  | First non-NA value across the arguments, row by row. |
+| [`na_if()`](vectors.qmd#na_if) |  | NA where `$x` equals `$y`. |
+| [`between()`](vectors.qmd#between) |  | `$left` &lt;= `$x` &lt;= `$right`. |
+| [`near()`](vectors.qmd#near) |  | Equality with tolerance, for floating point. |
+| [`when_any()`](vectors.qmd#when_any) |  | Elementwise `any()` across conditions (x \| y \| z). |
+| [`when_all()`](vectors.qmd#when_all) |  | Elementwise `all()` across conditions (x & y & z). |
+
+## Strings and dates
+
+### Strings
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`str_detect()`](strings-dates.qmd#str_detect) |  | Does the pattern occur?. |
+| [`str_starts()`](strings-dates.qmd#str_starts) |  | Does the string start with the pattern?. |
+| [`str_ends()`](strings-dates.qmd#str_ends) |  | Does the string end with the pattern?. |
+| [`str_count()`](strings-dates.qmd#str_count) |  | Number of matches. |
+| [`str_extract()`](strings-dates.qmd#str_extract) |  | The first match, or NA. |
+| [`str_extract_all()`](strings-dates.qmd#str_extract_all) |  | Every match, as a list per row (a list-column). |
+| [`str_replace()`](strings-dates.qmd#str_replace) |  | Replace the first match. |
+| [`str_replace_all()`](strings-dates.qmd#str_replace_all) |  | Replace every match. |
+| [`str_split()`](strings-dates.qmd#str_split) |  | Split into pieces, as a list per row (a list-column). |
+| [`str_split_i()`](strings-dates.qmd#str_split_i) |  | The i-th piece of a split (1-based. |
+| [`str_pad()`](strings-dates.qmd#str_pad) |  | Pad to a width. |
+| [`str_trunc()`](strings-dates.qmd#str_trunc) |  | Truncate to a width, marking the cut with an ellipsis. |
+| [`str_trim()`](strings-dates.qmd#str_trim) |  | Trim whitespace. |
+| [`str_squish()`](strings-dates.qmd#str_squish) |  | Trim and collapse internal whitespace. |
+| [`str_sub()`](strings-dates.qmd#str_sub) |  | Substring by 1-based positions, as stringr's `str_sub()`. |
+| [`str_length()`](strings-dates.qmd#str_length) |  | Number of characters. |
+| [`str_to_title()`](strings-dates.qmd#str_to_title) |  | Title case. |
+| [`str_to_upper()`](strings-dates.qmd#str_to_upper) |  | Uppercase, as stringr's `str_to_upper()`. |
+| [`str_to_lower()`](strings-dates.qmd#str_to_lower) |  | Lowercase, as stringr's `str_to_lower()`. |
+| [`str_upper()`](strings-dates.qmd#str_upper) |  | Uppercase. |
+| [`str_lower()`](strings-dates.qmd#str_lower) |  | Lowercase. |
+| [`paste()`](strings-dates.qmd#paste) |  | Paste values together, separated by sep (default a space). |
+| [`paste0()`](strings-dates.qmd#paste0) |  | Paste values together. |
+| [`fixed()`](strings-dates.qmd#fixed) |  | A literal pattern. |
+| [`regex()`](strings-dates.qmd#regex) |  | A regular expression with options. |
+
+### Dates and times
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`ymd()`](strings-dates.qmd#ymd) |  | Parse year-month-day strings to dates, with any separator. |
+| [`dmy()`](strings-dates.qmd#dmy) |  | Parse day-month-year strings to dates, with any separator. |
+| [`mdy()`](strings-dates.qmd#mdy) |  | Parse month-day-year strings to dates, with any separator. |
+| [`ymd_hms()`](strings-dates.qmd#ymd_hms) |  | Parse year-month-day hour:minute:second strings to datetimes, in UTC or tz. |
+| [`dmy_hms()`](strings-dates.qmd#dmy_hms) |  | Parse day-month-year hour:minute:second strings to datetimes, in UTC or tz. |
+| [`mdy_hms()`](strings-dates.qmd#mdy_hms) |  | Parse month-day-year hour:minute:second strings to datetimes, in UTC or tz. |
+| [`parse_date_time()`](strings-dates.qmd#parse_date_time) |  | Parse with lubridate orders. |
+| [`year()`](strings-dates.qmd#year) |  | The year of a date or datetime. |
+| [`month()`](strings-dates.qmd#month) |  | The month, 1-12. |
+| [`day()`](strings-dates.qmd#day) |  | The day of the month. |
+| [`wday()`](strings-dates.qmd#wday) |  | Day of the week, 1-7. |
+| [`yday()`](strings-dates.qmd#yday) |  | The day of the year, 1-366. |
+| [`quarter()`](strings-dates.qmd#quarter) |  | The quarter, 1-4. |
+| [`hour()`](strings-dates.qmd#hour) |  | The hour of a datetime, 0-23. |
+| [`minute()`](strings-dates.qmd#minute) |  | The minute of a datetime, 0-59. |
+| [`second()`](strings-dates.qmd#second) |  | The second of a datetime, 0-59. |
+| [`floor_date()`](strings-dates.qmd#floor_date) |  | Round down to a unit. |
+| [`ceiling_date()`](strings-dates.qmd#ceiling_date) |  | Round up to a unit, as `floor_date()`. |
+| [`round_date()`](strings-dates.qmd#round_date) |  | Round to the nearest unit, as `floor_date()`. |
+| [`seconds()`](strings-dates.qmd#seconds) |  | A period of n seconds, for date arithmetic. |
+| [`minutes()`](strings-dates.qmd#minutes) |  | A period of n minutes. |
+| [`hours()`](strings-dates.qmd#hours) |  | A period of n hours. |
+| [`days()`](strings-dates.qmd#days) |  | A period of n days. |
+| [`weeks()`](strings-dates.qmd#weeks) |  | A period of n weeks. |
+| [`months()`](strings-dates.qmd#months) |  | A period of n months. |
+| [`years()`](strings-dates.qmd#years) |  | A period of n years. |
+| [`difftime()`](strings-dates.qmd#difftime) |  | The difference x - y in units 'secs', 'mins', 'hours', 'days', or 'weeks', as a double. |
+| [`with_tz()`](strings-dates.qmd#with_tz) |  | The same instant in another time zone. |
+| [`force_tz()`](strings-dates.qmd#force_tz) |  | The same clock time in another time zone. |
+| [`today()`](strings-dates.qmd#today) |  | The current date, in the system time zone or tz. |
+| [`now()`](strings-dates.qmd#now) |  | The current datetime, in the system time zone or tz. |
+
+## Selecting columns
+
+### Selectors
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`starts_with()`](tidyselect.qmd#starts_with) |  | Columns whose names start with a prefix (case-insensitive by default). |
+| [`ends_with()`](tidyselect.qmd#ends_with) |  | Columns whose names end with a suffix (case-insensitive by default). |
+| [`contains()`](tidyselect.qmd#contains) |  | Columns whose names contain a string (case-insensitive by default). |
+| [`matches()`](tidyselect.qmd#matches) |  | Columns whose names match a regular expression. |
+| [`num_range()`](tidyselect.qmd#num_range) |  | Columns named prefix + number for each number. |
+| [`everything()`](tidyselect.qmd#everything) |  | Every column. |
+| [`last_col()`](tidyselect.qmd#last_col) |  | The last column, or the one `$offset` before it. |
+| [`all_of()`](tidyselect.qmd#all_of) |  | Exactly these columns. |
+| [`any_of()`](tidyselect.qmd#any_of) |  | These columns, skipping any that don't exist. |
+| [`where()`](tidyselect.qmd#where) |  | Columns for which a predicate holds. |
+| [`except()`](tidyselect.qmd#except) |  | Everything except these columns. |
+| [`any_selected()`](tidyselect.qmd#any_selected) |  | Columns matched by any of the selections (union). |
+| [`all_selected()`](tidyselect.qmd#all_selected) |  | Columns matched by every selection (intersection, like a & b in tidyselect). |
+| [`group_cols()`](tidyselect.qmd#group_cols) |  | The grouping columns. |
+
+### across()
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`across()`](tidyselect.qmd#across) |  | Apply functions to columns inside `mutate()` or `summarise()`. |
+| [`if_any()`](tidyselect.qmd#if_any) |  | Per-row test that a predicate holds for any of the columns, for `filter()`. |
+| [`if_all()`](tidyselect.qmd#if_all) |  | Per-row test that a predicate holds for all of the columns. |
+| [`c_across()`](tidyselect.qmd#c_across) |  | The values of the selected columns in the current row, for `rowwise()` tables. |
+| [`pick()`](tidyselect.qmd#pick) | `->pick()` | The selected columns of the current group as a table, for use in `summarise()` closures or with `vec()`. |
+| [`cur_column()`](tidyselect.qmd#cur_column) |  | The name of the column `across()` is working on, inside one of its functions. |
+
+## Reshaping with tidyr
+
+### Pivoting
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`pivot_longer()`](tidyr.qmd#pivot_longer) | `->pivotLonger()` | Lengthen. |
+| [`pivot_wider()`](tidyr.qmd#pivot_wider) | `->pivotWider()` | Widen. |
+| [`build_longer_spec()`](tidyr.qmd#build_longer_spec) | `->buildLongerSpec()` | The spec `pivot_longer()` would use, as a table with .name, .value and the namesTo columns. |
+| [`pivot_longer_spec()`](tidyr.qmd#pivot_longer_spec) | `->pivotLongerSpec()` | Lengthen with a spec from `build_longer_spec()` (a table or a list of rows). |
+| [`build_wider_spec()`](tidyr.qmd#build_wider_spec) | `->buildWiderSpec()` | The spec `pivot_wider()` would use, as a table with .name, .value and the namesFrom columns. |
+| [`pivot_wider_spec()`](tidyr.qmd#pivot_wider_spec) | `->pivotWiderSpec()` | Widen with a spec from `build_wider_spec()`. |
+| [`gather()`](tidyr.qmd#gather) | `->gather()` | Gather columns into key-value pairs (superseded by `pivot_longer()`). |
+| [`spread()`](tidyr.qmd#spread) | `->spread()` | Spread a key-value pair across columns (superseded by `pivot_wider()`). |
+
+### Missing combinations and values
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`complete()`](tidyr.qmd#complete) | `->complete()` | Add missing combinations, filling other columns with NA (or with fill). |
+| [`expand()`](tidyr.qmd#expand) | `->expand()` | Every combination of the given columns, per group. |
+| [`nesting()`](tidyr.qmd#nesting) |  | Only the combinations that occur in the data, for `complete()` and `expand()`. |
+| [`crossing()`](tidyr.qmd#crossing) |  | Every combination of unique values (sorted), as a new table. |
+| [`expand_grid()`](tidyr.qmd#expand_grid) |  | Every combination of the values as given, first column varying slowest. |
+| [`full_seq()`](tidyr.qmd#full_seq) |  | Every value from the smallest to the largest of x in steps of period. |
+| [`fill()`](tidyr.qmd#fill) | `->fill()` | Fill NA with the previous (or next) value, within groups. |
+| [`drop_na()`](tidyr.qmd#drop_na) | `->dropNa()` | Drop rows with NA in any of the columns (any column when none are given). |
+| [`replace_na()`](tidyr.qmd#replace_na) | `->replaceNa()` | Replace NA per column. |
+| [`uncount()`](tidyr.qmd#uncount) | `->uncount()` | Repeat each row by a weight column. |
+
+### Splitting and combining
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`separate_wider_delim()`](tidyr.qmd#separate_wider_delim) | `->separateWiderDelim()` | Split columns on a fixed delimiter into new columns. |
+| [`separate_wider_position()`](tidyr.qmd#separate_wider_position) | `->separateWiderPosition()` | Split columns by character widths. |
+| [`separate_wider_regex()`](tidyr.qmd#separate_wider_regex) | `->separateWiderRegex()` | Split columns with regular expressions. |
+| [`separate_longer_delim()`](tidyr.qmd#separate_longer_delim) | `->separateLongerDelim()` | Split columns on a fixed delimiter into rows. |
+| [`separate_longer_position()`](tidyr.qmd#separate_longer_position) | `->separateLongerPosition()` | Split columns into rows of `$width` characters. |
+| [`separate()`](tidyr.qmd#separate) | `->separate()` | Split a string column into several (superseded in tidyr, still common). |
+| [`separate_rows()`](tidyr.qmd#separate_rows) | `->separateRows()` | Split columns on a regular expression into rows (superseded by `separate_longer_delim()`). |
+| [`extract()`](tidyr.qmd#extract) | `->extract()` | Pull regular-expression groups into new columns (superseded by `separate_wider_regex()`). |
+| [`unite()`](tidyr.qmd#unite) | `->unite()` | Paste columns together into one. |
+
+### List-columns
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`nest()`](tidyr.qmd#nest) | `->nest()` | Nest columns into a list-column of tables. |
+| [`unnest()`](tidyr.qmd#unnest) | `->unnest()` | Unnest list-columns of tables back into rows. |
+| [`unnest_longer()`](tidyr.qmd#unnest_longer) | `->unnestLonger()` | Turn each element of list-columns into rows. |
+| [`unnest_wider()`](tidyr.qmd#unnest_wider) | `->unnestWider()` | Turn each element of list-columns into columns. |
+| [`hoist()`](tidyr.qmd#hoist) | `->hoist()` | Pull components out of a list-column into new columns, before it. |
+| [`chop()`](tidyr.qmd#chop) | `->chop()` | Collapse rows into list-columns. |
+| [`unchop()`](tidyr.qmd#unchop) | `->unchop()` | Expand list-columns into rows, the reverse of `chop()`. |
+| [`pack()`](tidyr.qmd#pack) | `->pack()` | Pack columns into a column of named arrays (tidyr's data frame columns). |
+| [`unpack()`](tidyr.qmd#unpack) | `->unpack()` | Spread columns of named arrays into columns, the reverse of `pack()`. |
+
+## Cleaning with janitor
+
+### Clean names
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`make_clean_names()`](janitor.qmd#make_clean_names) |  | janitor's `make_clean_names()`. |
+| [`clean_names()`](janitor.qmd#clean_names) | `->cleanNames()` | Rename every column with `make_clean_names()`, as janitor's `clean_names()`. |
+
+### Remove empty rows and columns
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`remove_empty()`](janitor.qmd#remove_empty) | `->removeEmpty()` | Drop rows and/or columns that are entirely NA, as janitor's `remove_empty()`. |
+
+### Duplicates
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`get_dupes()`](janitor.qmd#get_dupes) | `->getDupes()` | Rows whose values in these columns (all columns when none are given) appear more than once, as janitor's `get_dupes()`. |
+
+### Frequency tables
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`tabyl()`](janitor.qmd#tabyl) | `->tabyl()` | janitor's `tabyl()` for one or two columns. |
+
+## Models
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`lm()`](models.qmd#lm) | `->lm()` | Linear regression. |
+| [`glm()`](models.qmd#glm) | `->glm()` | Generalised linear model. |
+| [`lmer()`](models.qmd#lmer) | `->lmer()` | Linear mixed model with lme4-style random effects. |
+| [`glmer()`](models.qmd#glmer) | `->glmer()` | Generalised linear mixed model. |
+
+## Databases and expressions
+
+### Expressions {#expressions-functions}
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`col()`](databases.qmd#col) |  | A column as a vector. |
+| [`lit()`](databases.qmd#lit) |  | A literal value as a vector. |
+| [`vec()`](databases.qmd#vec) |  | A row closure as a vector, for use where a Vec is expected. |
+| [`is_na()`](databases.qmd#is_na) |  | True where x is NA. |
+| [`abs()`](databases.qmd#abs) |  | Absolute value. |
+| [`sqrt()`](databases.qmd#sqrt) |  | Square root. |
+| [`exp()`](databases.qmd#exp) |  | Exponential, e to the power x. |
+| [`log()`](databases.qmd#log) |  | Natural logarithm, or base `$base`. |
+| [`log10()`](databases.qmd#log10) |  | Base-10 logarithm. |
+| [`round()`](databases.qmd#round) |  | R's `round()`. |
+| [`floor()`](databases.qmd#floor) |  | Largest integer not greater than x. |
+| [`ceiling()`](databases.qmd#ceiling) |  | Smallest integer not less than x. |
+| [`as_int()`](databases.qmd#as_int) |  | Convert to integer. |
+| [`as_float()`](databases.qmd#as_float) |  | Convert to double. |
+| [`as_string()`](databases.qmd#as_string) |  | Convert to string. |
+| [`as_bool()`](databases.qmd#as_bool) |  | Convert to boolean. |
+
+### Database tables
+
+| Function | Chain method | Purpose |
+| --- | --- | --- |
+| [`show_query()`](databases.qmd#show_query) | `->showQuery()` | The SQL a lazy table would run (database backends only). |
+| [`collect()`](databases.qmd#collect) | `->collect()` | Run a lazy table's query and return an in-memory Phibble\DataFrame. |
+
+## Chain methods
+
+`phplyr($table)` starts a chain. Each function above with a chain method runs as that method. These methods belong to the chain itself:
+
+| Method | Purpose |
+| --- | --- |
+| [`->get()`](chains.qmd#chain-get) | Return the table. |
+| [`->pipe()`](chains.qmd#chain-pipe) | Apply your own functions to the table and continue the chain with the result. |
+
+## Expression methods
+
+Called on a vector helper, such as `col('price')->mul(1.1)`.
+
+| Method | Purpose |
+| --- | --- |
+| [`->add()`](databases.qmd#method-add) | x + y. |
+| [`->sub()`](databases.qmd#method-sub) | x - y. |
+| [`->mul()`](databases.qmd#method-mul) | x \* y. |
+| [`->div()`](databases.qmd#method-div) | x / y. |
+| [`->mod()`](databases.qmd#method-mod) | x modulo y, R's %%. |
+| [`->pow()`](databases.qmd#method-pow) | x to the power y. |
+| [`->neg()`](databases.qmd#method-neg) | Negation, -x. |
+| [`->eq()`](databases.qmd#method-eq) | x == y. |
+| [`->ne()`](databases.qmd#method-ne) | x != y. |
+| [`->lt()`](databases.qmd#method-lt) | x &lt. |
+| [`->le()`](databases.qmd#method-le) | x &lt;= y. |
+| [`->gt()`](databases.qmd#method-gt) | x &gt. |
+| [`->ge()`](databases.qmd#method-ge) | x &gt;= y. |
+| [`->between()`](databases.qmd#method-between) | low &lt;= x &lt;= high, inclusive. |
+| [`->isIn()`](databases.qmd#method-isin) | True where x is one of the values, R's %in%. |
+| [`->isNa()`](databases.qmd#method-isna) | True where x is NA. |
+| [`->and()`](databases.qmd#method-and) | Logical and, with R's NA rules. |
+| [`->or()`](databases.qmd#method-or) | Logical or, with R's NA rules. |
+| [`->not()`](databases.qmd#method-not) | Logical not. |
+| [`->desc()`](databases.qmd#method-desc) | Sort in descending order, for `arrange()` and order_by. |

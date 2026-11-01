@@ -26,7 +26,9 @@ Selectors pick columns by name, pattern, or type. They work in `select()`,
 `Phibble\Type`. `'numeric'` selects integer and double columns. `'time'`
 selects phibble's time columns, R's hms, and needs phibble 0.6 or later.
 
-## across()
+{{< include _api/tidyselect-selectors.md >}}
+
+## across() {#across-section}
 
 `across(cols, fns, names:)` applies functions to several columns inside
 `mutate()` or `summarize()`. Grouping columns are never selected. `fns` is one
@@ -53,3 +55,5 @@ being processed.
 predicate may return null for NA. With no columns selected, `if_any()` is
 false and `if_all()` is true, as in dplyr 1.1. `pick(...)` returns the selected columns of the current group
 as a table, for use inside closures.
+
+{{< include _api/tidyselect-across.md >}}

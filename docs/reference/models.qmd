@@ -39,6 +39,8 @@ CI runs phplyr's tests with each implementation. Both runs compare `lm()` and
 The [Models verification](https://phplyr.phpstats.org/verification/models)
 lists the comparisons.
 
+## Model functions
+
 ::: {.panel-tabset group="syntax"}
 
 ## PHP 8.5+
@@ -71,6 +73,8 @@ phplyr($table)->glmer('passed ~ hours + (1 | school)', family: 'binomial');
 Other named arguments go to phit's function unchanged.
 [phit's documentation](https://phit.phpstats.org/docs) lists them and the
 formula syntax it accepts.
+
+{{< include _api/models-model-functions.md >}}
 
 ## Results
 

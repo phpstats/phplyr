@@ -6,7 +6,7 @@ namespace Phplyr;
 
 use Phibble\Contracts\Table;
 
-/** @internal Element handling for the list-column verbs. */
+/** @internal Element handling for the list-column functions. */
 final class Lists
 {
     /**

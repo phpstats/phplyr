@@ -29,6 +29,8 @@ With the phit extension loaded, `mean`, `sd`, `var_`, `median`, and
 `quantile` use it. Without it, they run in PHP. The test suite checks both
 against R.
 
+{{< include _api/vectors-summaries.md >}}
+
 ## Window functions
 
 | Helper | Value |
@@ -44,6 +46,8 @@ against R.
 | `order_by('t', cumsum('x'))` | A window function evaluated in another order |
 
 {{< include ../examples/_windows.md >}}
+
+{{< include _api/vectors-window-functions.md >}}
 
 ## Conditionals and NA
 
@@ -63,3 +67,5 @@ against R.
 | `near('x', y)` | Equality within floating-point tolerance |
 
 {{< include ../examples/_conditionals.md >}}
+
+{{< include _api/vectors-conditionals-and-na.md >}}

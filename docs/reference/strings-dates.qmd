@@ -35,6 +35,8 @@ letters too.
 `str_replace`, `str_pad`, and `str_split` have the names of PHP built-ins. In a
 file that imports them, write `\str_replace()` for the built-in.
 
+{{< include _api/strings-dates-strings.md >}}
+
 ## Dates and times
 
 | Function | Value |
@@ -62,3 +64,5 @@ Month and year arithmetic that lands on a date that doesn't exist, such as
 January 31 plus one month, gives NA, as in lubridate. Subtracting dates gives
 days, and subtracting datetimes gives seconds. Date columns stay dates through
 these functions.
+
+{{< include _api/strings-dates-dates-and-times.md >}}

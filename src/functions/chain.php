@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 /*
- * Two ways to run verbs without the PHP 8.5 pipe operator. Both give the
- * same result as $t |> filter(...) |> head(5):
+ * Two ways to run table functions without the PHP 8.5 pipe operator. Both
+ * give the same result as $t |> filter(...) |> head(5):
  *
  *     phplyr($t)->filter(...)->head(5)->get();
  *     pipe($t, filter(...), head(5));
@@ -16,8 +16,8 @@ use Phibble\Contracts\Table;
 
 /**
  * Start a method chain on a table: phplyr($t)->filter(...)->head(5).
- * Each method runs the phplyr verb of that name, spelled camelCase, so
- * ->groupBy() runs group_by(). get() returns the table, and verbs that
+ * Each method runs the phplyr function of that name, spelled camelCase, so
+ * ->groupBy() runs group_by(). get() returns the table, and functions that
  * return something else, such as pull(), return it plainly.
  */
 function phplyr(Table|Chain $table): Chain

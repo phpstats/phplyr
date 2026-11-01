@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 /*
- * phplyr's verbs. Each verb returns a Closure that takes one table, so verbs
- * chain with the PHP 8.5 pipe operator:
+ * phplyr's single-table functions. Each returns a Closure that takes one
+ * table, so the functions chain with the PHP 8.5 pipe operator:
  *
  *     $out = DataFrame::fromCsv('sales.csv')
  *         |> filter(fn ($r) => $r->price > 0)
@@ -12,7 +12,7 @@ declare(strict_types=1);
  *         |> summarise(n: n(), avg: mean('price'))
  *         |> arrange(desc('avg'));
  *
- * Verbs delegate to Phibble\Contracts\Table, so any backend works unchanged.
+ * The functions delegate to Phibble\Contracts\Table, so any backend works unchanged.
  *
  * dplyr's dot-arguments (.by, .keep, .groups...) are written with a leading
  * underscore: mutate(z: ..., _by: 'g'). The prefix keeps an option apart
@@ -115,7 +115,7 @@ function select(mixed ...$columns): Closure
 }
 
 /**
- * Add, replace or drop (with null) columns, named by argument:
+ * Add, replace, or drop (with null) columns, named by argument:
  * mutate(log_price: fn ($r) => log($r->price), rank: min_rank('price')).
  *
  * Values may be a row closure fn ($r, $group), a vector helper (lag, cumsum,

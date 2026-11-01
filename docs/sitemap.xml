@@ -2,23 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://phplyr.phpstats.org/docs/reference/vectors.html</loc>
-    <lastmod>2026-10-31T14:46:05.207Z</lastmod>
+    <lastmod>2026-11-01T23:08:54.574Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/reference/tidyselect.html</loc>
-    <lastmod>2026-11-01T14:19:05.255Z</lastmod>
+    <lastmod>2026-11-01T23:10:14.224Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/reference/strings-dates.html</loc>
-    <lastmod>2026-11-01T18:59:23.219Z</lastmod>
+    <lastmod>2026-11-01T23:08:54.572Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/reference/models.html</loc>
-    <lastmod>2026-11-01T21:50:24.176Z</lastmod>
+    <lastmod>2026-11-01T23:09:01.209Z</lastmod>
   </url>
   <url>
-    <loc>https://phplyr.phpstats.org/docs/reference/grouping.html</loc>
-    <lastmod>2026-10-31T14:46:12.582Z</lastmod>
+    <loc>https://phplyr.phpstats.org/docs/reference/index.html</loc>
+    <lastmod>2026-11-01T23:11:03.754Z</lastmod>
+  </url>
+  <url>
+    <loc>https://phplyr.phpstats.org/docs/reference/databases.html</loc>
+    <lastmod>2026-11-01T23:08:54.568Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/port-r-script.html</loc>
@@ -26,7 +30,7 @@
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/index.html</loc>
-    <lastmod>2026-11-01T19:07:28.533Z</lastmod>
+    <lastmod>2026-11-01T23:09:36.163Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/gallery.html</loc>
@@ -46,11 +50,11 @@
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/coming-from-dplyr.html</loc>
-    <lastmod>2026-11-01T18:58:57.992Z</lastmod>
+    <lastmod>2026-11-01T23:05:07.266Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/development.html</loc>
-    <lastmod>2026-11-01T21:24:59.170Z</lastmod>
+    <lastmod>2026-11-01T23:09:44.276Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/examples/group-and-summarize.html</loc>
@@ -69,23 +73,27 @@
     <lastmod>2026-11-01T21:24:39.880Z</lastmod>
   </url>
   <url>
-    <loc>https://phplyr.phpstats.org/docs/reference/databases.html</loc>
-    <lastmod>2026-11-01T18:59:41.806Z</lastmod>
+    <loc>https://phplyr.phpstats.org/docs/reference/chains.html</loc>
+    <lastmod>2026-11-01T23:09:07.021Z</lastmod>
+  </url>
+  <url>
+    <loc>https://phplyr.phpstats.org/docs/reference/grouping.html</loc>
+    <lastmod>2026-11-01T23:08:54.569Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/reference/janitor.html</loc>
-    <lastmod>2026-11-01T18:59:23.218Z</lastmod>
+    <lastmod>2026-11-01T23:08:54.570Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/reference/single-table.html</loc>
-    <lastmod>2026-10-31T14:46:05.207Z</lastmod>
+    <lastmod>2026-11-01T23:08:54.571Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/reference/tidyr.html</loc>
-    <lastmod>2026-11-01T18:59:15.502Z</lastmod>
+    <lastmod>2026-11-01T23:08:54.572Z</lastmod>
   </url>
   <url>
     <loc>https://phplyr.phpstats.org/docs/reference/two-table.html</loc>
-    <lastmod>2026-11-01T18:59:23.218Z</lastmod>
+    <lastmod>2026-11-01T23:10:14.227Z</lastmod>
   </url>
 </urlset>

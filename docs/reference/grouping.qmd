@@ -2,6 +2,8 @@
 title: "Grouping"
 ---
 
+## Grouping and ungrouping
+
 `group_by()` sets the grouping columns. Selectors work, named arguments group
 by a computed column, and `_add: true` adds to the existing groups.
 `_drop: false` keeps groups for unused factor levels, so `summarize()` and
@@ -13,6 +15,8 @@ last. `filter()`, `mutate()`, `summarize()`, and the slice functions work
 within groups. `_by:` groups for a single call and returns an ungrouped table.
 
 {{< include ../examples/_grouping.md >}}
+
+{{< include _api/grouping-grouping-and-ungrouping.md >}}
 
 ## Group utilities
 
@@ -38,6 +42,8 @@ within groups. `_by:` groups for a single call and returns an ungrouped table.
 | `cur_group_rows()` | The current group's row numbers, in `mutate()` and `reframe()` |
 | `cur_group()` | The current group's key as an array of column => value |
 
+{{< include _api/grouping-group-utilities.md >}}
+
 ## Row-wise operations
 
 `rowwise()` makes each row its own group. Closures in `summarize()` and vector
@@ -46,3 +52,5 @@ result of `summarize()`. `c_across(cols)` gives the current row's values of
 the selected columns, for helpers such as `sum(c_across(starts_with('x')))`.
 
 {{< include ../examples/_rowwise.md >}}
+
+{{< include _api/grouping-row-wise-operations.md >}}

@@ -1,0 +1,46 @@
+---
+title: "Pipes and method chains"
+---
+
+A table function such as `filter(...)` returns a closure that takes a table.
+The PHP 8.5 pipe operator `|>`, `pipe()`, and a method chain started with
+`phplyr()` apply such closures in order and give the same result.
+[Pipelines](../getting-started.qmd#pipelines) shows the three forms.
+
+## Pipelines
+
+{{< include _api/chains-pipelines.md >}}
+
+## Chain methods
+
+`phplyr($table)` returns a `Phplyr\Chain`. Each table function runs as the
+chain method of the same name in camelCase, such as `->groupBy()` for
+`group_by()`; [Functions and methods](index.qmd) lists them. A method whose
+function returns a table returns a new chain, and any other result is returned
+as it is. A snake_case method name throws `BadMethodCallException` naming the
+camelCase method.
+
+### `->get()` {#chain-get}
+
+```php
+$chain->get(): Table
+```
+
+Returns the chain's table.
+
+### `->pipe()` {#chain-pipe}
+
+```php
+$chain->pipe(callable ...$steps): mixed
+```
+
+Applies each step to the table in order. Returns a new chain when the result
+is a table, and the result itself otherwise.
+
+### `echo` {#chain-echo}
+
+```php
+echo $chain;
+```
+
+Prints the table, as `echo $table` does.

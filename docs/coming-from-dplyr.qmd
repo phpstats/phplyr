@@ -77,7 +77,7 @@ names its first parameter `$_x`, after dplyr's `.x`:
 | `_missing` | `.missing` | `recode()` |
 | `$_x` | `.x` | `recode()` |
 
-Most of these verbs take the new columns as variadic named arguments, so
+Most of these functions take the new columns as variadic named arguments, so
 the prefix keeps an option apart from a column of the same name, as the dot
 does in dplyr:
 
@@ -103,7 +103,7 @@ The first call computes `m` within each group of `g`. The second makes a
 column called `by`.
 
 - An unprefixed named argument is always a column.
-- A prefixed name that isn't an option for that verb is an error that names
+- A prefixed name that isn't an option for that function is an error that names
   the options.
 - Every other argument is camelCase: `naRm:`, `orderBy:`, `namesFrom:`, and
   the rest.
@@ -127,5 +127,5 @@ pipeline can use both. phibble's methods have their own conventions:
 ## `across()` functions
 
 R passes a vector to every `across()` function. In phplyr, what a function
-receives depends on the function and the verb. See
-[across()](reference/tidyselect.qmd#across).
+receives depends on the function and on the table function that calls
+it. See [across()](reference/tidyselect.qmd#across).

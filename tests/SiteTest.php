@@ -37,6 +37,11 @@ it('lists files that exist in the site manifest', function () {
     }
 });
 
+it('has an API reference that matches the public functions', function () {
+    exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg(dirname(__DIR__).'/bin/api-reference').' --check 2>&1', $out, $status);
+    expect($status)->toBe(0, implode("\n", $out));
+});
+
 it('writes verification records in the site\'s evidence format', function () {
     $root = dirname(__DIR__);
     foreach (siteManifest()['verifications'] as $path) {

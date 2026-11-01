@@ -15,9 +15,13 @@ NO_EXT=1 bin/test        # pure-PHP descriptive statistics
 PHP=/path/to/php83 bin/test
 ```
 
-The method chain's `@method` list in `src/Chain.php` is generated. After
-adding or changing a table function, run `bin/chain-docblock`; a test fails while the
-list is out of date.
+The method chain's `@method` list in `src/Chain.php` and the API reference
+are generated from the source. After adding or changing a function, run
+`bin/chain-docblock` and `bin/api-reference`; a test fails while either is
+out of date. `bin/api-reference` writes one entry per public function and
+expression method, from its signature and docblock, into
+`docs/reference/_api/`, and the index `docs/reference/index.qmd`. Each
+function must be listed in a section of its `$sections` map.
 
 Most tests compare phplyr with R. The scripts in `tests/r/` run the same
 pipelines with dplyr and tidyr and write JSON fixtures to `tests/Fixtures/`:

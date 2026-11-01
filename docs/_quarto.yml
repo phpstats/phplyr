@@ -17,14 +17,20 @@ website:
     style: docked
     search: true
     contents:
-      - index.qmd
-      - getting-started.qmd
+      - section: "Getting started"
+        contents:
+          - index.qmd
+          - getting-started.qmd
+          - compatibility.qmd
       - section: "Guides"
         contents:
           - coming-from-dplyr.qmd
           - port-r-script.qmd
-      - section: "Reference"
+          - performance.qmd
+      - section: "Functions and methods"
         contents:
+          - reference/index.qmd
+          - reference/chains.qmd
           - reference/single-table.qmd
           - reference/two-table.qmd
           - reference/grouping.qmd
@@ -42,8 +48,6 @@ website:
           - examples/join.qmd
           - examples/pivot.qmd
           - gallery.qmd
-      - compatibility.qmd
-      - performance.qmd
       - section: "Contributing"
         contents:
           - development.qmd

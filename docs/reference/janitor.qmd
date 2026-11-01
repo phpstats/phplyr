@@ -33,12 +33,16 @@ make_clean_names(['First Name', 'first_name', '% Done', '1st Place']);
 pipe($survey, clean_names());
 ```
 
+{{< include _api/janitor-clean-names.md >}}
+
 ## Remove empty rows and columns
 
 `remove_empty()` drops rows and columns that are entirely NA. Pass `'rows'` or
 `'cols'` to drop only one kind. With `cutoff` below 1, a row or column is kept
 when its share of non-NA values is above the cutoff. A cutoff works with only
 one of `'rows'` and `'cols'`. An empty string is a value, as in R.
+
+{{< include _api/janitor-remove-empty-rows-and-columns.md >}}
 
 ## Duplicates
 
@@ -47,6 +51,8 @@ more than once. The result has the given columns first, then `dupe_count`, then
 the other columns. Rows are sorted by `dupe_count` (descending) and then by the
 given columns. With no columns, every column is used. A grouped table keeps its
 groups, but duplicates are found across the whole table.
+
+{{< include _api/janitor-duplicates.md >}}
 
 ## Frequency tables
 
@@ -67,3 +73,5 @@ pipe($people, tabyl('region', 'smoker', showNa: false));
 ```
 
 janitor's `adorn_*()` functions and three-way tables are not included.
+
+{{< include _api/janitor-frequency-tables.md >}}

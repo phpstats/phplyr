@@ -57,91 +57,123 @@
         "nav": [
             {
                 "title": "Overview",
-                "path": "index.qmd"
+                "path": "index.qmd",
+                "section": "Getting started"
             },
             {
                 "title": "Getting started",
-                "path": "getting-started.qmd"
-            },
-            {
-                "title": "Coming from dplyr",
-                "path": "coming-from-dplyr.qmd"
-            },
-            {
-                "title": "Porting an R script",
-                "path": "port-r-script.qmd"
-            },
-            {
-                "title": "Single-table functions",
-                "path": "reference/single-table.qmd"
-            },
-            {
-                "title": "Joins, binding, and set operations",
-                "path": "reference/two-table.qmd"
-            },
-            {
-                "title": "Grouping",
-                "path": "reference/grouping.qmd"
-            },
-            {
-                "title": "Vector helpers",
-                "path": "reference/vectors.qmd"
-            },
-            {
-                "title": "Strings and dates",
-                "path": "reference/strings-dates.qmd"
-            },
-            {
-                "title": "Selecting columns",
-                "path": "reference/tidyselect.qmd"
-            },
-            {
-                "title": "Reshaping with tidyr",
-                "path": "reference/tidyr.qmd"
-            },
-            {
-                "title": "Cleaning with janitor",
-                "path": "reference/janitor.qmd"
-            },
-            {
-                "title": "Models",
-                "path": "reference/models.qmd"
-            },
-            {
-                "title": "Databases and expressions",
-                "path": "reference/databases.qmd"
-            },
-            {
-                "title": "Filter rows and add columns",
-                "path": "examples/filter-and-mutate.qmd"
-            },
-            {
-                "title": "Summarize groups",
-                "path": "examples/group-and-summarize.qmd"
-            },
-            {
-                "title": "Join two tables",
-                "path": "examples/join.qmd"
-            },
-            {
-                "title": "Pivot between wide and long",
-                "path": "examples/pivot.qmd"
-            },
-            {
-                "title": "Gallery",
-                "path": "gallery.qmd"
+                "path": "getting-started.qmd",
+                "section": "Getting started"
             },
             {
                 "title": "Compatibility and limitations",
-                "path": "compatibility.qmd"
+                "path": "compatibility.qmd",
+                "section": "Getting started"
+            },
+            {
+                "title": "Coming from dplyr",
+                "path": "coming-from-dplyr.qmd",
+                "section": "Guides"
+            },
+            {
+                "title": "Porting an R script",
+                "path": "port-r-script.qmd",
+                "section": "Guides"
             },
             {
                 "title": "Performance",
-                "path": "performance.qmd"
+                "path": "performance.qmd",
+                "section": "Guides"
+            },
+            {
+                "title": "Functions and methods",
+                "path": "reference/index.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Pipes and method chains",
+                "path": "reference/chains.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Single-table functions",
+                "path": "reference/single-table.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Joins, binding, and set operations",
+                "path": "reference/two-table.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Grouping",
+                "path": "reference/grouping.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Vector helpers",
+                "path": "reference/vectors.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Strings and dates",
+                "path": "reference/strings-dates.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Selecting columns",
+                "path": "reference/tidyselect.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Reshaping with tidyr",
+                "path": "reference/tidyr.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Cleaning with janitor",
+                "path": "reference/janitor.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Models",
+                "path": "reference/models.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Databases and expressions",
+                "path": "reference/databases.qmd",
+                "section": "Functions and methods"
+            },
+            {
+                "title": "Filter rows and add columns",
+                "path": "examples/filter-and-mutate.qmd",
+                "section": "Examples"
+            },
+            {
+                "title": "Summarize groups",
+                "path": "examples/group-and-summarize.qmd",
+                "section": "Examples"
+            },
+            {
+                "title": "Join two tables",
+                "path": "examples/join.qmd",
+                "section": "Examples"
+            },
+            {
+                "title": "Pivot between wide and long",
+                "path": "examples/pivot.qmd",
+                "section": "Examples"
+            },
+            {
+                "title": "Gallery",
+                "path": "gallery.qmd",
+                "section": "Examples"
             },
             {
                 "title": "Development",
-                "path": "development.qmd"
+                "path": "development.qmd",
+                "section": "Contributing"
             }
         ]
     },

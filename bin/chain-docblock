@@ -2,11 +2,12 @@
 <?php
 
 /*
- * Write the @method lines in src/Chain.php's docblock, one per phplyr verb
- * (a function in the Phplyr namespace that returns a Closure), so IDEs
- * autocomplete phplyr($t)->... chains. A chained verb is camelCase, so
+ * Write the @method lines in src/Chain.php's docblock, one per phplyr table
+ * function (a function in the Phplyr namespace that returns a Closure), so
+ * IDEs autocomplete phplyr($t)->... chains. A chain method is camelCase, so
  * group_by() is listed as groupBy(). Run it after adding or changing a
- * verb. With --check, exit 1 if the docblock is out of date instead.
+ * table function. With --check, exit 1 if the docblock is out of date
+ * instead.
  *
  * Usage: bin/chain-docblock [--check]
  */
@@ -16,7 +17,7 @@ declare(strict_types=1);
 $root = dirname(__DIR__);
 require $root.'/vendor/autoload.php';
 
-// Verbs whose result isn't a table, so the chain returns it as it is.
+// Functions whose result isn't a table, so the chain returns it as it is.
 $returns = [
     'pull' => 'array',
     'group_vars' => 'array',
@@ -93,4 +94,4 @@ if (in_array('--check', $argv, true)) {
     exit(0);
 }
 file_put_contents($file, $new);
-echo count($lines)." verbs\n";
+echo count($lines)." methods\n";

@@ -126,7 +126,7 @@ function nest_by(mixed ...$cols): Closure
 }
 
 /**
- * Run a verb on the table grouped by _groups, then restore the original
+ * Run a table function on the table grouped by _groups, then restore the original
  * grouping (superseded in dplyr by _by): with_groups('g', mutate(m: mean('x'))).
  * A null _groups runs it ungrouped.
  */
@@ -347,7 +347,7 @@ function collect(): Closure
     return fn (Table $t) => $t->collect();
 }
 
-/** The current group's 1-based number, inside mutate(), summarise() or reframe(). */
+/** The current group's 1-based number, inside mutate(), summarise(), or reframe(). */
 function cur_group_id(): CurGroup
 {
     return new CurGroup('id');

@@ -11,13 +11,13 @@ use Stringable;
 
 /**
  * A table in a method chain, made by phplyr($t). Each method runs the
- * phplyr verb of that name with the same arguments, so
+ * phplyr function of that name with the same arguments, so
  * phplyr($t)->filter(...)->head(5) gives the result of
- * $t |> filter(...) |> head(5). A verb that returns a table returns a new
+ * $t |> filter(...) |> head(5). A function that returns a table returns a new
  * Chain; any other result, such as pull()'s values or lm()'s model, is
  * returned as it is. get() returns the table.
  *
- * A chained verb is camelCase, matching the methods on a phibble
+ * A chain method is camelCase, matching the methods on a phibble
  * DataFrame: ->groupBy() runs the group_by() function. The function keeps
  * its snake_case name, which is the convention for a standalone function,
  * and the chain does not take that spelling.
@@ -143,7 +143,7 @@ use Stringable;
  */
 final class Chain implements Stringable
 {
-    /** @var array<string, string|null> The verb each method name runs, or null. */
+    /** @var array<string, string|null> The function each method name runs, or null. */
     private static array $verbs = [];
 
     public function __construct(private readonly Table $table) {}
@@ -185,7 +185,7 @@ final class Chain implements Stringable
     }
 
     /**
-     * The verb $name runs, or null when it names none. A verb is a phplyr
+     * The function $name runs, or null when it names none: a phplyr
      * function that returns a Closure taking the table, and a chain spells
      * it camelCase, so groupBy() resolves to group_by().
      */
@@ -231,9 +231,9 @@ final class Chain implements Stringable
 
     private static function rejection(string $name): string
     {
-        $message = "{$name}() is not a phplyr verb";
+        $message = "{$name}() is not a phplyr chain method";
         if (\str_contains($name, '_') && self::verb(self::camel($name)) !== null) {
-            return $message.'; a chained verb is camelCase, so write '.self::camel($name).'()';
+            return $message.'; a chain method is camelCase, so write '.self::camel($name).'()';
         }
 
         return $message;

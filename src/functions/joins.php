@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * Two-table verbs with dplyr 1.1 semantics. The table's join() does the
+ * Two-table functions with dplyr 1.1 semantics. The table's join() does the
  * work (phibble Table contract v1), so backends can run joins natively.
  *
  * by: null joins on the columns both tables share; 'id' or ['id', 'year']

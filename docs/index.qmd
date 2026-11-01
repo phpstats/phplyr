@@ -33,6 +33,9 @@ phplyr has:
 - janitor's `clean_names()`, `remove_empty()`, `get_dupes()`, and `tabyl()`.
 - `lm()`, `glm()`, `lmer()`, and `glmer()`, which fit models with phit.
 
+[Functions and methods](reference/index.qmd) lists every function and
+method, with a link to its reference entry.
+
 ## Install
 
 ```bash

@@ -25,30 +25,48 @@ $code = fn (string $file) => trim((string) preg_replace(
 ));
 preg_match('/```\{\.text \.output\}\n(.*?)\n```/s', file_get_contents($root.'/docs/examples/_first-pipeline.md'), $m);
 
-$nav = [
-    ['title' => 'Overview', 'path' => 'index.qmd'],
-    ['title' => 'Getting started', 'path' => 'getting-started.qmd'],
-    ['title' => 'Coming from dplyr', 'path' => 'coming-from-dplyr.qmd'],
-    ['title' => 'Porting an R script', 'path' => 'port-r-script.qmd'],
-    ['title' => 'Single-table functions', 'path' => 'reference/single-table.qmd'],
-    ['title' => 'Joins, binding, and set operations', 'path' => 'reference/two-table.qmd'],
-    ['title' => 'Grouping', 'path' => 'reference/grouping.qmd'],
-    ['title' => 'Vector helpers', 'path' => 'reference/vectors.qmd'],
-    ['title' => 'Strings and dates', 'path' => 'reference/strings-dates.qmd'],
-    ['title' => 'Selecting columns', 'path' => 'reference/tidyselect.qmd'],
-    ['title' => 'Reshaping with tidyr', 'path' => 'reference/tidyr.qmd'],
-    ['title' => 'Cleaning with janitor', 'path' => 'reference/janitor.qmd'],
-    ['title' => 'Models', 'path' => 'reference/models.qmd'],
-    ['title' => 'Databases and expressions', 'path' => 'reference/databases.qmd'],
-    ['title' => 'Filter rows and add columns', 'path' => 'examples/filter-and-mutate.qmd'],
-    ['title' => 'Summarize groups', 'path' => 'examples/group-and-summarize.qmd'],
-    ['title' => 'Join two tables', 'path' => 'examples/join.qmd'],
-    ['title' => 'Pivot between wide and long', 'path' => 'examples/pivot.qmd'],
-    ['title' => 'Gallery', 'path' => 'gallery.qmd'],
-    ['title' => 'Compatibility and limitations', 'path' => 'compatibility.qmd'],
-    ['title' => 'Performance', 'path' => 'performance.qmd'],
-    ['title' => 'Development', 'path' => 'development.qmd'],
-];
+// The docs sidebar, in docs/_quarto.yml's order, with its sections.
+$nav = [];
+foreach ([
+    'Getting started' => [
+        'Overview' => 'index.qmd',
+        'Getting started' => 'getting-started.qmd',
+        'Compatibility and limitations' => 'compatibility.qmd',
+    ],
+    'Guides' => [
+        'Coming from dplyr' => 'coming-from-dplyr.qmd',
+        'Porting an R script' => 'port-r-script.qmd',
+        'Performance' => 'performance.qmd',
+    ],
+    'Functions and methods' => [
+        'Functions and methods' => 'reference/index.qmd',
+        'Pipes and method chains' => 'reference/chains.qmd',
+        'Single-table functions' => 'reference/single-table.qmd',
+        'Joins, binding, and set operations' => 'reference/two-table.qmd',
+        'Grouping' => 'reference/grouping.qmd',
+        'Vector helpers' => 'reference/vectors.qmd',
+        'Strings and dates' => 'reference/strings-dates.qmd',
+        'Selecting columns' => 'reference/tidyselect.qmd',
+        'Reshaping with tidyr' => 'reference/tidyr.qmd',
+        'Cleaning with janitor' => 'reference/janitor.qmd',
+        'Models' => 'reference/models.qmd',
+        'Databases and expressions' => 'reference/databases.qmd',
+    ],
+    'Examples' => [
+        'Filter rows and add columns' => 'examples/filter-and-mutate.qmd',
+        'Summarize groups' => 'examples/group-and-summarize.qmd',
+        'Join two tables' => 'examples/join.qmd',
+        'Pivot between wide and long' => 'examples/pivot.qmd',
+        'Gallery' => 'gallery.qmd',
+    ],
+    'Contributing' => [
+        'Development' => 'development.qmd',
+    ],
+] as $section => $pages) {
+    foreach ($pages as $title => $path) {
+        $nav[] = ['title' => $title, 'path' => $path, 'section' => $section];
+    }
+}
 foreach ($nav as $entry) {
     $html = $root.'/docs/'.substr($entry['path'], 0, -4).'.html';
     if (! is_file($html)) {
