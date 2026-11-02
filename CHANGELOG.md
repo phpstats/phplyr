@@ -2,6 +2,14 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
+## 0.4.7 - 2026-11-01
+
+### Changed
+
+- `lm()`, `glm()`, `lmer()`, and `glmer()` call only phit's `Phit\fit_ols()`, `Phit\fit_generalized_linear()`, `Phit\fit_mixed_gaussian()`, and `Phit\fit_mixed_logistic()`, which phit 0.4 and 0.5 provide. phplyr no longer calls phit 0.3's `fit_lm()`, `fit_glm()`, `fit_lmer()`, or `fit_glmer()`, which phit 0.5 does not have.
+- composer.json suggests phit 0.4 or 0.5.
+- Every documentation example reads public data by URL from the PHPstats datasets repository.
+
 ## 0.4.6 - 2026-11-01
 
 ### Changed

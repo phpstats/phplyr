@@ -415,7 +415,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>With phit 0.3, which predates these names, phplyr calls phit 0.3’s <code>fit_lm()</code>, <code>fit_glm()</code>, <code>fit_lmer()</code>, and <code>fit_glmer()</code>.</p>
 <p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, its PHP port, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them. The <a href="https://phplyr.phpstats.org/benchmarks/models">Models benchmark</a> times both through phplyr.</p>
 <ul>
 <li>Install the polyfill with <code>composer require phpstats/phit-polyfill</code>. When the extension is loaded, the polyfill defines nothing.</li>
@@ -483,25 +482,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="lm" class="level3">
 <h3 class="anchored" data-anchor-id="lm"><code>lm()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lm(<span class="dt">string</span> <span class="va">$formula</span><span class="ot">,</span> <span class="dt">mixed</span> ...<span class="va">$options</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Linear regression: <code>$t</code> |&gt; <code>lm('y ~ a + b')</code>. Calls phit’s fit_ols (fit_lm before phit 0.4).</p>
+<p>Linear regression: <code>$t</code> |&gt; <code>lm('y ~ a + b')</code>. Calls phit’s <code>fit_ols()</code>.</p>
 <p>Returns a function of a table, which returns phit’s result array. Chain method: <code>-&gt;lm()</code>. <a href="#results">Example</a>.</p>
 </section>
 <section id="glm" class="level3">
 <h3 class="anchored" data-anchor-id="glm"><code>glm()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>glm(<span class="dt">string</span> <span class="va">$formula</span><span class="ot">,</span> <span class="dt">string</span> <span class="va">$family</span> <span class="op">=</span> <span class="st">'gaussian'</span><span class="ot">,</span> <span class="dt">mixed</span> ...<span class="va">$options</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Generalised linear model: <code>$t</code> |&gt; <code>glm('y ~ x', family: 'binomial')</code>. Calls phit’s fit_generalized_linear (fit_glm before phit 0.4).</p>
+<p>Generalised linear model: <code>$t</code> |&gt; <code>glm('y ~ x', family: 'binomial')</code>. Calls phit’s <code>fit_generalized_linear()</code>.</p>
 <p>Returns a function of a table, which returns phit’s result array. Chain method: <code>-&gt;glm()</code>. <a href="#results">Example</a>.</p>
 </section>
 <section id="lmer" class="level3">
 <h3 class="anchored" data-anchor-id="lmer"><code>lmer()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lmer(<span class="dt">string</span> <span class="va">$formula</span><span class="ot">,</span> <span class="dt">mixed</span> ...<span class="va">$options</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Linear mixed model with lme4-style random effects: <code>$t</code> |&gt; <code>lmer('score ~ study_hours + (1 | school)')</code>. REML by default (reml: false for maximum likelihood). Calls phit’s fit_mixed_gaussian (fit_lmer before phit 0.4).</p>
+<p>Linear mixed model with lme4-style random effects: <code>$t</code> |&gt; <code>lmer('Reaction ~ Days + (1 | Subject)')</code>. REML by default (reml: false for maximum likelihood). Calls phit’s <code>fit_mixed_gaussian()</code>.</p>
 <p>Returns a function of a table, which returns phit’s result array. Chain method: <code>-&gt;lmer()</code>.</p>
 </section>
 <section id="glmer" class="level3">
 <h3 class="anchored" data-anchor-id="glmer"><code>glmer()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>glmer(<span class="dt">string</span> <span class="va">$formula</span><span class="ot">,</span> <span class="dt">string</span> <span class="va">$family</span> <span class="op">=</span> <span class="st">'binomial'</span><span class="ot">,</span> <span class="dt">mixed</span> ...<span class="va">$options</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Generalised linear mixed model: <code>$t</code> |&gt; <code>glmer('y ~ x + (1 | g)', family: 'binomial')</code>. Calls phit’s fit_mixed_logistic (fit_glmer before phit 0.4). Both fit the binomial family with the logit link only. fit_mixed_logistic takes no family or link, so they are checked here.</p>
+<p>Generalised linear mixed model: <code>$t</code> |&gt; <code>glmer('y ~ x + (1 | g)', family: 'binomial')</code>. Calls phit’s <code>fit_mixed_logistic()</code>, which fits the binomial family with the logit link only and takes neither as an argument, so they are checked here. A link may be given as link: or as the first positional option.</p>
 <p>Returns a function of a table, which returns phit’s result array. Chain method: <code>-&gt;glmer()</code>. Throws <code>InvalidArgumentException</code> on invalid arguments.</p>
 </section>
 </section>

@@ -15,7 +15,7 @@ which provides the tables, and `symfony/polyfill-php84`.
 
 | Optional | Enables |
 | --- | --- |
-| [phit](https://github.com/phpstats/phit) extension, 0.1 or later | `lm()`, `glm()`, `lmer()`, and `glmer()`, and native `mean()`, `sd()`, `var_()`, `median()`, and `quantile()` |
+| [phit](https://github.com/phpstats/phit) extension, 0.4 or 0.5 | `lm()`, `glm()`, `lmer()`, and `glmer()`, and native `mean()`, `sd()`, `var_()`, `median()`, and `quantile()` |
 | [phpolars](https://github.com/phpstats/phpolars) extension | phibble's `PolarsTable` backend. See [Backends](compatibility.qmd#backends). |
 | intl extension | Transliteration in `clean_names()` that matches R's janitor. Without it, iconv is used, and some names differ. |
 | PDO driver for SQLite, PostgreSQL, or MySQL | Database tables through `Phibble\tbl()`. See [Databases and expressions](reference/databases.qmd). |

@@ -695,25 +695,16 @@ final class Internal
      */
     public static string $phitNamespace = 'Phit\\';
 
-    /**
-     * Call one of phit's formula model functions: the phit 0.4 name when it
-     * exists, otherwise the phit 0.3 name. phit 0.3's fit_ols is the matrix
-     * fit, so the formula fit_ols counts as present only alongside
-     * fit_ols_matrix, which phit 0.4 adds.
-     */
-    public static function callModel(string $new, string $old, mixed ...$args): mixed
+    /** Call one of phit's formula model functions, or say how to install phit. */
+    public static function callModel(string $name, mixed ...$args): mixed
     {
         $ns = self::$phitNamespace;
-        $hasNew = $new === 'fit_ols' ? \function_exists($ns.'fit_ols_matrix') : \function_exists($ns.$new);
-        if ($hasNew) {
-            return ($ns.$new)(...$args);
-        }
-        if (\function_exists($ns.$old)) {
-            return ($ns.$old)(...$args);
+        if (\function_exists($ns.$name)) {
+            return ($ns.$name)(...$args);
         }
 
         throw new \RuntimeException(
-            "{$ns}{$new}() is not available. Install the phit extension (phpstats/phit) or phit-polyfill (phpstats/phit-polyfill)."
+            "{$ns}{$name}() is not available. Install the phit extension (phpstats/phit) or phit-polyfill (phpstats/phit-polyfill)."
         );
     }
 }

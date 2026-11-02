@@ -34,34 +34,23 @@ describe('phit function names', function () {
 
     $t = fn () => DataFrame::fromRows([['y' => 1.0, 'x' => 2.0, 'g' => 'a']]);
 
-    it('calls the phit 0.4 and 0.5 names, without the old aliases', function () use ($t) {
-        Internal::$phitNamespace = 'PhplyrTest\\Phit04\\';
+    it('calls phit\'s formula functions', function () use ($t) {
+        Internal::$phitNamespace = 'PhplyrTest\\Phit\\';
         $data = $t();
 
-        expect(pipe($data, lm('y ~ x', weights: [1.0])))->toBe(['PhplyrTest\\Phit04\\fit_ols', ['y ~ x', $data, 'weights' => [1.0]]]);
-        expect(pipe($data, glm('y ~ x', family: 'poisson')))->toBe(['PhplyrTest\\Phit04\\fit_generalized_linear', ['y ~ x', $data, 'poisson']]);
-        expect(pipe($data, lmer('y ~ x + (1 | g)', reml: false)))->toBe(['PhplyrTest\\Phit04\\fit_mixed_gaussian', ['y ~ x + (1 | g)', $data, 'reml' => false]]);
+        expect(pipe($data, lm('y ~ x', weights: [1.0])))->toBe(['PhplyrTest\\Phit\\fit_ols', ['y ~ x', $data, 'weights' => [1.0]]]);
+        expect(pipe($data, glm('y ~ x', family: 'poisson')))->toBe(['PhplyrTest\\Phit\\fit_generalized_linear', ['y ~ x', $data, 'poisson']]);
+        expect(pipe($data, lmer('y ~ x + (1 | g)', reml: false)))->toBe(['PhplyrTest\\Phit\\fit_mixed_gaussian', ['y ~ x + (1 | g)', $data, 'reml' => false]]);
         expect(pipe($data, glmer('y ~ x + (1 | g)', link: 'logit', quadraturePoints: 5)))
-            ->toBe(['PhplyrTest\\Phit04\\fit_mixed_logistic', ['y ~ x + (1 | g)', $data, 'quadraturePoints' => 5]]);
+            ->toBe(['PhplyrTest\\Phit\\fit_mixed_logistic', ['y ~ x + (1 | g)', $data, 'quadraturePoints' => 5]]);
         expect(pipe($data, glmer('y ~ x + (1 | g)', 'binomial', 'logit')))
-            ->toBe(['PhplyrTest\\Phit04\\fit_mixed_logistic', ['y ~ x + (1 | g)', $data]]);
+            ->toBe(['PhplyrTest\\Phit\\fit_mixed_logistic', ['y ~ x + (1 | g)', $data]]);
     });
 
     it('rejects a family or link that fit_mixed_logistic cannot fit', function () use ($t) {
-        Internal::$phitNamespace = 'PhplyrTest\\Phit04\\';
+        Internal::$phitNamespace = 'PhplyrTest\\Phit\\';
         expect(fn () => pipe($t(), glmer('y ~ x + (1 | g)', family: 'poisson')))->toThrow(InvalidArgumentException::class, "family 'binomial'");
         expect(fn () => pipe($t(), glmer('y ~ x + (1 | g)', link: 'probit')))->toThrow(InvalidArgumentException::class, "link 'logit'");
-    });
-
-    it('calls the phit 0.3 names before phit 0.4', function () use ($t) {
-        // phit 0.3's fit_ols is the matrix fit, so lm() must not call it.
-        Internal::$phitNamespace = 'PhplyrTest\\Phit03\\';
-        $data = $t();
-
-        expect(pipe($data, lm('y ~ x')))->toBe(['PhplyrTest\\Phit03\\fit_lm', ['y ~ x', $data]]);
-        expect(pipe($data, glm('y ~ x', family: 'binomial')))->toBe(['PhplyrTest\\Phit03\\fit_glm', ['y ~ x', $data, 'binomial']]);
-        expect(pipe($data, lmer('y ~ x + (1 | g)')))->toBe(['PhplyrTest\\Phit03\\fit_lmer', ['y ~ x + (1 | g)', $data]]);
-        expect(pipe($data, glmer('y ~ x + (1 | g)', link: 'logit')))->toBe(['PhplyrTest\\Phit03\\fit_glmer', ['y ~ x + (1 | g)', $data, 'binomial', 'link' => 'logit']]);
     });
 });
 

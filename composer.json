@@ -15,7 +15,7 @@
     },
     "suggest": {
         "ext-intl": "Transliteration in make_clean_names() and clean_names() that matches janitor; without it, iconv is used",
-        "ext-phit": "Native descriptives (Phit\\stat_*) and model fitting (Phit\\fit_*), needed for lm(), glm(), lmer(), and glmer()"
+        "ext-phit": "phit 0.4 or 0.5: native descriptives (Phit\\stat_*) and model fitting (Phit\\fit_*), needed for lm(), glm(), lmer(), and glmer()"
     },
     "autoload": {
         "psr-4": {
