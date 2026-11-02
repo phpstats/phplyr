@@ -15,7 +15,8 @@ fits the model. phplyr adds no model code of its own.
 
 The functions come from the [phit](https://github.com/phpstats/phit)
 extension or from [phit-polyfill](https://github.com/phpstats/phit-polyfill),
-its PHP port, and phplyr calls both the same way. phit's
+an implementation of the same functions in PHP, and phplyr calls both the same
+way. phit's
 [Extension or polyfill](https://phit.phpstats.org/docs/extension-or-polyfill)
 page compares them. The
 [Models benchmark](https://phplyr.phpstats.org/benchmarks/models) times both

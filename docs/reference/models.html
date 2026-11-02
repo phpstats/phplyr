@@ -193,7 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../port-r-script.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Porting an R script</span></a>
+ <span class="menu-text">Translate an R script</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -415,7 +415,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, its PHP port, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them. The <a href="https://phplyr.phpstats.org/benchmarks/models">Models benchmark</a> times both through phplyr.</p>
+<p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, an implementation of the same functions in PHP, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them. The <a href="https://phplyr.phpstats.org/benchmarks/models">Models benchmark</a> times both through phplyr.</p>
 <ul>
 <li>Install the polyfill with <code>composer require phpstats/phit-polyfill</code>. When the extension is loaded, the polyfill defines nothing.</li>
 <li>The polyfill throws an exception while OPcache’s JIT is enabled. Set <code>opcache.jit=disable</code> where it runs.</li>

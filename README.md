@@ -87,7 +87,7 @@ The documentation is at <https://phplyr.phpstats.org/docs>:
 - [Coming from dplyr](https://phplyr.phpstats.org/docs/coming-from-dplyr)
 - [Functions and methods](https://phplyr.phpstats.org/docs/reference/index), every function and method with its reference entry
 - Reference pages for single-table functions, joins, grouping, vector helpers, strings and dates, column selection, tidyr, janitor, models, and databases
-- [Gallery](https://phplyr.phpstats.org/docs/gallery) and [Porting an R script](https://phplyr.phpstats.org/docs/port-r-script)
+- [Gallery](https://phplyr.phpstats.org/docs/gallery) and [Translate an R script](https://phplyr.phpstats.org/docs/port-r-script)
 
 [CHANGELOG.md](CHANGELOG.md) lists the changes in each release.
 

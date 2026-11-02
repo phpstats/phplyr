@@ -114,7 +114,7 @@
     "href": "reference/models.html",
     "title": "Models",
     "section": "",
-    "text": "lm(), glm(), lmer(), and glmer() fit models with phit. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model. phplyr adds no model code of its own.\nThe functions come from the phit extension or from phit-polyfill, its PHP port, and phplyr calls both the same way. phit’s Extension or polyfill page compares them. The Models benchmark times both through phplyr.\nCI runs phplyr’s tests with each implementation. Both runs compare lm() and glm() coefficients with R’s, and lmer() fixed effects with lme4’s. The Models verification lists the comparisons.",
+    "text": "lm(), glm(), lmer(), and glmer() fit models with phit. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model. phplyr adds no model code of its own.\nThe functions come from the phit extension or from phit-polyfill, an implementation of the same functions in PHP, and phplyr calls both the same way. phit’s Extension or polyfill page compares them. The Models benchmark times both through phplyr.\nCI runs phplyr’s tests with each implementation. Both runs compare lm() and glm() coefficients with R’s, and lmer() fixed effects with lme4’s. The Models verification lists the comparisons.",
     "crumbs": [
       "Functions and methods",
       "Models"
@@ -332,23 +332,23 @@
   {
     "objectID": "port-r-script.html",
     "href": "port-r-script.html",
-    "title": "Porting an R script",
+    "title": "Translate an R script",
     "section": "",
     "text": "A typical R analysis of the penguins data, translated to PHP. It reads a CSV file, cleans and reshapes it, summarizes it, and fits a linear, a logistic, and a random-intercept model.\nData: penguins, size measurements for 344 penguins near Palmer Station, Antarctica, read by URL. The R script needs dplyr, tidyr, and lme4. The PHP script needs phplyr and, for the models, phit; see Models.",
     "crumbs": [
       "Guides",
-      "Porting an R script"
+      "Translate an R script"
     ]
   },
   {
     "objectID": "port-r-script.html#what-changed-in-translation",
     "href": "port-r-script.html#what-changed-in-translation",
-    "title": "Porting an R script",
+    "title": "Translate an R script",
     "section": "Translation notes",
     "text": "Translation notes\n\nLoading. read.csv() becomes DataFrame::fromCsv(), which infers column types like readr and reads empty fields as NA, as na.strings = c(\"\", \"NA\") does in R.\nPipes. On PHP 8.5, R’s |&gt; stays |&gt;. On PHP 8.3 and 8.4, the pipeline becomes a method chain that starts with phplyr($t).\nColumn references. Bare names become strings, or col('x') inside expressions, so bill_length_mm / bill_depth_mm becomes col('bill_length_mm')-&gt;div(col('bill_depth_mm')).\nConditions. case_when(x &lt; 4 ~ \"low\", .default = \"high\") becomes case_when([col('x')-&gt;lt(4), 'low'], default: 'high').\nRenaming in select. select(length = bill_length_mm) becomes select(['length' =&gt; 'bill_length_mm']).\nColumn sets. c(length, depth) becomes ['length', 'depth'].\nModels. lm(), glm(), and lmer() take the same formulas. They return arrays, so coef() and fixef() become reads of coefficients. The coefficients agree to the printed four decimals, except the last digit of the random-intercept model’s intercept.\nPrinting. DataFrames print in tibble’s format.\n\nOn a database table from Phibble\\tbl(), the cleaning, counting, and grouped-summary steps run as SQL, because they use col() expressions and phplyr’s helpers. The reshaping step loads the rows into PHP. See Databases and expressions.",
     "crumbs": [
       "Guides",
-      "Porting an R script"
+      "Translate an R script"
     ]
   },
   {
@@ -631,7 +631,7 @@
     "href": "development.html#documentation",
     "title": "Development",
     "section": "Documentation",
-    "text": "Documentation\nThe site is a Quarto project in docs/. Code examples live in docs/examples/*.php. bin/docs-examples runs each one with docs/ as the working directory and writes docs/examples/_&lt;name&gt;.md with the code and its output, which the pages include. Rendering never executes PHP.\nAn example uses |&gt;, and docs/examples/&lt;name&gt;.chain.php beside it is the same example as a method chain. bin/docs-examples runs both and fails if their output differs. The page shows the two in tabs labeled “PHP 8.5+” and “PHP 8.3–8.4”, with the output once. bin/docs-examples needs PHP 8.5, and it loads phit from .ext/libphit.dylib for the model examples.\nMost examples leave out the require line and the imports, and bin/docs-examples adds them before it runs the code, with $data set to the PHPstats datasets folder. Examples read their data from there by URL, so they need network access. An example that requires vendor/autoload.php itself is a complete script. It runs as written, so a missing import fails the run, and the page shows it without the opening tag and the require line. The first example, the porting script, and the pages in the Examples section (docs/examples/&lt;slug&gt;.qmd, with their code in docs/examples/pages/) are complete scripts. A subdirectory’s _prelude.php, such as the Gallery’s, replaces the generated prelude for its examples, and the page shows it once.\nPHP=/path/to/php85 bin/docs-examples   # refresh example output\nPHP=/path/to/php85 bin/render-docs     # examples, quarto render, publish to docs/\nThe first example reads penguins by URL from the datasets repository’s main branch, and a test checks that the README and site.json do the same.\nCommit the rendered HTML. The PHPstats site imports it from the commit it pins and serves it at https://phplyr.phpstats.org/docs. GitHub Pages serves redirects to those pages, which .github/workflows/pages.yml builds with bin/pages-redirects.",
+    "text": "Documentation\nThe site is a Quarto project in docs/. Code examples live in docs/examples/*.php. bin/docs-examples runs each one with docs/ as the working directory and writes docs/examples/_&lt;name&gt;.md with the code and its output, which the pages include. Rendering never executes PHP.\nAn example uses |&gt;, and docs/examples/&lt;name&gt;.chain.php beside it is the same example as a method chain. bin/docs-examples runs both and fails if their output differs. The page shows the two in tabs labeled “PHP 8.5+” and “PHP 8.3–8.4”, with the output once. bin/docs-examples needs PHP 8.5, and it loads phit from .ext/libphit.dylib for the model examples.\nMost examples leave out the require line and the imports, and bin/docs-examples adds them before it runs the code, with $data set to the PHPstats datasets folder. Examples read their data from there by URL, so they need network access. An example that requires vendor/autoload.php itself is a complete script. It runs as written, so a missing import fails the run, and the page shows it without the opening tag and the require line. The first example, the R translation script, and the pages in the Examples section (docs/examples/&lt;slug&gt;.qmd, with their code in docs/examples/pages/) are complete scripts. A subdirectory’s _prelude.php, such as the Gallery’s, replaces the generated prelude for its examples, and the page shows it once.\nPHP=/path/to/php85 bin/docs-examples   # refresh example output\nPHP=/path/to/php85 bin/render-docs     # examples, quarto render, publish to docs/\nThe first example reads penguins by URL from the datasets repository’s main branch, and a test checks that the README and site.json do the same.\nCommit the rendered HTML. The PHPstats site imports it from the commit it pins and serves it at https://phplyr.phpstats.org/docs. GitHub Pages serves redirects to those pages, which .github/workflows/pages.yml builds with bin/pages-redirects.",
     "crumbs": [
       "Contributing",
       "Development"

@@ -31,7 +31,7 @@ foreach ([
     ],
     'Guides' => [
         'Coming from dplyr' => 'coming-from-dplyr.qmd',
-        'Porting an R script' => 'port-r-script.qmd',
+        'Translate an R script' => 'port-r-script.qmd',
         'Performance' => 'performance.qmd',
     ],
     'Functions and methods' => [
@@ -99,7 +99,7 @@ foreach ($examples as $example) {
 $manifest = [
     'package' => 'phplyr',
     'title' => 'phplyr',
-    'tagline' => 'A PHP port of the Tidyverse\'s dplyr and tidyr.',
+    'tagline' => 'dplyr- and tidyr-style data manipulation for PHP.',
     'summary' => 'Filter, transform, join, and reshape tables with dplyr- and tidyr-style functions. Use PHP 8.5 pipes or method chains on PHP 8.3 and later. Pipelines run on phibble\'s in-memory DataFrame, on databases through SQL, and on Polars.',
     'install' => ['composer require phpstats/phplyr'],
     'php' => ['8.3', '8.4', '8.5'],

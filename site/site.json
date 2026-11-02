@@ -1,7 +1,7 @@
 {
     "package": "phplyr",
     "title": "phplyr",
-    "tagline": "A PHP port of the Tidyverse's dplyr and tidyr.",
+    "tagline": "dplyr- and tidyr-style data manipulation for PHP.",
     "summary": "Filter, transform, join, and reshape tables with dplyr- and tidyr-style functions. Use PHP 8.5 pipes or method chains on PHP 8.3 and later. Pipelines run on phibble's in-memory DataFrame, on databases through SQL, and on Polars.",
     "install": [
         "composer require phpstats/phplyr"
@@ -75,7 +75,7 @@
                 "section": "Guides"
             },
             {
-                "title": "Porting an R script",
+                "title": "Translate an R script",
                 "path": "port-r-script.qmd",
                 "section": "Guides"
             },

@@ -1,6 +1,6 @@
 ---
 title: "phplyr"
-subtitle: "A PHP port of the Tidyverse's dplyr and tidyr."
+subtitle: "dplyr- and tidyr-style data manipulation for PHP."
 ---
 
 Filter, transform, join, and reshape tables with dplyr- and tidyr-style

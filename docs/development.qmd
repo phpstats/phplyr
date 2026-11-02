@@ -66,7 +66,7 @@ Most examples leave out the `require` line and the imports, and
 read their data from there by URL, so they need network access. An example that
 requires `vendor/autoload.php` itself is a complete script. It runs as
 written, so a missing import fails the run, and the page shows it without the
-opening tag and the `require` line. The first example, the porting script,
+opening tag and the `require` line. The first example, the R translation script,
 and the pages in the Examples section (`docs/examples/<slug>.qmd`, with their
 code in `docs/examples/pages/`) are complete scripts. A subdirectory's
 `_prelude.php`, such as the Gallery's, replaces the generated prelude for its
