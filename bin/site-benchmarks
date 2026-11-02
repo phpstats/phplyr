@@ -2,7 +2,7 @@
 <?php
 
 /*
- * Write site/benchmarks/*.json for the phpstats site, in the format of
+ * Write site/benchmarks/*.json for the PHPstats site, in the format of
  * phpstats.org's docs/evidence-records.md, from the raw records in
  * docs/benchmarks/:
  *

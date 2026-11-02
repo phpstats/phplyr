@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * The site/ folder read by the phpstats site: the manifest names files and
+ * The site/ folder read by the PHPstats site: the manifest names files and
  * pages that exist.
  */
 

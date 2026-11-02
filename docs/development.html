@@ -414,11 +414,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">PHP</span><span class="op">=</span>/path/to/php85 <span class="ex">bin/docs-examples</span>   <span class="co"># refresh example output</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">PHP</span><span class="op">=</span>/path/to/php85 <span class="ex">bin/render-docs</span>     <span class="co"># examples, quarto render, publish to docs/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The first example reads <code>penguins</code> by URL from the datasets repository’s <code>main</code> branch, and a test checks that the README and site.json do the same.</p>
-<p>Commit the rendered HTML. phpstats.org imports it from the commit it pins and serves it at <a href="https://phplyr.phpstats.org/docs" class="uri">https://phplyr.phpstats.org/docs</a>. GitHub Pages serves redirects to those pages, which <code>.github/workflows/pages.yml</code> builds with <code>bin/pages-redirects</code>.</p>
+<p>Commit the rendered HTML. The PHPstats site imports it from the commit it pins and serves it at <a href="https://phplyr.phpstats.org/docs" class="uri">https://phplyr.phpstats.org/docs</a>. GitHub Pages serves redirects to those pages, which <code>.github/workflows/pages.yml</code> builds with <code>bin/pages-redirects</code>.</p>
 </section>
 <section id="site-content" class="level2">
 <h2 class="anchored" data-anchor-id="site-content">Site content</h2>
-<p><code>site/</code> holds phplyr’s content for phplyr.phpstats.org. The phpstats site reads it at a pinned commit.</p>
+<p><code>site/</code> holds phplyr’s content for <code>phplyr.phpstats.org</code>. The PHPstats site reads it at a pinned commit.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -450,7 +450,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>The records follow phpstats.org’s evidence record format, and <code>tests/SiteTest.php</code> checks their shape.</p>
+<p>The records follow the PHPstats site’s evidence record format, and <code>tests/SiteTest.php</code> checks their shape.</p>
 <p><code>bin/site-verifications</code> runs the test suite with <code>PHPLYR_VERIFY_LOG</code> set. Every test then logs its status, the fixtures it read through <code>rReference()</code>, its assertions, and the differences recorded by <code>expectClose()</code>. A test that can be skipped before it reads its fixture names its record with <code>-&gt;group('verify:&lt;record&gt;')</code>. Failed and skipped tests are written with their reason, and the script exits with an error after writing when a test failed. Set <code>PHIT_EXTENSION</code> to the phit extension to load, and <code>POLARS_PHP</code> to a PHP command that loads php_polars to write the PolarsTable parity file.</p>
 <p>The R scripts in <code>tests/r/</code> write the fixtures and record the R and package versions in <code>tests/Fixtures/r-versions.json</code>. Run them from the repository root, for example <code>Rscript tests/r/reference.R</code>.</p>
 <p>Published benchmark records come from the Linux benchmark machine. The scripts in <code>bench/</code> write them to <code>docs/benchmarks/</code>: <code>harness-&lt;backend&gt;.json</code>, <code>backends-results.json</code>, <code>dplyr-results.json</code> (run <code>bench/backends.php --csv-dir=bench/data</code> first), and <code>models-results.json</code>. Then <code>bin/site-benchmarks</code> writes <code>site/benchmarks/</code>.</p>

@@ -2,7 +2,7 @@
 <?php
 
 /*
- * Write site/verifications/*.json for the phpstats site from a test run, in
+ * Write site/verifications/*.json for the PHPstats site from a test run, in
  * the format of phpstats.org's docs/evidence-records.md.
  *
  * Runs bin/test with PHPLYR_VERIFY_LOG set, so every test logs its status,

@@ -80,14 +80,14 @@ PHP=/path/to/php85 bin/render-docs     # examples, quarto render, publish to doc
 The first example reads `penguins` by URL from the datasets repository's
 `main` branch, and a test checks that the README and site.json do the same.
 
-Commit the rendered HTML. phpstats.org imports it from the commit it pins
+Commit the rendered HTML. The PHPstats site imports it from the commit it pins
 and serves it at <https://phplyr.phpstats.org/docs>. GitHub Pages serves
 redirects to those pages, which `.github/workflows/pages.yml` builds with
 `bin/pages-redirects`.
 
 ## Site content
 
-`site/` holds phplyr's content for phplyr.phpstats.org. The phpstats site
+`site/` holds phplyr's content for `phplyr.phpstats.org`. The PHPstats site
 reads it at a pinned commit.
 
 | Path | Contents | Made by |
@@ -96,7 +96,7 @@ reads it at a pinned commit.
 | `site/benchmarks/*.json` | The Benchmarks pages: phibble's workloads, the backend pipelines with dplyr, and the models | `bin/site-benchmarks`, from `docs/benchmarks/` |
 | `site/verifications/*.json` | The Verification pages: every test that checks phplyr against R or against DataFrame, with its status, assertion count, and largest floating-point errors | `bin/site-verifications` |
 
-The records follow phpstats.org's evidence record format, and
+The records follow the PHPstats site's evidence record format, and
 `tests/SiteTest.php` checks their shape.
 
 `bin/site-verifications` runs the test suite with `PHPLYR_VERIFY_LOG` set.

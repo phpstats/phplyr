@@ -2,7 +2,7 @@
 <?php
 
 /*
- * Write site/site.json, the manifest the phpstats site reads for
+ * Write site/site.json, the manifest the PHPstats site reads for
  * phplyr.phpstats.org. The example comes from docs/examples/first-pipeline
  * (both versions and the output bin/docs-examples recorded), and the lists of
  * benchmark and verification files come from site/.
