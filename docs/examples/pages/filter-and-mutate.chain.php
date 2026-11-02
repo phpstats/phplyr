@@ -1,21 +1,18 @@
 <?php
-
 require 'vendor/autoload.php';
-
-use function Phibble\tribble;
+use Phibble\DataFrame;
 use function Phplyr\{phplyr, if_else, col};
-
-$orders = tribble(
-    ['order', 'product', 'qty', 'price'],
-    1, 'pen', 10, 1.50,
-    2, 'notebook', 0, 4.00,
-    3, 'stapler', 2, 12.00,
-    4, 'pen', 40, 1.25,
-);
-
-echo phplyr($orders)
-    ->filter(fn ($r) => $r->qty > 0)
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
+echo phplyr($penguins)
+    ->filter(fn ($r) => $r->body_mass_g !== null)
+    ->select('species', 'island', 'sex', 'body_mass_g')
     ->mutate(
-        total: fn ($r) => $r->qty * $r->price,
-        size: if_else(col('qty')->ge(20), 'bulk', 'single'),
+        mass_kg: fn ($r) => $r->body_mass_g / 1000,
+        size: if_else(
+            col('body_mass_g')->ge(4500),
+            'large',
+            'small',
+        ),
     );

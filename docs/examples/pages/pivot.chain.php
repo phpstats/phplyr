@@ -1,29 +1,22 @@
 <?php
-
 require 'vendor/autoload.php';
-
-use function Phibble\tribble;
+use Phibble\DataFrame;
 use function Phplyr\{phplyr, starts_with};
-
-$wide = tribble(
-    ['store', 'sales_2023', 'sales_2024', 'sales_2025'],
-    'Leeds', 120, 135, 150,
-    'Lyon', 95, 110, 104,
-);
-echo $wide, "\n\n";
-
-$long = phplyr($wide)
-    ->pivotLonger(
-        starts_with('sales_'),
-        namesTo: 'year',
-        namesPrefix: 'sales_',
-        valuesTo: 'sales',
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
+$wide = phplyr($penguins)
+    ->count('species', 'year')
+    ->pivotWider(
+        namesFrom: 'year',
+        valuesFrom: 'n',
+        namesPrefix: 'n_',
     )
     ->get();
-echo $long, "\n\n";
-
-echo phplyr($long)->pivotWider(
-    namesFrom: 'year',
-    valuesFrom: 'sales',
-    namesPrefix: 'sales_',
+echo $wide, "\n\n";
+echo phplyr($wide)->pivotLonger(
+    starts_with('n_'),
+    namesTo: 'year',
+    namesPrefix: 'n_',
+    valuesTo: 'penguins',
 );

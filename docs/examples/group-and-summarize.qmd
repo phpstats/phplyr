@@ -2,19 +2,20 @@
 title: "Summarize groups"
 ---
 
-Count the orders, total the units, and average the units for each region,
-then sort the regions by total.
+Count the penguins, and find the mean and largest body mass, for each
+species, then sort the species by mean mass.
+[`penguins`](https://github.com/phpstats/datasets#penguins) has size
+measurements for 344 penguins near Palmer Station, Antarctica, from 2007 to
+2009 (Gorman et al., 2014).
 
 {{< include pages/_group-and-summarize.md >}}
 
-- `summarize()` after `group_by('region')` returns one row per region.
-- `n()` counts every row in the group, including the row whose `units` is
-  missing.
-- `naRm: true` leaves missing values out of `sum()` and `mean()`. Without it,
-  the South total and mean are NA, as in R.
-- The summaries evaluate in order, and each can use the ones before it. A
-  summary named `units` would replace the `units` column for the mean that
-  follows, so the total is named `total_units`.
+- `summarize()` after `group_by('species')` returns one row per species.
+- `n()` counts every row in the group, including the Adelie and the Gentoo
+  penguin with no recorded mass.
+- `naRm: true` leaves missing values out of `mean()` and `max()`. Without it,
+  the Adelie and Gentoo results are NA, as in R.
+- Gentoo penguins are the heaviest, with a mean of about 5,076 g.
 
 Reference: [Single-table functions](../reference/single-table.qmd#summaries) ·
 [Grouping](../reference/grouping.qmd) ·

@@ -3,58 +3,55 @@
 ## PHP 8.5+
 
 ```php
-use function Phibble\tribble;
-use function Phplyr\left_join;
-
-$orders = tribble(
-    ['order', 'customer_id', 'amount'],
-    1, 'c1', 25.00,
-    2, 'c2', 12.50,
-    3, 'c1', 8.00,
-    4, 'c9', 40.00,
-);
-$customers = tribble(
-    ['customer_id', 'name', 'city'],
-    'c1', 'Ana', 'Lisbon',
-    'c2', 'Ben', 'Leeds',
-    'c3', 'Cleo', 'Lyon',
-);
-
-echo $orders |> left_join($customers, by: 'customer_id');
+use Phibble\DataFrame;
+use function Phplyr\{filter, select, left_join};
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$weather = DataFrame::fromCsv("$data/weather.csv");
+$airports = DataFrame::fromCsv("$data/airports.csv");
+$nineAm = fn ($r) => $r->month === 1 && $r->day === 1
+    && $r->hour === 9;
+echo $weather |>
+    filter($nineAm) |>
+    select('origin', 'time_hour', 'temp', 'wind_speed') |>
+    left_join(
+        $airports |> select('faa', 'name', 'alt'),
+        by: ['origin' => 'faa'],
+        relationship: 'many-to-one',
+    );
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-use function Phibble\tribble;
+use Phibble\DataFrame;
 use function Phplyr\phplyr;
-
-$orders = tribble(
-    ['order', 'customer_id', 'amount'],
-    1, 'c1', 25.00,
-    2, 'c2', 12.50,
-    3, 'c1', 8.00,
-    4, 'c9', 40.00,
-);
-$customers = tribble(
-    ['customer_id', 'name', 'city'],
-    'c1', 'Ana', 'Lisbon',
-    'c2', 'Ben', 'Leeds',
-    'c3', 'Cleo', 'Lyon',
-);
-
-echo phplyr($orders)
-    ->leftJoin($customers, by: 'customer_id');
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$weather = DataFrame::fromCsv("$data/weather.csv");
+$airports = DataFrame::fromCsv("$data/airports.csv");
+$nineAm = fn ($r) => $r->month === 1 && $r->day === 1
+    && $r->hour === 9;
+$names = phplyr($airports)
+    ->select('faa', 'name', 'alt')
+    ->get();
+echo phplyr($weather)
+    ->filter($nineAm)
+    ->select('origin', 'time_hour', 'temp', 'wind_speed')
+    ->leftJoin(
+        $names,
+        by: ['origin' => 'faa'],
+        relationship: 'many-to-one',
+    );
 ```
 
 :::
 
 ```{.text .output}
-# A tibble: 4 × 5
-  order customer_id amount name  city  
-  <int> <chr>        <dbl> <chr> <chr> 
-1     1 c1            25   Ana   Lisbon
-2     2 c2            12.5 Ben   Leeds 
-3     3 c1             8   Ana   Lisbon
-4     4 c9            40   <NA>  <NA>
+# A tibble: 3 × 6
+  origin time_hour            temp wind_speed name                  alt
+  <chr>  <dttm>              <dbl>      <dbl> <chr>               <int>
+1 EWR    2013-01-01 14:00:00  39.9       15.0 Newark Liberty Intl    18
+2 JFK    2013-01-01 14:00:00  39.9       16.1 John F Kennedy Intl    13
+3 LGA    2013-01-01 14:00:00  39.9       18.4 La Guardia             22
 ```

@@ -2,60 +2,76 @@
 title: "Gallery"
 ---
 
-Short analyses of the small datasets from phit's documentation.
-
-**Data:** [`schools.csv`](https://github.com/phpstats/phplyr/blob/main/docs/data/schools.csv) ·
-[`housing.csv`](https://github.com/phpstats/phplyr/blob/main/docs/data/housing.csv) ·
-[`learning.csv`](https://github.com/phpstats/phplyr/blob/main/docs/data/learning.csv) ·
-[`clinic.csv`](https://github.com/phpstats/phplyr/blob/main/docs/data/clinic.csv)
+Short analyses of public datasets from the
+[PHPstats datasets](https://github.com/phpstats/datasets) repository, read by
+URL.
 
 **Imports** for every example on this page. The model examples also need
 phit; see [Models](reference/models.qmd).
 
 {{< include examples/gallery/_prelude.md >}}
 
-## School residuals
+## Subject residuals
 
-`schools.csv` has 250 students in 12 schools, with study hours, a prior score,
-and a final score.
+[`sleepstudy`](https://github.com/phpstats/datasets#sleepstudy) has the
+average reaction time, in milliseconds, of 18 subjects on each of 10 days of
+sleep deprivation (Belenky et al., 2003).
 
-{{< include examples/gallery/_schools.md >}}
+{{< include examples/gallery/_sleep.md >}}
 
-- Each residual is a student's final score minus the score a regression on
-  prior score and study hours predicts for all students.
-- The school averages and ranks are a descriptive summary of this sample.
-  They don't identify how much a school causes its students' scores.
+- The common line starts at 251.4 ms on day 0 and rises 10.5 ms per day.
+- Each residual is a subject's reaction time minus that line's prediction for
+  the same day. Subject 337 was 77.2 ms slower than the line on average, and
+  slower on all 10 days.
 
-## Schools as random intercepts
+## Subjects as random intercepts
 
-{{< include examples/gallery/_mixed.md >}}
+{{< include examples/gallery/_sleep-mixed.md >}}
 
+- The fixed effects match the common line above: 251.4 ms on day 0 and
+  10.5 ms more per day.
 - The ICC is the share of the variance left after the fixed effects that
-  lies between schools.
-- The intercept shifts adjust for study hours and prior score and are shrunk
-  toward zero. Either difference can separate them from the raw means.
+  lies between subjects.
+- The intercept shifts are shrunk toward zero, so each is smaller than the
+  subject's average residual above.
 
-## Rent per square meter
+## Fuel economy by cylinders
 
-{{< include examples/gallery/_housing.md >}}
+[`mtcars`](https://github.com/phpstats/datasets#mtcars) has fuel consumption
+and design measurements for 32 cars from the 1974 *Motor Trend* magazine.
+`mpg` is miles per US gallon, `hp` is gross horsepower, and `wt` is weight in
+1,000 lb.
 
-- `vs_group` is each flat's rent per square meter minus the mean for flats
-  with the same number of bedrooms.
+{{< include examples/gallery/_mtcars.md >}}
 
-## Pass rates by study time
+- `vs_group` is each car's mpg minus the mean for cars with the same number
+  of cylinders.
 
-`learning.csv` has 80 students, with study hours, a practice score, and
-whether each passed.
+## Labor-force participation by age
 
-{{< include examples/gallery/_learning.md >}}
+[`mroz`](https://github.com/phpstats/datasets#mroz) has 753 married women in
+1975 from the Panel Study of Income Dynamics: whether each was in the labor
+force (`lfp`), her age, her number of children under 6 (`k5`) and from 6 to
+18 (`k618`), and family income excluding her earnings (`inc`, in $1,000s).
 
-- `ntile()` splits the students into four groups of nearly equal size by
-  study hours.
-- The odds ratio is for one more study hour at the same practice score. It
-  describes an association in these observational data.
+{{< include examples/gallery/_mroz.md >}}
 
-## Clinic calls by staffing
+- `ntile()` splits the women into four groups of nearly equal size by age.
+- Each odds ratio is for one more unit of its variable with the others held
+  fixed: one more year of age, one more child, or $1,000 more income. One more
+  child under 6 goes with odds of participation about a quarter as large. The
+  ratios describe associations in these observational data.
 
-`clinic.csv` has visitors, staff, and calls for 120 days.
+## Warp breaks by wool and tension
 
-{{< include examples/gallery/_clinic.md >}}
+[`warpbreaks`](https://github.com/phpstats/datasets#warpbreaks) has the number
+of warp breaks per loom for 54 looms, by wool type (A or B) and tension (low,
+medium, or high).
+
+{{< include examples/gallery/_warpbreaks.md >}}
+
+- `asFactor()` orders tension L, M, H, so the cross-tabulation's columns
+  follow it and L is the regression's reference level.
+- Each rate ratio compares the expected breaks with wool A or low tension,
+  holding the other factor fixed: high tension goes with 0.595 times as many
+  breaks as low tension.

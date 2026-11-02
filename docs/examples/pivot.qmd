@@ -2,19 +2,22 @@
 title: "Pivot between wide and long"
 ---
 
-Turn a table with one sales column per year into one row per store and year,
-then rebuild the wide table.
+Count the penguins per species and study year, with one column per year, then
+stack the year columns into one row per species and year.
+[`penguins`](https://github.com/phpstats/datasets#penguins) has size
+measurements for 344 penguins near Palmer Station, Antarctica, from 2007 to
+2009 (Gorman et al., 2014).
 
 {{< include pages/_pivot.md >}}
 
-- `pivot_longer()` stacks the columns that `starts_with('sales_')` selects.
-- Each column name, without the `sales_` prefix, goes into `year`, and each
-  value goes into `sales`. `store` repeats for each stacked value.
+- `count()` gives one row per species and year, with the count in `n`.
+- `pivot_wider()` makes one column for each value of `year`, adds the `n_`
+  prefix, and fills the columns from `n`. The columns it doesn't use, here
+  `species`, identify the output rows.
+- `pivot_longer()` stacks the columns that `starts_with('n_')` selects. Each
+  column name, without the `n_` prefix, goes into `year`, and each value goes
+  into `penguins`.
 - `year` holds strings, because the values come from column names.
-- `pivot_wider()` makes one column for each value of `year`, adds the
-  `sales_` prefix, and fills the columns from `sales`.
-- The columns `pivot_wider()` doesn't use, here `store`, identify the output
-  rows. Each distinct combination of them becomes one row.
 
 Reference: [tidyr](../reference/tidyr.qmd#pivoting) ·
-[tidyselect and across()](../reference/tidyselect.qmd#selectors)
+[Selecting columns](../reference/tidyselect.qmd#selectors)

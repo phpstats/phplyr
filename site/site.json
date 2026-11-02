@@ -201,22 +201,22 @@
         {
             "path": "examples/filter-and-mutate",
             "title": "Filter rows and add columns",
-            "description": "Keep matching rows and compute new columns, row by row or from whole columns."
+            "description": "Keep the penguins with a recorded body mass, and add the mass in kilograms and a size label."
         },
         {
             "path": "examples/group-and-summarize",
             "title": "Summarize groups",
-            "description": "Count, total, and average within groups when some values are missing."
+            "description": "Count the penguins and find the mean and largest body mass for each species, with some masses missing."
         },
         {
             "path": "examples/join",
             "title": "Join two tables",
-            "description": "Combine tables on a shared key, including keys with no match or several."
+            "description": "Add airport names and altitudes to hourly weather readings from the nycflights13 tables."
         },
         {
             "path": "examples/pivot",
             "title": "Pivot between wide and long",
-            "description": "Turn one column per year into one row per year, and back."
+            "description": "Count penguins per species with one column per study year, then stack the years into rows."
         }
     ]
 }

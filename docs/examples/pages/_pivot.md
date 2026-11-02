@@ -3,84 +3,73 @@
 ## PHP 8.5+
 
 ```php
-use function Phibble\tribble;
-use function Phplyr\{pivot_longer, pivot_wider};
+use Phibble\DataFrame;
+use function Phplyr\{count, pivot_longer, pivot_wider};
 use function Phplyr\starts_with;
-
-$wide = tribble(
-    ['store', 'sales_2023', 'sales_2024', 'sales_2025'],
-    'Leeds', 120, 135, 150,
-    'Lyon', 95, 110, 104,
-);
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
+$wide = $penguins |>
+    count('species', 'year') |>
+    pivot_wider(
+        namesFrom: 'year',
+        valuesFrom: 'n',
+        namesPrefix: 'n_',
+    );
 echo $wide, "\n\n";
-
-$long = $wide |> pivot_longer(
-    starts_with('sales_'),
+echo $wide |> pivot_longer(
+    starts_with('n_'),
     namesTo: 'year',
-    namesPrefix: 'sales_',
-    valuesTo: 'sales',
-);
-echo $long, "\n\n";
-
-echo $long |> pivot_wider(
-    namesFrom: 'year',
-    valuesFrom: 'sales',
-    namesPrefix: 'sales_',
+    namesPrefix: 'n_',
+    valuesTo: 'penguins',
 );
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-use function Phibble\tribble;
+use Phibble\DataFrame;
 use function Phplyr\{phplyr, starts_with};
-
-$wide = tribble(
-    ['store', 'sales_2023', 'sales_2024', 'sales_2025'],
-    'Leeds', 120, 135, 150,
-    'Lyon', 95, 110, 104,
-);
-echo $wide, "\n\n";
-
-$long = phplyr($wide)
-    ->pivotLonger(
-        starts_with('sales_'),
-        namesTo: 'year',
-        namesPrefix: 'sales_',
-        valuesTo: 'sales',
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
+$wide = phplyr($penguins)
+    ->count('species', 'year')
+    ->pivotWider(
+        namesFrom: 'year',
+        valuesFrom: 'n',
+        namesPrefix: 'n_',
     )
     ->get();
-echo $long, "\n\n";
-
-echo phplyr($long)->pivotWider(
-    namesFrom: 'year',
-    valuesFrom: 'sales',
-    namesPrefix: 'sales_',
+echo $wide, "\n\n";
+echo phplyr($wide)->pivotLonger(
+    starts_with('n_'),
+    namesTo: 'year',
+    namesPrefix: 'n_',
+    valuesTo: 'penguins',
 );
 ```
 
 :::
 
 ```{.text .output}
-# A tibble: 2 × 4
-  store sales_2023 sales_2024 sales_2025
-  <chr>      <int>      <int>      <int>
-1 Leeds        120        135        150
-2 Lyon          95        110        104
+# A tibble: 3 × 4
+  species   n_2007 n_2008 n_2009
+  <chr>      <int>  <int>  <int>
+1 Adelie        50     50     52
+2 Chinstrap     26     18     24
+3 Gentoo        34     46     44
 
-# A tibble: 6 × 3
-  store year  sales
-  <chr> <chr> <int>
-1 Leeds 2023    120
-2 Leeds 2024    135
-3 Leeds 2025    150
-4 Lyon  2023     95
-5 Lyon  2024    110
-6 Lyon  2025    104
-
-# A tibble: 2 × 4
-  store sales_2023 sales_2024 sales_2025
-  <chr>      <int>      <int>      <int>
-1 Leeds        120        135        150
-2 Lyon          95        110        104
+# A tibble: 9 × 3
+  species   year  penguins
+  <chr>     <chr>    <int>
+1 Adelie    2007        50
+2 Adelie    2008        50
+3 Adelie    2009        52
+4 Chinstrap 2007        26
+5 Chinstrap 2008        18
+6 Chinstrap 2009        24
+7 Gentoo    2007        34
+8 Gentoo    2008        46
+9 Gentoo    2009        44
 ```

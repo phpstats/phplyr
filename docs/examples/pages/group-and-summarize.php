@@ -1,26 +1,16 @@
 <?php
-
 require 'vendor/autoload.php';
-
-use function Phibble\tribble;
+use Phibble\DataFrame;
 use function Phplyr\{group_by, summarize, arrange, desc};
-use function Phplyr\{n, sum, mean};
-
-$sales = tribble(
-    ['region', 'product', 'units'],
-    'North', 'pen', 12,
-    'North', 'stapler', 3,
-    'South', 'pen', 20,
-    'South', 'notebook', 7,
-    'South', 'stapler', null,
-    'West', 'notebook', 9,
-);
-
-echo $sales |>
-    group_by('region') |>
+use function Phplyr\{n, mean, max};
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
+echo $penguins |>
+    group_by('species') |>
     summarize(
-        orders: n(),
-        total_units: sum('units', naRm: true),
-        avg_units: mean('units', naRm: true),
+        penguins: n(),
+        avg_mass_g: mean('body_mass_g', naRm: true),
+        max_mass_g: max('body_mass_g', naRm: true),
     ) |>
-    arrange(desc('total_units'));
+    arrange(desc('avg_mass_g'));

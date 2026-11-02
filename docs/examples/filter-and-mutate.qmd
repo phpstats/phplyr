@@ -2,17 +2,23 @@
 title: "Filter rows and add columns"
 ---
 
-Keep the orders with a positive quantity and add a line total and a size
-label to each.
+Keep the penguins with a recorded body mass, and add the mass in kilograms
+and a size label to each.
+[`penguins`](https://github.com/phpstats/datasets#penguins) has size
+measurements for 344 penguins near Palmer Station, Antarctica, from 2007 to
+2009 (Gorman et al., 2014).
 
 {{< include pages/_filter-and-mutate.md >}}
 
-- `filter()` keeps the rows for which the row closure returns `true`.
-- `mutate()` adds one column for each named argument.
-- A row closure such as `fn ($r) => $r->qty * $r->price` runs once per row
+- `filter()` keeps the rows for which the row closure returns `true`. Two
+  penguins have no recorded mass, so 342 rows remain.
+- `select()` keeps four columns, and `mutate()` adds one column for each named
+  argument.
+- A row closure such as `fn ($r) => $r->body_mass_g / 1000` runs once per row
   and reads the row's columns as properties.
-- A column expression such as `col('qty')->ge(20)` works on the whole
-  column, and `if_else()` uses it to pick `'bulk'` or `'single'`.
+- A column expression such as `col('body_mass_g')->ge(4500)` works on the
+  whole column, and `if_else()` uses it to pick `'large'` or `'small'`.
+- `sex` is NA for some penguins. Missing values print as `<NA>`.
 
 Reference: [Single-table functions](../reference/single-table.qmd) ·
 [Vector helpers](../reference/vectors.qmd#conditionals-and-na)

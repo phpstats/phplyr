@@ -26,7 +26,7 @@ sum(mixed $x, bool $naRm = false): Vec
 
 Sum of x; NA unless naRm is true.
 
-Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers. [Summarize groups](../examples/group-and-summarize.qmd).
+Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers.
 
 ### `mean()` {#mean}
 
@@ -116,7 +116,7 @@ max(mixed $x, bool $naRm = false): Vec
 
 Largest value of x; NA unless naRm is true.
 
-Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers.
+Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers. [Summarize groups](../examples/group-and-summarize.qmd).
 
 ### `first()` {#first}
 

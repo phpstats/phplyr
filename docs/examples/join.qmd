@@ -2,19 +2,24 @@
 title: "Join two tables"
 ---
 
-Add each order's customer name and city from a customers table that shares
-the `customer_id` column.
+Add the airport name and altitude to the weather readings at the three New
+York City airports at 9 a.m. on January 1, 2013.
+[`weather`](https://github.com/phpstats/datasets#weather) has hourly readings
+from 2013, and [`airports`](https://github.com/phpstats/datasets#airports) has
+the name and altitude, in feet, of 1,458 US airports, keyed by FAA code. Both
+are from nycflights13.
 
 {{< include pages/_join.md >}}
 
-- `left_join()` keeps every row of `orders` in its original order.
-- An order with no matching customer gets NA in the new columns. A customer
-  with no orders is left out.
-- Each order gets one output row per matching customer. If `customers` had
-  two rows for c1, each c1 order would appear twice.
-- `relationship: 'many-to-one'` throws an exception when a key in `orders`
-  matches more than one customer.
-- `inner_join()` drops the orders with no match. `full_join()` also keeps
-  customers with no orders and adds them after the matched rows.
+- `by: ['origin' => 'faa']` matches `origin` in `weather` with `faa` in
+  `airports`, and the result keeps the name `origin`.
+- `left_join()` keeps every row of `weather` in its original order. A reading
+  with no matching airport would get NA in the new columns. Airports with no
+  readings are left out.
+- `relationship: 'many-to-one'` throws an exception if a code matches more
+  than one airport.
+- `hour` is local time, and `time_hour` prints the same instant in UTC.
+- `inner_join()` drops the readings with no match. `full_join()` also keeps
+  the airports with no readings and adds them after the matched rows.
 
 Reference: [Joins, binding, and set operations](../reference/two-table.qmd#joins)

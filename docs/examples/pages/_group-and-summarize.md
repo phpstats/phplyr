@@ -3,63 +3,47 @@
 ## PHP 8.5+
 
 ```php
-use function Phibble\tribble;
+use Phibble\DataFrame;
 use function Phplyr\{group_by, summarize, arrange, desc};
-use function Phplyr\{n, sum, mean};
-
-$sales = tribble(
-    ['region', 'product', 'units'],
-    'North', 'pen', 12,
-    'North', 'stapler', 3,
-    'South', 'pen', 20,
-    'South', 'notebook', 7,
-    'South', 'stapler', null,
-    'West', 'notebook', 9,
-);
-
-echo $sales |>
-    group_by('region') |>
+use function Phplyr\{n, mean, max};
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
+echo $penguins |>
+    group_by('species') |>
     summarize(
-        orders: n(),
-        total_units: sum('units', naRm: true),
-        avg_units: mean('units', naRm: true),
+        penguins: n(),
+        avg_mass_g: mean('body_mass_g', naRm: true),
+        max_mass_g: max('body_mass_g', naRm: true),
     ) |>
-    arrange(desc('total_units'));
+    arrange(desc('avg_mass_g'));
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-use function Phibble\tribble;
-use function Phplyr\{phplyr, desc, n, sum, mean};
-
-$sales = tribble(
-    ['region', 'product', 'units'],
-    'North', 'pen', 12,
-    'North', 'stapler', 3,
-    'South', 'pen', 20,
-    'South', 'notebook', 7,
-    'South', 'stapler', null,
-    'West', 'notebook', 9,
-);
-
-echo phplyr($sales)
-    ->groupBy('region')
+use Phibble\DataFrame;
+use function Phplyr\{phplyr, desc, n, mean, max};
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
+echo phplyr($penguins)
+    ->groupBy('species')
     ->summarize(
-        orders: n(),
-        total_units: sum('units', naRm: true),
-        avg_units: mean('units', naRm: true),
+        penguins: n(),
+        avg_mass_g: mean('body_mass_g', naRm: true),
+        max_mass_g: max('body_mass_g', naRm: true),
     )
-    ->arrange(desc('total_units'));
+    ->arrange(desc('avg_mass_g'));
 ```
 
 :::
 
 ```{.text .output}
 # A tibble: 3 × 4
-  region orders total_units avg_units
-  <chr>   <int>       <int>     <dbl>
-1 South       3          27      13.5
-2 North       2          15       7.5
-3 West        1           9       9
+  species   penguins avg_mass_g max_mass_g
+  <chr>        <int>      <dbl>      <int>
+1 Gentoo         124      5076.       6300
+2 Chinstrap       68      3733.       4800
+3 Adelie         152      3701.       4775
 ```

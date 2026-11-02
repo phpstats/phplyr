@@ -375,94 +375,82 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Turn a table with one sales column per year into one row per store and year, then rebuild the wide table.</p>
+<p>Count the penguins per species and study year, with one column per year, then stack the year columns into one row per species and year. <a href="https://github.com/phpstats/datasets#penguins"><code>penguins</code></a> has size measurements for 344 penguins near Palmer Station, Antarctica, from 2007 to 2009 (Gorman et al., 2014).</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phibble\tribble<span class="ot">;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{pivot_longer<span class="ot">,</span> pivot_wider}<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{<span class="fu">count</span><span class="ot">,</span> pivot_longer<span class="ot">,</span> pivot_wider}<span class="ot">;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\starts_with<span class="ot">;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="va">$wide</span> <span class="op">=</span> tribble(</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'store'</span><span class="ot">,</span> <span class="st">'sales_2023'</span><span class="ot">,</span> <span class="st">'sales_2024'</span><span class="ot">,</span> <span class="st">'sales_2025'</span>]<span class="ot">,</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Leeds'</span><span class="ot">,</span> <span class="dv">120</span><span class="ot">,</span> <span class="dv">135</span><span class="ot">,</span> <span class="dv">150</span><span class="ot">,</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Lyon'</span><span class="ot">,</span> <span class="dv">95</span><span class="ot">,</span> <span class="dv">110</span><span class="ot">,</span> <span class="dv">104</span><span class="ot">,</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$wide</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="va">$long</span> <span class="op">=</span> <span class="va">$wide</span> <span class="op">|&gt;</span> pivot_longer(</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    starts_with(<span class="st">'sales_'</span>)<span class="ot">,</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    namesTo<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span><span class="ot">,</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    valuesTo<span class="ot">:</span> <span class="st">'sales'</span><span class="ot">,</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$long</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$long</span> <span class="op">|&gt;</span> pivot_wider(</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    namesFrom<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    valuesFrom<span class="ot">:</span> <span class="st">'sales'</span><span class="ot">,</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span><span class="ot">,</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">$data</span> <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/phpstats'</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span> <span class="st">'/datasets/main/csv'</span><span class="ot">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="va">$wide</span> <span class="op">=</span> <span class="va">$penguins</span> <span class="op">|&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'year'</span>) <span class="op">|&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    pivot_wider(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        namesFrom<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        valuesFrom<span class="ot">:</span> <span class="st">'n'</span><span class="ot">,</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        namesPrefix<span class="ot">:</span> <span class="st">'n_'</span><span class="ot">,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$wide</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$wide</span> <span class="op">|&gt;</span> pivot_longer(</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    starts_with(<span class="st">'n_'</span>)<span class="ot">,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    namesTo<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    namesPrefix<span class="ot">:</span> <span class="st">'n_'</span><span class="ot">,</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    valuesTo<span class="ot">:</span> <span class="st">'penguins'</span><span class="ot">,</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phibble\tribble<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Phibble\DataFrame<span class="ot">;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phplyr\{phplyr<span class="ot">,</span> starts_with}<span class="ot">;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">$wide</span> <span class="op">=</span> tribble(</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'store'</span><span class="ot">,</span> <span class="st">'sales_2023'</span><span class="ot">,</span> <span class="st">'sales_2024'</span><span class="ot">,</span> <span class="st">'sales_2025'</span>]<span class="ot">,</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Leeds'</span><span class="ot">,</span> <span class="dv">120</span><span class="ot">,</span> <span class="dv">135</span><span class="ot">,</span> <span class="dv">150</span><span class="ot">,</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Lyon'</span><span class="ot">,</span> <span class="dv">95</span><span class="ot">,</span> <span class="dv">110</span><span class="ot">,</span> <span class="dv">104</span><span class="ot">,</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$wide</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="va">$long</span> <span class="op">=</span> phplyr(<span class="va">$wide</span>)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    -&gt;pivotLonger(</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        starts_with(<span class="st">'sales_'</span>)<span class="ot">,</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        namesTo<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span><span class="ot">,</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        valuesTo<span class="ot">:</span> <span class="st">'sales'</span><span class="ot">,</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$long</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$long</span>)-&gt;pivotWider(</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    namesFrom<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    valuesFrom<span class="ot">:</span> <span class="st">'sales'</span><span class="ot">,</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    namesPrefix<span class="ot">:</span> <span class="st">'sales_'</span><span class="ot">,</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">$data</span> <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/phpstats'</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span> <span class="st">'/datasets/main/csv'</span><span class="ot">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="va">$wide</span> <span class="op">=</span> phplyr(<span class="va">$penguins</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    -&gt;<span class="fu">count</span>(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'year'</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    -&gt;pivotWider(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        namesFrom<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        valuesFrom<span class="ot">:</span> <span class="st">'n'</span><span class="ot">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        namesPrefix<span class="ot">:</span> <span class="st">'n_'</span><span class="ot">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$wide</span><span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$wide</span>)-&gt;pivotLonger(</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    starts_with(<span class="st">'n_'</span>)<span class="ot">,</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    namesTo<span class="ot">:</span> <span class="st">'year'</span><span class="ot">,</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    namesPrefix<span class="ot">:</span> <span class="st">'n_'</span><span class="ot">,</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    valuesTo<span class="ot">:</span> <span class="st">'penguins'</span><span class="ot">,</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code># A tibble: 2 × 4
-  store sales_2023 sales_2024 sales_2025
-  &lt;chr&gt;      &lt;int&gt;      &lt;int&gt;      &lt;int&gt;
-1 Leeds        120        135        150
-2 Lyon          95        110        104
+<pre class="text output"><code># A tibble: 3 × 4
+  species   n_2007 n_2008 n_2009
+  &lt;chr&gt;      &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+1 Adelie        50     50     52
+2 Chinstrap     26     18     24
+3 Gentoo        34     46     44
 
-# A tibble: 6 × 3
-  store year  sales
-  &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
-1 Leeds 2023    120
-2 Leeds 2024    135
-3 Leeds 2025    150
-4 Lyon  2023     95
-5 Lyon  2024    110
-6 Lyon  2025    104
-
-# A tibble: 2 × 4
-  store sales_2023 sales_2024 sales_2025
-  &lt;chr&gt;      &lt;int&gt;      &lt;int&gt;      &lt;int&gt;
-1 Leeds        120        135        150
-2 Lyon          95        110        104</code></pre>
+# A tibble: 9 × 3
+  species   year  penguins
+  &lt;chr&gt;     &lt;chr&gt;    &lt;int&gt;
+1 Adelie    2007        50
+2 Adelie    2008        50
+3 Adelie    2009        52
+4 Chinstrap 2007        26
+5 Chinstrap 2008        18
+6 Chinstrap 2009        24
+7 Gentoo    2007        34
+8 Gentoo    2008        46
+9 Gentoo    2009        44</code></pre>
 <ul>
-<li><code>pivot_longer()</code> stacks the columns that <code>starts_with('sales_')</code> selects.</li>
-<li>Each column name, without the <code>sales_</code> prefix, goes into <code>year</code>, and each value goes into <code>sales</code>. <code>store</code> repeats for each stacked value.</li>
+<li><code>count()</code> gives one row per species and year, with the count in <code>n</code>.</li>
+<li><code>pivot_wider()</code> makes one column for each value of <code>year</code>, adds the <code>n_</code> prefix, and fills the columns from <code>n</code>. The columns it doesn’t use, here <code>species</code>, identify the output rows.</li>
+<li><code>pivot_longer()</code> stacks the columns that <code>starts_with('n_')</code> selects. Each column name, without the <code>n_</code> prefix, goes into <code>year</code>, and each value goes into <code>penguins</code>.</li>
 <li><code>year</code> holds strings, because the values come from column names.</li>
-<li><code>pivot_wider()</code> makes one column for each value of <code>year</code>, adds the <code>sales_</code> prefix, and fills the columns from <code>sales</code>.</li>
-<li>The columns <code>pivot_wider()</code> doesn’t use, here <code>store</code>, identify the output rows. Each distinct combination of them becomes one row.</li>
 </ul>
-<p>Reference: <a href="../reference/tidyr.html#pivoting">tidyr</a> · <a href="../reference/tidyselect.html#selectors">tidyselect and across()</a></p>
+<p>Reference: <a href="../reference/tidyr.html#pivoting">tidyr</a> · <a href="../reference/tidyselect.html#selectors">Selecting columns</a></p>
 
 
 
