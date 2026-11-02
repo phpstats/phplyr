@@ -117,7 +117,7 @@ $records = [
             ['id' => 'coefficients', 'kind' => 'tolerance', 'applies_to' => 'Coefficients and fixed effects', 'atol' => 1e-6, 'rtol' => 1e-6, 'rel_floor' => 1],
             ['id' => 'sigma', 'kind' => 'tolerance', 'applies_to' => 'Residual standard deviation; lmer()', 'atol' => 1e-5, 'rel_floor' => 1],
         ],
-        'exclusions' => ['glmer() is not compared with lme4.', 'phit-polyfill is not compared with R; the Models benchmark compares its coefficients with the extension\'s.'],
+        'exclusions' => ['glmer() is not compared with lme4.', 'This saved record covers the phit extension. CI also runs the model fixtures with phit-polyfill.'],
     ],
     'descriptives' => [
         'title' => 'Descriptive statistics',

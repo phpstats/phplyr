@@ -53,6 +53,7 @@ pipeline runs on any table that implements it:
 - **Strings are UTF-8.** String functions count UTF-8 characters.
 - **Date-times parse to UTC** unless a function is given `tz:`, whatever PHP's
   default time zone is, as in lubridate.
-- **Models return arrays.** `lm()` and the other model functions return phit's
-  result array, with R's coefficient names in `columns`, in place of a model
-  object.
+- **Model results follow phit.** With phit 0.6 or later, `lm()` and the other
+  model functions return a read-only fit object that prints its summary and
+  supports array access. Earlier phit versions return arrays. R's coefficient
+  names are in `columns` in both forms. See [Model results](reference/models.qmd#results).

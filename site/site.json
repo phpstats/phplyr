@@ -194,7 +194,7 @@
     ],
     "evidence_gaps": {
         "benchmarks": "Memory is measured for the models benchmark only; the workloads and backend pipelines record elapsed time.",
-        "verification": "glmer() is not compared with lme4, phit-polyfill is not compared with R, and PostgreSQL and MySQL tables are not checked."
+        "verification": "glmer() is not compared with lme4, and PostgreSQL and MySQL tables are not checked. The published Models record covers the phit extension; CI also runs the model fixtures with phit-polyfill."
     },
     "examples": [
         {

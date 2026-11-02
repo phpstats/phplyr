@@ -483,30 +483,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="lm"><code>lm()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lm(<span class="dt">string</span> <span class="va">$formula</span><span class="ot">,</span> <span class="dt">mixed</span> ...<span class="va">$options</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Linear regression: <code>$t</code> |&gt; <code>lm('y ~ a + b')</code>. Calls phit’s <code>fit_ols()</code>.</p>
-<p>Returns a function of a table, which returns phit’s result array. Chain method: <code>-&gt;lm()</code>. <a href="#results">Example</a>.</p>
+<p>Returns a function of a table, which returns phit’s fit object (an array before phit 0.6). Chain method: <code>-&gt;lm()</code>. <a href="#results">Example</a>.</p>
 </section>
 <section id="glm" class="level3">
 <h3 class="anchored" data-anchor-id="glm"><code>glm()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>glm(<span class="dt">string</span> <span class="va">$formula</span><span class="ot">,</span> <span class="dt">string</span> <span class="va">$family</span> <span class="op">=</span> <span class="st">'gaussian'</span><span class="ot">,</span> <span class="dt">mixed</span> ...<span class="va">$options</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Generalised linear model: <code>$t</code> |&gt; <code>glm('y ~ x', family: 'binomial')</code>. Calls phit’s <code>fit_generalized_linear()</code>.</p>
-<p>Returns a function of a table, which returns phit’s result array. Chain method: <code>-&gt;glm()</code>. <a href="#results">Example</a>.</p>
+<p>Returns a function of a table, which returns phit’s fit object (an array before phit 0.6). Chain method: <code>-&gt;glm()</code>. <a href="#results">Example</a>.</p>
 </section>
 <section id="lmer" class="level3">
 <h3 class="anchored" data-anchor-id="lmer"><code>lmer()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lmer(<span class="dt">string</span> <span class="va">$formula</span><span class="ot">,</span> <span class="dt">mixed</span> ...<span class="va">$options</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Linear mixed model with lme4-style random effects: <code>$t</code> |&gt; <code>lmer('Reaction ~ Days + (1 | Subject)')</code>. REML by default (reml: false for maximum likelihood). Calls phit’s <code>fit_mixed_gaussian()</code>.</p>
-<p>Returns a function of a table, which returns phit’s result array. Chain method: <code>-&gt;lmer()</code>.</p>
+<p>Returns a function of a table, which returns phit’s fit object (an array before phit 0.6). Chain method: <code>-&gt;lmer()</code>.</p>
 </section>
 <section id="glmer" class="level3">
 <h3 class="anchored" data-anchor-id="glmer"><code>glmer()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>glmer(<span class="dt">string</span> <span class="va">$formula</span><span class="ot">,</span> <span class="dt">string</span> <span class="va">$family</span> <span class="op">=</span> <span class="st">'binomial'</span><span class="ot">,</span> <span class="dt">mixed</span> ...<span class="va">$options</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Generalised linear mixed model: <code>$t</code> |&gt; <code>glmer('y ~ x + (1 | g)', family: 'binomial')</code>. Calls phit’s <code>fit_mixed_logistic()</code>, which fits the binomial family with the logit link only and takes neither as an argument, so they are checked here. A link may be given as link: or as the first positional option.</p>
-<p>Returns a function of a table, which returns phit’s result array. Chain method: <code>-&gt;glmer()</code>. Throws <code>InvalidArgumentException</code> on invalid arguments.</p>
+<p>Returns a function of a table, which returns phit’s fit object (an array before phit 0.6). Chain method: <code>-&gt;glmer()</code>. Throws <code>InvalidArgumentException</code> on invalid arguments.</p>
 </section>
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
-<p>Each function returns phit’s result array in place of a table, so it ends a method chain. <code>columns</code> holds R’s coefficient names, in R’s order, and <code>coefficients</code>, <code>std_errors</code>, <code>p_values</code>, and <code>conf_int</code> follow the same order. The array also has the fitted values, residuals, fit statistics such as <code>r_squared</code> and <code>sigma</code>, and <code>n_observations</code> and <code>n_dropped</code>, which count the rows used and the rows dropped for missing values.</p>
+<p>Each function returns phit’s model result in place of a table, so it ends a method chain. With phit 0.6 or later, the result is a read-only fit object. <code>echo $fit</code> prints its summary, <code>$fit['coefficients']</code> reads a result key, and <code>$fit-&gt;toArray()</code> returns a plain array. Earlier phit versions return the array directly.</p>
+<p><code>columns</code> holds R’s coefficient names, in R’s order, and <code>coefficients</code>, <code>std_errors</code>, <code>p_values</code>, and <code>conf_int</code> follow the same order. The result also has the fitted values, residuals, fit statistics such as <code>r_squared</code> and <code>sigma</code>, and <code>n_observations</code> and <code>n_dropped</code>, which count the rows used and the rows dropped for missing values.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">

@@ -15,11 +15,11 @@ which provides the tables, and `symfony/polyfill-php84`.
 
 | Optional | Enables |
 | --- | --- |
-| [phit](https://github.com/phpstats/phit) extension, 0.4 or 0.5 | `lm()`, `glm()`, `lmer()`, and `glmer()`, and native `mean()`, `sd()`, `var_()`, `median()`, and `quantile()` |
+| [phit](https://github.com/phpstats/phit) extension, 0.4 or later | `lm()`, `glm()`, `lmer()`, and `glmer()`, and native `mean()`, `sd()`, `var_()`, `median()`, and `quantile()` |
 | [phpolars](https://github.com/phpstats/phpolars) extension | phibble's `PolarsTable` backend. See [Backends](compatibility.qmd#backends). |
 | intl extension | Transliteration in `clean_names()` that matches R's janitor. Without it, iconv is used, and some names differ. |
 | PDO driver for SQLite, PostgreSQL, or MySQL | Database tables through `Phibble\tbl()`. See [Databases and expressions](reference/databases.qmd). |
-| [[phit-polyfill](https://github.com/phpstats/phit-polyfill)]{.text-muted} | [The model functions in PHP, where the phit extension can't be installed. See [Models](reference/models.qmd).]{.text-muted} |
+| [phit-polyfill](https://github.com/phpstats/phit-polyfill) | The model functions in PHP, where the phit extension cannot be installed. See [Models](reference/models.qmd). |
 
 Without phit, the descriptive helpers run in PHP with the same results.
 
@@ -126,7 +126,7 @@ functions return something else, and the chain returns that value:
 | `n_groups()` | An integer |
 | `setequal()` | A boolean |
 | `show_query()` | The SQL string |
-| `lm()`, `glm()`, `lmer()`, `glmer()` | phit's result array |
+| `lm()`, `glm()`, `lmer()`, `glmer()` | phit's fit object (an array before phit 0.6) |
 
 `echo` prints a chain's table without `get()`. `->pipe($closure)` applies a
 closure of your own and continues the chain with its result.

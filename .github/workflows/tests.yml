@@ -84,7 +84,7 @@ jobs:
           PHP="$(command -v php)" PHP_CONFIG="$(command -v php-config)" cargo build -p phit --release --locked
           sudo cp target/release/libphit.so "$(php-config --extension-dir)/phit.so"
           echo "extension=phit.so" | sudo tee "$(php -r "echo PHP_CONFIG_FILE_SCAN_DIR;")/90-phit.ini"
-          php -r 'var_dump(function_exists("Phit\\fit_lm"));'
+          php -r 'exit(extension_loaded("phit") && function_exists("Phit\\fit_ols") && function_exists("Phit\\fit_generalized_linear") ? 0 : 1);'
 
       - run: composer install --no-interaction --no-progress
 
@@ -105,11 +105,11 @@ jobs:
 
       - run: composer install --no-interaction --no-progress
 
-      - run: composer require --dev phpstats/phit-polyfill:^0.3 --no-interaction --no-progress
+      - run: composer require --dev phpstats/phit-polyfill:^0.6 --no-interaction --no-progress
 
       - name: Check that phit-polyfill is in use
         run: |
-          php -r 'require "vendor/autoload.php"; exit(! extension_loaded("phit") && function_exists("Phit\\fit_lm") ? 0 : 1);'
+          php -r 'require "vendor/autoload.php"; exit(! extension_loaded("phit") && function_exists("Phit\\fit_ols") && function_exists("Phit\\fit_generalized_linear") ? 0 : 1);'
 
       - run: bin/test
 

@@ -48,8 +48,8 @@ for the models, phit; see [Models](reference/models.qmd).
 - **Renaming in select.** `select(length = bill_length_mm)` becomes
   `select(['length' => 'bill_length_mm'])`.
 - **Column sets.** `c(length, depth)` becomes `['length', 'depth']`.
-- **Models.** `lm()`, `glm()`, and `lmer()` take the same formulas. They
-  return arrays, so `coef()` and `fixef()` become reads of `coefficients`.
+- **Models.** `lm()`, `glm()`, and `lmer()` take the same formulas. Their
+  results support array access, so `coef()` and `fixef()` become reads of `coefficients`.
   The coefficients agree to the printed four decimals, except the last digit
   of the random-intercept model's intercept.
 - **Printing.** DataFrames print in tibble's format.

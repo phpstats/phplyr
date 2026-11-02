@@ -76,10 +76,15 @@ formula syntax it accepts.
 
 ## Results
 
-Each function returns phit's result array in place of a table, so it ends a
-method chain. `columns` holds R's coefficient names, in R's order, and
+Each function returns phit's model result in place of a table, so it ends a
+method chain. With phit 0.6 or later, the result is a read-only fit object.
+`echo $fit` prints its summary, `$fit['coefficients']` reads a result key,
+and `$fit->toArray()` returns a plain array. Earlier phit versions return
+the array directly.
+
+`columns` holds R's coefficient names, in R's order, and
 `coefficients`, `std_errors`, `p_values`, and `conf_int` follow the same order.
-The array also has the fitted values, residuals, fit statistics such as
+The result also has the fitted values, residuals, fit statistics such as
 `r_squared` and `sigma`, and `n_observations` and `n_dropped`, which count the
 rows used and the rows dropped for missing values.
 

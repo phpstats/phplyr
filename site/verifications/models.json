@@ -92,7 +92,7 @@
     ],
     "exclusions": [
         "glmer() is not compared with lme4.",
-        "phit-polyfill is not compared with R; the Models benchmark compares its coefficients with the extension's."
+        "This saved record covers the phit extension. CI also runs the model fixtures with phit-polyfill."
     ],
     "reproduce": [
         "Rscript tests/r/models.R",

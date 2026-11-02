@@ -679,7 +679,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Conditions.</strong> <code>case_when(x &lt; 4 ~ "low", .default = "high")</code> becomes <code>case_when([col('x')-&gt;lt(4), 'low'], default: 'high')</code>.</li>
 <li><strong>Renaming in select.</strong> <code>select(length = bill_length_mm)</code> becomes <code>select(['length' =&gt; 'bill_length_mm'])</code>.</li>
 <li><strong>Column sets.</strong> <code>c(length, depth)</code> becomes <code>['length', 'depth']</code>.</li>
-<li><strong>Models.</strong> <code>lm()</code>, <code>glm()</code>, and <code>lmer()</code> take the same formulas. They return arrays, so <code>coef()</code> and <code>fixef()</code> become reads of <code>coefficients</code>. The coefficients agree to the printed four decimals, except the last digit of the random-intercept model’s intercept.</li>
+<li><strong>Models.</strong> <code>lm()</code>, <code>glm()</code>, and <code>lmer()</code> take the same formulas. Their results support array access, so <code>coef()</code> and <code>fixef()</code> become reads of <code>coefficients</code>. The coefficients agree to the printed four decimals, except the last digit of the random-intercept model’s intercept.</li>
 <li><strong>Printing.</strong> DataFrames print in tibble’s format.</li>
 </ul>
 <p>On a database table from <code>Phibble\tbl()</code>, the cleaning, counting, and grouped-summary steps run as SQL, because they use <code>col()</code> expressions and phplyr’s helpers. The reshaping step loads the rows into PHP. See <a href="./reference/databases.html">Databases and expressions</a>.</p>

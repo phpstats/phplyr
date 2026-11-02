@@ -383,7 +383,7 @@ ul.task-list li input[type="checkbox"] {
 <li><strong><code>_by</code> sorts groups.</strong> dplyr keeps the order of first appearance for <code>.by</code>. phplyr sorts by key, as it does for <code>group_by()</code>.</li>
 <li><strong>Strings are UTF-8.</strong> String functions count UTF-8 characters.</li>
 <li><strong>Date-times parse to UTC</strong> unless a function is given <code>tz:</code>, whatever PHP’s default time zone is, as in lubridate.</li>
-<li><strong>Models return arrays.</strong> <code>lm()</code> and the other model functions return phit’s result array, with R’s coefficient names in <code>columns</code>, in place of a model object.</li>
+<li><strong>Model results follow phit.</strong> With phit 0.6 or later, <code>lm()</code> and the other model functions return a read-only fit object that prints its summary and supports array access. Earlier phit versions return arrays. R’s coefficient names are in <code>columns</code> in both forms. See <a href="./reference/models.html#results">Model results</a>.</li>
 </ul>
 
 
