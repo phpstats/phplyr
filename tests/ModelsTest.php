@@ -25,7 +25,7 @@ it('explains when phit is missing', function () {
     $t = DataFrame::fromRows([['y' => 1.0, 'x' => 2.0]]);
     expect(fn () => pipe($t, lm('y ~ x')))->toThrow(RuntimeException::class, 'Phit\\fit_ols()');
     expect(fn () => pipe($t, glm('y ~ x', family: 'binomial')))->toThrow(RuntimeException::class, 'Phit\\fit_generalized_linear()');
-})->skip(fn () => function_exists('Phit\\fit_lm'), 'phit is available');
+})->skip(fn () => phitLoaded(), 'phit is available');
 
 require_once __DIR__.'/Fixtures/phit-stubs.php';
 
@@ -34,7 +34,7 @@ describe('phit function names', function () {
 
     $t = fn () => DataFrame::fromRows([['y' => 1.0, 'x' => 2.0, 'g' => 'a']]);
 
-    it('calls the phit 0.4 names when phit has them', function () use ($t) {
+    it('calls the phit 0.4 and 0.5 names, without the old aliases', function () use ($t) {
         Internal::$phitNamespace = 'PhplyrTest\\Phit04\\';
         $data = $t();
 
@@ -71,4 +71,4 @@ it('fits models like R', function (string $key, Closure $fit) {
     'lm(score ~ study_hours + prior_score + school) on schools' => ['lm', fn () => pipe(DataFrame::fromCsv(fixturePath('schools.csv')), lm('score ~ study_hours + prior_score + school'))],
     'lm(score ~ study_hours) on schools with prior_score > 60' => ['lm_filtered', fn () => pipe(DataFrame::fromCsv(fixturePath('schools.csv')), filter(fn ($r) => $r->prior_score > 60), lm('score ~ study_hours'))],
     'glm(passed ~ study_hours + practice_score, binomial) on learning' => ['glm', fn () => pipe(DataFrame::fromCsv(fixturePath('learning.csv')), glm('passed ~ study_hours + practice_score', family: 'binomial'))],
-])->group('verify:models')->skip(fn () => ! function_exists('Phit\\fit_lm'), 'needs phit with fit_lm');
+])->group('verify:models')->skip(fn () => ! phitLoaded(), 'needs phit');

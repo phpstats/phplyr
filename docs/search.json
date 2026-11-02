@@ -114,7 +114,7 @@
     "href": "reference/models.html",
     "title": "Models",
     "section": "",
-    "text": "lm(), glm(), lmer(), and glmer() fit models with phit. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model. phplyr adds no model code of its own.\nphit 0.4 also has the older names, such as fit_lm(), as deprecated aliases. phplyr calls the current names.\nThe functions come from the phit extension or from phit-polyfill, its PHP port, and phplyr calls both the same way. phit’s Extension or polyfill page compares them. The Models benchmark times both through phplyr.\nCI runs phplyr’s tests with each implementation. Both runs compare lm() and glm() coefficients with R’s, and lmer() fixed effects with lme4’s. The Models verification lists the comparisons.",
+    "text": "lm(), glm(), lmer(), and glmer() fit models with phit. phit reads factor levels from the table, builds the model matrix from an R formula, and fits the model. phplyr adds no model code of its own.\nWith phit 0.3, which predates these names, phplyr calls phit 0.3’s fit_lm(), fit_glm(), fit_lmer(), and fit_glmer().\nThe functions come from the phit extension or from phit-polyfill, its PHP port, and phplyr calls both the same way. phit’s Extension or polyfill page compares them. The Models benchmark times both through phplyr.\nCI runs phplyr’s tests with each implementation. Both runs compare lm() and glm() coefficients with R’s, and lmer() fixed effects with lme4’s. The Models verification lists the comparisons.",
     "crumbs": [
       "Functions and methods",
       "Models"

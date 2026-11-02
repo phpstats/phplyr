@@ -9,6 +9,12 @@ function fixturePath(string $name): string
     return __DIR__.'/Fixtures/'.$name;
 }
 
+/** phit's model functions are loaded: the extension or phit-polyfill, any version. */
+function phitLoaded(): bool
+{
+    return function_exists('Phit\\fit_ols');
+}
+
 /** Run a test body once with phit (when loaded) and once in pure PHP. */
 function bothBackends(Closure $body): void
 {

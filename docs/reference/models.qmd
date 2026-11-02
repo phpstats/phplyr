@@ -13,8 +13,8 @@ fits the model. phplyr adds no model code of its own.
 | `lmer()` | `Phit\fit_mixed_gaussian()` |
 | `glmer()` | `Phit\fit_mixed_logistic()` |
 
-phit 0.4 also has the older names, such as `fit_lm()`, as deprecated aliases.
-phplyr calls the current names.
+With phit 0.3, which predates these names, phplyr calls phit 0.3's `fit_lm()`,
+`fit_glm()`, `fit_lmer()`, and `fit_glmer()`.
 
 The functions come from the [phit](https://github.com/phpstats/phit)
 extension or from [phit-polyfill](https://github.com/phpstats/phit-polyfill),

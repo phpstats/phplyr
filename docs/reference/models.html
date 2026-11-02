@@ -415,7 +415,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>phit 0.4 also has the older names, such as <code>fit_lm()</code>, as deprecated aliases. phplyr calls the current names.</p>
+<p>With phit 0.3, which predates these names, phplyr calls phit 0.3’s <code>fit_lm()</code>, <code>fit_glm()</code>, <code>fit_lmer()</code>, and <code>fit_glmer()</code>.</p>
 <p>The functions come from the <a href="https://github.com/phpstats/phit">phit</a> extension or from <a href="https://github.com/phpstats/phit-polyfill">phit-polyfill</a>, its PHP port, and phplyr calls both the same way. phit’s <a href="https://phit.phpstats.org/docs/extension-or-polyfill">Extension or polyfill</a> page compares them. The <a href="https://phplyr.phpstats.org/benchmarks/models">Models benchmark</a> times both through phplyr.</p>
 <ul>
 <li>Install the polyfill with <code>composer require phpstats/phit-polyfill</code>. When the extension is loaded, the polyfill defines nothing.</li>
