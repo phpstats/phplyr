@@ -5,11 +5,10 @@
 ```php
 // Inside a group, the second closure argument is the group's table, and
 // vector helpers such as max() are evaluated per group.
-echo DataFrame::fromCsv('schools.csv') |>
-    group_by('school') |>
-    filter(fn ($r, $g) => $r->score === max('score')($g)) |>
-    select('school', 'score') |>
-    head(4);
+echo DataFrame::fromCsv("$data/penguins.csv") |>
+    group_by('species') |>
+    filter(fn ($r, $g) => $r->body_mass_g === max('body_mass_g', naRm: true)($g)) |>
+    select('species', 'island', 'sex', 'body_mass_g');
 ```
 
 ## PHP 8.3–8.4
@@ -17,22 +16,20 @@ echo DataFrame::fromCsv('schools.csv') |>
 ```php
 // Inside a group, the second closure argument is the group's table, and
 // vector helpers such as max() are evaluated per group.
-echo phplyr(DataFrame::fromCsv('schools.csv'))
-    ->groupBy('school')
-    ->filter(fn ($r, $g) => $r->score === max('score')($g))
-    ->select('school', 'score')
-    ->head(4);
+echo phplyr(DataFrame::fromCsv("$data/penguins.csv"))
+    ->groupBy('species')
+    ->filter(fn ($r, $g) => $r->body_mass_g === max('body_mass_g', naRm: true)($g))
+    ->select('species', 'island', 'sex', 'body_mass_g');
 ```
 
 :::
 
 ```{.text .output}
-# A tibble: 4 × 2
-# Groups:   school [4]
-  school    score
-  <chr>     <dbl>
-1 school-01  91.0
-2 school-02  92.1
-3 school-03  84.0
-4 school-04  83.9
+# A tibble: 3 × 4
+# Groups:   species [3]
+  species   island sex   body_mass_g
+  <chr>     <chr>  <chr>       <int>
+1 Adelie    Biscoe male         4775
+2 Gentoo    Biscoe male         6300
+3 Chinstrap Dream  male         4800
 ```

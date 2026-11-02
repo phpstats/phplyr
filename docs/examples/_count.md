@@ -3,45 +3,36 @@
 ## PHP 8.5+
 
 ```php
-$schools = DataFrame::fromCsv('schools.csv') |>
-    mutate(band: case_when(
-        [fn ($r) => $r->study_hours < 4, 'light'],
-        [fn ($r) => $r->study_hours < 8, 'moderate'],
-        default: 'heavy',
-    ));
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo $schools |> count('band', sort: true);
-echo "\n", $schools |> count('band', wt: 'study_hours', name: 'hours');
+echo $penguins |> count('species', 'island', sort: true);
+echo "\n", $penguins |> count('species', wt: 'body_mass_g', name: 'total_mass_g');
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-$schools = phplyr(DataFrame::fromCsv('schools.csv'))
-    ->mutate(band: case_when(
-        [fn ($r) => $r->study_hours < 4, 'light'],
-        [fn ($r) => $r->study_hours < 8, 'moderate'],
-        default: 'heavy',
-    ))
-    ->get();
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo phplyr($schools)->count('band', sort: true);
-echo "\n", phplyr($schools)->count('band', wt: 'study_hours', name: 'hours');
+echo phplyr($penguins)->count('species', 'island', sort: true);
+echo "\n", phplyr($penguins)->count('species', wt: 'body_mass_g', name: 'total_mass_g');
 ```
 
 :::
 
 ```{.text .output}
+# A tibble: 5 × 3
+  species   island        n
+  <chr>     <chr>     <int>
+1 Gentoo    Biscoe      124
+2 Chinstrap Dream        68
+3 Adelie    Dream        56
+4 Adelie    Torgersen    52
+5 Adelie    Biscoe       44
 # A tibble: 3 × 2
-  band         n
-  <chr>    <int>
-1 heavy       95
-2 moderate    90
-3 light       65
-# A tibble: 3 × 2
-  band     hours
-  <chr>    <dbl>
-1 heavy     953.
-2 light     159.
-3 moderate  540.
+  species   total_mass_g
+  <chr>            <int>
+1 Adelie          558800
+2 Chinstrap       253850
+3 Gentoo          624350
 ```

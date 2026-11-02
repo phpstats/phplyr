@@ -1,11 +1,11 @@
 <?php
 
-$schools = DataFrame::fromCsv('schools.csv');
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
 // Several conditions are combined with AND; NA counts as false.
-echo $schools |>
-    filter(fn ($r) => $r->prior_score > 75, between('study_hours', 2, 6)) |>
-    head(4);
+echo $penguins |>
+    filter(fn ($r) => $r->bill_length_mm > 50, between('flipper_length_mm', 190, 200)) |>
+    select('species', 'island', 'bill_length_mm', 'flipper_length_mm');
 
 // filter_out() drops the rows where every condition is true.
-echo "\n", $schools |> filter_out(fn ($r) => $r->prior_score < 70) |> count();
+echo "\n", $penguins |> filter_out(fn ($r) => $r->species === 'Adelie') |> count();

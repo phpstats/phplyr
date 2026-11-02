@@ -4,55 +4,57 @@ suppressPackageStartupMessages({
   library(lme4)
 })
 
-schools <- as_tibble(read.csv("schools.csv"))
+data <- paste0("https://raw.githubusercontent.com/phpstats",
+               "/datasets/main/csv")
+penguins <- read.csv(file.path(data, "penguins.csv"),
+                     na.strings = c("", "NA")) |>
+  as_tibble()
 
-# Clean: drop incomplete rows, band study time,
-# compute the gain.
-clean <- schools |>
-  filter(!is.na(score), study_hours > 0) |>
+# Clean: drop incomplete rows, band body mass,
+# compute the bill ratio.
+clean <- penguins |>
+  filter(!is.na(body_mass_g), !is.na(sex)) |>
   mutate(
-    hours_band = case_when(
-      study_hours < 4 ~ "low",
-      study_hours < 8 ~ "mid",
-      .default = "high"
+    mass_band = case_when(
+      body_mass_g < 3500 ~ "light",
+      body_mass_g < 4500 ~ "mid",
+      .default = "heavy"
     ),
-    gain = score - prior_score,
-    passed = as.integer(score >= 75)
+    bill_ratio = bill_length_mm / bill_depth_mm,
+    male = as.integer(sex == "male")
   )
 
-# Reshape: one row per student and test.
+# Reshape: one row per penguin and bill measure.
 long <- clean |>
-  mutate(student = row_number()) |>
-  select(student, school, prior = prior_score,
-         final = score) |>
-  pivot_longer(c(prior, final), names_to = "test",
-               values_to = "points")
+  mutate(penguin = row_number()) |>
+  select(penguin, species, length = bill_length_mm,
+         depth = bill_depth_mm) |>
+  pivot_longer(c(length, depth), names_to = "measure",
+               values_to = "mm")
 
 long |>
-  group_by(test) |>
-  summarise(mean = mean(points), sd = sd(points))
+  group_by(measure) |>
+  summarise(mean = mean(mm), sd = sd(mm))
 
-# Summarize: students per school and band, then
-# the schools with the largest mean gains.
+# Summarize: penguins per species and mass band, then
+# the species by mean bill ratio.
 clean |>
-  count(school, hours_band) |>
-  pivot_wider(names_from = hours_band, values_from = n,
-              values_fill = 0) |>
-  head(3)
+  count(species, mass_band) |>
+  pivot_wider(names_from = mass_band, values_from = n,
+              values_fill = 0)
 
 clean |>
-  group_by(school) |>
-  summarise(n = n(), mean_gain = mean(gain)) |>
-  arrange(desc(mean_gain)) |>
-  head(3)
+  group_by(species) |>
+  summarise(n = n(), mean_ratio = mean(bill_ratio)) |>
+  arrange(desc(mean_ratio))
 
 # Model: linear, logistic, and random-intercept fits.
-fit_lm <- lm(score ~ study_hours + prior_score,
+fit_lm <- lm(body_mass_g ~ flipper_length_mm + male,
              data = clean)
-fit_glm <- glm(passed ~ study_hours + prior_score,
+fit_glm <- glm(male ~ body_mass_g + bill_depth_mm,
                family = binomial, data = clean)
 fit_lmer <- lmer(
-  score ~ study_hours + prior_score + (1 | school),
+  body_mass_g ~ flipper_length_mm + male + (1 | species),
   data = clean
 )
 round(coef(fit_lm), 4)

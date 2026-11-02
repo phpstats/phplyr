@@ -188,7 +188,7 @@ $firstSentence = function (string $markdown): string {
     $parts = preg_split('/(`[^`]*`)/', $first, -1, PREG_SPLIT_DELIM_CAPTURE) ?: [];
     $out = '';
     foreach ($parts as $i => $part) {
-        if ($i % 2 === 0 && preg_match('/^(.*?[.;:])(\s|$)/s', $part, $m)) {
+        if ($i % 2 === 0 && preg_match('/^(.*?(?:[.:]|(?<!&gt|&lt|&amp);))(\s|$)/s', $part, $m)) {
             return rtrim($out.$m[1], ';:').(str_ends_with($m[1], '.') ? '' : '.');
         }
         $out .= $part;

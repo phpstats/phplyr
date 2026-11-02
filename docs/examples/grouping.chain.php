@@ -1,19 +1,20 @@
 <?php
 
-$schools = phplyr(DataFrame::fromCsv('schools.csv'))->groupBy('school')->get();
+$penguins = phplyr(DataFrame::fromCsv("$data/penguins.csv"))->groupBy('species')->get();
 
 echo json_encode([
-    'groups' => phplyr($schools)->groupVars(),
-    'n_groups' => phplyr($schools)->nGroups(),
-    'sizes' => \array_slice(phplyr($schools)->groupSize(), 0, 4),
+    'groups' => phplyr($penguins)->groupVars(),
+    'n_groups' => phplyr($penguins)->nGroups(),
+    'sizes' => phplyr($penguins)->groupSize(),
 ]), "\n\n";
 
 // Grouped mutate: helpers are evaluated within each group.
-echo phplyr($schools)
-    ->mutate(centered: fn ($r, $g) => round($r->score - mean('score')($g), 2), rank_in_school: min_rank(desc('score')))
+echo phplyr($penguins)
+    ->mutate(centered: col('body_mass_g')->sub(mean('body_mass_g', naRm: true)), rank_in_species: min_rank(desc('body_mass_g')))
     ->ungroup()
+    ->select('species', 'body_mass_g', 'centered', 'rank_in_species')
     ->head(4);
 
 // One table per group.
-$parts = phplyr($schools)->groupSplit();
+$parts = phplyr($penguins)->groupSplit();
 echo "\n", \count($parts), ' tables; the first has ', $parts[0]->nrow(), " rows\n";

@@ -3,58 +3,60 @@
 ## PHP 8.5+
 
 ```php
-$schools = DataFrame::fromCsv('schools.csv') |> group_by('school');
+$penguins = DataFrame::fromCsv("$data/penguins.csv") |> group_by('species');
 
 echo json_encode([
-    'groups' => $schools |> group_vars(),
-    'n_groups' => $schools |> n_groups(),
-    'sizes' => \array_slice($schools |> group_size(), 0, 4),
+    'groups' => $penguins |> group_vars(),
+    'n_groups' => $penguins |> n_groups(),
+    'sizes' => $penguins |> group_size(),
 ]), "\n\n";
 
 // Grouped mutate: helpers are evaluated within each group.
-echo $schools |>
-    mutate(centered: fn ($r, $g) => round($r->score - mean('score')($g), 2), rank_in_school: min_rank(desc('score'))) |>
+echo $penguins |>
+    mutate(centered: col('body_mass_g')->sub(mean('body_mass_g', naRm: true)), rank_in_species: min_rank(desc('body_mass_g'))) |>
     ungroup() |>
+    select('species', 'body_mass_g', 'centered', 'rank_in_species') |>
     head(4);
 
 // One table per group.
-$parts = $schools |> group_split();
+$parts = $penguins |> group_split();
 echo "\n", \count($parts), ' tables; the first has ', $parts[0]->nrow(), " rows\n";
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-$schools = phplyr(DataFrame::fromCsv('schools.csv'))->groupBy('school')->get();
+$penguins = phplyr(DataFrame::fromCsv("$data/penguins.csv"))->groupBy('species')->get();
 
 echo json_encode([
-    'groups' => phplyr($schools)->groupVars(),
-    'n_groups' => phplyr($schools)->nGroups(),
-    'sizes' => \array_slice(phplyr($schools)->groupSize(), 0, 4),
+    'groups' => phplyr($penguins)->groupVars(),
+    'n_groups' => phplyr($penguins)->nGroups(),
+    'sizes' => phplyr($penguins)->groupSize(),
 ]), "\n\n";
 
 // Grouped mutate: helpers are evaluated within each group.
-echo phplyr($schools)
-    ->mutate(centered: fn ($r, $g) => round($r->score - mean('score')($g), 2), rank_in_school: min_rank(desc('score')))
+echo phplyr($penguins)
+    ->mutate(centered: col('body_mass_g')->sub(mean('body_mass_g', naRm: true)), rank_in_species: min_rank(desc('body_mass_g')))
     ->ungroup()
+    ->select('species', 'body_mass_g', 'centered', 'rank_in_species')
     ->head(4);
 
 // One table per group.
-$parts = phplyr($schools)->groupSplit();
+$parts = phplyr($penguins)->groupSplit();
 echo "\n", \count($parts), ' tables; the first has ', $parts[0]->nrow(), " rows\n";
 ```
 
 :::
 
 ```{.text .output}
-{"groups":["school"],"n_groups":12,"sizes":[18,24,15,22]}
+{"groups":["species"],"n_groups":3,"sizes":[152,68,124]}
 
-# A tibble: 4 × 6
-  school    study_hours prior_score score centered rank_in_school
-  <chr>           <dbl>       <dbl> <dbl>    <dbl>          <int>
-1 school-01       11.6         77.3  78.3     5.34              4
-2 school-01        2.7         51.7  67.2    -5.67             14
-3 school-01       10.0         78.8  88.2    15.3               2
-4 school-01        3.71        45.3  68.5    -4.37             13
-12 tables; the first has 18 rows
+# A tibble: 4 × 4
+  species body_mass_g centered rank_in_species
+  <chr>         <int>    <dbl>           <int>
+1 Adelie         3750     49.3              65
+2 Adelie         3800     99.3              56
+3 Adelie         3250   -451.              125
+4 Adelie           NA     NA                NA
+3 tables; the first has 152 rows
 ```

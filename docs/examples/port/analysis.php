@@ -3,66 +3,68 @@
 require 'vendor/autoload.php';
 
 use Phibble\DataFrame;
-use function Phplyr\{filter, mutate, select, count, head};
+use function Phplyr\{filter, mutate, select, count};
 use function Phplyr\{group_by, summarize, arrange, desc};
 use function Phplyr\{pivot_longer, pivot_wider};
 use function Phplyr\{case_when, if_else, col, row_number};
 use function Phplyr\{n, mean, sd, lm, glm, lmer};
 
-$schools = DataFrame::fromCsv('schools.csv');
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-// Clean: drop incomplete rows, band study time,
-// compute the gain.
-$hours = col('study_hours');
-$clean = $schools |>
-    filter(col('score')->isNa()->not(), $hours->gt(0)) |>
+// Clean: drop incomplete rows, band body mass,
+// compute the bill ratio.
+$mass = col('body_mass_g');
+$clean = $penguins |>
+    filter(
+        $mass->isNa()->not(),
+        col('sex')->isNa()->not(),
+    ) |>
     mutate(
-        hours_band: case_when(
-            [$hours->lt(4), 'low'],
-            [$hours->lt(8), 'mid'],
-            default: 'high',
+        mass_band: case_when(
+            [$mass->lt(3500), 'light'],
+            [$mass->lt(4500), 'mid'],
+            default: 'heavy',
         ),
-        gain: col('score')->sub(col('prior_score')),
-        passed: if_else(col('score')->ge(75), 1, 0),
+        bill_ratio: col('bill_length_mm')
+            ->div(col('bill_depth_mm')),
+        male: if_else(col('sex')->eq('male'), 1, 0),
     );
 
-// Reshape: one row per student and test.
+// Reshape: one row per penguin and bill measure.
 $long = $clean |>
-    mutate(student: row_number()) |>
+    mutate(penguin: row_number()) |>
     select(
-        'student',
-        'school',
-        ['prior' => 'prior_score', 'final' => 'score'],
+        'penguin',
+        'species',
+        ['length' => 'bill_length_mm'],
+        ['depth' => 'bill_depth_mm'],
     ) |>
     pivot_longer(
-        ['prior', 'final'],
-        namesTo: 'test',
-        valuesTo: 'points',
+        ['length', 'depth'],
+        namesTo: 'measure',
+        valuesTo: 'mm',
     );
 
 echo $long |>
-    group_by('test') |>
-    summarize(
-        mean: mean('points'),
-        sd: sd('points'),
-    ), "\n";
+    group_by('measure') |>
+    summarize(mean: mean('mm'), sd: sd('mm')), "\n";
 
-// Summarize: students per school and band, then
-// the schools with the largest mean gains.
+// Summarize: penguins per species and mass band, then
+// the species by mean bill ratio.
 echo $clean |>
-    count('school', 'hours_band') |>
+    count('species', 'mass_band') |>
     pivot_wider(
-        namesFrom: 'hours_band',
+        namesFrom: 'mass_band',
         valuesFrom: 'n',
         valuesFill: 0,
-    ) |>
-    head(3), "\n";
+    ), "\n";
 
 echo $clean |>
-    group_by('school') |>
-    summarize(n: n(), mean_gain: mean('gain')) |>
-    arrange(desc('mean_gain')) |>
-    head(3), "\n";
+    group_by('species') |>
+    summarize(n: n(), mean_ratio: mean('bill_ratio')) |>
+    arrange(desc('mean_ratio')), "\n";
 
 // Model: linear, logistic, and random-intercept fits.
 $coef = fn (array $fit) => implode('  ', array_map(
@@ -70,12 +72,14 @@ $coef = fn (array $fit) => implode('  ', array_map(
     $fit['columns'],
     $fit['coefficients'],
 ));
-$rhs = 'study_hours + prior_score';
-echo $coef($clean |> lm("score ~ {$rhs}")), "\n";
+echo $coef($clean |> lm(
+    'body_mass_g ~ flipper_length_mm + male',
+)), "\n";
 echo $coef($clean |> glm(
-    "passed ~ {$rhs}",
+    'male ~ body_mass_g + bill_depth_mm',
     family: 'binomial',
 )), "\n";
 echo $coef($clean |> lmer(
-    "score ~ {$rhs} + (1 | school)",
+    'body_mass_g ~ flipper_length_mm + male'
+    . ' + (1 | species)',
 )), "\n";

@@ -5,55 +5,57 @@ suppressPackageStartupMessages({
   library(lme4)
 })
 
-schools <- as_tibble(read.csv("schools.csv"))
+data <- paste0("https://raw.githubusercontent.com/phpstats",
+               "/datasets/main/csv")
+penguins <- read.csv(file.path(data, "penguins.csv"),
+                     na.strings = c("", "NA")) |>
+  as_tibble()
 
-# Clean: drop incomplete rows, band study time,
-# compute the gain.
-clean <- schools |>
-  filter(!is.na(score), study_hours > 0) |>
+# Clean: drop incomplete rows, band body mass,
+# compute the bill ratio.
+clean <- penguins |>
+  filter(!is.na(body_mass_g), !is.na(sex)) |>
   mutate(
-    hours_band = case_when(
-      study_hours < 4 ~ "low",
-      study_hours < 8 ~ "mid",
-      .default = "high"
+    mass_band = case_when(
+      body_mass_g < 3500 ~ "light",
+      body_mass_g < 4500 ~ "mid",
+      .default = "heavy"
     ),
-    gain = score - prior_score,
-    passed = as.integer(score >= 75)
+    bill_ratio = bill_length_mm / bill_depth_mm,
+    male = as.integer(sex == "male")
   )
 
-# Reshape: one row per student and test.
+# Reshape: one row per penguin and bill measure.
 long <- clean |>
-  mutate(student = row_number()) |>
-  select(student, school, prior = prior_score,
-         final = score) |>
-  pivot_longer(c(prior, final), names_to = "test",
-               values_to = "points")
+  mutate(penguin = row_number()) |>
+  select(penguin, species, length = bill_length_mm,
+         depth = bill_depth_mm) |>
+  pivot_longer(c(length, depth), names_to = "measure",
+               values_to = "mm")
 
 long |>
-  group_by(test) |>
-  summarise(mean = mean(points), sd = sd(points))
+  group_by(measure) |>
+  summarise(mean = mean(mm), sd = sd(mm))
 
-# Summarize: students per school and band, then
-# the schools with the largest mean gains.
+# Summarize: penguins per species and mass band, then
+# the species by mean bill ratio.
 clean |>
-  count(school, hours_band) |>
-  pivot_wider(names_from = hours_band, values_from = n,
-              values_fill = 0) |>
-  head(3)
+  count(species, mass_band) |>
+  pivot_wider(names_from = mass_band, values_from = n,
+              values_fill = 0)
 
 clean |>
-  group_by(school) |>
-  summarise(n = n(), mean_gain = mean(gain)) |>
-  arrange(desc(mean_gain)) |>
-  head(3)
+  group_by(species) |>
+  summarise(n = n(), mean_ratio = mean(bill_ratio)) |>
+  arrange(desc(mean_ratio))
 
 # Model: linear, logistic, and random-intercept fits.
-fit_lm <- lm(score ~ study_hours + prior_score,
+fit_lm <- lm(body_mass_g ~ flipper_length_mm + male,
              data = clean)
-fit_glm <- glm(passed ~ study_hours + prior_score,
+fit_glm <- glm(male ~ body_mass_g + bill_depth_mm,
                family = binomial, data = clean)
 fit_lmer <- lmer(
-  score ~ study_hours + prior_score + (1 | school),
+  body_mass_g ~ flipper_length_mm + male + (1 | species),
   data = clean
 )
 round(coef(fit_lm), 4)
@@ -63,26 +65,26 @@ round(fixef(fit_lmer), 4)
 
 ```{.text .output}
 # A tibble: 2 × 3
-  test   mean    sd
-  <chr> <dbl> <dbl>
-1 final  72.0  10.3
-2 prior  59.8  12.4
+  measure  mean    sd
+  <chr>   <dbl> <dbl>
+1 depth    17.2  1.97
+2 length   44.0  5.47
 # A tibble: 3 × 4
-  school     high   low   mid
+  species   heavy light   mid
   <chr>     <int> <int> <int>
-1 school-01     7     4     7
-2 school-02     8     8     8
-3 school-03     5     3     7
+1 Adelie        8    51    87
+2 Chinstrap     3    17    48
+3 Gentoo      104     0    15
 # A tibble: 3 × 3
-  school        n mean_gain
-  <chr>     <int>     <dbl>
-1 school-07    19      24.3
-2 school-10    25      14.1
-3 school-02    24      13.6
-(Intercept) study_hours prior_score 
-    45.3014      1.5691      0.2730 
-(Intercept) study_hours prior_score 
-    -6.9865      0.5688      0.0395 
-(Intercept) study_hours prior_score 
-    46.6627      1.6141      0.2453
+  species       n mean_ratio
+  <chr>     <int>      <dbl>
+1 Gentoo      119       3.18
+2 Chinstrap    68       2.65
+3 Adelie      146       2.12
+      (Intercept) flipper_length_mm              male 
+       -5410.3002           46.9822          347.8503 
+  (Intercept)   body_mass_g bill_depth_mm 
+     -56.7794        0.0053        2.0257 
+      (Intercept) flipper_length_mm              male 
+        -202.2404           20.4609          527.4247
 ```

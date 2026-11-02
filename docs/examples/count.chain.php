@@ -1,12 +1,6 @@
 <?php
 
-$schools = phplyr(DataFrame::fromCsv('schools.csv'))
-    ->mutate(band: case_when(
-        [fn ($r) => $r->study_hours < 4, 'light'],
-        [fn ($r) => $r->study_hours < 8, 'moderate'],
-        default: 'heavy',
-    ))
-    ->get();
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo phplyr($schools)->count('band', sort: true);
-echo "\n", phplyr($schools)->count('band', wt: 'study_hours', name: 'hours');
+echo phplyr($penguins)->count('species', 'island', sort: true);
+echo "\n", phplyr($penguins)->count('species', wt: 'body_mass_g', name: 'total_mass_g');

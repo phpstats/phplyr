@@ -493,7 +493,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="is_na"><code>is_na()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>is_na(<span class="dt">mixed</span> <span class="va">$x</span>)<span class="ot">:</span> Vec</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>True where x is NA.</p>
-<p>Returns a vector helper (<code>Vec</code>). Its expression runs on a database table when its arguments are columns, literals, or other helpers.</p>
+<p>Returns a vector helper (<code>Vec</code>). Its expression runs on a database table when its arguments are columns, literals, or other helpers. <a href="#database-tables">Example</a>.</p>
 </section>
 <section id="abs" class="level3">
 <h3 class="anchored" data-anchor-id="abs"><code>abs()</code></h3>
@@ -661,7 +661,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="method-isna"><code>-&gt;isNa()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="va">$vec</span>-&gt;isNa()<span class="ot">:</span> Vec</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>True where x is NA.</p>
-<p>Returns a vector helper (<code>Vec</code>). Its expression runs on a database table when its arguments are columns, literals, or other helpers.</p>
+<p>Returns a vector helper (<code>Vec</code>). Its expression runs on a database table when its arguments are columns, literals, or other helpers. <a href="#database-tables">Example</a>.</p>
 </section>
 <section id="method-and" class="level3">
 <h3 class="anchored" data-anchor-id="method-and"><code>-&gt;and()</code></h3>
@@ -679,7 +679,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="method-not"><code>-&gt;not()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="va">$vec</span>-&gt;not()<span class="ot">:</span> Vec</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Logical not; NA stays NA.</p>
-<p>Returns a vector helper (<code>Vec</code>). Its expression runs on a database table when its arguments are columns, literals, or other helpers.</p>
+<p>Returns a vector helper (<code>Vec</code>). Its expression runs on a database table when its arguments are columns, literals, or other helpers. <a href="#database-tables">Example</a>.</p>
 </section>
 <section id="method-desc" class="level3">
 <h3 class="anchored" data-anchor-id="method-desc"><code>-&gt;desc()</code></h3>
@@ -695,62 +695,60 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Load the schools data into an in-memory SQLite database.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Load the penguins into an in-memory SQLite database, with typed columns.</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="va">$pdo</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">PDO</span>(<span class="st">'sqlite::memory:'</span>)<span class="ot">;</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="va">$pdo</span>-&gt;<span class="fu">exec</span>(<span class="st">'CREATE TABLE schools (school TEXT, study_hours REAL, prior_score REAL, score REAL)'</span>)<span class="ot">;</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="va">$insert</span> <span class="op">=</span> <span class="va">$pdo</span>-&gt;prepare(<span class="st">'INSERT INTO schools VALUES (?, ?, ?, ?)'</span>)<span class="ot">;</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span> (DataFrame::fromCsv(<span class="st">'schools.csv'</span>)-&gt;toRows() <span class="kw">as</span> <span class="va">$row</span>) {</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">$insert</span>-&gt;execute(<span class="fu">array_values</span>(<span class="va">$row</span>))<span class="ot">;</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co">// The same functions build a query. Nothing runs until collect().</span></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="va">$query</span> <span class="op">=</span> tbl(<span class="va">$pdo</span><span class="ot">,</span> <span class="st">'schools'</span>) <span class="op">|&gt;</span></span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    filter(col(<span class="st">'study_hours'</span>)-&gt;ge(<span class="dv">5</span>)) <span class="op">|&gt;</span></span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'school'</span>) <span class="op">|&gt;</span></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    summarize(students<span class="ot">:</span> n()<span class="ot">,</span> avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>)) <span class="op">|&gt;</span></span>
-<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    filter(col(<span class="st">'students'</span>)-&gt;ge(<span class="dv">12</span>)) <span class="op">|&gt;</span></span>
-<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>    arrange(desc(<span class="st">'avg_score'</span>))<span class="ot">;</span></span>
-<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$query</span> <span class="op">|&gt;</span> show_query()<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$query</span> <span class="op">|&gt;</span> collect()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="va">$pdo</span>-&gt;<span class="fu">exec</span>(<span class="st">'CREATE TABLE penguins (species TEXT, island TEXT, bill_length_mm REAL, bill_depth_mm REAL,</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="st">    flipper_length_mm INTEGER, body_mass_g INTEGER, sex TEXT, year INTEGER)'</span>)<span class="ot">;</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="va">$insert</span> <span class="op">=</span> <span class="va">$pdo</span>-&gt;prepare(<span class="st">'INSERT INTO penguins VALUES (?, ?, ?, ?, ?, ?, ?, ?)'</span>)<span class="ot">;</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span> ((DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>) <span class="op">|&gt;</span> select(except(<span class="st">'rownames'</span>)))-&gt;toRows() <span class="kw">as</span> <span class="va">$row</span>) {</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">$insert</span>-&gt;execute(<span class="fu">array_values</span>(<span class="va">$row</span>))<span class="ot">;</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="co">// The same functions build a query. Nothing runs until collect().</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="va">$query</span> <span class="op">=</span> tbl(<span class="va">$pdo</span><span class="ot">,</span> <span class="st">'penguins'</span>) <span class="op">|&gt;</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    filter(col(<span class="st">'body_mass_g'</span>)-&gt;isNa()-&gt;not()) <span class="op">|&gt;</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span>) <span class="op">|&gt;</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    summarize(penguins<span class="ot">:</span> n()<span class="ot">,</span> avg_mass_g<span class="ot">:</span> mean(<span class="st">'body_mass_g'</span>)) <span class="op">|&gt;</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>    filter(col(<span class="st">'penguins'</span>)-&gt;ge(<span class="dv">50</span>)) <span class="op">|&gt;</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>    arrange(desc(<span class="st">'avg_mass_g'</span>))<span class="ot">;</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$query</span> <span class="op">|&gt;</span> show_query()<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$query</span> <span class="op">|&gt;</span> collect()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Load the schools data into an in-memory SQLite database.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Load the penguins into an in-memory SQLite database, with typed columns.</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="va">$pdo</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">PDO</span>(<span class="st">'sqlite::memory:'</span>)<span class="ot">;</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="va">$pdo</span>-&gt;<span class="fu">exec</span>(<span class="st">'CREATE TABLE schools (school TEXT, study_hours REAL, prior_score REAL, score REAL)'</span>)<span class="ot">;</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="va">$insert</span> <span class="op">=</span> <span class="va">$pdo</span>-&gt;prepare(<span class="st">'INSERT INTO schools VALUES (?, ?, ?, ?)'</span>)<span class="ot">;</span></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span> (DataFrame::fromCsv(<span class="st">'schools.csv'</span>)-&gt;toRows() <span class="kw">as</span> <span class="va">$row</span>) {</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">$insert</span>-&gt;execute(<span class="fu">array_values</span>(<span class="va">$row</span>))<span class="ot">;</span></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="co">// The same functions build a query. Nothing runs until collect().</span></span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="va">$query</span> <span class="op">=</span> phplyr(tbl(<span class="va">$pdo</span><span class="ot">,</span> <span class="st">'schools'</span>))</span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(col(<span class="st">'study_hours'</span>)-&gt;ge(<span class="dv">5</span>))</span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(students<span class="ot">:</span> n()<span class="ot">,</span> avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>))</span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(col(<span class="st">'students'</span>)-&gt;ge(<span class="dv">12</span>))</span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(desc(<span class="st">'avg_score'</span>))</span>
-<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
-<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$query</span>)-&gt;showQuery()<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$query</span>)-&gt;collect()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="va">$pdo</span>-&gt;<span class="fu">exec</span>(<span class="st">'CREATE TABLE penguins (species TEXT, island TEXT, bill_length_mm REAL, bill_depth_mm REAL,</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="st">    flipper_length_mm INTEGER, body_mass_g INTEGER, sex TEXT, year INTEGER)'</span>)<span class="ot">;</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="va">$insert</span> <span class="op">=</span> <span class="va">$pdo</span>-&gt;prepare(<span class="st">'INSERT INTO penguins VALUES (?, ?, ?, ?, ?, ?, ?, ?)'</span>)<span class="ot">;</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span> (phplyr(DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>))-&gt;select(except(<span class="st">'rownames'</span>))-&gt;get()-&gt;toRows() <span class="kw">as</span> <span class="va">$row</span>) {</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">$insert</span>-&gt;execute(<span class="fu">array_values</span>(<span class="va">$row</span>))<span class="ot">;</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="co">// The same functions build a query. Nothing runs until collect().</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="va">$query</span> <span class="op">=</span> phplyr(tbl(<span class="va">$pdo</span><span class="ot">,</span> <span class="st">'penguins'</span>))</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(col(<span class="st">'body_mass_g'</span>)-&gt;isNa()-&gt;not())</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span>)</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(penguins<span class="ot">:</span> n()<span class="ot">,</span> avg_mass_g<span class="ot">:</span> mean(<span class="st">'body_mass_g'</span>))</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(col(<span class="st">'penguins'</span>)-&gt;ge(<span class="dv">50</span>))</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(desc(<span class="st">'avg_mass_g'</span>))</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$query</span>)-&gt;showQuery()<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$query</span>)-&gt;collect()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code>SELECT "school", "students", "avg_score" FROM (SELECT * FROM (SELECT "school", "students", "avg_score", ROW_NUMBER() OVER (ORDER BY ("school" IS NULL), "school") AS "__phibble_row" FROM (SELECT "school" AS "school", COUNT(*) AS "students", (CASE WHEN COUNT(*) &gt; COUNT("score") THEN NULL ELSE (CASE WHEN COUNT("score") = 0 THEN NULL ELSE AVG(CAST("score" AS REAL)) END) END) AS "avg_score" FROM (SELECT * FROM (SELECT *, rowid AS "__phibble_row" FROM "schools") AS q1 WHERE ("study_hours" &gt;= ?)) AS q2 GROUP BY "school") AS q3) AS q4 WHERE ("students" &gt;= ?)) AS q5 ORDER BY ("avg_score" IS NULL), "avg_score" DESC, ("__phibble_row" IS NULL), "__phibble_row"
+<pre class="text output"><code>SELECT "species", "island", "penguins", "avg_mass_g" FROM (SELECT * FROM (SELECT "species", "island", "penguins", "avg_mass_g", ROW_NUMBER() OVER (ORDER BY ("species" IS NULL), "species", ("island" IS NULL), "island") AS "__phibble_row" FROM (SELECT "species" AS "species", "island" AS "island", COUNT(*) AS "penguins", (CASE WHEN COUNT(*) &gt; COUNT("body_mass_g") THEN NULL ELSE (CASE WHEN COUNT("body_mass_g") = 0 THEN NULL ELSE AVG(CAST("body_mass_g" AS REAL)) END) END) AS "avg_mass_g" FROM (SELECT * FROM (SELECT *, rowid AS "__phibble_row" FROM "penguins") AS q1 WHERE (NOT ("body_mass_g" IS NULL))) AS q2 GROUP BY "species", "island") AS q3) AS q4 WHERE ("penguins" &gt;= ?)) AS q5 ORDER BY ("avg_mass_g" IS NULL), "avg_mass_g" DESC, ("__phibble_row" IS NULL), "__phibble_row"
 
-# A tibble: 9 × 3
-  school    students avg_score
-  &lt;chr&gt;        &lt;int&gt;     &lt;dbl&gt;
-1 school-07       14      86.9
-2 school-06       20      80.9
-3 school-02       12      79.7
-4 school-11       13      77.6
-5 school-10       13      77.5
-6 school-01       12      76.6
-7 school-05       13      75.8
-8 school-04       20      71.1
-9 school-08       12      67.5</code></pre>
+# A tibble: 4 × 4
+# Groups:   species [3]
+  species   island    penguins avg_mass_g
+  &lt;chr&gt;     &lt;chr&gt;        &lt;int&gt;      &lt;dbl&gt;
+1 Gentoo    Biscoe         123      5076.
+2 Chinstrap Dream           68      3733.
+3 Adelie    Torgersen       51      3706.
+4 Adelie    Dream           56      3688.</code></pre>
 <p>Grouped <code>mutate()</code> and <code>filter()</code> compile aggregates and window functions to <code>OVER (PARTITION BY ...)</code>. Window functions need an order, so call <code>arrange()</code> first or pass <code>orderBy:</code>.</p>
 <p>A function given a PHP closure runs the query so far, loads the rows, and continues in memory, returning a <code>DataFrame</code>. Expressions with no faithful SQL translation do the same. They include <code>round()</code> (R rounds halves to even), <code>first()</code>, <code>last()</code>, <code>nth()</code>, <code>iqr()</code>, <code>cumprod()</code>, <code>consecutive_id()</code>, and <code>median()</code> or <code>quantile()</code> outside PostgreSQL.</p>
 <section id="show_query" class="level3">

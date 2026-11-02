@@ -46,19 +46,19 @@ lists the comparisons.
 ## PHP 8.5+
 
 ```php
-$table |> lm('y ~ x + group');
-$table |> glm('passed ~ hours', family: 'binomial');
-$table |> lmer('score ~ hours + (1 | school)');
-$table |> glmer('passed ~ hours + (1 | school)', family: 'binomial');
+$mtcars |> lm('mpg ~ wt + hp');
+$mroz |> glm('in_lf ~ age + k5', family: 'binomial');
+$sleepstudy |> lmer('Reaction ~ Days + (1 | Subject)');
+$table |> glmer('y ~ x + (1 | group)', family: 'binomial');
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-phplyr($table)->lm('y ~ x + group');
-phplyr($table)->glm('passed ~ hours', family: 'binomial');
-phplyr($table)->lmer('score ~ hours + (1 | school)');
-phplyr($table)->glmer('passed ~ hours + (1 | school)', family: 'binomial');
+phplyr($mtcars)->lm('mpg ~ wt + hp');
+phplyr($mroz)->glm('in_lf ~ age + k5', family: 'binomial');
+phplyr($sleepstudy)->lmer('Reaction ~ Days + (1 | Subject)');
+phplyr($table)->glmer('y ~ x + (1 | group)', family: 'binomial');
 ```
 
 :::
@@ -67,8 +67,8 @@ phplyr($table)->glmer('passed ~ hours + (1 | school)', family: 'binomial');
 | --- | --- | --- |
 | `lm($formula)` | Linear regression | |
 | `glm($formula, family:)` | Generalized linear model | `family: 'gaussian'` (the default), `'binomial'`, or `'poisson'`, and `link:` |
-| `lmer($formula)` | Linear mixed model with lme4's random-effect terms, such as `(1 \| school)` | REML by default; `reml: false` fits by maximum likelihood |
-| `glmer($formula)` | Generalized linear mixed model | The binomial family with the logit link and one random intercept, such as `(1 \| school)`, which is what phit supports |
+| `lmer($formula)` | Linear mixed model with lme4's random-effect terms, such as `(1 \| Subject)` | REML by default; `reml: false` fits by maximum likelihood |
+| `glmer($formula)` | Generalized linear mixed model | The binomial family with the logit link and one random intercept, such as `(1 \| group)`, which is what phit supports |
 
 Other named arguments go to phit's function unchanged.
 [phit's documentation](https://phit.phpstats.org/docs) lists them and the

@@ -1,16 +1,19 @@
 <?php
 
-$schools = DataFrame::fromCsv('schools.csv') |>
-    group_by('school') |>
-    summarize(avg_score: mean('score'));
+use function Phibble\tribble;
 
-$districts = DataFrame::fromRows([
-    ['school_id' => 'school-01', 'district' => 'North'],
-    ['school_id' => 'school-02', 'district' => 'North'],
-    ['school_id' => 'school-03', 'district' => 'South'],
-    ['school_id' => 'school-99', 'district' => 'East'],
-]);
+$species = DataFrame::fromCsv("$data/penguins.csv") |>
+    group_by('species') |>
+    summarize(avg_mass_g: mean('body_mass_g', naRm: true));
 
-echo $schools |> inner_join($districts, by: ['school' => 'school_id']);
-echo "\n", $schools |> left_join($districts, by: ['school' => 'school_id']) |> head(5);
-echo "\n", $districts |> anti_join($schools, by: ['school_id' => 'school']);
+// A lookup table with one species that isn't in the data.
+$scientific = tribble(
+    ['species', 'scientific_name'],
+    'Adelie', 'Pygoscelis adeliae',
+    'Gentoo', 'Pygoscelis papua',
+    'Emperor', 'Aptenodytes forsteri',
+);
+
+echo $species |> inner_join($scientific, by: 'species');
+echo "\n", $species |> left_join($scientific, by: 'species');
+echo "\n", $scientific |> anti_join($species, by: 'species');

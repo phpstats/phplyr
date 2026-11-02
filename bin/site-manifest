@@ -13,10 +13,6 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__);
-// The latest release, which the data URLs point at.
-preg_match('/^release: (\S+)$/m', file_get_contents($root.'/docs/_variables.yml'), $r);
-$release = $r[1];
-
 // The example without the opening tag and the require line, as the docs show it.
 $code = fn (string $file) => trim((string) preg_replace(
     ['/^<\?php\s*/', '/^require .*autoload\.php\';\n+/m'],
@@ -122,7 +118,6 @@ $manifest = [
     'example' => [
         'setup' => [
             'composer require phpstats/phplyr',
-            "curl -O https://raw.githubusercontent.com/phpstats/phplyr/{$release}/docs/data/schools.csv",
         ],
         'chain' => $code('first-pipeline.chain.php'),
         'pipe' => $code('first-pipeline.php'),

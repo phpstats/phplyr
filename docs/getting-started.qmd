@@ -26,10 +26,15 @@ Without phit, the descriptive helpers run in PHP with the same results.
 ## A first script
 
 [A first pipeline](index.qmd#a-first-pipeline) on the overview page is a
-complete script, with the commands that install phplyr and download its data.
-The snippets on this page use its `$schools` table. The other examples'
-CSV files are in
-[docs/data](https://github.com/phpstats/phplyr/tree/main/docs/data).
+complete script, with the command that installs phplyr. The snippets on this
+page use its `$penguins` table. The examples in the reference pages read their
+data by URL from [PHPstats datasets](https://github.com/phpstats/datasets),
+with `$data` set as in that script:
+
+```php
+$data = 'https://raw.githubusercontent.com/phpstats/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
+```
 
 ## Imports
 
@@ -67,7 +72,7 @@ phibble builds tables from CSV files, PDO queries, query builders, and PHP
 arrays:
 
 ```php
-$schools = DataFrame::fromCsv('schools.csv');
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 $rows = DataFrame::fromRows([['id' => 1, 'x' => 2.5], ['id' => 2, 'x' => null]]);
 $cols = DataFrame::fromColumns(['id' => [1, 2], 'x' => [2.5, null]]);
 ```
@@ -89,9 +94,9 @@ The pipe operator `|>` calls the closure on its right with the value on its
 left:
 
 ```php
-$out = $schools |>
-    filter(fn ($r) => $r->score > 80) |>
-    arrange(desc('score'));
+$out = $penguins |>
+    filter(fn ($r) => $r->body_mass_g > 5000) |>
+    arrange(desc('body_mass_g'));
 ```
 
 ## PHP 8.3–8.4
@@ -102,9 +107,9 @@ of the same name with the same arguments. A chained method is camelCase, so
 returns the table:
 
 ```php
-$out = phplyr($schools)
-    ->filter(fn ($r) => $r->score > 80)
-    ->arrange(desc('score'))
+$out = phplyr($penguins)
+    ->filter(fn ($r) => $r->body_mass_g > 5000)
+    ->arrange(desc('body_mass_g'))
     ->get();
 ```
 
@@ -129,20 +134,21 @@ closure of your own and continues the chain with its result.
 `pipe()` applies closures in order on every PHP version:
 
 ```php
-$out = pipe($schools, filter(fn ($r) => $r->score > 80), arrange(desc('score')));
+$out = pipe($penguins, filter(fn ($r) => $r->body_mass_g > 5000), arrange(desc('body_mass_g')));
 ```
 
 ## Columns, row closures, and vector helpers
 
-Columns are named with strings: `'score'` where dplyr takes a bare `score`.
+Columns are named with strings: `'body_mass_g'` where dplyr takes a bare
+`body_mass_g`.
 
 A **row closure** is an ordinary PHP closure. It receives the row as a
-`Phibble\Row`, whose columns read as `$r->score` or `$r['score']`, and the
+`Phibble\Row`, whose columns read as `$r->body_mass_g` or `$r['body_mass_g']`, and the
 table of the row's group as a second argument:
 
 ```php
-mutate(gap: fn ($r) => $r->score - $r->prior_score)
-filter(fn ($r, $group) => $r->score > mean('score')($group))
+mutate(bill_ratio: fn ($r) => $r->bill_length_mm / $r->bill_depth_mm)
+filter(fn ($r, $group) => $r->body_mass_g > mean('body_mass_g', naRm: true)($group))
 ```
 
 A **vector helper** is one of phplyr's functions for whole columns, such as

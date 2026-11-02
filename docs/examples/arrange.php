@@ -1,4 +1,6 @@
 <?php
 
-echo DataFrame::fromCsv('housing.csv') |>
-    arrange('bedrooms', desc(fn ($r) => $r->monthly_rent / $r->area_m2));
+// Heaviest first within each species.
+echo DataFrame::fromCsv("$data/penguins.csv") |>
+    select('species', 'island', 'sex', 'body_mass_g') |>
+    arrange('species', desc('body_mass_g'));

@@ -1,9 +1,9 @@
 <?php
 
-echo phplyr(DataFrame::fromCsv('schools.csv'))
-    ->filter(fn ($r) => $r->school <= 'school-02')
-    ->groupBy('school')
+echo phplyr(DataFrame::fromCsv("$data/penguins.csv"))
+    ->dropNa('body_mass_g')
+    ->groupBy('species')
     ->reframe(
         p: [0.25, 0.5, 0.75],
-        score: fn ($g) => array_map(fn ($p) => Stats::quantile($g->column('score'), $p), [0.25, 0.5, 0.75]),
+        body_mass_g: fn ($g) => array_map(fn ($p) => Stats::quantile($g->column('body_mass_g'), $p), [0.25, 0.5, 0.75]),
     );

@@ -1,9 +1,7 @@
 <?php
 
-$schools = DataFrame::fromCsv('schools.csv') |> group_by('school');
-
-// The two best students in each of the first three schools.
-echo $schools |>
-    slice_max('score', n: 2) |>
-    filter(fn ($r) => $r->school <= 'school-03') |>
-    select('school', 'score');
+// The two heaviest penguins of each species.
+echo DataFrame::fromCsv("$data/penguins.csv") |>
+    group_by('species') |>
+    slice_max('body_mass_g', n: 2) |>
+    select('species', 'island', 'sex', 'body_mass_g');

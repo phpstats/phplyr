@@ -522,7 +522,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="where"><code>where()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>where(<span class="bu">Closure</span><span class="op">|</span>Phibble\Type<span class="op">|</span><span class="dt">string</span> <span class="va">$predicate</span>)<span class="ot">:</span> Selector</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Columns for which a predicate holds. The predicate receives (list <code>$values</code>, Type <code>$type</code>, string <code>$name</code>). Shortcuts: a Phibble, or one of ‘numeric’, ‘integer’, ‘double’, ‘character’, ‘logical’, ‘factor’, ‘date’, ‘datetime’, ‘time’ (phibble 0.6 and later), ‘list’.</p>
-<p>Returns <code>Selector</code>. Throws <code>InvalidArgumentException</code> on invalid arguments. <a href="#across-section">Example</a>.</p>
+<p>Returns <code>Selector</code>. Throws <code>InvalidArgumentException</code> on invalid arguments.</p>
 </section>
 <section id="except" class="level3">
 <h3 class="anchored" data-anchor-id="except"><code>except()</code></h3>
@@ -556,54 +556,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span> group_by(<span class="st">'school'</span>)<span class="ot">;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Phplyr helpers can be passed by name; each gets the column name.</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    summarize(across(where(<span class="st">'numeric'</span>)<span class="ot">,</span> [<span class="st">'avg'</span> =&gt; mean(...)<span class="ot">,</span> <span class="st">'sd'</span> =&gt; sd(...)])) <span class="op">|&gt;</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">3</span>)<span class="ot">;</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Other closures get the column's values (summarize) or each value (mutate).</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    summarize(across([<span class="st">'study_hours'</span><span class="ot">,</span> <span class="st">'score'</span>]<span class="ot">,</span> <span class="kw">fn</span> (<span class="dt">array</span> <span class="va">$v</span>) =&gt; <span class="fu">round</span>(\<span class="fu">max</span>(<span class="va">$v</span>) <span class="op">-</span> \<span class="fu">min</span>(<span class="va">$v</span>)<span class="ot">,</span> <span class="dv">1</span>)<span class="ot">,</span> names<span class="ot">:</span> <span class="st">'range_{col}'</span>)) <span class="op">|&gt;</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">3</span>)<span class="ot">;</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$schools</span> <span class="op">|&gt;</span> ungroup() <span class="op">|&gt;</span> mutate(across(ends_with(<span class="st">'score'</span>)<span class="ot">,</span> <span class="kw">fn</span> (<span class="va">$v</span>) =&gt; <span class="fu">round</span>(<span class="va">$v</span>))) <span class="op">|&gt;</span> head(<span class="dv">3</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>) <span class="op">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    drop_na() <span class="op">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'species'</span>)<span class="ot">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Phplyr helpers can be passed by name; each gets the column name.</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$penguins</span> <span class="op">|&gt;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    summarize(across(ends_with(<span class="st">'_mm'</span>)<span class="ot">,</span> [<span class="st">'avg'</span> =&gt; mean(...)<span class="ot">,</span> <span class="st">'sd'</span> =&gt; sd(...)]))<span class="ot">;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Other closures get the column's values (summarize) or each value (mutate).</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$penguins</span> <span class="op">|&gt;</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    summarize(across([<span class="st">'flipper_length_mm'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>]<span class="ot">,</span> <span class="kw">fn</span> (<span class="dt">array</span> <span class="va">$v</span>) =&gt; \<span class="fu">max</span>(<span class="va">$v</span>) <span class="op">-</span> \<span class="fu">min</span>(<span class="va">$v</span>)<span class="ot">,</span> names<span class="ot">:</span> <span class="st">'range_{col}'</span>))<span class="ot">;</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$penguins</span> <span class="op">|&gt;</span> ungroup() <span class="op">|&gt;</span> mutate(across(ends_with(<span class="st">'_mm'</span>)<span class="ot">,</span> <span class="kw">fn</span> (<span class="va">$v</span>) =&gt; <span class="fu">round</span>(<span class="va">$v</span>))) <span class="op">|&gt;</span> head(<span class="dv">3</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))-&gt;groupBy(<span class="st">'school'</span>)-&gt;get()<span class="ot">;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Phplyr helpers can be passed by name; each gets the column name.</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(across(where(<span class="st">'numeric'</span>)<span class="ot">,</span> [<span class="st">'avg'</span> =&gt; mean(...)<span class="ot">,</span> <span class="st">'sd'</span> =&gt; sd(...)]))</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">3</span>)<span class="ot">;</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Other closures get the column's values (summarize) or each value (mutate).</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$schools</span>)</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(across([<span class="st">'study_hours'</span><span class="ot">,</span> <span class="st">'score'</span>]<span class="ot">,</span> <span class="kw">fn</span> (<span class="dt">array</span> <span class="va">$v</span>) =&gt; <span class="fu">round</span>(\<span class="fu">max</span>(<span class="va">$v</span>) <span class="op">-</span> \<span class="fu">min</span>(<span class="va">$v</span>)<span class="ot">,</span> <span class="dv">1</span>)<span class="ot">,</span> names<span class="ot">:</span> <span class="st">'range_{col}'</span>))</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">3</span>)<span class="ot">;</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$schools</span>)-&gt;ungroup()-&gt;mutate(across(ends_with(<span class="st">'score'</span>)<span class="ot">,</span> <span class="kw">fn</span> (<span class="va">$v</span>) =&gt; <span class="fu">round</span>(<span class="va">$v</span>)))-&gt;head(<span class="dv">3</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    -&gt;dropNa()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'species'</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Phplyr helpers can be passed by name; each gets the column name.</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$penguins</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(across(ends_with(<span class="st">'_mm'</span>)<span class="ot">,</span> [<span class="st">'avg'</span> =&gt; mean(...)<span class="ot">,</span> <span class="st">'sd'</span> =&gt; sd(...)]))<span class="ot">;</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Other closures get the column's values (summarize) or each value (mutate).</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$penguins</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(across([<span class="st">'flipper_length_mm'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>]<span class="ot">,</span> <span class="kw">fn</span> (<span class="dt">array</span> <span class="va">$v</span>) =&gt; \<span class="fu">max</span>(<span class="va">$v</span>) <span class="op">-</span> \<span class="fu">min</span>(<span class="va">$v</span>)<span class="ot">,</span> names<span class="ot">:</span> <span class="st">'range_{col}'</span>))<span class="ot">;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$penguins</span>)-&gt;ungroup()-&gt;mutate(across(ends_with(<span class="st">'_mm'</span>)<span class="ot">,</span> <span class="kw">fn</span> (<span class="va">$v</span>) =&gt; <span class="fu">round</span>(<span class="va">$v</span>)))-&gt;head(<span class="dv">3</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 <pre class="text output"><code># A tibble: 3 × 7
-  school study_hours_avg study_hours_sd prior_score_avg prior_score_sd score_avg
-  &lt;chr&gt;            &lt;dbl&gt;          &lt;dbl&gt;           &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;
-1 schoo…            6.60           3.26            63.0           12.3      72.9
-2 schoo…            6.20           3.57            59.3           13.3      72.9
-3 schoo…            6.52           3.34            56.1           11.3      69.0
-# ℹ 1 more variable: score_sd &lt;dbl&gt;
+  species   bill_length_mm_avg bill_length_mm_sd bill_depth_mm_avg
+  &lt;chr&gt;                  &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;
+1 Adelie                  38.8              2.66              18.3
+2 Chinstrap               48.8              3.34              18.4
+3 Gentoo                  47.6              3.11              15.0
+# ℹ 3 more variables: bill_depth_mm_sd &lt;dbl&gt;, flipper_length_mm_avg &lt;dbl&gt;,
+#   flipper_length_mm_sd &lt;dbl&gt;
 # A tibble: 3 × 3
-  school    range_study_hours range_score
-  &lt;chr&gt;                 &lt;dbl&gt;       &lt;dbl&gt;
-1 school-01              10.3        30.9
-2 school-02              10.8        34.4
-3 school-03              10.3        35.7
-# A tibble: 3 × 4
-  school    study_hours prior_score score
-  &lt;chr&gt;           &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;
-1 school-01        11.6          77    78
-2 school-01         2.7          52    67
-3 school-01        10.0          79    88</code></pre>
+  species   range_flipper_length_mm range_body_mass_g
+  &lt;chr&gt;                       &lt;int&gt;             &lt;int&gt;
+1 Adelie                         38              1925
+2 Chinstrap                      34              2100
+3 Gentoo                         28              2350
+# A tibble: 3 × 9
+  rownames species island    bill_length_mm bill_depth_mm flipper_length_mm
+     &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;
+1        1 Adelie  Torgersen             39            19               181
+2        2 Adelie  Torgersen             40            17               186
+3        3 Adelie  Torgersen             40            18               195
+# ℹ 3 more variables: body_mass_g &lt;int&gt;, sex &lt;chr&gt;, year &lt;int&gt;</code></pre>
 <p>What each function receives:</p>
 <ul>
 <li>A phplyr helper passed as a first-class callable, such as <code>mean(...)</code>, is called with the column name.</li>

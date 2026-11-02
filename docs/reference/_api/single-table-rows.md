@@ -116,7 +116,7 @@ head(int $n = 6): Closure
 
 First `$n` rows of the whole table, ignoring groups (like utils::head).
 
-Returns a function of a table, which returns a table. Chain method: `->head()`. [Example](#rows).
+Returns a function of a table, which returns a table. Chain method: `->head()`. [Example](#columns).
 
 ### `top_n()` {#top_n}
 

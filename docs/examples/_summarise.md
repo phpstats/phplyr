@@ -3,28 +3,28 @@
 ## PHP 8.5+
 
 ```php
-echo DataFrame::fromCsv('schools.csv') |>
+echo DataFrame::fromCsv("$data/penguins.csv") |>
     summarize(
-        students: n(),
-        schools: n_distinct('school'),
-        median_hours: median('study_hours'),
-        q90_score: quantile('score', 0.9),
-        iqr_score: iqr('score'),
-        top_school: fn ($g) => ($g |> slice_max('score', n: 1) |> pull('school'))[0],
+        penguins: n(),
+        species: n_distinct('species'),
+        median_mass_g: median('body_mass_g', naRm: true),
+        q90_flipper_mm: quantile('flipper_length_mm', 0.9, naRm: true),
+        iqr_bill_mm: iqr('bill_length_mm', naRm: true),
+        heaviest: fn ($g) => ($g |> slice_max('body_mass_g', n: 1) |> pull('species'))[0],
     );
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-echo phplyr(DataFrame::fromCsv('schools.csv'))
+echo phplyr(DataFrame::fromCsv("$data/penguins.csv"))
     ->summarize(
-        students: n(),
-        schools: n_distinct('school'),
-        median_hours: median('study_hours'),
-        q90_score: quantile('score', 0.9),
-        iqr_score: iqr('score'),
-        top_school: fn ($g) => (phplyr($g)->sliceMax('score', n: 1)->pull('school'))[0],
+        penguins: n(),
+        species: n_distinct('species'),
+        median_mass_g: median('body_mass_g', naRm: true),
+        q90_flipper_mm: quantile('flipper_length_mm', 0.9, naRm: true),
+        iqr_bill_mm: iqr('bill_length_mm', naRm: true),
+        heaviest: fn ($g) => phplyr($g)->sliceMax('body_mass_g', n: 1)->pull('species')[0],
     );
 ```
 
@@ -32,7 +32,7 @@ echo phplyr(DataFrame::fromCsv('schools.csv'))
 
 ```{.text .output}
 # A tibble: 1 × 6
-  students schools median_hours q90_score iqr_score top_school
-     <int>   <int>        <dbl>     <dbl>     <dbl> <chr>     
-1      250      12         6.66      86.1      15.3 school-06
+  penguins species median_mass_g q90_flipper_mm iqr_bill_mm heaviest
+     <int>   <int>         <dbl>          <dbl>       <dbl> <chr>   
+1      344       3          4050           221.        9.27 Gentoo
 ```

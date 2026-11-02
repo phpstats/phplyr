@@ -4,10 +4,11 @@
 /*
  * Run every docs/examples/*.php and write docs/examples/_<name>.md with the
  * example's code and its actual output, for Quarto to include. Examples run
- * with docs/data as the working directory, after a hidden prelude that
+ * with docs/ as the working directory, after a hidden prelude that
  * imports Phibble\DataFrame, Phibble\tbl and every Phplyr function except those
  * that would shadow a PHP built-in other than count, min and max (examples
- * import round(), abs() and the like themselves).
+ * import round(), abs() and the like themselves), and sets $data to the
+ * PHPstats datasets folder, which the examples read CSV files from by URL.
  *
  * A <name>.chain.php beside an example is its method-chain version. Both
  * must print the same output, and the page shows them in tabs.
@@ -44,7 +45,7 @@ $preludeFor = function (string $code) use ($names): string {
     preg_match_all('/use function Phplyr\\\\\{([^}]*)\}/', $code, $m);
     $own = array_map('trim', explode(',', implode(',', $m[1])));
 
-    return "use Phibble\\DataFrame;\nuse Phplyr\\Stats;\nuse function Phibble\\tbl;\nuse function Phplyr\\{".implode(', ', array_diff($names, $own))."};\n";
+    return "use Phibble\\DataFrame;\nuse Phplyr\\Stats;\nuse function Phibble\\tbl;\nuse function Phplyr\\{".implode(', ', array_diff($names, $own))."};\n\$data = 'https://raw.githubusercontent.com/phpstats/datasets/main/csv';\n";
 };
 
 $php = getenv('PHP') ?: PHP_BINARY;
@@ -60,7 +61,7 @@ foreach ([...glob($root.'/docs/examples/*.R'), ...glob($root.'/docs/examples/*/*
     if ($only !== [] && ! in_array($name, $only, true)) {
         continue;
     }
-    $proc = proc_open(['Rscript', $file], [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, $root.'/docs/data');
+    $proc = proc_open(['Rscript', $file], [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, $root.'/docs');
     $out = stream_get_contents($pipes[1]);
     $err = stream_get_contents($pipes[2]);
     if (proc_close($proc) !== 0) {
@@ -96,7 +97,7 @@ $run = function (string $file, string $name) use ($root, $php, $args, $preludeFo
     $script = tempnam(sys_get_temp_dir(), 'phplyr-doc').'.php';
     file_put_contents($script, $body."\n");
     $cmd = array_merge([$php], $args, [$script]);
-    $proc = proc_open($cmd, [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, $root.'/docs/data');
+    $proc = proc_open($cmd, [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, $root.'/docs');
     $out = stream_get_contents($pipes[1]);
     $err = stream_get_contents($pipes[2]);
     $status = proc_close($proc);

@@ -4,17 +4,18 @@ require __DIR__.'/vendor/autoload.php';
 
 use Phibble\DataFrame;
 use function Phplyr\{filter, group_by, summarize};
-use function Phplyr\{arrange, head, desc, n, mean, sd};
+use function Phplyr\{arrange, desc, n, mean, sd};
 
-$schools = DataFrame::fromCsv('schools.csv');
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo $schools |>
-    filter(fn ($r) => $r->study_hours >= 5) |>
-    group_by('school') |>
+echo $penguins |>
+    filter(fn ($r) => $r->body_mass_g !== null) |>
+    group_by('species') |>
     summarize(
-        students: n(),
-        avg_score: mean('score'),
-        sd_score: sd('score'),
+        penguins: n(),
+        avg_mass_g: mean('body_mass_g'),
+        sd_mass_g: sd('body_mass_g'),
     ) |>
-    arrange(desc('avg_score')) |>
-    head(5);
+    arrange(desc('avg_mass_g'));

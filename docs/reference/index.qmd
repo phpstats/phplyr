@@ -138,7 +138,7 @@ phplyr's functions are namespaced functions in `Phplyr`. A function marked with 
 | [`nest_by()`](grouping.qmd#nest_by) | `->nestBy()` | Nest by the given columns into a rowwise table. |
 | [`cur_group_id()`](grouping.qmd#cur_group_id) |  | The current group's 1-based number, inside `mutate()`, `summarise()`, or `reframe()`. |
 | [`cur_group_rows()`](grouping.qmd#cur_group_rows) |  | The current group's 1-based row numbers in the table. |
-| [`cur_group()`](grouping.qmd#cur_group) |  | The current group's key, as an array of grouping column =&gt. |
+| [`cur_group()`](grouping.qmd#cur_group) |  | The current group's key, as an array of grouping column =&gt; value (dplyr returns a one-row tibble). |
 
 ### Row-wise operations
 
@@ -458,9 +458,9 @@ Called on a vector helper, such as `col('price')->mul(1.1)`.
 | [`->neg()`](databases.qmd#method-neg) | Negation, -x. |
 | [`->eq()`](databases.qmd#method-eq) | x == y. |
 | [`->ne()`](databases.qmd#method-ne) | x != y. |
-| [`->lt()`](databases.qmd#method-lt) | x &lt. |
+| [`->lt()`](databases.qmd#method-lt) | x &lt; y. |
 | [`->le()`](databases.qmd#method-le) | x &lt;= y. |
-| [`->gt()`](databases.qmd#method-gt) | x &gt. |
+| [`->gt()`](databases.qmd#method-gt) | x &gt; y. |
 | [`->ge()`](databases.qmd#method-ge) | x &gt;= y. |
 | [`->between()`](databases.qmd#method-between) | low &lt;= x &lt;= high, inclusive. |
 | [`->isIn()`](databases.qmd#method-isin) | True where x is one of the values, R's %in%. |

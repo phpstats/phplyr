@@ -1,14 +1,14 @@
 <?php
 
-$schools = DataFrame::fromCsv('schools.csv') |> group_by('school');
+$penguins = DataFrame::fromCsv("$data/penguins.csv") |>
+    drop_na() |>
+    group_by('species');
 
 // Phplyr helpers can be passed by name; each gets the column name.
-echo $schools |>
-    summarize(across(where('numeric'), ['avg' => mean(...), 'sd' => sd(...)])) |>
-    head(3);
+echo $penguins |>
+    summarize(across(ends_with('_mm'), ['avg' => mean(...), 'sd' => sd(...)]));
 
 // Other closures get the column's values (summarize) or each value (mutate).
-echo "\n", $schools |>
-    summarize(across(['study_hours', 'score'], fn (array $v) => round(\max($v) - \min($v), 1), names: 'range_{col}')) |>
-    head(3);
-echo "\n", $schools |> ungroup() |> mutate(across(ends_with('score'), fn ($v) => round($v))) |> head(3);
+echo "\n", $penguins |>
+    summarize(across(['flipper_length_mm', 'body_mass_g'], fn (array $v) => \max($v) - \min($v), names: 'range_{col}'));
+echo "\n", $penguins |> ungroup() |> mutate(across(ends_with('_mm'), fn ($v) => round($v))) |> head(3);

@@ -3,37 +3,40 @@
 ## PHP 8.5+
 
 ```php
-echo DataFrame::fromCsv('schools.csv') |>
-    filter(fn ($r) => $r->school <= 'school-02') |>
-    group_by('school') |>
+echo DataFrame::fromCsv("$data/penguins.csv") |>
+    drop_na('body_mass_g') |>
+    group_by('species') |>
     reframe(
         p: [0.25, 0.5, 0.75],
-        score: fn ($g) => array_map(fn ($p) => Stats::quantile($g->column('score'), $p), [0.25, 0.5, 0.75]),
+        body_mass_g: fn ($g) => array_map(fn ($p) => Stats::quantile($g->column('body_mass_g'), $p), [0.25, 0.5, 0.75]),
     );
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-echo phplyr(DataFrame::fromCsv('schools.csv'))
-    ->filter(fn ($r) => $r->school <= 'school-02')
-    ->groupBy('school')
+echo phplyr(DataFrame::fromCsv("$data/penguins.csv"))
+    ->dropNa('body_mass_g')
+    ->groupBy('species')
     ->reframe(
         p: [0.25, 0.5, 0.75],
-        score: fn ($g) => array_map(fn ($p) => Stats::quantile($g->column('score'), $p), [0.25, 0.5, 0.75]),
+        body_mass_g: fn ($g) => array_map(fn ($p) => Stats::quantile($g->column('body_mass_g'), $p), [0.25, 0.5, 0.75]),
     );
 ```
 
 :::
 
 ```{.text .output}
-# A tibble: 6 × 3
-  school        p score
-  <chr>     <dbl> <dbl>
-1 school-01  0.25  67.6
-2 school-01  0.5   72.5
-3 school-01  0.75  76.9
-4 school-02  0.25  65.3
-5 school-02  0.5   70.3
-6 school-02  0.75  81.0
+# A tibble: 9 × 3
+  species       p body_mass_g
+  <chr>     <dbl>       <dbl>
+1 Adelie     0.25       3350 
+2 Adelie     0.5        3700 
+3 Adelie     0.75       4000 
+4 Chinstrap  0.25       3488.
+5 Chinstrap  0.5        3700 
+6 Chinstrap  0.75       3950 
+7 Gentoo     0.25       4700 
+8 Gentoo     0.5        5000 
+9 Gentoo     0.75       5500
 ```

@@ -3,39 +3,44 @@
 ## PHP 8.5+
 
 ```php
-echo DataFrame::fromCsv('housing.csv') |>
+echo DataFrame::fromCsv("$data/penguins.csv") |>
+    drop_na() |>
+    select('species', 'bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g') |>
     mutate(
-        rent_per_m2: fn ($r) => round($r->monthly_rent / $r->area_m2, 2),
-        size: if_else(fn ($r) => $r->area_m2 >= 60, 'large', 'small'),
-        rank: min_rank(desc('monthly_rent')),
+        bill_ratio: fn ($r) => round($r->bill_length_mm / $r->bill_depth_mm, 2),
+        flipper: if_else(col('flipper_length_mm')->ge(200), 'long', 'short'),
+        rank: min_rank(desc('body_mass_g')),
     ) |>
-    arrange('rank');
+    arrange('rank') |>
+    head(6);
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-echo phplyr(DataFrame::fromCsv('housing.csv'))
+echo phplyr(DataFrame::fromCsv("$data/penguins.csv"))
+    ->dropNa()
+    ->select('species', 'bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g')
     ->mutate(
-        rent_per_m2: fn ($r) => round($r->monthly_rent / $r->area_m2, 2),
-        size: if_else(fn ($r) => $r->area_m2 >= 60, 'large', 'small'),
-        rank: min_rank(desc('monthly_rent')),
+        bill_ratio: fn ($r) => round($r->bill_length_mm / $r->bill_depth_mm, 2),
+        flipper: if_else(col('flipper_length_mm')->ge(200), 'long', 'short'),
+        rank: min_rank(desc('body_mass_g')),
     )
-    ->arrange('rank');
+    ->arrange('rank')
+    ->head(6);
 ```
 
 :::
 
 ```{.text .output}
-# A tibble: 8 × 6
-  area_m2 bedrooms monthly_rent rent_per_m2 size   rank
-    <dbl>    <int>        <dbl>       <dbl> <chr> <int>
-1    93.9        3        2387.        25.4 large     1
-2    92.4        3        2240.        24.2 large     2
-3    66.4        2        2022.        30.5 large     3
-4    74.4        2        1879.        25.3 large     4
-5    57.4        2        1805.        31.4 small     5
-6    45.7        1        1509.        33.0 small     6
-7    49.1        1        1268.        25.8 small     7
-8    37          1         960.        25.9 small     8
+# A tibble: 6 × 8
+  species bill_length_mm bill_depth_mm flipper_length_mm body_mass_g bill_ratio
+  <chr>            <dbl>         <dbl>             <int>       <int>      <dbl>
+1 Gentoo            49.2          15.2               221        6300       3.24
+2 Gentoo            59.6          17                 230        6050       3.51
+3 Gentoo            51.1          16.3               220        6000       3.13
+4 Gentoo            48.8          16.2               222        6000       3.01
+5 Gentoo            45.2          16.4               223        5950       2.76
+6 Gentoo            49.8          15.9               229        5950       3.13
+# ℹ 2 more variables: flipper <chr>, rank <int>
 ```

@@ -418,55 +418,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span> group_by(<span class="st">'school'</span>)<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>) <span class="op">|&gt;</span> group_by(<span class="st">'species'</span>)<span class="ot">;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">json_encode</span>([</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'groups'</span> =&gt; <span class="va">$schools</span> <span class="op">|&gt;</span> group_vars()<span class="ot">,</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'n_groups'</span> =&gt; <span class="va">$schools</span> <span class="op">|&gt;</span> n_groups()<span class="ot">,</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'sizes'</span> =&gt; \<span class="fu">array_slice</span>(<span class="va">$schools</span> <span class="op">|&gt;</span> group_size()<span class="ot">,</span> <span class="dv">0</span><span class="ot">,</span> <span class="dv">4</span>)<span class="ot">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'groups'</span> =&gt; <span class="va">$penguins</span> <span class="op">|&gt;</span> group_vars()<span class="ot">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'n_groups'</span> =&gt; <span class="va">$penguins</span> <span class="op">|&gt;</span> n_groups()<span class="ot">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'sizes'</span> =&gt; <span class="va">$penguins</span> <span class="op">|&gt;</span> group_size()<span class="ot">,</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>])<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Grouped mutate: helpers are evaluated within each group.</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    mutate(centered<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;score <span class="op">-</span> mean(<span class="st">'score'</span>)(<span class="va">$g</span>)<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span> rank_in_school<span class="ot">:</span> min_rank(desc(<span class="st">'score'</span>))) <span class="op">|&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$penguins</span> <span class="op">|&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    mutate(centered<span class="ot">:</span> col(<span class="st">'body_mass_g'</span>)-&gt;sub(mean(<span class="st">'body_mass_g'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>))<span class="ot">,</span> rank_in_species<span class="ot">:</span> min_rank(desc(<span class="st">'body_mass_g'</span>))) <span class="op">|&gt;</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    ungroup() <span class="op">|&gt;</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">4</span>)<span class="ot">;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">// One table per group.</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="va">$parts</span> <span class="op">=</span> <span class="va">$schools</span> <span class="op">|&gt;</span> group_split()<span class="ot">;</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> \<span class="fu">count</span>(<span class="va">$parts</span>)<span class="ot">,</span> <span class="st">' tables; the first has '</span><span class="ot">,</span> <span class="va">$parts</span>[<span class="dv">0</span>]-&gt;nrow()<span class="ot">,</span> <span class="st">" rows</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span><span class="ot">,</span> <span class="st">'centered'</span><span class="ot">,</span> <span class="st">'rank_in_species'</span>) <span class="op">|&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">4</span>)<span class="ot">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">// One table per group.</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="va">$parts</span> <span class="op">=</span> <span class="va">$penguins</span> <span class="op">|&gt;</span> group_split()<span class="ot">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> \<span class="fu">count</span>(<span class="va">$parts</span>)<span class="ot">,</span> <span class="st">' tables; the first has '</span><span class="ot">,</span> <span class="va">$parts</span>[<span class="dv">0</span>]-&gt;nrow()<span class="ot">,</span> <span class="st">" rows</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))-&gt;groupBy(<span class="st">'school'</span>)-&gt;get()<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>))-&gt;groupBy(<span class="st">'species'</span>)-&gt;get()<span class="ot">;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">json_encode</span>([</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'groups'</span> =&gt; phplyr(<span class="va">$schools</span>)-&gt;groupVars()<span class="ot">,</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'n_groups'</span> =&gt; phplyr(<span class="va">$schools</span>)-&gt;nGroups()<span class="ot">,</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'sizes'</span> =&gt; \<span class="fu">array_slice</span>(phplyr(<span class="va">$schools</span>)-&gt;groupSize()<span class="ot">,</span> <span class="dv">0</span><span class="ot">,</span> <span class="dv">4</span>)<span class="ot">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'groups'</span> =&gt; phplyr(<span class="va">$penguins</span>)-&gt;groupVars()<span class="ot">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'n_groups'</span> =&gt; phplyr(<span class="va">$penguins</span>)-&gt;nGroups()<span class="ot">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'sizes'</span> =&gt; phplyr(<span class="va">$penguins</span>)-&gt;groupSize()<span class="ot">,</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>])<span class="ot">,</span> <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span><span class="ot">;</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Grouped mutate: helpers are evaluated within each group.</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(centered<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;score <span class="op">-</span> mean(<span class="st">'score'</span>)(<span class="va">$g</span>)<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span> rank_in_school<span class="ot">:</span> min_rank(desc(<span class="st">'score'</span>)))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$penguins</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(centered<span class="ot">:</span> col(<span class="st">'body_mass_g'</span>)-&gt;sub(mean(<span class="st">'body_mass_g'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>))<span class="ot">,</span> rank_in_species<span class="ot">:</span> min_rank(desc(<span class="st">'body_mass_g'</span>)))</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    -&gt;ungroup()</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">4</span>)<span class="ot">;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">// One table per group.</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="va">$parts</span> <span class="op">=</span> phplyr(<span class="va">$schools</span>)-&gt;groupSplit()<span class="ot">;</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> \<span class="fu">count</span>(<span class="va">$parts</span>)<span class="ot">,</span> <span class="st">' tables; the first has '</span><span class="ot">,</span> <span class="va">$parts</span>[<span class="dv">0</span>]-&gt;nrow()<span class="ot">,</span> <span class="st">" rows</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    -&gt;select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span><span class="ot">,</span> <span class="st">'centered'</span><span class="ot">,</span> <span class="st">'rank_in_species'</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">4</span>)<span class="ot">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">// One table per group.</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="va">$parts</span> <span class="op">=</span> phplyr(<span class="va">$penguins</span>)-&gt;groupSplit()<span class="ot">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> \<span class="fu">count</span>(<span class="va">$parts</span>)<span class="ot">,</span> <span class="st">' tables; the first has '</span><span class="ot">,</span> <span class="va">$parts</span>[<span class="dv">0</span>]-&gt;nrow()<span class="ot">,</span> <span class="st">" rows</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code>{"groups":["school"],"n_groups":12,"sizes":[18,24,15,22]}
+<pre class="text output"><code>{"groups":["species"],"n_groups":3,"sizes":[152,68,124]}
 
-# A tibble: 4 × 6
-  school    study_hours prior_score score centered rank_in_school
-  &lt;chr&gt;           &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;          &lt;int&gt;
-1 school-01       11.6         77.3  78.3     5.34              4
-2 school-01        2.7         51.7  67.2    -5.67             14
-3 school-01       10.0         78.8  88.2    15.3               2
-4 school-01        3.71        45.3  68.5    -4.37             13
-12 tables; the first has 18 rows</code></pre>
+# A tibble: 4 × 4
+  species body_mass_g centered rank_in_species
+  &lt;chr&gt;         &lt;int&gt;    &lt;dbl&gt;           &lt;int&gt;
+1 Adelie         3750     49.3              65
+2 Adelie         3800     99.3              56
+3 Adelie         3250   -451.              125
+4 Adelie           NA     NA                NA
+3 tables; the first has 152 rows</code></pre>
 <section id="group_by" class="level3">
 <h3 class="anchored" data-anchor-id="group_by"><code>group_by()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>group_by(<span class="dt">mixed</span> ...<span class="va">$columns</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>

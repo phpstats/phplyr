@@ -1,19 +1,20 @@
 <?php
 
-$schools = DataFrame::fromCsv('schools.csv') |> group_by('school');
+$penguins = DataFrame::fromCsv("$data/penguins.csv") |> group_by('species');
 
 echo json_encode([
-    'groups' => $schools |> group_vars(),
-    'n_groups' => $schools |> n_groups(),
-    'sizes' => \array_slice($schools |> group_size(), 0, 4),
+    'groups' => $penguins |> group_vars(),
+    'n_groups' => $penguins |> n_groups(),
+    'sizes' => $penguins |> group_size(),
 ]), "\n\n";
 
 // Grouped mutate: helpers are evaluated within each group.
-echo $schools |>
-    mutate(centered: fn ($r, $g) => round($r->score - mean('score')($g), 2), rank_in_school: min_rank(desc('score'))) |>
+echo $penguins |>
+    mutate(centered: col('body_mass_g')->sub(mean('body_mass_g', naRm: true)), rank_in_species: min_rank(desc('body_mass_g'))) |>
     ungroup() |>
+    select('species', 'body_mass_g', 'centered', 'rank_in_species') |>
     head(4);
 
 // One table per group.
-$parts = $schools |> group_split();
+$parts = $penguins |> group_split();
 echo "\n", \count($parts), ' tables; the first has ', $parts[0]->nrow(), " rows\n";

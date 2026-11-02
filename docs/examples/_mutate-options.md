@@ -3,28 +3,30 @@
 ## PHP 8.5+
 
 ```php
-$housing = DataFrame::fromCsv('housing.csv');
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
 // _keep: 'none' keeps only new columns (and grouping columns).
-echo $housing |> mutate(rent_k: fn ($r) => $r->monthly_rent / 1000, _keep: 'none') |> head(3);
+echo $penguins |> mutate(mass_kg: col('body_mass_g')->div(1000), _keep: 'none') |> head(3);
 
 // _by groups for this call only; mean() is recycled within each group.
-echo "\n", $housing |>
-    mutate(vs_bedroom_avg: fn ($r, $g) => $r->monthly_rent - mean('monthly_rent')($g), _by: 'bedrooms', _after: 'bedrooms') |>
+echo "\n", $penguins |>
+    select('species', 'island', 'body_mass_g') |>
+    mutate(vs_species_avg: col('body_mass_g')->sub(mean('body_mass_g', naRm: true)), _by: 'species', _after: 'body_mass_g') |>
     head(4);
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-$housing = DataFrame::fromCsv('housing.csv');
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
 // _keep: 'none' keeps only new columns (and grouping columns).
-echo phplyr($housing)->mutate(rent_k: fn ($r) => $r->monthly_rent / 1000, _keep: 'none')->head(3);
+echo phplyr($penguins)->mutate(mass_kg: col('body_mass_g')->div(1000), _keep: 'none')->head(3);
 
 // _by groups for this call only; mean() is recycled within each group.
-echo "\n", phplyr($housing)
-    ->mutate(vs_bedroom_avg: fn ($r, $g) => $r->monthly_rent - mean('monthly_rent')($g), _by: 'bedrooms', _after: 'bedrooms')
+echo "\n", phplyr($penguins)
+    ->select('species', 'island', 'body_mass_g')
+    ->mutate(vs_species_avg: col('body_mass_g')->sub(mean('body_mass_g', naRm: true)), _by: 'species', _after: 'body_mass_g')
     ->head(4);
 ```
 
@@ -32,16 +34,16 @@ echo "\n", phplyr($housing)
 
 ```{.text .output}
 # A tibble: 3 × 1
-  rent_k
-   <dbl>
-1   1.88
-2   1.81
-3   2.02
+  mass_kg
+    <dbl>
+1    3.75
+2    3.8 
+3    3.25
 # A tibble: 4 × 4
-  area_m2 bedrooms vs_bedroom_avg monthly_rent
-    <dbl>    <int>          <dbl>        <dbl>
-1    74.4        2          -22.9        1879.
-2    57.4        2          -97.2        1805.
-3    66.4        2          120.         2022.
-4    49.1        1           22.3        1268.
+  species island    body_mass_g vs_species_avg
+  <chr>   <chr>           <int>          <dbl>
+1 Adelie  Torgersen        3750           49.3
+2 Adelie  Torgersen        3800           99.3
+3 Adelie  Torgersen        3250         -451. 
+4 Adelie  Torgersen          NA           NA
 ```

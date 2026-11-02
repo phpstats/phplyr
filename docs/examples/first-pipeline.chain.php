@@ -5,15 +5,16 @@ require __DIR__.'/vendor/autoload.php';
 use Phibble\DataFrame;
 use function Phplyr\{phplyr, desc, n, mean, sd};
 
-$schools = DataFrame::fromCsv('schools.csv');
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo phplyr($schools)
-    ->filter(fn ($r) => $r->study_hours >= 5)
-    ->groupBy('school')
+echo phplyr($penguins)
+    ->filter(fn ($r) => $r->body_mass_g !== null)
+    ->groupBy('species')
     ->summarize(
-        students: n(),
-        avg_score: mean('score'),
-        sd_score: sd('score'),
+        penguins: n(),
+        avg_mass_g: mean('body_mass_g'),
+        sd_mass_g: sd('body_mass_g'),
     )
-    ->arrange(desc('avg_score'))
-    ->head(5);
+    ->arrange(desc('avg_mass_g'));

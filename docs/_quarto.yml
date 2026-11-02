@@ -6,7 +6,6 @@ project:
     - "reference/*.qmd"
     - "examples/*.qmd"
   resources:
-    - data/*.csv
     - benchmarks/*.json
 
 website:

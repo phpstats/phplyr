@@ -5,20 +5,21 @@
 ```php
 use Phibble\DataFrame;
 use function Phplyr\{filter, group_by, summarize};
-use function Phplyr\{arrange, head, desc, n, mean, sd};
+use function Phplyr\{arrange, desc, n, mean, sd};
 
-$schools = DataFrame::fromCsv('schools.csv');
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo $schools |>
-    filter(fn ($r) => $r->study_hours >= 5) |>
-    group_by('school') |>
+echo $penguins |>
+    filter(fn ($r) => $r->body_mass_g !== null) |>
+    group_by('species') |>
     summarize(
-        students: n(),
-        avg_score: mean('score'),
-        sd_score: sd('score'),
+        penguins: n(),
+        avg_mass_g: mean('body_mass_g'),
+        sd_mass_g: sd('body_mass_g'),
     ) |>
-    arrange(desc('avg_score')) |>
-    head(5);
+    arrange(desc('avg_mass_g'));
 ```
 
 ## PHP 8.3–8.4
@@ -27,29 +28,28 @@ echo $schools |>
 use Phibble\DataFrame;
 use function Phplyr\{phplyr, desc, n, mean, sd};
 
-$schools = DataFrame::fromCsv('schools.csv');
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo phplyr($schools)
-    ->filter(fn ($r) => $r->study_hours >= 5)
-    ->groupBy('school')
+echo phplyr($penguins)
+    ->filter(fn ($r) => $r->body_mass_g !== null)
+    ->groupBy('species')
     ->summarize(
-        students: n(),
-        avg_score: mean('score'),
-        sd_score: sd('score'),
+        penguins: n(),
+        avg_mass_g: mean('body_mass_g'),
+        sd_mass_g: sd('body_mass_g'),
     )
-    ->arrange(desc('avg_score'))
-    ->head(5);
+    ->arrange(desc('avg_mass_g'));
 ```
 
 :::
 
 ```{.text .output}
-# A tibble: 5 × 4
-  school    students avg_score sd_score
-  <chr>        <int>     <dbl>    <dbl>
-1 school-07       14      86.9     6.32
-2 school-06       20      80.9     8.90
-3 school-02       12      79.7     8.22
-4 school-09       11      79.3     6.67
-5 school-11       13      77.6     7.31
+# A tibble: 3 × 4
+  species   penguins avg_mass_g sd_mass_g
+  <chr>        <int>      <dbl>     <dbl>
+1 Gentoo         123      5076.      504.
+2 Chinstrap       68      3733.      384.
+3 Adelie         151      3701.      459.
 ```

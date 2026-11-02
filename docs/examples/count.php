@@ -1,11 +1,6 @@
 <?php
 
-$schools = DataFrame::fromCsv('schools.csv') |>
-    mutate(band: case_when(
-        [fn ($r) => $r->study_hours < 4, 'light'],
-        [fn ($r) => $r->study_hours < 8, 'moderate'],
-        default: 'heavy',
-    ));
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo $schools |> count('band', sort: true);
-echo "\n", $schools |> count('band', wt: 'study_hours', name: 'hours');
+echo $penguins |> count('species', 'island', sort: true);
+echo "\n", $penguins |> count('species', wt: 'body_mass_g', name: 'total_mass_g');

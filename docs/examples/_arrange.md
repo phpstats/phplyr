@@ -3,29 +3,36 @@
 ## PHP 8.5+
 
 ```php
-echo DataFrame::fromCsv('housing.csv') |>
-    arrange('bedrooms', desc(fn ($r) => $r->monthly_rent / $r->area_m2));
+// Heaviest first within each species.
+echo DataFrame::fromCsv("$data/penguins.csv") |>
+    select('species', 'island', 'sex', 'body_mass_g') |>
+    arrange('species', desc('body_mass_g'));
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-echo phplyr(DataFrame::fromCsv('housing.csv'))
-    ->arrange('bedrooms', desc(fn ($r) => $r->monthly_rent / $r->area_m2));
+// Heaviest first within each species.
+echo phplyr(DataFrame::fromCsv("$data/penguins.csv"))
+    ->select('species', 'island', 'sex', 'body_mass_g')
+    ->arrange('species', desc('body_mass_g'));
 ```
 
 :::
 
 ```{.text .output}
-# A tibble: 8 × 3
-  area_m2 bedrooms monthly_rent
-    <dbl>    <int>        <dbl>
-1    45.7        1        1509.
-2    37          1         960.
-3    49.1        1        1268.
-4    57.4        2        1805.
-5    66.4        2        2022.
-6    74.4        2        1879.
-7    93.9        3        2387.
-8    92.4        3        2240.
+# A tibble: 344 × 4
+   species island    sex   body_mass_g
+   <chr>   <chr>     <chr>       <int>
+ 1 Adelie  Biscoe    male         4775
+ 2 Adelie  Biscoe    male         4725
+ 3 Adelie  Torgersen male         4700
+ 4 Adelie  Torgersen male         4675
+ 5 Adelie  Dream     male         4650
+ 6 Adelie  Dream     male         4600
+ 7 Adelie  Biscoe    male         4600
+ 8 Adelie  Torgersen male         4500
+ 9 Adelie  Dream     male         4475
+10 Adelie  Torgersen male         4450
+# ℹ 334 more rows
 ```

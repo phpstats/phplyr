@@ -464,58 +464,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'school'</span>) <span class="op">|&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    summarize(avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>))<span class="ot">;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="va">$districts</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-01'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-02'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-03'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'South'</span>]<span class="ot">,</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-99'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'East'</span>]<span class="ot">,</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span> inner_join(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>])<span class="ot">;</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$schools</span> <span class="op">|&gt;</span> left_join(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>]) <span class="op">|&gt;</span> head(<span class="dv">5</span>)<span class="ot">;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$districts</span> <span class="op">|&gt;</span> anti_join(<span class="va">$schools</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school_id'</span> =&gt; <span class="st">'school'</span>])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phibble\tribble<span class="ot">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">$species</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>) <span class="op">|&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'species'</span>) <span class="op">|&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    summarize(avg_mass_g<span class="ot">:</span> mean(<span class="st">'body_mass_g'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>))<span class="ot">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">// A lookup table with one species that isn't in the data.</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="va">$scientific</span> <span class="op">=</span> tribble(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'species'</span><span class="ot">,</span> <span class="st">'scientific_name'</span>]<span class="ot">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Adelie'</span><span class="ot">,</span> <span class="st">'Pygoscelis adeliae'</span><span class="ot">,</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Gentoo'</span><span class="ot">,</span> <span class="st">'Pygoscelis papua'</span><span class="ot">,</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Emperor'</span><span class="ot">,</span> <span class="st">'Aptenodytes forsteri'</span><span class="ot">,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$species</span> <span class="op">|&gt;</span> inner_join(<span class="va">$scientific</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'species'</span>)<span class="ot">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$species</span> <span class="op">|&gt;</span> left_join(<span class="va">$scientific</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'species'</span>)<span class="ot">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$scientific</span> <span class="op">|&gt;</span> anti_join(<span class="va">$species</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'species'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(avg_score<span class="ot">:</span> mean(<span class="st">'score'</span>))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="va">$districts</span> <span class="op">=</span> DataFrame::fromRows([</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-01'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-02'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'North'</span>]<span class="ot">,</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-03'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'South'</span>]<span class="ot">,</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'school_id'</span> =&gt; <span class="st">'school-99'</span><span class="ot">,</span> <span class="st">'district'</span> =&gt; <span class="st">'East'</span>]<span class="ot">,</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>])<span class="ot">;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)-&gt;innerJoin(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>])<span class="ot">;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$schools</span>)-&gt;leftJoin(<span class="va">$districts</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school'</span> =&gt; <span class="st">'school_id'</span>])-&gt;head(<span class="dv">5</span>)<span class="ot">;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$districts</span>)-&gt;antiJoin(<span class="va">$schools</span><span class="ot">,</span> by<span class="ot">:</span> [<span class="st">'school_id'</span> =&gt; <span class="st">'school'</span>])<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">function</span> Phibble\tribble<span class="ot">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">$species</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'species'</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(avg_mass_g<span class="ot">:</span> mean(<span class="st">'body_mass_g'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">// A lookup table with one species that isn't in the data.</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="va">$scientific</span> <span class="op">=</span> tribble(</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'species'</span><span class="ot">,</span> <span class="st">'scientific_name'</span>]<span class="ot">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Adelie'</span><span class="ot">,</span> <span class="st">'Pygoscelis adeliae'</span><span class="ot">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Gentoo'</span><span class="ot">,</span> <span class="st">'Pygoscelis papua'</span><span class="ot">,</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Emperor'</span><span class="ot">,</span> <span class="st">'Aptenodytes forsteri'</span><span class="ot">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$species</span>)-&gt;innerJoin(<span class="va">$scientific</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'species'</span>)<span class="ot">;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$species</span>)-&gt;leftJoin(<span class="va">$scientific</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'species'</span>)<span class="ot">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$scientific</span>)-&gt;antiJoin(<span class="va">$species</span><span class="ot">,</span> by<span class="ot">:</span> <span class="st">'species'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code># A tibble: 3 × 3
-  school    avg_score district
-  &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;   
-1 school-01      72.9 North   
-2 school-02      72.9 North   
-3 school-03      69.0 South   
-# A tibble: 5 × 3
-  school    avg_score district
-  &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;   
-1 school-01      72.9 North   
-2 school-02      72.9 North   
-3 school-03      69.0 South   
-4 school-04      69.6 &lt;NA&gt;    
-5 school-05      73.0 &lt;NA&gt;    
+<pre class="text output"><code># A tibble: 2 × 3
+  species avg_mass_g scientific_name   
+  &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;             
+1 Adelie       3701. Pygoscelis adeliae
+2 Gentoo       5076. Pygoscelis papua  
+# A tibble: 3 × 3
+  species   avg_mass_g scientific_name   
+  &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;             
+1 Adelie         3701. Pygoscelis adeliae
+2 Chinstrap      3733. &lt;NA&gt;              
+3 Gentoo         5076. Pygoscelis papua  
 # A tibble: 1 × 2
-  school_id district
-  &lt;chr&gt;     &lt;chr&gt;   
-1 school-99 East</code></pre>
+  species scientific_name     
+  &lt;chr&gt;   &lt;chr&gt;               
+1 Emperor Aptenodytes forsteri</code></pre>
 <p>The options follow dplyr 1.1:</p>
 <ul>
 <li><code>suffix:</code> renames clashing non-key columns, <code>['.x', '.y']</code> by default.</li>

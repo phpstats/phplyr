@@ -36,7 +36,7 @@ is_na(mixed $x): Vec
 
 True where x is NA.
 
-Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers.
+Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers. [Example](#database-tables).
 
 ### `abs()` {#abs}
 
@@ -316,7 +316,7 @@ $vec->isNa(): Vec
 
 True where x is NA.
 
-Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers.
+Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers. [Example](#database-tables).
 
 ### `->and()` {#method-and}
 
@@ -346,7 +346,7 @@ $vec->not(): Vec
 
 Logical not; NA stays NA.
 
-Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers.
+Returns a vector helper (`Vec`). Its expression runs on a database table when its arguments are columns, literals, or other helpers. [Example](#database-tables).
 
 ### `->desc()` {#method-desc}
 

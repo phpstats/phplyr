@@ -2,11 +2,10 @@
 
 phplyr is a PHP library for filtering, transforming, summarizing, joining, and reshaping tables of data. Its functions and arguments follow R's [dplyr](https://dplyr.tidyverse.org) and [tidyr](https://tidyr.tidyverse.org), and it works on [phibble](https://github.com/phpstats/phibble) tables: the in-memory `DataFrame`, database tables, and Polars through phibble's `PolarsTable`.
 
-To run the example below, create a Composer project in an empty directory, download the data, save one of the scripts as `first.php`, and run `php first.php`:
+To run the example below, create a Composer project in an empty directory, save one of the scripts as `first.php`, and run `php first.php`. It reads [`penguins`](https://github.com/phpstats/datasets#penguins), size measurements for 344 penguins near Palmer Station, Antarctica, by URL.
 
 ```bash
 composer require phpstats/phplyr
-curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.6/docs/data/schools.csv
 ```
 
 **PHP 8.5+**
@@ -17,16 +16,22 @@ curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.6/docs/data/schoo
 require __DIR__.'/vendor/autoload.php';
 
 use Phibble\DataFrame;
-use function Phplyr\{filter, group_by, summarize, arrange, head, desc, n, mean, sd};
+use function Phplyr\{filter, group_by, summarize};
+use function Phplyr\{arrange, desc, n, mean, sd};
 
-$schools = DataFrame::fromCsv('schools.csv');
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo $schools |>
-    filter(fn ($r) => $r->study_hours >= 5) |>
-    group_by('school') |>
-    summarize(students: n(), avg_score: mean('score'), sd_score: sd('score')) |>
-    arrange(desc('avg_score')) |>
-    head(5);
+echo $penguins |>
+    filter(fn ($r) => $r->body_mass_g !== null) |>
+    group_by('species') |>
+    summarize(
+        penguins: n(),
+        avg_mass_g: mean('body_mass_g'),
+        sd_mass_g: sd('body_mass_g'),
+    ) |>
+    arrange(desc('avg_mass_g'));
 ```
 
 **PHP 8.3–8.4**
@@ -39,14 +44,19 @@ require __DIR__.'/vendor/autoload.php';
 use Phibble\DataFrame;
 use function Phplyr\{phplyr, desc, n, mean, sd};
 
-$schools = DataFrame::fromCsv('schools.csv');
+$data = 'https://raw.githubusercontent.com/phpstats'
+    . '/datasets/main/csv';
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo phplyr($schools)
-    ->filter(fn ($r) => $r->study_hours >= 5)
-    ->groupBy('school')
-    ->summarize(students: n(), avg_score: mean('score'), sd_score: sd('score'))
-    ->arrange(desc('avg_score'))
-    ->head(5);
+echo phplyr($penguins)
+    ->filter(fn ($r) => $r->body_mass_g !== null)
+    ->groupBy('species')
+    ->summarize(
+        penguins: n(),
+        avg_mass_g: mean('body_mass_g'),
+        sd_mass_g: sd('body_mass_g'),
+    )
+    ->arrange(desc('avg_mass_g'));
 ```
 
 ## Installation

@@ -1,11 +1,12 @@
 <?php
 
-$housing = DataFrame::fromCsv('housing.csv');
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
 // _keep: 'none' keeps only new columns (and grouping columns).
-echo phplyr($housing)->mutate(rent_k: fn ($r) => $r->monthly_rent / 1000, _keep: 'none')->head(3);
+echo phplyr($penguins)->mutate(mass_kg: col('body_mass_g')->div(1000), _keep: 'none')->head(3);
 
 // _by groups for this call only; mean() is recycled within each group.
-echo "\n", phplyr($housing)
-    ->mutate(vs_bedroom_avg: fn ($r, $g) => $r->monthly_rent - mean('monthly_rent')($g), _by: 'bedrooms', _after: 'bedrooms')
+echo "\n", phplyr($penguins)
+    ->select('species', 'island', 'body_mass_g')
+    ->mutate(vs_species_avg: col('body_mass_g')->sub(mean('body_mass_g', naRm: true)), _by: 'species', _after: 'body_mass_g')
     ->head(4);

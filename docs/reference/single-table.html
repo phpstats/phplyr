@@ -428,36 +428,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Several conditions are combined with AND; NA counts as false.</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;prior_score <span class="op">&gt;</span> <span class="dv">75</span><span class="ot">,</span> between(<span class="st">'study_hours'</span><span class="ot">,</span> <span class="dv">2</span><span class="ot">,</span> <span class="dv">6</span>)) <span class="op">|&gt;</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">4</span>)<span class="ot">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$penguins</span> <span class="op">|&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;bill_length_mm <span class="op">&gt;</span> <span class="dv">50</span><span class="ot">,</span> between(<span class="st">'flipper_length_mm'</span><span class="ot">,</span> <span class="dv">190</span><span class="ot">,</span> <span class="dv">200</span>)) <span class="op">|&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="st">'bill_length_mm'</span><span class="ot">,</span> <span class="st">'flipper_length_mm'</span>)<span class="ot">;</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">// filter_out() drops the rows where every condition is true.</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$schools</span> <span class="op">|&gt;</span> filter_out(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;prior_score <span class="op">&lt;</span> <span class="dv">70</span>) <span class="op">|&gt;</span> <span class="fu">count</span>()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$penguins</span> <span class="op">|&gt;</span> filter_out(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;species <span class="op">===</span> <span class="st">'Adelie'</span>) <span class="op">|&gt;</span> <span class="fu">count</span>()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Several conditions are combined with AND; NA counts as false.</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;prior_score <span class="op">&gt;</span> <span class="dv">75</span><span class="ot">,</span> between(<span class="st">'study_hours'</span><span class="ot">,</span> <span class="dv">2</span><span class="ot">,</span> <span class="dv">6</span>))</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">4</span>)<span class="ot">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$penguins</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;bill_length_mm <span class="op">&gt;</span> <span class="dv">50</span><span class="ot">,</span> between(<span class="st">'flipper_length_mm'</span><span class="ot">,</span> <span class="dv">190</span><span class="ot">,</span> <span class="dv">200</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    -&gt;select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="st">'bill_length_mm'</span><span class="ot">,</span> <span class="st">'flipper_length_mm'</span>)<span class="ot">;</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">// filter_out() drops the rows where every condition is true.</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$schools</span>)-&gt;filterOut(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;prior_score <span class="op">&lt;</span> <span class="dv">70</span>)-&gt;<span class="fu">count</span>()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$penguins</span>)-&gt;filterOut(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;species <span class="op">===</span> <span class="st">'Adelie'</span>)-&gt;<span class="fu">count</span>()<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code># A tibble: 0 × 4
-# ℹ 4 variables: school &lt;chr&gt;, study_hours &lt;dbl&gt;, prior_score &lt;dbl&gt;,
-#   score &lt;dbl&gt;
+<pre class="text output"><code># A tibble: 14 × 4
+   species   island bill_length_mm flipper_length_mm
+   &lt;chr&gt;     &lt;chr&gt;           &lt;dbl&gt;             &lt;int&gt;
+ 1 Chinstrap Dream            51.3               193
+ 2 Chinstrap Dream            52.7               197
+ 3 Chinstrap Dream            51.3               197
+ 4 Chinstrap Dream            51.3               198
+ 5 Chinstrap Dream            51.7               194
+ 6 Chinstrap Dream            50.3               197
+ 7 Chinstrap Dream            50.6               193
+ 8 Chinstrap Dream            52                 197
+ 9 Chinstrap Dream            50.5               200
+10 Chinstrap Dream            50.9               196
+11 Chinstrap Dream            50.9               196
+12 Chinstrap Dream            50.1               190
+13 Chinstrap Dream            52.2               197
+14 Chinstrap Dream            50.2               198
 # A tibble: 1 × 1
       n
   &lt;int&gt;
-1    59</code></pre>
+1   192</code></pre>
 <p>In a grouped table, the second closure argument is the row’s group, and vector helpers are evaluated per group:</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
@@ -465,56 +479,60 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Inside a group, the second closure argument is the group's table, and</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">// vector helpers such as max() are evaluated per group.</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'school'</span>) <span class="op">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">===</span> <span class="fu">max</span>(<span class="st">'score'</span>)(<span class="va">$g</span>)) <span class="op">|&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    select(<span class="st">'school'</span><span class="ot">,</span> <span class="st">'score'</span>) <span class="op">|&gt;</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">4</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>) <span class="op">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'species'</span>) <span class="op">|&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="va">$r</span>-&gt;body_mass_g <span class="op">===</span> <span class="fu">max</span>(<span class="st">'body_mass_g'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>)(<span class="va">$g</span>)) <span class="op">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="st">'sex'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Inside a group, the second closure argument is the group's table, and</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">// vector helpers such as max() are evaluated per group.</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="va">$r</span>-&gt;score <span class="op">===</span> <span class="fu">max</span>(<span class="st">'score'</span>)(<span class="va">$g</span>))</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    -&gt;select(<span class="st">'school'</span><span class="ot">,</span> <span class="st">'score'</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">4</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'species'</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="va">$r</span>-&gt;body_mass_g <span class="op">===</span> <span class="fu">max</span>(<span class="st">'body_mass_g'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>)(<span class="va">$g</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    -&gt;select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="st">'sex'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code># A tibble: 4 × 2
-# Groups:   school [4]
-  school    score
-  &lt;chr&gt;     &lt;dbl&gt;
-1 school-01  91.0
-2 school-02  92.1
-3 school-03  84.0
-4 school-04  83.9</code></pre>
+<pre class="text output"><code># A tibble: 3 × 4
+# Groups:   species [3]
+  species   island sex   body_mass_g
+  &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;       &lt;int&gt;
+1 Adelie    Biscoe male         4775
+2 Gentoo    Biscoe male         6300
+3 Chinstrap Dream  male         4800</code></pre>
 <p><code>arrange()</code> sorts rows. It is stable and puts NA last. Keys are column names, <code>desc()</code>, or expressions, which are evaluated over the whole table. It ignores grouping unless you pass <code>_byGroup: true</code>.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">'housing.csv'</span>) <span class="op">|&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    arrange(<span class="st">'bedrooms'</span><span class="ot">,</span> desc(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;monthly_rent <span class="op">/</span> <span class="va">$r</span>-&gt;area_m2))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Heaviest first within each species.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>) <span class="op">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="st">'sex'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>) <span class="op">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    arrange(<span class="st">'species'</span><span class="ot">,</span> desc(<span class="st">'body_mass_g'</span>))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">'housing.csv'</span>))</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(<span class="st">'bedrooms'</span><span class="ot">,</span> desc(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;monthly_rent <span class="op">/</span> <span class="va">$r</span>-&gt;area_m2))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Heaviest first within each species.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    -&gt;select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="st">'sex'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(<span class="st">'species'</span><span class="ot">,</span> desc(<span class="st">'body_mass_g'</span>))<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code># A tibble: 8 × 3
-  area_m2 bedrooms monthly_rent
-    &lt;dbl&gt;    &lt;int&gt;        &lt;dbl&gt;
-1    45.7        1        1509.
-2    37          1         960.
-3    49.1        1        1268.
-4    57.4        2        1805.
-5    66.4        2        2022.
-6    74.4        2        1879.
-7    93.9        3        2387.
-8    92.4        3        2240.</code></pre>
+<pre class="text output"><code># A tibble: 344 × 4
+   species island    sex   body_mass_g
+   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;       &lt;int&gt;
+ 1 Adelie  Biscoe    male         4775
+ 2 Adelie  Biscoe    male         4725
+ 3 Adelie  Torgersen male         4700
+ 4 Adelie  Torgersen male         4675
+ 5 Adelie  Dream     male         4650
+ 6 Adelie  Dream     male         4600
+ 7 Adelie  Biscoe    male         4600
+ 8 Adelie  Torgersen male         4500
+ 9 Adelie  Dream     male         4475
+10 Adelie  Torgersen male         4450
+# ℹ 334 more rows</code></pre>
 <p><code>distinct()</code> keeps unique rows over the given columns, or over all columns. Named arguments add computed columns first, and <code>_keepAll: true</code> keeps every column from the first row of each combination.</p>
 <p>The slice family picks rows within each group:</p>
 <table class="caption-top table">
@@ -568,35 +586,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span> group_by(<span class="st">'school'</span>)<span class="ot">;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">// The two best students in each of the first three schools.</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    slice_max(<span class="st">'score'</span><span class="ot">,</span> n<span class="ot">:</span> <span class="dv">2</span>) <span class="op">|&gt;</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;school <span class="op">&lt;=</span> <span class="st">'school-03'</span>) <span class="op">|&gt;</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    select(<span class="st">'school'</span><span class="ot">,</span> <span class="st">'score'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// The two heaviest penguins of each species.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>) <span class="op">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'species'</span>) <span class="op">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    slice_max(<span class="st">'body_mass_g'</span><span class="ot">,</span> n<span class="ot">:</span> <span class="dv">2</span>) <span class="op">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="st">'sex'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))-&gt;groupBy(<span class="st">'school'</span>)-&gt;get()<span class="ot">;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">// The two best students in each of the first three schools.</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    -&gt;sliceMax(<span class="st">'score'</span><span class="ot">,</span> n<span class="ot">:</span> <span class="dv">2</span>)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;school <span class="op">&lt;=</span> <span class="st">'school-03'</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    -&gt;select(<span class="st">'school'</span><span class="ot">,</span> <span class="st">'score'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// The two heaviest penguins of each species.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'species'</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    -&gt;sliceMax(<span class="st">'body_mass_g'</span><span class="ot">,</span> n<span class="ot">:</span> <span class="dv">2</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    -&gt;select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="st">'sex'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code># A tibble: 6 × 2
-# Groups:   school [3]
-  school    score
-  &lt;chr&gt;     &lt;dbl&gt;
-1 school-01  91.0
-2 school-01  88.2
-3 school-02  92.1
-4 school-02  88.7
-5 school-03  84.0
-6 school-03  83.1</code></pre>
+<pre class="text output"><code># A tibble: 6 × 4
+# Groups:   species [3]
+  species   island sex   body_mass_g
+  &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;       &lt;int&gt;
+1 Adelie    Biscoe male         4775
+2 Adelie    Biscoe male         4725
+3 Chinstrap Dream  male         4800
+4 Chinstrap Dream  male         4550
+5 Gentoo    Biscoe male         6300
+6 Gentoo    Biscoe male         6050</code></pre>
 <section id="filter" class="level3">
 <h3 class="anchored" data-anchor-id="filter"><code>filter()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>filter(<span class="dt">mixed</span> ...<span class="va">$conditions</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -667,7 +681,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="head"><code>head()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>head(<span class="dt">int</span> <span class="va">$n</span> <span class="op">=</span> <span class="dv">6</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>First <code>$n</code> rows of the whole table, ignoring groups (like utils::head).</p>
-<p>Returns a function of a table, which returns a table. Chain method: <code>-&gt;head()</code>. <a href="#rows">Example</a>.</p>
+<p>Returns a function of a table, which returns a table. Chain method: <code>-&gt;head()</code>. <a href="#columns">Example</a>.</p>
 </section>
 <section id="top_n" class="level3">
 <h3 class="anchored" data-anchor-id="top_n"><code>top_n()</code></h3>
@@ -707,137 +721,146 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$schools</span> <span class="op">|&gt;</span> select(<span class="st">'school'</span><span class="ot">,</span> ends_with(<span class="st">'score'</span>)))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$schools</span> <span class="op">|&gt;</span> select(except(<span class="st">'school'</span>)))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$schools</span> <span class="op">|&gt;</span> select(where(<span class="st">'numeric'</span>)))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$schools</span> <span class="op">|&gt;</span> select([<span class="st">'hours'</span> =&gt; <span class="st">'study_hours'</span>]<span class="ot">,</span> everything()))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$schools</span> <span class="op">|&gt;</span> relocate(<span class="st">'score'</span><span class="ot">,</span> _before<span class="ot">:</span> <span class="st">'study_hours'</span>))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$schools</span> <span class="op">|&gt;</span> rename_with(<span class="fu">strtoupper</span>(...)<span class="ot">,</span> contains(<span class="st">'score'</span>)))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$penguins</span> <span class="op">|&gt;</span> select(<span class="st">'species'</span><span class="ot">,</span> ends_with(<span class="st">'_mm'</span>)))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$penguins</span> <span class="op">|&gt;</span> select(except(<span class="st">'rownames'</span>)))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$penguins</span> <span class="op">|&gt;</span> select(where(<span class="st">'numeric'</span>)))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$penguins</span> <span class="op">|&gt;</span> select([<span class="st">'mass'</span> =&gt; <span class="st">'body_mass_g'</span>]<span class="ot">,</span> <span class="st">'species'</span>))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$penguins</span> <span class="op">|&gt;</span> relocate(<span class="st">'sex'</span><span class="ot">,</span> _before<span class="ot">:</span> <span class="st">'island'</span>))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (<span class="va">$penguins</span> <span class="op">|&gt;</span> rename_with(<span class="fu">strtoupper</span>(...)<span class="ot">,</span> contains(<span class="st">'length'</span>)))-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>)<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$schools</span>)-&gt;select(<span class="st">'school'</span><span class="ot">,</span> ends_with(<span class="st">'score'</span>))-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$schools</span>)-&gt;select(except(<span class="st">'school'</span>))-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$schools</span>)-&gt;select(where(<span class="st">'numeric'</span>))-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$schools</span>)-&gt;select([<span class="st">'hours'</span> =&gt; <span class="st">'study_hours'</span>]<span class="ot">,</span> everything())-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$schools</span>)-&gt;relocate(<span class="st">'score'</span><span class="ot">,</span> _before<span class="ot">:</span> <span class="st">'study_hours'</span>)-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$schools</span>)-&gt;renameWith(<span class="fu">strtoupper</span>(...)<span class="ot">,</span> contains(<span class="st">'score'</span>))-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$penguins</span>)-&gt;select(<span class="st">'species'</span><span class="ot">,</span> ends_with(<span class="st">'_mm'</span>))-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$penguins</span>)-&gt;select(except(<span class="st">'rownames'</span>))-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$penguins</span>)-&gt;select(where(<span class="st">'numeric'</span>))-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$penguins</span>)-&gt;select([<span class="st">'mass'</span> =&gt; <span class="st">'body_mass_g'</span>]<span class="ot">,</span> <span class="st">'species'</span>)-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$penguins</span>)-&gt;relocate(<span class="st">'sex'</span><span class="ot">,</span> _before<span class="ot">:</span> <span class="st">'island'</span>)-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">implode</span>(<span class="st">', '</span><span class="ot">,</span> (phplyr(<span class="va">$penguins</span>)-&gt;renameWith(<span class="fu">strtoupper</span>(...)<span class="ot">,</span> contains(<span class="st">'length'</span>))-&gt;get())-&gt;columns())<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code>school, prior_score, score
-study_hours, prior_score, score
-study_hours, prior_score, score
-hours, school, prior_score, score
-school, score, study_hours, prior_score
-school, study_hours, PRIOR_SCORE, SCORE</code></pre>
+<pre class="text output"><code>species, bill_length_mm, bill_depth_mm, flipper_length_mm
+species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, year
+rownames, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, year
+mass, species
+rownames, species, sex, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, year
+rownames, species, island, BILL_LENGTH_MM, bill_depth_mm, FLIPPER_LENGTH_MM, body_mass_g, sex, year</code></pre>
 <p><code>mutate()</code> adds or replaces columns. A value can be a row closure, a vector helper, a list with one value per row, a scalar, or <code>null</code> to drop the column. Later arguments see the columns made by earlier ones.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">'housing.csv'</span>) <span class="op">|&gt;</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    mutate(</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>        rent_per_m2<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;monthly_rent <span class="op">/</span> <span class="va">$r</span>-&gt;area_m2<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>        size<span class="ot">:</span> if_else(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;area_m2 <span class="op">&gt;=</span> <span class="dv">60</span><span class="ot">,</span> <span class="st">'large'</span><span class="ot">,</span> <span class="st">'small'</span>)<span class="ot">,</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>        rank<span class="ot">:</span> min_rank(desc(<span class="st">'monthly_rent'</span>))<span class="ot">,</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">|&gt;</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    arrange(<span class="st">'rank'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>) <span class="op">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    drop_na() <span class="op">|&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'bill_length_mm'</span><span class="ot">,</span> <span class="st">'bill_depth_mm'</span><span class="ot">,</span> <span class="st">'flipper_length_mm'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>) <span class="op">|&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    mutate(</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>        bill_ratio<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;bill_length_mm <span class="op">/</span> <span class="va">$r</span>-&gt;bill_depth_mm<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>        flipper<span class="ot">:</span> if_else(col(<span class="st">'flipper_length_mm'</span>)-&gt;ge(<span class="dv">200</span>)<span class="ot">,</span> <span class="st">'long'</span><span class="ot">,</span> <span class="st">'short'</span>)<span class="ot">,</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>        rank<span class="ot">:</span> min_rank(desc(<span class="st">'body_mass_g'</span>))<span class="ot">,</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">|&gt;</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    arrange(<span class="st">'rank'</span>) <span class="op">|&gt;</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">6</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">'housing.csv'</span>))</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>        rent_per_m2<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;monthly_rent <span class="op">/</span> <span class="va">$r</span>-&gt;area_m2<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>        size<span class="ot">:</span> if_else(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;area_m2 <span class="op">&gt;=</span> <span class="dv">60</span><span class="ot">,</span> <span class="st">'large'</span><span class="ot">,</span> <span class="st">'small'</span>)<span class="ot">,</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        rank<span class="ot">:</span> min_rank(desc(<span class="st">'monthly_rent'</span>))<span class="ot">,</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(<span class="st">'rank'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>))</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    -&gt;dropNa()</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    -&gt;select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'bill_length_mm'</span><span class="ot">,</span> <span class="st">'bill_depth_mm'</span><span class="ot">,</span> <span class="st">'flipper_length_mm'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        bill_ratio<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="fu">round</span>(<span class="va">$r</span>-&gt;bill_length_mm <span class="op">/</span> <span class="va">$r</span>-&gt;bill_depth_mm<span class="ot">,</span> <span class="dv">2</span>)<span class="ot">,</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>        flipper<span class="ot">:</span> if_else(col(<span class="st">'flipper_length_mm'</span>)-&gt;ge(<span class="dv">200</span>)<span class="ot">,</span> <span class="st">'long'</span><span class="ot">,</span> <span class="st">'short'</span>)<span class="ot">,</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>        rank<span class="ot">:</span> min_rank(desc(<span class="st">'body_mass_g'</span>))<span class="ot">,</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    -&gt;arrange(<span class="st">'rank'</span>)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">6</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code># A tibble: 8 × 6
-  area_m2 bedrooms monthly_rent rent_per_m2 size   rank
-    &lt;dbl&gt;    &lt;int&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;int&gt;
-1    93.9        3        2387.        25.4 large     1
-2    92.4        3        2240.        24.2 large     2
-3    66.4        2        2022.        30.5 large     3
-4    74.4        2        1879.        25.3 large     4
-5    57.4        2        1805.        31.4 small     5
-6    45.7        1        1509.        33.0 small     6
-7    49.1        1        1268.        25.8 small     7
-8    37          1         960.        25.9 small     8</code></pre>
+<pre class="text output"><code># A tibble: 6 × 8
+  species bill_length_mm bill_depth_mm flipper_length_mm body_mass_g bill_ratio
+  &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;      &lt;dbl&gt;
+1 Gentoo            49.2          15.2               221        6300       3.24
+2 Gentoo            59.6          17                 230        6050       3.51
+3 Gentoo            51.1          16.3               220        6000       3.13
+4 Gentoo            48.8          16.2               222        6000       3.01
+5 Gentoo            45.2          16.4               223        5950       2.76
+6 Gentoo            49.8          15.9               229        5950       3.13
+# ℹ 2 more variables: flipper &lt;chr&gt;, rank &lt;int&gt;</code></pre>
 <p><code>mutate()</code> takes dplyr’s options: <code>_by</code> groups for one call, <code>_keep: 'none'</code> keeps only the grouping and new columns, and <code>_before</code> or <code>_after</code> place the new columns. <code>transmute()</code> is <code>mutate()</code> that keeps only the new columns.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="va">$housing</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'housing.csv'</span>)<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">// _keep: 'none' keeps only new columns (and grouping columns).</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$housing</span> <span class="op">|&gt;</span> mutate(rent_k<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;monthly_rent <span class="op">/</span> <span class="dv">1000</span><span class="ot">,</span> _keep<span class="ot">:</span> <span class="st">'none'</span>) <span class="op">|&gt;</span> head(<span class="dv">3</span>)<span class="ot">;</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$penguins</span> <span class="op">|&gt;</span> mutate(mass_kg<span class="ot">:</span> col(<span class="st">'body_mass_g'</span>)-&gt;div(<span class="dv">1000</span>)<span class="ot">,</span> _keep<span class="ot">:</span> <span class="st">'none'</span>) <span class="op">|&gt;</span> head(<span class="dv">3</span>)<span class="ot">;</span></span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co">// _by groups for this call only; mean() is recycled within each group.</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$housing</span> <span class="op">|&gt;</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    mutate(vs_bedroom_avg<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="va">$r</span>-&gt;monthly_rent <span class="op">-</span> mean(<span class="st">'monthly_rent'</span>)(<span class="va">$g</span>)<span class="ot">,</span> _by<span class="ot">:</span> <span class="st">'bedrooms'</span><span class="ot">,</span> _after<span class="ot">:</span> <span class="st">'bedrooms'</span>) <span class="op">|&gt;</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">4</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$penguins</span> <span class="op">|&gt;</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>) <span class="op">|&gt;</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    mutate(vs_species_avg<span class="ot">:</span> col(<span class="st">'body_mass_g'</span>)-&gt;sub(mean(<span class="st">'body_mass_g'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>))<span class="ot">,</span> _by<span class="ot">:</span> <span class="st">'species'</span><span class="ot">,</span> _after<span class="ot">:</span> <span class="st">'body_mass_g'</span>) <span class="op">|&gt;</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    head(<span class="dv">4</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="va">$housing</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'housing.csv'</span>)<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co">// _keep: 'none' keeps only new columns (and grouping columns).</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$housing</span>)-&gt;mutate(rent_k<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;monthly_rent <span class="op">/</span> <span class="dv">1000</span><span class="ot">,</span> _keep<span class="ot">:</span> <span class="st">'none'</span>)-&gt;head(<span class="dv">3</span>)<span class="ot">;</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$penguins</span>)-&gt;mutate(mass_kg<span class="ot">:</span> col(<span class="st">'body_mass_g'</span>)-&gt;div(<span class="dv">1000</span>)<span class="ot">,</span> _keep<span class="ot">:</span> <span class="st">'none'</span>)-&gt;head(<span class="dv">3</span>)<span class="ot">;</span></span>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co">// _by groups for this call only; mean() is recycled within each group.</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$housing</span>)</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(vs_bedroom_avg<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$r</span><span class="ot">,</span> <span class="va">$g</span>) =&gt; <span class="va">$r</span>-&gt;monthly_rent <span class="op">-</span> mean(<span class="st">'monthly_rent'</span>)(<span class="va">$g</span>)<span class="ot">,</span> _by<span class="ot">:</span> <span class="st">'bedrooms'</span><span class="ot">,</span> _after<span class="ot">:</span> <span class="st">'bedrooms'</span>)</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">4</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$penguins</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    -&gt;select(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="st">'body_mass_g'</span>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(vs_species_avg<span class="ot">:</span> col(<span class="st">'body_mass_g'</span>)-&gt;sub(mean(<span class="st">'body_mass_g'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>))<span class="ot">,</span> _by<span class="ot">:</span> <span class="st">'species'</span><span class="ot">,</span> _after<span class="ot">:</span> <span class="st">'body_mass_g'</span>)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    -&gt;head(<span class="dv">4</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 <pre class="text output"><code># A tibble: 3 × 1
-  rent_k
-   &lt;dbl&gt;
-1   1.88
-2   1.81
-3   2.02
+  mass_kg
+    &lt;dbl&gt;
+1    3.75
+2    3.8 
+3    3.25
 # A tibble: 4 × 4
-  area_m2 bedrooms vs_bedroom_avg monthly_rent
-    &lt;dbl&gt;    &lt;int&gt;          &lt;dbl&gt;        &lt;dbl&gt;
-1    74.4        2          -22.9        1879.
-2    57.4        2          -97.2        1805.
-3    66.4        2          120.         2022.
-4    49.1        1           22.3        1268.</code></pre>
+  species island    body_mass_g vs_species_avg
+  &lt;chr&gt;   &lt;chr&gt;           &lt;int&gt;          &lt;dbl&gt;
+1 Adelie  Torgersen        3750           49.3
+2 Adelie  Torgersen        3800           99.3
+3 Adelie  Torgersen        3250         -451. 
+4 Adelie  Torgersen          NA           NA</code></pre>
 <p><code>pull()</code> returns one column as a PHP list. It takes a name or a position (1-based, negative from the end, the last column by default) and an optional <code>name:</code> column whose values become the keys.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="va">$housing</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'housing.csv'</span>)<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$housing</span> <span class="op">|&gt;</span> distinct(<span class="st">'bedrooms'</span>) <span class="op">|&gt;</span> arrange(<span class="st">'bedrooms'</span>)<span class="ot">;</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="fu">json_encode</span>(<span class="va">$housing</span> <span class="op">|&gt;</span> arrange(<span class="st">'area_m2'</span>) <span class="op">|&gt;</span> pull(<span class="st">'monthly_rent'</span>))<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">json_encode</span>(<span class="va">$housing</span> <span class="op">|&gt;</span> pull(<span class="op">-</span><span class="dv">1</span>))<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$penguins</span> <span class="op">|&gt;</span> distinct(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span>) <span class="op">|&gt;</span> arrange(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span>)<span class="ot">;</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="fu">json_encode</span>(<span class="va">$penguins</span> <span class="op">|&gt;</span> head(<span class="dv">5</span>) <span class="op">|&gt;</span> pull(<span class="st">'body_mass_g'</span>))<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">json_encode</span>(<span class="va">$penguins</span> <span class="op">|&gt;</span> head(<span class="dv">5</span>) <span class="op">|&gt;</span> pull(<span class="op">-</span><span class="dv">1</span>))<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="va">$housing</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'housing.csv'</span>)<span class="ot">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$housing</span>)-&gt;distinct(<span class="st">'bedrooms'</span>)-&gt;arrange(<span class="st">'bedrooms'</span>)<span class="ot">;</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="fu">json_encode</span>(phplyr(<span class="va">$housing</span>)-&gt;arrange(<span class="st">'area_m2'</span>)-&gt;pull(<span class="st">'monthly_rent'</span>))<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">json_encode</span>(phplyr(<span class="va">$housing</span>)-&gt;pull(<span class="op">-</span><span class="dv">1</span>))<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$penguins</span>)-&gt;distinct(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span>)-&gt;arrange(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span>)<span class="ot">;</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="fu">json_encode</span>(phplyr(<span class="va">$penguins</span>)-&gt;head(<span class="dv">5</span>)-&gt;pull(<span class="st">'body_mass_g'</span>))<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">json_encode</span>(phplyr(<span class="va">$penguins</span>)-&gt;head(<span class="dv">5</span>)-&gt;pull(<span class="op">-</span><span class="dv">1</span>))<span class="ot">,</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code># A tibble: 3 × 1
-  bedrooms
-     &lt;int&gt;
-1        1
-2        2
-3        3
-[959.51,1509.24,1267.85,1805.03,2022.29,1879.25,2240.1,2386.54]
-[1879.25,1805.03,2022.29,1267.85,1509.24,2240.1,959.51,2386.54]</code></pre>
+<pre class="text output"><code># A tibble: 5 × 2
+  species   island   
+  &lt;chr&gt;     &lt;chr&gt;    
+1 Adelie    Biscoe   
+2 Adelie    Dream    
+3 Adelie    Torgersen
+4 Chinstrap Dream    
+5 Gentoo    Biscoe   
+[3750,3800,3250,null,3450]
+[2007,2007,2007,2007,2007]</code></pre>
 <section id="select" class="level3">
 <h3 class="anchored" data-anchor-id="select"><code>select()</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>select(<span class="dt">mixed</span> ...<span class="va">$columns</span>)<span class="ot">:</span> <span class="bu">Closure</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -890,107 +913,101 @@ school, study_hours, PRIOR_SCORE, SCORE</code></pre>
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>) <span class="op">|&gt;</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    summarize(</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>        students<span class="ot">:</span> n()<span class="ot">,</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>        schools<span class="ot">:</span> n_distinct(<span class="st">'school'</span>)<span class="ot">,</span></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>        median_hours<span class="ot">:</span> median(<span class="st">'study_hours'</span>)<span class="ot">,</span></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>        q90_score<span class="ot">:</span> quantile(<span class="st">'score'</span><span class="ot">,</span> <span class="fl">0.9</span>)<span class="ot">,</span></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>        iqr_score<span class="ot">:</span> iqr(<span class="st">'score'</span>)<span class="ot">,</span></span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>        top_school<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$g</span>) =&gt; (<span class="va">$g</span> <span class="op">|&gt;</span> slice_max(<span class="st">'score'</span><span class="ot">,</span> n<span class="ot">:</span> <span class="dv">1</span>) <span class="op">|&gt;</span> pull(<span class="st">'school'</span>))[<span class="dv">0</span>]<span class="ot">,</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>        penguins<span class="ot">:</span> n()<span class="ot">,</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>        species<span class="ot">:</span> n_distinct(<span class="st">'species'</span>)<span class="ot">,</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>        median_mass_g<span class="ot">:</span> median(<span class="st">'body_mass_g'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>)<span class="ot">,</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>        q90_flipper_mm<span class="ot">:</span> quantile(<span class="st">'flipper_length_mm'</span><span class="ot">,</span> <span class="fl">0.9</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>)<span class="ot">,</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>        iqr_bill_mm<span class="ot">:</span> iqr(<span class="st">'bill_length_mm'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>)<span class="ot">,</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>        heaviest<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$g</span>) =&gt; (<span class="va">$g</span> <span class="op">|&gt;</span> slice_max(<span class="st">'body_mass_g'</span><span class="ot">,</span> n<span class="ot">:</span> <span class="dv">1</span>) <span class="op">|&gt;</span> pull(<span class="st">'species'</span>))[<span class="dv">0</span>]<span class="ot">,</span></span>
 <span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>))</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    -&gt;summarize(</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>        students<span class="ot">:</span> n()<span class="ot">,</span></span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>        schools<span class="ot">:</span> n_distinct(<span class="st">'school'</span>)<span class="ot">,</span></span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>        median_hours<span class="ot">:</span> median(<span class="st">'study_hours'</span>)<span class="ot">,</span></span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>        q90_score<span class="ot">:</span> quantile(<span class="st">'score'</span><span class="ot">,</span> <span class="fl">0.9</span>)<span class="ot">,</span></span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>        iqr_score<span class="ot">:</span> iqr(<span class="st">'score'</span>)<span class="ot">,</span></span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>        top_school<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$g</span>) =&gt; (phplyr(<span class="va">$g</span>)-&gt;sliceMax(<span class="st">'score'</span><span class="ot">,</span> n<span class="ot">:</span> <span class="dv">1</span>)-&gt;pull(<span class="st">'school'</span>))[<span class="dv">0</span>]<span class="ot">,</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>        penguins<span class="ot">:</span> n()<span class="ot">,</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>        species<span class="ot">:</span> n_distinct(<span class="st">'species'</span>)<span class="ot">,</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>        median_mass_g<span class="ot">:</span> median(<span class="st">'body_mass_g'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>)<span class="ot">,</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>        q90_flipper_mm<span class="ot">:</span> quantile(<span class="st">'flipper_length_mm'</span><span class="ot">,</span> <span class="fl">0.9</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>)<span class="ot">,</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>        iqr_bill_mm<span class="ot">:</span> iqr(<span class="st">'bill_length_mm'</span><span class="ot">,</span> naRm<span class="ot">:</span> <span class="kw">true</span>)<span class="ot">,</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>        heaviest<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$g</span>) =&gt; phplyr(<span class="va">$g</span>)-&gt;sliceMax(<span class="st">'body_mass_g'</span><span class="ot">,</span> n<span class="ot">:</span> <span class="dv">1</span>)-&gt;pull(<span class="st">'species'</span>)[<span class="dv">0</span>]<span class="ot">,</span></span>
 <span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 <pre class="text output"><code># A tibble: 1 × 6
-  students schools median_hours q90_score iqr_score top_school
-     &lt;int&gt;   &lt;int&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;     
-1      250      12         6.66      86.1      15.3 school-06</code></pre>
+  penguins species median_mass_g q90_flipper_mm iqr_bill_mm heaviest
+     &lt;int&gt;   &lt;int&gt;         &lt;dbl&gt;          &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;   
+1      344       3          4050           221.        9.27 Gentoo</code></pre>
 <p><code>reframe()</code> is <code>summarize()</code> for summaries that return several values. Results are recycled to a common length within each group, and the output is ungrouped.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb52"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;school <span class="op">&lt;=</span> <span class="st">'school-02'</span>) <span class="op">|&gt;</span></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'school'</span>) <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb52"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>) <span class="op">|&gt;</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    drop_na(<span class="st">'body_mass_g'</span>) <span class="op">|&gt;</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    group_by(<span class="st">'species'</span>) <span class="op">|&gt;</span></span>
 <span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    reframe(</span>
 <span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>        p<span class="ot">:</span> [<span class="fl">0.25</span><span class="ot">,</span> <span class="fl">0.5</span><span class="ot">,</span> <span class="fl">0.75</span>]<span class="ot">,</span></span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>        score<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$g</span>) =&gt; <span class="fu">array_map</span>(<span class="kw">fn</span> (<span class="va">$p</span>) =&gt; Stats::quantile(<span class="va">$g</span>-&gt;column(<span class="st">'score'</span>)<span class="ot">,</span> <span class="va">$p</span>)<span class="ot">,</span> [<span class="fl">0.25</span><span class="ot">,</span> <span class="fl">0.5</span><span class="ot">,</span> <span class="fl">0.75</span>])<span class="ot">,</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>        body_mass_g<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$g</span>) =&gt; <span class="fu">array_map</span>(<span class="kw">fn</span> (<span class="va">$p</span>) =&gt; Stats::quantile(<span class="va">$g</span>-&gt;column(<span class="st">'body_mass_g'</span>)<span class="ot">,</span> <span class="va">$p</span>)<span class="ot">,</span> [<span class="fl">0.25</span><span class="ot">,</span> <span class="fl">0.5</span><span class="ot">,</span> <span class="fl">0.75</span>])<span class="ot">,</span></span>
 <span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    -&gt;filter(<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;school <span class="op">&lt;=</span> <span class="st">'school-02'</span>)</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'school'</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>))</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    -&gt;dropNa(<span class="st">'body_mass_g'</span>)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    -&gt;groupBy(<span class="st">'species'</span>)</span>
 <span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    -&gt;reframe(</span>
 <span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>        p<span class="ot">:</span> [<span class="fl">0.25</span><span class="ot">,</span> <span class="fl">0.5</span><span class="ot">,</span> <span class="fl">0.75</span>]<span class="ot">,</span></span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>        score<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$g</span>) =&gt; <span class="fu">array_map</span>(<span class="kw">fn</span> (<span class="va">$p</span>) =&gt; Stats::quantile(<span class="va">$g</span>-&gt;column(<span class="st">'score'</span>)<span class="ot">,</span> <span class="va">$p</span>)<span class="ot">,</span> [<span class="fl">0.25</span><span class="ot">,</span> <span class="fl">0.5</span><span class="ot">,</span> <span class="fl">0.75</span>])<span class="ot">,</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>        body_mass_g<span class="ot">:</span> <span class="kw">fn</span> (<span class="va">$g</span>) =&gt; <span class="fu">array_map</span>(<span class="kw">fn</span> (<span class="va">$p</span>) =&gt; Stats::quantile(<span class="va">$g</span>-&gt;column(<span class="st">'body_mass_g'</span>)<span class="ot">,</span> <span class="va">$p</span>)<span class="ot">,</span> [<span class="fl">0.25</span><span class="ot">,</span> <span class="fl">0.5</span><span class="ot">,</span> <span class="fl">0.75</span>])<span class="ot">,</span></span>
 <span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code># A tibble: 6 × 3
-  school        p score
-  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
-1 school-01  0.25  67.6
-2 school-01  0.5   72.5
-3 school-01  0.75  76.9
-4 school-02  0.25  65.3
-5 school-02  0.5   70.3
-6 school-02  0.75  81.0</code></pre>
+<pre class="text output"><code># A tibble: 9 × 3
+  species       p body_mass_g
+  &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+1 Adelie     0.25       3350 
+2 Adelie     0.5        3700 
+3 Adelie     0.75       4000 
+4 Chinstrap  0.25       3488.
+5 Chinstrap  0.5        3700 
+6 Chinstrap  0.75       3950 
+7 Gentoo     0.25       4700 
+8 Gentoo     0.5        5000 
+9 Gentoo     0.75       5500</code></pre>
 <p><code>count()</code> counts rows per combination of columns within any existing groups and keeps the original grouping. <code>wt:</code> sums a column instead, <code>sort: true</code> orders by the count, and <code>name:</code> names the count column. <code>tally()</code> counts within the current groups, and <code>add_count()</code> and <code>add_tally()</code> add the count as a column.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true" href="">PHP 8.5+</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false" href="">PHP 8.3–8.4</a></li></ul>
 <div class="tab-content" data-group="syntax">
 <div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb55"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">'schools.csv'</span>) <span class="op">|&gt;</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    mutate(band<span class="ot">:</span> case_when(</span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>        [<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;study_hours <span class="op">&lt;</span> <span class="dv">4</span><span class="ot">,</span> <span class="st">'light'</span>]<span class="ot">,</span></span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>        [<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;study_hours <span class="op">&lt;</span> <span class="dv">8</span><span class="ot">,</span> <span class="st">'moderate'</span>]<span class="ot">,</span></span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">default</span><span class="ot">:</span> <span class="st">'heavy'</span><span class="ot">,</span></span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>    ))<span class="ot">;</span></span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$schools</span> <span class="op">|&gt;</span> <span class="fu">count</span>(<span class="st">'band'</span><span class="ot">,</span> <span class="fu">sort</span><span class="ot">:</span> <span class="kw">true</span>)<span class="ot">;</span></span>
-<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$schools</span> <span class="op">|&gt;</span> <span class="fu">count</span>(<span class="st">'band'</span><span class="ot">,</span> wt<span class="ot">:</span> <span class="st">'study_hours'</span><span class="ot">,</span> name<span class="ot">:</span> <span class="st">'hours'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb55"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$penguins</span> <span class="op">|&gt;</span> <span class="fu">count</span>(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="fu">sort</span><span class="ot">:</span> <span class="kw">true</span>)<span class="ot">;</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> <span class="va">$penguins</span> <span class="op">|&gt;</span> <span class="fu">count</span>(<span class="st">'species'</span><span class="ot">,</span> wt<span class="ot">:</span> <span class="st">'body_mass_g'</span><span class="ot">,</span> name<span class="ot">:</span> <span class="st">'total_mass_g'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb56"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="va">$schools</span> <span class="op">=</span> phplyr(DataFrame::fromCsv(<span class="st">'schools.csv'</span>))</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    -&gt;mutate(band<span class="ot">:</span> case_when(</span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>        [<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;study_hours <span class="op">&lt;</span> <span class="dv">4</span><span class="ot">,</span> <span class="st">'light'</span>]<span class="ot">,</span></span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>        [<span class="kw">fn</span> (<span class="va">$r</span>) =&gt; <span class="va">$r</span>-&gt;study_hours <span class="op">&lt;</span> <span class="dv">8</span><span class="ot">,</span> <span class="st">'moderate'</span>]<span class="ot">,</span></span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">default</span><span class="ot">:</span> <span class="st">'heavy'</span><span class="ot">,</span></span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>    ))</span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>    -&gt;get()<span class="ot">;</span></span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$schools</span>)-&gt;<span class="fu">count</span>(<span class="st">'band'</span><span class="ot">,</span> <span class="fu">sort</span><span class="ot">:</span> <span class="kw">true</span>)<span class="ot">;</span></span>
-<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$schools</span>)-&gt;<span class="fu">count</span>(<span class="st">'band'</span><span class="ot">,</span> wt<span class="ot">:</span> <span class="st">'study_hours'</span><span class="ot">,</span> name<span class="ot">:</span> <span class="st">'hours'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb56"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> phplyr(<span class="va">$penguins</span>)-&gt;<span class="fu">count</span>(<span class="st">'species'</span><span class="ot">,</span> <span class="st">'island'</span><span class="ot">,</span> <span class="fu">sort</span><span class="ot">:</span> <span class="kw">true</span>)<span class="ot">;</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span><span class="ot">,</span> phplyr(<span class="va">$penguins</span>)-&gt;<span class="fu">count</span>(<span class="st">'species'</span><span class="ot">,</span> wt<span class="ot">:</span> <span class="st">'body_mass_g'</span><span class="ot">,</span> name<span class="ot">:</span> <span class="st">'total_mass_g'</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<pre class="text output"><code># A tibble: 3 × 2
-  band         n
-  &lt;chr&gt;    &lt;int&gt;
-1 heavy       95
-2 moderate    90
-3 light       65
+<pre class="text output"><code># A tibble: 5 × 3
+  species   island        n
+  &lt;chr&gt;     &lt;chr&gt;     &lt;int&gt;
+1 Gentoo    Biscoe      124
+2 Chinstrap Dream        68
+3 Adelie    Dream        56
+4 Adelie    Torgersen    52
+5 Adelie    Biscoe       44
 # A tibble: 3 × 2
-  band     hours
-  &lt;chr&gt;    &lt;dbl&gt;
-1 heavy     953.
-2 light     159.
-3 moderate  540.</code></pre>
+  species   total_mass_g
+  &lt;chr&gt;            &lt;int&gt;
+1 Adelie          558800
+2 Chinstrap       253850
+3 Gentoo          624350</code></pre>
 <p><code>glimpse()</code> prints a compact summary of each column and returns the table unchanged.</p>
 <section id="summarise" class="level3">
 <h3 class="anchored" data-anchor-id="summarise"><code>summarise()</code></h3>

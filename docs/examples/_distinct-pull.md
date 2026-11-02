@@ -3,32 +3,34 @@
 ## PHP 8.5+
 
 ```php
-$housing = DataFrame::fromCsv('housing.csv');
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo $housing |> distinct('bedrooms') |> arrange('bedrooms');
-echo "\n", json_encode($housing |> arrange('area_m2') |> pull('monthly_rent')), "\n";
-echo json_encode($housing |> pull(-1)), "\n";
+echo $penguins |> distinct('species', 'island') |> arrange('species', 'island');
+echo "\n", json_encode($penguins |> head(5) |> pull('body_mass_g')), "\n";
+echo json_encode($penguins |> head(5) |> pull(-1)), "\n";
 ```
 
 ## PHP 8.3–8.4
 
 ```php
-$housing = DataFrame::fromCsv('housing.csv');
+$penguins = DataFrame::fromCsv("$data/penguins.csv");
 
-echo phplyr($housing)->distinct('bedrooms')->arrange('bedrooms');
-echo "\n", json_encode(phplyr($housing)->arrange('area_m2')->pull('monthly_rent')), "\n";
-echo json_encode(phplyr($housing)->pull(-1)), "\n";
+echo phplyr($penguins)->distinct('species', 'island')->arrange('species', 'island');
+echo "\n", json_encode(phplyr($penguins)->head(5)->pull('body_mass_g')), "\n";
+echo json_encode(phplyr($penguins)->head(5)->pull(-1)), "\n";
 ```
 
 :::
 
 ```{.text .output}
-# A tibble: 3 × 1
-  bedrooms
-     <int>
-1        1
-2        2
-3        3
-[959.51,1509.24,1267.85,1805.03,2022.29,1879.25,2240.1,2386.54]
-[1879.25,1805.03,2022.29,1267.85,1509.24,2240.1,959.51,2386.54]
+# A tibble: 5 × 2
+  species   island   
+  <chr>     <chr>    
+1 Adelie    Biscoe   
+2 Adelie    Dream    
+3 Adelie    Torgersen
+4 Chinstrap Dream    
+5 Gentoo    Biscoe   
+[3750,3800,3250,null,3450]
+[2007,2007,2007,2007,2007]
 ```

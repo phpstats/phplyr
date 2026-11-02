@@ -8,12 +8,13 @@ functions. Use PHP 8.5 pipes, or method chains on PHP 8.3 and later.
 
 ## A first pipeline
 
-Keep the students who studied at least five hours, summarize each school, and
-print the five schools with the highest average score.
+Keep the penguins with a recorded body mass, summarize each species, and sort
+the species by average mass. The script reads
+[`penguins`](https://github.com/phpstats/datasets#penguins), size
+measurements for 344 penguins near Palmer Station, Antarctica, by URL.
 
 ```bash
 composer require phpstats/phplyr
-curl -O https://raw.githubusercontent.com/phpstats/phplyr/{{< var release >}}/docs/data/schools.csv
 ```
 
 {{< include examples/_first-pipeline.md >}}

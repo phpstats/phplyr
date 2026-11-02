@@ -1,17 +1,20 @@
 <?php
 
-$schools = phplyr(DataFrame::fromCsv('schools.csv'))
-    ->groupBy('school')
-    ->summarize(avg_score: mean('score'))
+use function Phibble\tribble;
+
+$species = phplyr(DataFrame::fromCsv("$data/penguins.csv"))
+    ->groupBy('species')
+    ->summarize(avg_mass_g: mean('body_mass_g', naRm: true))
     ->get();
 
-$districts = DataFrame::fromRows([
-    ['school_id' => 'school-01', 'district' => 'North'],
-    ['school_id' => 'school-02', 'district' => 'North'],
-    ['school_id' => 'school-03', 'district' => 'South'],
-    ['school_id' => 'school-99', 'district' => 'East'],
-]);
+// A lookup table with one species that isn't in the data.
+$scientific = tribble(
+    ['species', 'scientific_name'],
+    'Adelie', 'Pygoscelis adeliae',
+    'Gentoo', 'Pygoscelis papua',
+    'Emperor', 'Aptenodytes forsteri',
+);
 
-echo phplyr($schools)->innerJoin($districts, by: ['school' => 'school_id']);
-echo "\n", phplyr($schools)->leftJoin($districts, by: ['school' => 'school_id'])->head(5);
-echo "\n", phplyr($districts)->antiJoin($schools, by: ['school_id' => 'school']);
+echo phplyr($species)->innerJoin($scientific, by: 'species');
+echo "\n", phplyr($species)->leftJoin($scientific, by: 'species');
+echo "\n", phplyr($scientific)->antiJoin($species, by: 'species');

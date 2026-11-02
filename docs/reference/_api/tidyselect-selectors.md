@@ -96,7 +96,7 @@ where(Closure|Phibble\Type|string $predicate): Selector
 
 Columns for which a predicate holds. The predicate receives (list `$values`, Type `$type`, string `$name`). Shortcuts: a Phibble\Type, or one of 'numeric', 'integer', 'double', 'character', 'logical', 'factor', 'date', 'datetime', 'time' (phibble 0.6 and later), 'list'.
 
-Returns `Selector`. Throws `InvalidArgumentException` on invalid arguments. [Example](#across-section).
+Returns `Selector`. Throws `InvalidArgumentException` on invalid arguments.
 
 ### `except()` {#except}
 

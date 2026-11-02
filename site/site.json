@@ -44,12 +44,11 @@
     "repository": "https://github.com/phpstats/phplyr",
     "example": {
         "setup": [
-            "composer require phpstats/phplyr",
-            "curl -O https://raw.githubusercontent.com/phpstats/phplyr/v0.4.6/docs/data/schools.csv"
+            "composer require phpstats/phplyr"
         ],
-        "chain": "use Phibble\\DataFrame;\nuse function Phplyr\\{phplyr, desc, n, mean, sd};\n\n$schools = DataFrame::fromCsv('schools.csv');\n\necho phplyr($schools)\n    ->filter(fn ($r) => $r->study_hours >= 5)\n    ->groupBy('school')\n    ->summarize(\n        students: n(),\n        avg_score: mean('score'),\n        sd_score: sd('score'),\n    )\n    ->arrange(desc('avg_score'))\n    ->head(5);",
-        "pipe": "use Phibble\\DataFrame;\nuse function Phplyr\\{filter, group_by, summarize};\nuse function Phplyr\\{arrange, head, desc, n, mean, sd};\n\n$schools = DataFrame::fromCsv('schools.csv');\n\necho $schools |>\n    filter(fn ($r) => $r->study_hours >= 5) |>\n    group_by('school') |>\n    summarize(\n        students: n(),\n        avg_score: mean('score'),\n        sd_score: sd('score'),\n    ) |>\n    arrange(desc('avg_score')) |>\n    head(5);",
-        "output": "# A tibble: 5 × 4\n  school    students avg_score sd_score\n  <chr>        <int>     <dbl>    <dbl>\n1 school-07       14      86.9     6.32\n2 school-06       20      80.9     8.90\n3 school-02       12      79.7     8.22\n4 school-09       11      79.3     6.67\n5 school-11       13      77.6     7.31"
+        "chain": "use Phibble\\DataFrame;\nuse function Phplyr\\{phplyr, desc, n, mean, sd};\n\n$data = 'https://raw.githubusercontent.com/phpstats'\n    . '/datasets/main/csv';\n$penguins = DataFrame::fromCsv(\"$data/penguins.csv\");\n\necho phplyr($penguins)\n    ->filter(fn ($r) => $r->body_mass_g !== null)\n    ->groupBy('species')\n    ->summarize(\n        penguins: n(),\n        avg_mass_g: mean('body_mass_g'),\n        sd_mass_g: sd('body_mass_g'),\n    )\n    ->arrange(desc('avg_mass_g'));",
+        "pipe": "use Phibble\\DataFrame;\nuse function Phplyr\\{filter, group_by, summarize};\nuse function Phplyr\\{arrange, desc, n, mean, sd};\n\n$data = 'https://raw.githubusercontent.com/phpstats'\n    . '/datasets/main/csv';\n$penguins = DataFrame::fromCsv(\"$data/penguins.csv\");\n\necho $penguins |>\n    filter(fn ($r) => $r->body_mass_g !== null) |>\n    group_by('species') |>\n    summarize(\n        penguins: n(),\n        avg_mass_g: mean('body_mass_g'),\n        sd_mass_g: sd('body_mass_g'),\n    ) |>\n    arrange(desc('avg_mass_g'));",
+        "output": "# A tibble: 3 × 4\n  species   penguins avg_mass_g sd_mass_g\n  <chr>        <int>      <dbl>     <dbl>\n1 Gentoo         123      5076.      504.\n2 Chinstrap       68      3733.      384.\n3 Adelie         151      3701.      459."
     },
     "docs": {
         "root": "docs",
