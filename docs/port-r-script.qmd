@@ -33,7 +33,7 @@ for the models, phit; see [Models](reference/models.qmd).
 
 :::
 
-## What changed in translation
+## Translation notes {#what-changed-in-translation}
 
 - **Loading.** `read.csv()` becomes `DataFrame::fromCsv()`, which infers
   column types like readr and reads empty fields as NA, as

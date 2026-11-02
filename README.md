@@ -2,6 +2,16 @@
 
 phplyr is a PHP library for filtering, transforming, summarizing, joining, and reshaping tables of data. Its functions and arguments follow R's [dplyr](https://dplyr.tidyverse.org) and [tidyr](https://tidyr.tidyverse.org), and it works on [phibble](https://github.com/phpstats/phibble) tables: the in-memory `DataFrame`, database tables, and Polars through phibble's `PolarsTable`.
 
+## Features
+
+- dplyr's single-table and two-table functions, with grouped window functions, `across()`, column selectors, and `join_by()` conditions.
+- tidyr's pivoting, completing, splitting, nesting, and list-column functions.
+- janitor's `clean_names()`, `remove_empty()`, `get_dupes()`, and `tabyl()`.
+- `lm()`, `glm()`, `lmer()`, and `glmer()`, which fit models with [phit](https://github.com/phpstats/phit).
+- Pipelines on phibble's in-memory `DataFrame`, on database tables as SQL, and on Polars.
+
+## Example
+
 To run the example below, create a Composer project in an empty directory, save one of the scripts as `first.php`, and run `php first.php`. It reads [`penguins`](https://github.com/phpstats/datasets#penguins), size measurements for 344 penguins near Palmer Station, Antarctica, by URL.
 
 ```bash
@@ -75,6 +85,7 @@ The documentation is at <https://phplyr.phpstats.org/docs>:
 
 - [Getting started](https://phplyr.phpstats.org/docs/getting-started)
 - [Coming from dplyr](https://phplyr.phpstats.org/docs/coming-from-dplyr)
+- [Functions and methods](https://phplyr.phpstats.org/docs/reference/index), every function and method with its reference entry
 - Reference pages for single-table functions, joins, grouping, vector helpers, strings and dates, column selection, tidyr, janitor, models, and databases
 - [Gallery](https://phplyr.phpstats.org/docs/gallery) and [Porting an R script](https://phplyr.phpstats.org/docs/port-r-script)
 

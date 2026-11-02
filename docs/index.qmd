@@ -6,7 +6,7 @@ subtitle: "A PHP port of the Tidyverse's dplyr and tidyr."
 Filter, transform, join, and reshape tables with dplyr- and tidyr-style
 functions. Use PHP 8.5 pipes, or method chains on PHP 8.3 and later.
 
-## A first pipeline
+## Example {#a-first-pipeline}
 
 Keep the penguins with a recorded body mass, summarize each species, and sort
 the species by average mass. The script reads
@@ -19,25 +19,21 @@ composer require phpstats/phplyr
 
 {{< include examples/_first-pipeline.md >}}
 
-## phplyr and phibble
-
-The tables come from [phibble](https://github.com/phpstats/phibble), which
-Composer installs with phplyr. phplyr adds dplyr's and tidyr's functions on
-top of phibble's table methods, so a pipeline runs on an in-memory
-`DataFrame`, on a database table as SQL, or on Polars.
-
-phplyr has:
+## Features {#phplyr-and-phibble}
 
 - dplyr's single-table and two-table functions, with grouped window
   functions, `across()`, column selectors, and `join_by()` conditions.
 - tidyr's pivoting, completing, splitting, nesting, and list-column functions.
 - janitor's `clean_names()`, `remove_empty()`, `get_dupes()`, and `tabyl()`.
 - `lm()`, `glm()`, `lmer()`, and `glmer()`, which fit models with phit.
+- Pipelines on [phibble](https://github.com/phpstats/phibble)'s tables, which
+  Composer installs with phplyr: an in-memory `DataFrame`, a database table
+  as SQL, or Polars.
 
 [Functions and methods](reference/index.qmd) lists every function and
 method, with a link to its reference entry.
 
-## Install
+## Installation {#install}
 
 ```bash
 composer require phpstats/phplyr

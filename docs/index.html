@@ -355,9 +355,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#a-first-pipeline" id="toc-a-first-pipeline" class="nav-link active" data-scroll-target="#a-first-pipeline">A first pipeline</a></li>
-  <li><a href="#phplyr-and-phibble" id="toc-phplyr-and-phibble" class="nav-link" data-scroll-target="#phplyr-and-phibble">phplyr and phibble</a></li>
-  <li><a href="#install" id="toc-install" class="nav-link" data-scroll-target="#install">Install</a></li>
+  <li><a href="#a-first-pipeline" id="toc-a-first-pipeline" class="nav-link active" data-scroll-target="#a-first-pipeline">Example</a></li>
+  <li><a href="#phplyr-and-phibble" id="toc-phplyr-and-phibble" class="nav-link" data-scroll-target="#phplyr-and-phibble">Features</a></li>
+  <li><a href="#install" id="toc-install" class="nav-link" data-scroll-target="#install">Installation</a></li>
   </ul>
 </nav>
     </div>
@@ -386,7 +386,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>Filter, transform, join, and reshape tables with dplyr- and tidyr-style functions. Use PHP 8.5 pipes, or method chains on PHP 8.3 and later.</p>
 <section id="a-first-pipeline" class="level2">
-<h2 class="anchored" data-anchor-id="a-first-pipeline">A first pipeline</h2>
+<h2 class="anchored" data-anchor-id="a-first-pipeline">Example</h2>
 <p>Keep the penguins with a recorded body mass, summarize each species, and sort the species by average mass. The script reads <a href="https://github.com/phpstats/datasets#penguins"><code>penguins</code></a>, size measurements for 344 penguins near Palmer Station, Antarctica, by URL.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require phpstats/phplyr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="syntax">
@@ -439,19 +439,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 3 Adelie         151      3701.      459.</code></pre>
 </section>
 <section id="phplyr-and-phibble" class="level2">
-<h2 class="anchored" data-anchor-id="phplyr-and-phibble">phplyr and phibble</h2>
-<p>The tables come from <a href="https://github.com/phpstats/phibble">phibble</a>, which Composer installs with phplyr. phplyr adds dplyr’s and tidyr’s functions on top of phibble’s table methods, so a pipeline runs on an in-memory <code>DataFrame</code>, on a database table as SQL, or on Polars.</p>
-<p>phplyr has:</p>
+<h2 class="anchored" data-anchor-id="phplyr-and-phibble">Features</h2>
 <ul>
 <li>dplyr’s single-table and two-table functions, with grouped window functions, <code>across()</code>, column selectors, and <code>join_by()</code> conditions.</li>
 <li>tidyr’s pivoting, completing, splitting, nesting, and list-column functions.</li>
 <li>janitor’s <code>clean_names()</code>, <code>remove_empty()</code>, <code>get_dupes()</code>, and <code>tabyl()</code>.</li>
 <li><code>lm()</code>, <code>glm()</code>, <code>lmer()</code>, and <code>glmer()</code>, which fit models with phit.</li>
+<li>Pipelines on <a href="https://github.com/phpstats/phibble">phibble</a>’s tables, which Composer installs with phplyr: an in-memory <code>DataFrame</code>, a database table as SQL, or Polars.</li>
 </ul>
 <p><a href="./reference/index.html">Functions and methods</a> lists every function and method, with a link to its reference entry.</p>
 </section>
 <section id="install" class="level2">
-<h2 class="anchored" data-anchor-id="install">Install</h2>
+<h2 class="anchored" data-anchor-id="install">Installation</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require phpstats/phplyr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>phplyr needs PHP 8.3 or later with the mbstring and PDO extensions. <a href="./getting-started.html#installation">Installation</a> lists the optional extensions, and <a href="./compatibility.html">Compatibility and limitations</a> lists the dplyr features phplyr doesn’t have.</p>
 

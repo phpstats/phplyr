@@ -356,7 +356,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a></li>
-  <li><a href="#a-first-script" id="toc-a-first-script" class="nav-link" data-scroll-target="#a-first-script">A first script</a></li>
+  <li><a href="#a-first-script" id="toc-a-first-script" class="nav-link" data-scroll-target="#a-first-script">Example data</a></li>
   <li><a href="#imports" id="toc-imports" class="nav-link" data-scroll-target="#imports">Imports</a></li>
   <li><a href="#loading-data" id="toc-loading-data" class="nav-link" data-scroll-target="#loading-data">Loading data</a></li>
   <li><a href="#pipelines" id="toc-pipelines" class="nav-link" data-scroll-target="#pipelines">Pipelines</a></li>
@@ -425,8 +425,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Without phit, the descriptive helpers run in PHP with the same results.</p>
 </section>
 <section id="a-first-script" class="level2">
-<h2 class="anchored" data-anchor-id="a-first-script">A first script</h2>
-<p><a href="./index.html#a-first-pipeline">A first pipeline</a> on the overview page is a complete script, with the command that installs phplyr. The snippets on this page use its <code>$penguins</code> table. The examples in the reference pages read their data by URL from <a href="https://github.com/phpstats/datasets">PHPstats datasets</a>, with <code>$data</code> set as in that script:</p>
+<h2 class="anchored" data-anchor-id="a-first-script">Example data</h2>
+<p>The <a href="./index.html#a-first-pipeline">example</a> on the overview page is a complete script, with the command that installs phplyr. The snippets on this page use its <code>$penguins</code> table. The examples in the reference pages read their data by URL from <a href="https://github.com/phpstats/datasets">PHPstats datasets</a>, with <code>$data</code> set as in that script:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$data</span> <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/phpstats/datasets/main/csv'</span><span class="ot">;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">$penguins</span> <span class="op">=</span> DataFrame::fromCsv(<span class="st">"</span><span class="va">$data</span><span class="st">/penguins.csv"</span>)<span class="ot">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>

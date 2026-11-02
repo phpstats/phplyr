@@ -344,8 +344,8 @@
     "objectID": "port-r-script.html#what-changed-in-translation",
     "href": "port-r-script.html#what-changed-in-translation",
     "title": "Porting an R script",
-    "section": "What changed in translation",
-    "text": "What changed in translation\n\nLoading. read.csv() becomes DataFrame::fromCsv(), which infers column types like readr and reads empty fields as NA, as na.strings = c(\"\", \"NA\") does in R.\nPipes. On PHP 8.5, R’s |&gt; stays |&gt;. On PHP 8.3 and 8.4, the pipeline becomes a method chain that starts with phplyr($t).\nColumn references. Bare names become strings, or col('x') inside expressions, so bill_length_mm / bill_depth_mm becomes col('bill_length_mm')-&gt;div(col('bill_depth_mm')).\nConditions. case_when(x &lt; 4 ~ \"low\", .default = \"high\") becomes case_when([col('x')-&gt;lt(4), 'low'], default: 'high').\nRenaming in select. select(length = bill_length_mm) becomes select(['length' =&gt; 'bill_length_mm']).\nColumn sets. c(length, depth) becomes ['length', 'depth'].\nModels. lm(), glm(), and lmer() take the same formulas. They return arrays, so coef() and fixef() become reads of coefficients. The coefficients agree to the printed four decimals, except the last digit of the random-intercept model’s intercept.\nPrinting. DataFrames print in tibble’s format.\n\nOn a database table from Phibble\\tbl(), the cleaning, counting, and grouped-summary steps run as SQL, because they use col() expressions and phplyr’s helpers. The reshaping step loads the rows into PHP. See Databases and expressions.",
+    "section": "Translation notes",
+    "text": "Translation notes\n\nLoading. read.csv() becomes DataFrame::fromCsv(), which infers column types like readr and reads empty fields as NA, as na.strings = c(\"\", \"NA\") does in R.\nPipes. On PHP 8.5, R’s |&gt; stays |&gt;. On PHP 8.3 and 8.4, the pipeline becomes a method chain that starts with phplyr($t).\nColumn references. Bare names become strings, or col('x') inside expressions, so bill_length_mm / bill_depth_mm becomes col('bill_length_mm')-&gt;div(col('bill_depth_mm')).\nConditions. case_when(x &lt; 4 ~ \"low\", .default = \"high\") becomes case_when([col('x')-&gt;lt(4), 'low'], default: 'high').\nRenaming in select. select(length = bill_length_mm) becomes select(['length' =&gt; 'bill_length_mm']).\nColumn sets. c(length, depth) becomes ['length', 'depth'].\nModels. lm(), glm(), and lmer() take the same formulas. They return arrays, so coef() and fixef() become reads of coefficients. The coefficients agree to the printed four decimals, except the last digit of the random-intercept model’s intercept.\nPrinting. DataFrames print in tibble’s format.\n\nOn a database table from Phibble\\tbl(), the cleaning, counting, and grouped-summary steps run as SQL, because they use col() expressions and phplyr’s helpers. The reshaping step loads the rows into PHP. See Databases and expressions.",
     "crumbs": [
       "Guides",
       "Porting an R script"
@@ -366,8 +366,8 @@
     "objectID": "index.html#a-first-pipeline",
     "href": "index.html#a-first-pipeline",
     "title": "phplyr",
-    "section": "A first pipeline",
-    "text": "A first pipeline\nKeep the penguins with a recorded body mass, summarize each species, and sort the species by average mass. The script reads penguins, size measurements for 344 penguins near Palmer Station, Antarctica, by URL.\ncomposer require phpstats/phplyr\n\nPHP 8.5+PHP 8.3–8.4\n\n\nuse Phibble\\DataFrame;\nuse function Phplyr\\{filter, group_by, summarize};\nuse function Phplyr\\{arrange, desc, n, mean, sd};\n\n$data = 'https://raw.githubusercontent.com/phpstats'\n    . '/datasets/main/csv';\n$penguins = DataFrame::fromCsv(\"$data/penguins.csv\");\n\necho $penguins |&gt;\n    filter(fn ($r) =&gt; $r-&gt;body_mass_g !== null) |&gt;\n    group_by('species') |&gt;\n    summarize(\n        penguins: n(),\n        avg_mass_g: mean('body_mass_g'),\n        sd_mass_g: sd('body_mass_g'),\n    ) |&gt;\n    arrange(desc('avg_mass_g'));\n\n\nuse Phibble\\DataFrame;\nuse function Phplyr\\{phplyr, desc, n, mean, sd};\n\n$data = 'https://raw.githubusercontent.com/phpstats'\n    . '/datasets/main/csv';\n$penguins = DataFrame::fromCsv(\"$data/penguins.csv\");\n\necho phplyr($penguins)\n    -&gt;filter(fn ($r) =&gt; $r-&gt;body_mass_g !== null)\n    -&gt;groupBy('species')\n    -&gt;summarize(\n        penguins: n(),\n        avg_mass_g: mean('body_mass_g'),\n        sd_mass_g: sd('body_mass_g'),\n    )\n    -&gt;arrange(desc('avg_mass_g'));\n\n\n\n# A tibble: 3 × 4\n  species   penguins avg_mass_g sd_mass_g\n  &lt;chr&gt;        &lt;int&gt;      &lt;dbl&gt;     &lt;dbl&gt;\n1 Gentoo         123      5076.      504.\n2 Chinstrap       68      3733.      384.\n3 Adelie         151      3701.      459.",
+    "section": "Example",
+    "text": "Example\nKeep the penguins with a recorded body mass, summarize each species, and sort the species by average mass. The script reads penguins, size measurements for 344 penguins near Palmer Station, Antarctica, by URL.\ncomposer require phpstats/phplyr\n\nPHP 8.5+PHP 8.3–8.4\n\n\nuse Phibble\\DataFrame;\nuse function Phplyr\\{filter, group_by, summarize};\nuse function Phplyr\\{arrange, desc, n, mean, sd};\n\n$data = 'https://raw.githubusercontent.com/phpstats'\n    . '/datasets/main/csv';\n$penguins = DataFrame::fromCsv(\"$data/penguins.csv\");\n\necho $penguins |&gt;\n    filter(fn ($r) =&gt; $r-&gt;body_mass_g !== null) |&gt;\n    group_by('species') |&gt;\n    summarize(\n        penguins: n(),\n        avg_mass_g: mean('body_mass_g'),\n        sd_mass_g: sd('body_mass_g'),\n    ) |&gt;\n    arrange(desc('avg_mass_g'));\n\n\nuse Phibble\\DataFrame;\nuse function Phplyr\\{phplyr, desc, n, mean, sd};\n\n$data = 'https://raw.githubusercontent.com/phpstats'\n    . '/datasets/main/csv';\n$penguins = DataFrame::fromCsv(\"$data/penguins.csv\");\n\necho phplyr($penguins)\n    -&gt;filter(fn ($r) =&gt; $r-&gt;body_mass_g !== null)\n    -&gt;groupBy('species')\n    -&gt;summarize(\n        penguins: n(),\n        avg_mass_g: mean('body_mass_g'),\n        sd_mass_g: sd('body_mass_g'),\n    )\n    -&gt;arrange(desc('avg_mass_g'));\n\n\n\n# A tibble: 3 × 4\n  species   penguins avg_mass_g sd_mass_g\n  &lt;chr&gt;        &lt;int&gt;      &lt;dbl&gt;     &lt;dbl&gt;\n1 Gentoo         123      5076.      504.\n2 Chinstrap       68      3733.      384.\n3 Adelie         151      3701.      459.",
     "crumbs": [
       "Getting started",
       "phplyr"
@@ -377,8 +377,8 @@
     "objectID": "index.html#phplyr-and-phibble",
     "href": "index.html#phplyr-and-phibble",
     "title": "phplyr",
-    "section": "phplyr and phibble",
-    "text": "phplyr and phibble\nThe tables come from phibble, which Composer installs with phplyr. phplyr adds dplyr’s and tidyr’s functions on top of phibble’s table methods, so a pipeline runs on an in-memory DataFrame, on a database table as SQL, or on Polars.\nphplyr has:\n\ndplyr’s single-table and two-table functions, with grouped window functions, across(), column selectors, and join_by() conditions.\ntidyr’s pivoting, completing, splitting, nesting, and list-column functions.\njanitor’s clean_names(), remove_empty(), get_dupes(), and tabyl().\nlm(), glm(), lmer(), and glmer(), which fit models with phit.\n\nFunctions and methods lists every function and method, with a link to its reference entry.",
+    "section": "Features",
+    "text": "Features\n\ndplyr’s single-table and two-table functions, with grouped window functions, across(), column selectors, and join_by() conditions.\ntidyr’s pivoting, completing, splitting, nesting, and list-column functions.\njanitor’s clean_names(), remove_empty(), get_dupes(), and tabyl().\nlm(), glm(), lmer(), and glmer(), which fit models with phit.\nPipelines on phibble’s tables, which Composer installs with phplyr: an in-memory DataFrame, a database table as SQL, or Polars.\n\nFunctions and methods lists every function and method, with a link to its reference entry.",
     "crumbs": [
       "Getting started",
       "phplyr"
@@ -388,8 +388,8 @@
     "objectID": "index.html#install",
     "href": "index.html#install",
     "title": "phplyr",
-    "section": "Install",
-    "text": "Install\ncomposer require phpstats/phplyr\nphplyr needs PHP 8.3 or later with the mbstring and PDO extensions. Installation lists the optional extensions, and Compatibility and limitations lists the dplyr features phplyr doesn’t have.",
+    "section": "Installation",
+    "text": "Installation\ncomposer require phpstats/phplyr\nphplyr needs PHP 8.3 or later with the mbstring and PDO extensions. Installation lists the optional extensions, and Compatibility and limitations lists the dplyr features phplyr doesn’t have.",
     "crumbs": [
       "Getting started",
       "phplyr"
@@ -707,8 +707,8 @@
     "objectID": "getting-started.html#a-first-script",
     "href": "getting-started.html#a-first-script",
     "title": "Getting started",
-    "section": "A first script",
-    "text": "A first script\nA first pipeline on the overview page is a complete script, with the command that installs phplyr. The snippets on this page use its $penguins table. The examples in the reference pages read their data by URL from PHPstats datasets, with $data set as in that script:\n$data = 'https://raw.githubusercontent.com/phpstats/datasets/main/csv';\n$penguins = DataFrame::fromCsv(\"$data/penguins.csv\");",
+    "section": "Example data",
+    "text": "Example data\nThe example on the overview page is a complete script, with the command that installs phplyr. The snippets on this page use its $penguins table. The examples in the reference pages read their data by URL from PHPstats datasets, with $data set as in that script:\n$data = 'https://raw.githubusercontent.com/phpstats/datasets/main/csv';\n$penguins = DataFrame::fromCsv(\"$data/penguins.csv\");",
     "crumbs": [
       "Getting started",
       "Getting started"

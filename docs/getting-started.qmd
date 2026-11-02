@@ -23,9 +23,9 @@ which provides the tables, and `symfony/polyfill-php84`.
 
 Without phit, the descriptive helpers run in PHP with the same results.
 
-## A first script
+## Example data {#a-first-script}
 
-[A first pipeline](index.qmd#a-first-pipeline) on the overview page is a
+The [example](index.qmd#a-first-pipeline) on the overview page is a
 complete script, with the command that installs phplyr. The snippets on this
 page use its `$penguins` table. The examples in the reference pages read their
 data by URL from [PHPstats datasets](https://github.com/phpstats/datasets),
