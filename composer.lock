@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "877edbf670b9adb20ae95836300b0d38",
+    "content-hash": "9f463fef67cd431597661e3c8ebffe2e",
     "packages": [
         {
             "name": "phpstats/phibble",
-            "version": "v0.7.0",
+            "version": "v0.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstats/phibble.git",
-                "reference": "7cf161c27b0f91cc7b592ecf8caf5e5ec2b999bd"
+                "reference": "9e63ca5eb9128838c22d86b304db4c964edd567c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstats/phibble/zipball/7cf161c27b0f91cc7b592ecf8caf5e5ec2b999bd",
-                "reference": "7cf161c27b0f91cc7b592ecf8caf5e5ec2b999bd",
+                "url": "https://api.github.com/repos/phpstats/phibble/zipball/9e63ca5eb9128838c22d86b304db4c964edd567c",
+                "reference": "9e63ca5eb9128838c22d86b304db4c964edd567c",
                 "shasum": ""
             },
             "require": {
@@ -34,7 +34,7 @@
             },
             "suggest": {
                 "ext-pdo_sqlite": "Used by the test suite for the PDO source",
-                "ext-phit": "Native CSV reading with Phit\\read_csv (phit 0.1.1 or later) and Phit\\CsvReader for chunks (phit 0.2.0 or later), from phpstats/phit",
+                "ext-phit": "Native CSV reading with Phit\\read_csv and Phit\\CsvReader (phit 0.4.0 or later), from phpstats/phit",
                 "ext-php_polars": "The Polars backend (Phibble\\Polars\\PolarsTable), from phpstats/phpolars",
                 "illuminate/database": "Laravel integration: Collection::toDataFrame() and query builder ->phibble() / ->toDataFrame() macros (auto-discovered)"
             },
@@ -62,9 +62,9 @@
             "description": "A typed, immutable in-memory data frame for PHP.",
             "support": {
                 "issues": "https://github.com/phpstats/phibble/issues",
-                "source": "https://github.com/phpstats/phibble/tree/v0.7.0"
+                "source": "https://github.com/phpstats/phibble/tree/v0.8.0"
             },
-            "time": "2026-11-01T23:48:55+00:00"
+            "time": "2026-11-02T12:10:18+00:00"
         },
         {
             "name": "symfony/polyfill-php84",

@@ -2,6 +2,13 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
+## 0.4.8 - 2026-11-02
+
+### Changed
+
+- phplyr allows phibble ^0.8 as well as ^0.3 through ^0.7, and the lock file installs phibble 0.8.0.
+- The README and documentation use plain section headings (Features, Example, Installation), describe phplyr as dplyr- and tidyr-style data manipulation for PHP, and title the R guide Translate an R script.
+
 ## 0.4.7 - 2026-11-01
 
 ### Changed
