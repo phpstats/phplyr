@@ -44,26 +44,12 @@ final class Janitor
     }
 
     /**
-     * snakecase::to_any_case(case = "snake", sep_in = "\\.",
-     * parsing_option = 1, numerals = "asis"), as janitor calls it.
+     * A name in snake case, as janitor's make_clean_names() gives it after
+     * make.names(). See SnakeCase.
      */
     public static function snake(string $name): string
     {
-        $s = preg_replace('/\h/u', '_', $name);
-        $s = \str_replace('.', '_', $s);
-        $s = preg_replace('/(?<=[^_|\p{Nd}])(\p{Nd})/u', '_ $1', $s);
-        $s = preg_replace('/(\p{Nd})(?=[^_|\p{Nd}])/u', '$1 _', $s);
-        $s = preg_replace('/(\p{Lu}\p{Ll}+)/u', '_$1_', $s);
-        $s = preg_replace('/(\p{Nd}+)/u', '_$1_', $s);
-        $s = preg_replace('/(\p{Lu}{2,})/u', '_$1_', $s);
-        $s = preg_replace('/((?<!\p{Lu})\p{Lu}(?!\p{L}))/u', '_$1_', $s);
-        $s = preg_replace('/([^\p{L}\p{N}])/u', '_$1_', $s);
-        $s = preg_replace('/_+/', '_', $s);
-        $s = preg_replace('/^_|_$/', '', $s);
-        $s = mb_strtolower(self::ascii($s));
-        $s = \str_replace(' ', '', $s);
-
-        return preg_replace('/_(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])_/u', '', $s);
+        return SnakeCase::convert($name, self::ascii(...));
     }
 
     /**

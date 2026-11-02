@@ -2,6 +2,12 @@
 
 All notable changes to phplyr are recorded here. Versions follow semantic versioning; before 1.0, minor versions may change behavior.
 
+## 0.4.9 - 2026-11-02
+
+### Changed
+
+- `make_clean_names()` and `clean_names()` convert names to snake case with new code, `Phplyr\SnakeCase`, written from snakecase's documentation and janitor's observed output. It gives the same names as janitor 2.2.1 on phplyr's janitor fixtures and on a further 284 names compared with R.
+
 ## 0.4.8 - 2026-11-02
 
 ### Changed
